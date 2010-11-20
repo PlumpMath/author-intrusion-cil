@@ -6,7 +6,7 @@ using System.IO;
 
 using Castle.Core;
 
-using MfGames.Author.Contract;
+using MfGames.Author.Contract.IO;
 using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion

@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Xml;
 
-using MfGames.Author.Contract;
+using MfGames.Author.Contract.IO;
 using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion

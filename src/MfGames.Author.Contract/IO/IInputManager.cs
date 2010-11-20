@@ -6,7 +6,7 @@ using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion
 
-namespace MfGames.Author.Contract
+namespace MfGames.Author.Contract.IO
 {
 	/// <summary>
 	/// Defines the signature for the input manager.
