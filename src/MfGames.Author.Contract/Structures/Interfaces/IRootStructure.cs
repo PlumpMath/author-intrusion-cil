@@ -1,4 +1,4 @@
-namespace MfGames.Author.Contract.Interfaces
+namespace MfGames.Author.Contract.Structures.Interfaces
 {
 	/// <summary>
 	/// Defines the structural elements that are considered root. These are book,

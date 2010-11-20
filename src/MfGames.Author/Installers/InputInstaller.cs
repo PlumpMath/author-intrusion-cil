@@ -4,7 +4,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
-using MfGames.Author.Contract.Interfaces;
+using MfGames.Author.Contract;
 
 #endregion
 

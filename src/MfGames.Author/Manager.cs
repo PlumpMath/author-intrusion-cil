@@ -8,7 +8,7 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 
-using MfGames.Author.Contract.Interfaces;
+using MfGames.Author.Contract;
 using MfGames.Author.Installer;
 using MfGames.Author.IO;
 

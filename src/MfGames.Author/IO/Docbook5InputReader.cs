@@ -1,9 +1,11 @@
 #region Namespaces
 
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Xml;
 
-using MfGames.Author.Contract.Interfaces;
+using MfGames.Author.Contract.Structures;
+using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion
 
@@ -14,8 +16,17 @@ namespace MfGames.Author.IO
 	/// internal structure. Docbook elements that are not understood are ignored
 	/// and dropped.
 	/// </summary>
-	public class Docbook5InputReader : XmlInputReaderBase, IInputReader
+	public class Docbook5InputReader : XmlInputReaderBase
 	{
+		#region Constants
+
+		/// <summary>
+		/// Contains the namespace for Docbook XML.
+		/// </summary>
+		public const string DocbookNamespace = "http://docbook.org/ns/docbook";
+
+		#endregion
+
 		#region Identification
 
 		/// <summary>
@@ -23,19 +34,37 @@ namespace MfGames.Author.IO
 		/// file format.
 		/// </summary>
 		/// <value>The file mask.</value>
-		public string[] FileExtensions
+		public override string[] FileExtensions
 		{
-			get
-			{
-				return new[] { ".xml" };
-			}
+			get { return new[] { ".xml" }; }
 		}
 
 		/// <summary>
 		/// Gets the name of the input file.
 		/// </summary>
 		/// <value>The name.</value>
-		public string Name { get { return "Docbook 5"; } }
+		public override string Name
+		{
+			get { return "Docbook 5"; }
+		}
+
+		/// <summary>
+		/// Determines whether this instance can read XML files with the given root
+		/// element.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <returns>
+		/// 	<c>true</c> if this instance [can read element] the specified reader; otherwise, <c>false</c>.
+		/// </returns>
+		protected override bool CanReadElement(XmlReader reader)
+		{
+			if (reader.NamespaceURI != DocbookNamespace || reader["version"] != "5.0")
+			{
+				return false;
+			}
+
+			return true;
+		}
 
 		#endregion
 
@@ -46,11 +75,152 @@ namespace MfGames.Author.IO
 		/// If there is any problems with reading the input, this should throw
 		/// an exception and never return a null root structure.
 		/// </summary>
-		/// <param name="inputStream">The input stream.</param>
+		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		public IRootStructure Read(Stream inputStream)
+		protected override IRootStructure Read(XmlReader reader)
 		{
-			throw new NotImplementedException();
+			// This implements a very simple Docbook 5 XML reader that ignores
+			// all the elements outside of the scope of this application and 
+			// creates a simplified structure.
+			var structureContext = new List<StructureBase>();
+			StructureBase rootStructure = null;
+
+			while (reader.Read())
+			{
+				switch (reader.NodeType)
+				{
+					case XmlNodeType.Element:
+						ReadElement(reader, structureContext);
+
+						if (structureContext.Count == 1)
+						{
+							rootStructure = structureContext[0];
+						}
+						break;
+
+					case XmlNodeType.EndElement:
+						ReadEndElement(reader, structureContext);
+						break;
+				}
+			}
+
+			// If we still have a null root structure, something is wrong.
+			if (rootStructure == null)
+			{
+				throw new Exception("Cannot identify the root level element");
+			}
+
+			if (!(rootStructure is IRootStructure))
+			{
+				throw new Exception("Root structure does not define IRootStructure");
+			}
+
+			// There is nothing wrong with the parse, so return the root.
+			return rootStructure as IRootStructure;
+		}
+
+		/// <summary>
+		/// Reads the element from the XML reader and parses it.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <param name="context">The context.</param>
+		private static void ReadElement(
+			XmlReader reader,
+			List<StructureBase> context)
+		{
+			// If we aren't a DocBook element, just ignore it.
+			if (reader.NamespaceURI != DocbookNamespace)
+			{
+				return;
+			}
+
+			// Get the last item in the context.
+			StructureBase parent = null;
+
+			if (context.Count > 0)
+			{
+				parent = context[context.Count - 1];
+			}
+
+			// Switch based on the local tag.
+			StructureBase structure;
+
+			switch (reader.LocalName)
+			{
+				case "book":
+					structure = new Book();
+					break;
+
+				case "chapter":
+					var chapter = new Chapter();
+					structure = chapter;
+
+					if (parent != null && parent is Book)
+					{
+						((Book) parent).Chapters.Add(chapter);
+					}
+					break;
+
+				case "article":
+					structure = new Article();
+					break;
+
+				case "section":
+					var section = new Section();
+					structure = section;
+
+					if (parent != null && parent is ISectionContainer)
+					{
+						((ISectionContainer) parent).Sections.Add(section);
+					}
+					break;
+
+				case "para":
+					var paragraph = new Paragraph();
+					structure = paragraph;
+
+					if (parent != null && parent is IParagraphContainer)
+					{
+						((IParagraphContainer) parent).Paragraphs.Add(paragraph);
+					}
+					break;
+
+				default:
+					// Unknown type, so just skip it.
+					return;
+			}
+
+			// Add the structure to the context.
+			context.Add(structure);
+		}
+
+		/// <summary>
+		/// Reads the element from the XML reader and parses it.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <param name="context">The context.</param>
+		private static void ReadEndElement(
+			XmlReader reader,
+			List<StructureBase> context)
+		{
+			// If we aren't a DocBook element, just ignore it.
+			if (reader.NamespaceURI != DocbookNamespace)
+			{
+				return;
+			}
+
+			// Switch based on the local tag.
+			switch (reader.LocalName)
+			{
+				case "book":
+				case "chapter":
+				case "article":
+				case "section":
+				case "para":
+					// Remove the last item which should be this element.
+					context.RemoveAt(context.Count - 1);
+					break;
+			}
 		}
 
 		#endregion

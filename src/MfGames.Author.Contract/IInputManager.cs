@@ -2,9 +2,11 @@
 
 using System.IO;
 
+using MfGames.Author.Contract.Structures.Interfaces;
+
 #endregion
 
-namespace MfGames.Author.Contract.Interfaces
+namespace MfGames.Author.Contract
 {
 	/// <summary>
 	/// Defines the signature for the input manager.

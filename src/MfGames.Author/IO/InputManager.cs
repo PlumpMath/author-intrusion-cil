@@ -6,7 +6,8 @@ using System.IO;
 
 using Castle.Core;
 
-using MfGames.Author.Contract.Interfaces;
+using MfGames.Author.Contract;
+using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion
 
@@ -133,7 +134,11 @@ namespace MfGames.Author.IO
 					}
 				}
 
+				// Move the readers back into the main list.
 				readers = filteredReaders;
+
+				// Reposition the input stream back to the beginning.
+				inputStream.Seek(0, SeekOrigin.Begin);
 			}
 
 			// At this point, we have either 0, 1, or more readers. If we have

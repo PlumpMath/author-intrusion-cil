@@ -1,9 +1,9 @@
-namespace MfGames.Author.Contract.Structure
+namespace MfGames.Author.Contract.Structures
 {
 	/// <summary>
 	/// Represents a section within an article, chapter, or another section.
 	/// </summary>
-	public class Section
+	public class Section : SectionParagraphContainerBase
 	{
 	}
 }
