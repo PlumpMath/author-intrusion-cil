@@ -1,15 +1,15 @@
+#region Namespaces
 
-using System;
+using MfGames.Author.Contract.Interfaces;
 
-namespace MfGames.Author.Contract
+#endregion
+
+namespace MfGames.Author.Contract.Structure
 {
-
-
-	public class Article
+	/// <summary>
+	/// Identifies a root-level article.
+	/// </summary>
+	public class Article : IRootStructure
 	{
-
-		public Article ()
-		{
-		}
 	}
 }
