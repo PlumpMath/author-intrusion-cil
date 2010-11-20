@@ -34,9 +34,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structure\Book.cs" />
+    <Compile Include="Structure\Chapter.cs" />
+    <Compile Include="Structure\Article.cs" />
+    <Compile Include="Structure\Section.cs" />
+    <Compile Include="Structure\Para.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Structure\" />
   </ItemGroup>
 </Project>
