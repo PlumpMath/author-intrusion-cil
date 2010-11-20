@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title>My First Book</title>
+
+	<chapter>
+		<info>
+			<title>Loomings...</title>
+		</info>
+
+		<para>This is the first paragraph in the document.</para>
+
+		<para>
+			This is the not first paragraph in the document. But, this one has
+			multiple sentences which makes it more difficult to parse.
+		</para>
+	</chapter>
+</book>

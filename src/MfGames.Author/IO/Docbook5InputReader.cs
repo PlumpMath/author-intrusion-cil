@@ -23,7 +23,7 @@ namespace MfGames.Author.IO
 		/// file format.
 		/// </summary>
 		/// <value>The file mask.</value>
-		public string[] FileMasks
+		public string[] FileExtensions
 		{
 			get
 			{

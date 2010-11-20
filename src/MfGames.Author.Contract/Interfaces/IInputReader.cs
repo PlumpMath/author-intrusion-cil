@@ -15,11 +15,11 @@ namespace MfGames.Author.Contract.Interfaces
 		#region Identification
 
 		/// <summary>
-		/// Gets the file masks that are commonly associated with this input
-		/// file format.
+		/// Gets the file extensions that are commonly associated with this
+		/// input reader.
 		/// </summary>
 		/// <value>The file mask.</value>
-		string[] FileMasks { get; }
+		string[] FileExtensions { get; }
 
 		/// <summary>
 		/// Gets the name of the input file.
