@@ -50,21 +50,30 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="outputStream">The output stream.</param>
 		/// <param name="rootStructure">The root structure.</param>
-		public void Write(
+		public void Write (
 			Stream outputStream,
 			StructureBase rootStructure)
 		{
 			// Write this using the XHTML writer.
-			var settings = new XmlWriterSettings();
+			var settings = new XmlWriterSettings ();
 			settings.Indent = true;
 			settings.CloseOutput = false;
 			settings.OmitXmlDeclaration = false;
-
-			using (XmlWriter writer = XmlWriter.Create(outputStream, settings))
+		
+			using (XmlWriter writer = XmlWriter.Create (outputStream, settings))
 			{
 				// Write out the XML headers.
-				writer.WriteStartElement("html", Namespaces.Xhtml11);
+				writer.WriteStartElement ("html", Namespaces.Xhtml11);
 
+				// Write out the head tag.
+				writer.WriteStartElement ("head");
+				writer.WriteStartElement ("link");
+				writer.WriteAttributeString("rel", "stylesheet");
+				writer.WriteAttributeString("type", "text/css");
+				writer.WriteAttributeString("href", "style.css");
+				writer.WriteEndElement();
+				writer.WriteEndElement();
+				
 				// Write out the body tag.
 				writer.WriteStartElement("body", Namespaces.Xhtml11);
 				WriteStructure(writer, rootStructure, 0);

@@ -245,8 +245,7 @@ namespace MfGames.Author.IO
 			}
 
 			// Wrap the text into an unparsed string and add it to the container.
-			UnparsedString content = new UnparsedString(reader.Value);
-			container.UnparsedContents.Add(content);
+			container.UnparsedContents.Add(reader.Value);
 		}
 
 		#endregion
