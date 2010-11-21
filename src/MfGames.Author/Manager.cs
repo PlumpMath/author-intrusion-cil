@@ -28,7 +28,9 @@ namespace MfGames.Author
 		{
 			// Set up Windsor container along with the extensions.
 			container = new WindsorContainer();
-			container.Install(FromAssembly.This());
+			container.Install(
+				FromAssembly.This(),
+				FromAssembly.InDirectory(new AssemblyFilter("Extensions", "*.dll")));
 			container.Kernel.Resolver.AddSubResolver(
 				new CollectionResolver(container.Kernel, true));
 

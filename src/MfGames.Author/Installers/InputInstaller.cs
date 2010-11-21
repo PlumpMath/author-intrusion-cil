@@ -5,7 +5,6 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
 using MfGames.Author.Contract.IO;
-using MfGames.Author.IO;
 
 #endregion
 
@@ -27,9 +26,7 @@ namespace MfGames.Author.Installers
 			// Register the individual input components.
 			container.Register(
 				AllTypes.FromThisAssembly().BasedOn<IInputReader>().WithService.
-					DefaultInterface(),
-				AllTypes.FromAssemblyInDirectory(new AssemblyFilter("Extensions", "*.dll")).
-					BasedOn<IInputReader>().WithService.DefaultInterface());
+					DefaultInterface());
 		}
 	}
 }

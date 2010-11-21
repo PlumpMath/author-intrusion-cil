@@ -4,17 +4,17 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
-using MfGames.Author.Contract.IO;
-using MfGames.Author.IO;
+using MfGames.Author.Contract.Languages;
 
 #endregion
 
-namespace MfGames.Author.Installers
+namespace MfGames.Author.English
 {
 	/// <summary>
-	/// Implements the installer for IOutputWriter instances.
+	/// Installs the various components of the English namespace into the Windsor
+	/// container.
 	/// </summary>
-	public class OutputInstaller : IWindsorInstaller
+	public class EnglishInstaller : IWindsorInstaller
 	{
 		/// <summary>
 		/// Performs the installation in the <see cref="T:Castle.Windsor.IWindsorContainer"/>.
@@ -26,7 +26,7 @@ namespace MfGames.Author.Installers
 		{
 			// Register the individual input components.
 			container.Register(
-				AllTypes.FromThisAssembly().BasedOn<IOutputWriter>().WithService.
+				AllTypes.FromThisAssembly().BasedOn<IParagraphParser>().WithService.
 					DefaultInterface());
 		}
 	}

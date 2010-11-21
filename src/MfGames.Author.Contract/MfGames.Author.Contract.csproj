@@ -46,6 +46,8 @@
     <Compile Include="IO\IInputReader.cs" />
     <Compile Include="IO\IOutputManager.cs" />
     <Compile Include="IO\IOutputWriter.cs" />
+    <Compile Include="Languages\ILanguageSpecific.cs" />
+    <Compile Include="Languages\IParagraphParser.cs" />
     <Compile Include="Structures\Collections\ChapterList.cs" />
     <Compile Include="Structures\Collections\ParagraphList.cs" />
     <Compile Include="Structures\Collections\SectionList.cs" />
