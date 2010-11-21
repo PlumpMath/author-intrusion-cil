@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
+using MfGames.Author.Contract.Constants;
 using MfGames.Author.Contract.Structures;
 using MfGames.Author.Contract.Structures.Interfaces;
 
@@ -18,15 +19,6 @@ namespace MfGames.Author.IO
 	/// </summary>
 	public class Docbook5InputReader : XmlInputReaderBase
 	{
-		#region Constants
-
-		/// <summary>
-		/// Contains the namespace for Docbook XML.
-		/// </summary>
-		public const string DocbookNamespace = "http://docbook.org/ns/docbook";
-
-		#endregion
-
 		#region Identification
 
 		/// <summary>
@@ -58,7 +50,7 @@ namespace MfGames.Author.IO
 		/// </returns>
 		protected override bool CanReadElement(XmlReader reader)
 		{
-			if (reader.NamespaceURI != DocbookNamespace || reader["version"] != "5.0")
+			if (reader.NamespaceURI != Namespaces.Docbook5 || reader["version"] != "5.0")
 			{
 				return false;
 			}
@@ -129,7 +121,7 @@ namespace MfGames.Author.IO
 			List<StructureBase> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
-			if (reader.NamespaceURI != DocbookNamespace)
+			if (reader.NamespaceURI != Namespaces.Docbook5)
 			{
 				return;
 			}
@@ -204,7 +196,7 @@ namespace MfGames.Author.IO
 			List<StructureBase> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
-			if (reader.NamespaceURI != DocbookNamespace)
+			if (reader.NamespaceURI != Namespaces.Docbook5)
 			{
 				return;
 			}

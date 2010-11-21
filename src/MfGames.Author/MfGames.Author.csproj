@@ -47,8 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Installers\InputInstaller.cs" />
+    <Compile Include="Installers\OutputInstaller.cs" />
     <Compile Include="IO\Docbook5InputReader.cs" />
     <Compile Include="IO\InputManager.cs" />
+    <Compile Include="IO\OutputManager.cs" />
+    <Compile Include="IO\XhtmlOutputWriter.cs" />
     <Compile Include="IO\XmlInputReaderBase.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="AssemblyInfo.cs" />

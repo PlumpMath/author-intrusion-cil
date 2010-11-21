@@ -1,7 +1,6 @@
 #region Namespaces
 
 using System;
-using System.IO;
 
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
@@ -9,7 +8,6 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 
 using MfGames.Author.Contract.IO;
-using MfGames.Author.Installer;
 using MfGames.Author.IO;
 
 #endregion
@@ -26,38 +24,41 @@ namespace MfGames.Author
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Manager"/> class.
 		/// </summary>
-		public Manager ()
+		public Manager()
 		{
 			// Set up Windsor container along with the extensions.
-			windsor = new WindsorContainer();
-			windsor.Install(FromAssembly.This());
-			windsor.Kernel.Resolver.AddSubResolver(new CollectionResolver(windsor.Kernel, true));
-			windsor.Register(
-				Component.For<IInputManager>().ImplementedBy<InputManager>());
+			container = new WindsorContainer();
+			container.Install(FromAssembly.This());
+			container.Kernel.Resolver.AddSubResolver(
+				new CollectionResolver(container.Kernel, true));
+
+			container.Register(
+				Component.For<IInputManager>().ImplementedBy<InputManager>(),
+				Component.For<IOutputManager>().ImplementedBy<OutputManager>());
 		}
-		
+
 		#endregion
-		
+
 		#region Destructors
 
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
-		public void Dispose ()
+		public void Dispose()
 		{
-			if (windsor != null)
+			if (container != null)
 			{
-				windsor.Dispose ();
-				windsor = null;
+				container.Dispose();
+				container = null;
 			}
 		}
-		
+
 		#endregion
-		
+
 		#region IOC
-		
-		private WindsorContainer windsor;
-		
+
+		private WindsorContainer container;
+
 		#endregion
 
 		#region Managers
@@ -68,7 +69,16 @@ namespace MfGames.Author
 		/// <value>The input manager.</value>
 		public IInputManager InputManager
 		{
-			get { return windsor.Resolve<IInputManager>(); }
+			get { return container.Resolve<IInputManager>(); }
+		}
+
+		/// <summary>
+		/// Gets the output manager.
+		/// </summary>
+		/// <value>The output manager.</value>
+		public IOutputManager OutputManager
+		{
+			get { return container.Resolve<IOutputManager>(); }
 		}
 
 		#endregion

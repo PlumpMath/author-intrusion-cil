@@ -12,9 +12,9 @@ using MfGames.Author.IO;
 namespace MfGames.Author.Installers
 {
 	/// <summary>
-	/// Implements the installer for IInputReader instances.
+	/// Implements the installer for IOutputWriter instances.
 	/// </summary>
-	public class InputInstaller : IWindsorInstaller
+	public class OutputInstaller : IWindsorInstaller
 	{
 		/// <summary>
 		/// Performs the installation in the <see cref="T:Castle.Windsor.IWindsorContainer"/>.
@@ -26,10 +26,10 @@ namespace MfGames.Author.Installers
 		{
 			// Register the individual input components.
 			container.Register(
-				AllTypes.FromThisAssembly().BasedOn<IInputReader>().WithService.
+				AllTypes.FromThisAssembly().BasedOn<IOutputWriter>().WithService.
 					DefaultInterface(),
 				AllTypes.FromAssemblyInDirectory(new AssemblyFilter("Extensions", "*.dll")).
-					BasedOn<IInputReader>().WithService.DefaultInterface());
+					BasedOn<IOutputWriter>().WithService.DefaultInterface());
 		}
 	}
 }

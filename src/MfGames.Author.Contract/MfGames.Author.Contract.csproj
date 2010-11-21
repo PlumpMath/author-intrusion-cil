@@ -37,8 +37,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Namespaces.cs" />
     <Compile Include="IO\IInputManager.cs" />
     <Compile Include="IO\IInputReader.cs" />
+    <Compile Include="IO\IOutputManager.cs" />
+    <Compile Include="IO\IOutputWriter.cs" />
     <Compile Include="Structures\Collections\ChapterList.cs" />
     <Compile Include="Structures\Collections\ParagraphList.cs" />
     <Compile Include="Structures\Collections\SectionList.cs" />
