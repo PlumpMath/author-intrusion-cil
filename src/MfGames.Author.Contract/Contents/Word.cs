@@ -1,3 +1,5 @@
+using System;
+
 namespace MfGames.Author.Contract.Contents
 {
 	/// <summary>
@@ -29,6 +31,21 @@ namespace MfGames.Author.Contract.Contents
 		public string Text
 		{
 			get { return text; }
+		}
+
+		#endregion
+
+		#region Conversion
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return String.Format("Word {0}", text);
 		}
 
 		#endregion

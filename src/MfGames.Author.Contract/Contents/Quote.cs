@@ -1,8 +1,11 @@
 #region Namespaces
 
+using System;
+
 using MfGames.Author.Contract.Contents.Collections;
 using MfGames.Author.Contract.Contents.Interfaces;
 using MfGames.Author.Contract.Languages;
+using MfGames.Extensions;
 
 #endregion
 
@@ -38,8 +41,8 @@ namespace MfGames.Author.Contract.Contents
 
 		#region Contents
 
-		private readonly ContentList unparsedContents;
 		private readonly ContentList contents;
+		private readonly ContentList unparsedContents;
 
 		/// <summary>
 		/// Gets the parsed contents of the quote.
@@ -48,6 +51,38 @@ namespace MfGames.Author.Contract.Contents
 		public ContentList Contents
 		{
 			get { return contents; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the quote ends with a sentence
+		/// terminator.
+		/// </summary>
+		/// <value><c>true</c> if [ends with terminator]; otherwise, <c>false</c>.</value>
+		public bool EndsWithTerminator
+		{
+			get
+			{
+				// If we don't have parsed content, throw an exception.
+				if (contents.Count == 0)
+				{
+					throw new ArgumentException("Quote does not contain parsed contents");
+				}
+
+				// Grab the last item and figure out if it ends with a terminator.
+				ContentBase lastContent = contents.GetLast();
+
+				if (lastContent is Terminator)
+				{
+					return true;
+				}
+
+				if (lastContent is Quote)
+				{
+					return ((Quote) lastContent).EndsWithTerminator;
+				}
+
+				return false;
+			}
 		}
 
 		/// <summary>

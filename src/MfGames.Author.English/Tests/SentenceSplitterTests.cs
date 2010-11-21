@@ -50,7 +50,9 @@ namespace MfGames.Author.English
 		[Test]
 		public void SentenceWithQuote()
 		{
-			TestSingleSentence(new UnparsedString("I said, "), new Quote("You like me."));
+			TestSingleSentence(
+				new UnparsedString("I said, "),
+				new Quote("You like me."));
 		}
 
 		/// <summary>
@@ -88,21 +90,24 @@ namespace MfGames.Author.English
 		private static ContentList TestSingleSentence(params ContentBase[] contents)
 		{
 			// Create the paragraph and add the sentence to the unparsed content.
-			var paragraph = new Paragraph();
-			paragraph.UnparsedContents.Add(
+			var unparsed = new ContentList();
+			unparsed.Add(
 				new UnparsedString("This is the first sentence."));
 
 			foreach (ContentBase content in contents)
 			{
-				paragraph.UnparsedContents.Add(content);
+				unparsed.Add(content);
 			}
 
-			paragraph.UnparsedContents.Add(
+			unparsed.Add(
 				new UnparsedString("This is the third sentence."));
 
+			// Split the input into parsed content.
+			EnglishContentSplitter contentSplitter = new EnglishContentSplitter();
+			ContentList parsed = contentSplitter.SplitContents(unparsed);
+
 			// Split the sentences out and compare the results.
-			List<ContentList> sentences =
-				SentenceSplitter.Split(paragraph.UnparsedContents);
+			List<ContentList> sentences = EnglishSentenceSplitter.SplitSentences(parsed);
 
 			Assert.AreEqual(
 				3,
