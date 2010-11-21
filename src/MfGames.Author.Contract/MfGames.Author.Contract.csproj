@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,11 +41,14 @@
     <Compile Include="Contents\Collections\ContentList.cs" />
     <Compile Include="Contents\ContentBase.cs" />
     <Compile Include="Contents\Interfaces\IUnparsedContentContainer.cs" />
+    <Compile Include="Contents\Terminator.cs" />
     <Compile Include="Contents\UnparsedString.cs" />
+    <Compile Include="Contents\Word.cs" />
     <Compile Include="IO\IInputManager.cs" />
     <Compile Include="IO\IInputReader.cs" />
     <Compile Include="IO\IOutputManager.cs" />
     <Compile Include="IO\IOutputWriter.cs" />
+    <Compile Include="Languages\IContentSplitter.cs" />
     <Compile Include="Languages\ILanguageSpecific.cs" />
     <Compile Include="Languages\IParagraphParser.cs" />
     <Compile Include="Structures\Collections\ChapterList.cs" />

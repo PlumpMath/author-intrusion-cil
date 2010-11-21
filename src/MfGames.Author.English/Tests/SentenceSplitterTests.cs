@@ -1,6 +1,5 @@
 #region Namespaces
 
-using System;
 using System.Collections.Generic;
 
 using MfGames.Author.Contract.Contents;
@@ -20,79 +19,101 @@ namespace MfGames.Author.English
 	public class SentenceSplitterTests
 	{
 		#region Tests
-		
+
+		/// <summary>
+		/// Tests a simple sentence.
+		/// </summary>
 		[Test]
 		public void SimpleSentence()
 		{
-			TestSingleSentence(
+			ContentList sentence = TestSingleSentence(
 				new UnparsedString("This is a simple sentence."));
+
+			Assert.AreEqual(
+				6,
+				sentence.Count, 
+				"Unexpected number of content elements in results");
 		}
-		
+
+		/// <summary>
+		/// Tests a sentence with an honorific.
+		/// </summary>
 		[Test]
 		public void SentenceWithHonorific()
 		{
-			TestSingleSentence(
-				new UnparsedString("I saw Mr. Smith."));
+			TestSingleSentence(new UnparsedString("I saw Mr. Smith."));
 		}
-		
+
+		/// <summary>
+		/// Tests a sentence with a quote.
+		/// </summary>
 		[Test]
 		public void SentenceWithQuote()
 		{
-			TestSingleSentence(
-				new UnparsedString("I said, "),
-			    new Quote("You like me."));
+			TestSingleSentence(new UnparsedString("I said, "), new Quote("You like me."));
 		}
 
+		/// <summary>
+		/// Tests a sentence with a quote that contains two sentences.
+		/// </summary>
 		[Test]
 		public void SentenceWithMultipleSentenceQuote()
 		{
 			TestSingleSentence(
 				new UnparsedString("I said, "),
-			    new Quote("You like me. And then she hit me."));
+				new Quote("You like me. And then she hit me."));
 		}
 
+		/// <summary>
+		/// Tests a sentence with a split quote.
+		/// </summary>
 		[Test]
 		public void SentenceWithSplitQuote()
 		{
 			TestSingleSentence(
 				new UnparsedString("I said, "),
-			    new Quote("You like me,"),
+				new Quote("You like me,"),
 				new UnparsedString(" while flinching."));
 		}
 
 		#endregion
-		
+
 		#region Utility
-		
+
 		/// <summary>
 		/// Takes the list of content elements and splits the resulting sentences. Then
 		/// the resulting sentence is verify that it is parsed correctly.
 		/// </summary>
-		/// <param name="contents">
-		/// A <see cref="ContentBase[]"/>
-		/// </param>
-		private List<ContentList> TestSingleSentence(params ContentBase[] contents)
+		/// <param name="contents">The contents.</param>
+		private static ContentList TestSingleSentence(params ContentBase[] contents)
 		{
 			// Create the paragraph and add the sentence to the unparsed content.
-			Paragraph paragraph = new Paragraph();
-			paragraph.UnparsedContents.Add(new UnparsedString ("This is the first sentence."));
-			
+			var paragraph = new Paragraph();
+			paragraph.UnparsedContents.Add(
+				new UnparsedString("This is the first sentence."));
+
 			foreach (ContentBase content in contents)
 			{
 				paragraph.UnparsedContents.Add(content);
 			}
-			
-			paragraph.UnparsedContents.Add(new UnparsedString("This is the third sentence."));
-			
+
+			paragraph.UnparsedContents.Add(
+				new UnparsedString("This is the third sentence."));
+
 			// Split the sentences out and compare the results.
-			List<ContentList> sentences = SentenceSplitter.Split(paragraph.UnparsedContents);
-			
-			Assert.AreEqual(3, sentences.Count, "Could not parse isolate the sentence with the splitter.");
-			
-			// Return the resulting list so additional tests again.
-			return sentences;
+			List<ContentList> sentences =
+				SentenceSplitter.Split(paragraph.UnparsedContents);
+
+			Assert.AreEqual(
+				3,
+				sentences.Count,
+				"Could not parse isolate the sentence with the splitter.");
+
+			// Return the parsed sentence if we got this far. We don't bother with
+			// the first and third since those are just used to detect run-ons.
+			return sentences[1];
 		}
-		
+
 		#endregion
 	}
 }
