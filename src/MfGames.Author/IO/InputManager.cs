@@ -7,10 +7,9 @@ using System.IO;
 using Castle.Core;
 
 using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Structures.Interfaces;
+using MfGames.Author.Contract.Structures;
 
 #endregion
-
 
 namespace MfGames.Author.IO
 {
@@ -49,7 +48,7 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="inputFile">The input file.</param>
 		/// <returns></returns>
-		public IRootStructure Read(FileInfo inputFile)
+		public StructureBase Read(FileInfo inputFile)
 		{
 			// Make sure the file exists for reading.
 			if (inputFile == null)
@@ -76,7 +75,7 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <returns></returns>
-		public IRootStructure Read(Stream inputStream)
+		public StructureBase Read(Stream inputStream)
 		{
 			throw new NotImplementedException();
 		}
@@ -88,7 +87,7 @@ namespace MfGames.Author.IO
 		/// <param name="inputStream">The input stream.</param>
 		/// <param name="filename">The filename.</param>
 		/// <returns></returns>
-		private IRootStructure Read(Stream inputStream, string filename)
+		private StructureBase Read(Stream inputStream, string filename)
 		{
 			// Build up a list of possible readers based on filename.
 			List<IInputReader> readers = new List<IInputReader>();

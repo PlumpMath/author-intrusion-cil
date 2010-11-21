@@ -5,8 +5,8 @@ using System.IO;
 
 using MfGames.Author;
 using MfGames.Author.Contract.IO;
+using MfGames.Author.Contract.Languages;
 using MfGames.Author.Contract.Structures;
-using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion
 
@@ -24,14 +24,18 @@ namespace MfGamesAuthorCli
 			Console.WriteLine("Reading {0} {1}", inputFile, inputFile.Exists);
 
 			IInputManager inputManager = manager.InputManager;
-			IRootStructure rootStructure = inputManager.Read(inputFile);
+			StructureBase rootStructure = inputManager.Read(inputFile);
+
+			// Parse the contents of the root.
+			ILanguageManager languageManager = manager.LanguageManager;
+			languageManager.Parse(rootStructure);
 
 			// Write out the HTML
 			FileInfo outputFile = new FileInfo(args[1]);
 			Console.WriteLine("Writing {0} {1}", outputFile, outputFile.Exists);
 
 			IOutputManager outputManager = manager.OutputManager;
-			outputManager.Write(outputFile, (StructureBase) rootStructure);
+			outputManager.Write(outputFile, rootStructure);
 
 			// Just set up the input.
 			Console.WriteLine("Hello World!");

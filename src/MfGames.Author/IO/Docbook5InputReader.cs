@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Xml;
 
 using MfGames.Author.Contract.Constants;
-using MfGames.Author.Contract.Contents;
 using MfGames.Author.Contract.Contents.Interfaces;
 using MfGames.Author.Contract.Structures;
 using MfGames.Author.Contract.Structures.Interfaces;
@@ -71,7 +70,7 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		protected override IRootStructure Read(XmlReader reader)
+		protected override StructureBase Read(XmlReader reader)
 		{
 			// This implements a very simple Docbook 5 XML reader that ignores
 			// all the elements outside of the scope of this application and 
@@ -108,13 +107,13 @@ namespace MfGames.Author.IO
 				throw new Exception("Cannot identify the root level element");
 			}
 
-			if (!(rootStructure is IRootStructure))
+			if (!(rootStructure is StructureBase))
 			{
-				throw new Exception("Root structure does not define IRootStructure");
+				throw new Exception("Root structure does not define StructureBase");
 			}
 
 			// There is nothing wrong with the parse, so return the root.
-			return rootStructure as IRootStructure;
+			return rootStructure as StructureBase;
 		}
 
 		/// <summary>

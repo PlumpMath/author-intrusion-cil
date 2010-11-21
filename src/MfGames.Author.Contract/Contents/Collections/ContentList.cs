@@ -1,6 +1,7 @@
 #region Namespaces
 
 using System.Collections.Generic;
+using System.Text;
 
 #endregion
 
@@ -24,6 +25,41 @@ namespace MfGames.Author.Contract.Contents.Collections
 			Add(new UnparsedString(parsedContent));
 		}
 		
+		#endregion
+
+		#region Conversion
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder buffer = new StringBuilder();
+			bool first = true;
+
+			foreach (ContentBase content in this)
+			{
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					if (!(content is Terminator))
+					{
+						buffer.Append(" ");
+					}
+				}
+
+				buffer.Append(content.ToString());
+			}
+
+			return buffer.ToString();
+		}
+
 		#endregion
 	}
 }

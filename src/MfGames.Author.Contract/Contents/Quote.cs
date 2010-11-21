@@ -91,7 +91,7 @@ namespace MfGames.Author.Contract.Contents
 		/// <value><c>true</c> if this instance is parsed; otherwise, <c>false</c>.</value>
 		public bool IsParsed
 		{
-			get { return unparsedContents.Count != 0; }
+			get { return unparsedContents.Count == 0; }
 		}
 
 		/// <summary>
@@ -123,6 +123,21 @@ namespace MfGames.Author.Contract.Contents
 
 			// Clear out the unparsed contents since everything is parsed.
 			unparsedContents.Clear();
+		}
+
+		#endregion
+
+		#region Conversion
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return String.Format("{0}{1}{0}", '"', contents);
 		}
 
 		#endregion

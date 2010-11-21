@@ -2,7 +2,7 @@
 
 using System.IO;
 
-using MfGames.Author.Contract.Structures.Interfaces;
+using MfGames.Author.Contract.Structures;
 
 #endregion
 
@@ -22,7 +22,7 @@ namespace MfGames.Author.Contract.IO
 		/// </summary>
 		/// <param name="inputFile">The input file.</param>
 		/// <returns></returns>
-		IRootStructure Read(FileInfo inputFile);
+		StructureBase Read(FileInfo inputFile);
 
 		/// <summary>
 		/// Reads the specified input stream and returns a structure elements.
@@ -31,7 +31,7 @@ namespace MfGames.Author.Contract.IO
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <returns></returns>
-		IRootStructure Read(Stream inputStream);
+		StructureBase Read(Stream inputStream);
 
 		#endregion
 	}

@@ -1,7 +1,10 @@
 #region Namespaces
 
 using System;
+using System.Collections.Generic;
 
+using MfGames.Author.Contract.Contents;
+using MfGames.Author.Contract.Contents.Collections;
 using MfGames.Author.Contract.Languages;
 using MfGames.Author.Contract.Structures;
 
@@ -24,9 +27,24 @@ namespace MfGames.Author.English
 		/// </summary>
 		/// <param name="paragraph">The paragraph with unparsed contents.</param>
 		/// <returns>True if successfully parsed, false if not.</returns>
-		public bool Parse(Paragraph paragraph)
+		public void Parse(Paragraph paragraph)
 		{
-			throw new NotImplementedException();
+			// Pull out the paragraphs' unparsed content.
+			ContentList unparsed = paragraph.UnparsedContents;
+
+			// Split the input into parsed content.
+			EnglishContentSplitter contentSplitter = new EnglishContentSplitter();
+			ContentList parsed = contentSplitter.SplitContents(unparsed);
+
+			// Split the sentences out and put them back into the paragraph.
+			List<ContentList> sentences = EnglishSentenceSplitter.SplitSentences(parsed);
+
+			foreach (ContentList sentenceContents in sentences)
+			{
+				Sentence sentence = new Sentence();
+				sentence.AddRange(sentenceContents);
+				paragraph.Sentences.Add(sentence);
+			}
 		}
 
 		#endregion

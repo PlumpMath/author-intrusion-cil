@@ -45,7 +45,7 @@ namespace MfGames.Author.Contract.Contents
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("Word {0}", text);
+			return text;
 		}
 
 		#endregion

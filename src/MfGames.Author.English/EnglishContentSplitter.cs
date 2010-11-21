@@ -48,7 +48,7 @@ namespace MfGames.Author.English
 					// unparsed content.
 					Quote quote = (Quote) content;
 
-					if (quote.IsParsed)
+					if (!quote.IsParsed)
 					{
 					    quote.SplitContents(this);
 					}

@@ -4,19 +4,18 @@ using System.Collections.Generic;
 
 using MfGames.Author.Contract.Contents;
 using MfGames.Author.Contract.Contents.Collections;
-using MfGames.Author.Contract.Structures;
 
 using NUnit.Framework;
 
 #endregion
 
-namespace MfGames.Author.English
+namespace MfGames.Author.English.Tests
 {
 	/// <summary>
 	/// Contains various sentence splitter tests.
 	/// </summary>
 	[TestFixture]
-	public class SentenceSplitterTests
+	public class EnglishSentenceSplitterTests
 	{
 		#region Tests
 

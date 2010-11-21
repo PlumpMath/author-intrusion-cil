@@ -1,7 +1,6 @@
 #region Namespaces
 
 using MfGames.Author.Contract.Structures.Collections;
-using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion
 
@@ -10,7 +9,7 @@ namespace MfGames.Author.Contract.Structures
 	/// <summary>
 	/// Defines a top-level structural element for the document.
 	/// </summary>
-	public class Book : StructureBase, IRootStructure
+	public class Book : StructureBase
 	{
 		#region Constructors
 

@@ -21,7 +21,7 @@ namespace MfGames.Author.Contract.Languages
 		/// </summary>
 		/// <param name="paragraph">The paragraph with unparsed contents.</param>
 		/// <returns>True if successfully parsed, false if not.</returns>
-		bool Parse(Paragraph paragraph);
+		void Parse(Paragraph paragraph);
 
 		#endregion
 	}

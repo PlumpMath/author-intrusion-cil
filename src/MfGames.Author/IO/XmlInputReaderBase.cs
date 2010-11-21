@@ -1,11 +1,10 @@
 #region Namespaces
 
-using System;
 using System.IO;
 using System.Xml;
 
 using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Structures.Interfaces;
+using MfGames.Author.Contract.Structures;
 
 #endregion
 
@@ -91,8 +90,8 @@ namespace MfGames.Author.IO
 		/// an exception and never return a null root structure.
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
-		/// <returns>An IRootStructure containing the top-level element.</returns>
-		public IRootStructure Read(Stream inputStream)
+		/// <returns>An StructureBase containing the top-level element.</returns>
+		public StructureBase Read(Stream inputStream)
 		{
 			// Wrap the stream in an XmlReader so we can parse the top-level
 			// element.
@@ -109,9 +108,9 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <returns>
-		/// An IRootStructure containing the top-level element.
+		/// An StructureBase containing the top-level element.
 		/// </returns>
-		protected abstract IRootStructure Read(XmlReader reader);
+		protected abstract StructureBase Read(XmlReader reader);
 
 		#endregion
 

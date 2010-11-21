@@ -8,7 +8,9 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 
 using MfGames.Author.Contract.IO;
+using MfGames.Author.Contract.Languages;
 using MfGames.Author.IO;
+using MfGames.Author.Languages;
 
 #endregion
 
@@ -36,7 +38,8 @@ namespace MfGames.Author
 
 			container.Register(
 				Component.For<IInputManager>().ImplementedBy<InputManager>(),
-				Component.For<IOutputManager>().ImplementedBy<OutputManager>());
+				Component.For<IOutputManager>().ImplementedBy<OutputManager>(),
+				Component.For<ILanguageManager>().ImplementedBy<LanguageManager>());
 		}
 
 		#endregion
@@ -72,6 +75,15 @@ namespace MfGames.Author
 		public IInputManager InputManager
 		{
 			get { return container.Resolve<IInputManager>(); }
+		}
+
+		/// <summary>
+		/// Contains the language manager.
+		/// </summary>
+		/// <value>The language manager.</value>
+		public ILanguageManager LanguageManager
+		{
+			get { return container.Resolve<ILanguageManager>(); }
 		}
 
 		/// <summary>

@@ -104,6 +104,15 @@ namespace MfGames.Author.IO
 
 			// Write out the resulting paragraph.
 			writer.WriteString(String.Join(" ", sentences.ToArray()));
+
+			// Write out the sentences in the paragraph.
+			foreach (Sentence sentence in paragraph.Sentences)
+			{
+				writer.WriteStartElement("span");
+				writer.WriteAttributeString("class", "sentence");
+				writer.WriteString(sentence.ToString());
+				writer.WriteEndElement();
+			}
 		}
 
 		/// <summary>
