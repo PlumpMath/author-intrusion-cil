@@ -35,6 +35,31 @@ namespace MfGames.Author.English
 				new UnparsedString("I saw Mr. Smith."));
 		}
 		
+		[Test]
+		public void SentenceWithQuote()
+		{
+			TestSingleSentence(
+				new UnparsedString("I said, "),
+			    new Quote("You like me."));
+		}
+
+		[Test]
+		public void SentenceWithMultipleSentenceQuote()
+		{
+			TestSingleSentence(
+				new UnparsedString("I said, "),
+			    new Quote("You like me. And then she hit me."));
+		}
+
+		[Test]
+		public void SentenceWithSplitQuote()
+		{
+			TestSingleSentence(
+				new UnparsedString("I said, "),
+			    new Quote("You like me,"),
+				new UnparsedString(" while flinching."));
+		}
+
 		#endregion
 		
 		#region Utility
