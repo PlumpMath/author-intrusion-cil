@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Xml;
 
 using MfGames.Author.Contract.Constants;
+using MfGames.Author.Contract.Contents;
+using MfGames.Author.Contract.Contents.Interfaces;
 using MfGames.Author.Contract.Structures;
 using MfGames.Author.Contract.Structures.Interfaces;
 
@@ -74,7 +76,7 @@ namespace MfGames.Author.IO
 			// This implements a very simple Docbook 5 XML reader that ignores
 			// all the elements outside of the scope of this application and 
 			// creates a simplified structure.
-			var structureContext = new List<StructureBase>();
+			List<StructureBase> structureContext = new List<StructureBase>();
 			StructureBase rootStructure = null;
 
 			while (reader.Read())
@@ -92,6 +94,10 @@ namespace MfGames.Author.IO
 
 					case XmlNodeType.EndElement:
 						ReadEndElement(reader, structureContext);
+						break;
+
+					case XmlNodeType.Text:
+						ReadText(reader, structureContext);
 						break;
 				}
 			}
@@ -213,6 +219,34 @@ namespace MfGames.Author.IO
 					context.RemoveAt(context.Count - 1);
 					break;
 			}
+		}
+
+		/// <summary>
+		/// Reads the text from the given XML string.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <param name="context">The context.</param>
+		private static void ReadText(XmlReader reader, List<StructureBase> context)
+		{
+			// Figure out where to put this text content.
+			if (context.Count == 0)
+			{
+				throw new Exception("Cannot figure out context to add contents");
+			}
+
+			// Make sure the last item in the context can contain contents.
+			IUnparsedContentContainer container = context[context.Count - 1] as IUnparsedContentContainer;
+
+			if (container == null)
+			{
+				// Ignore it since the item can't handle it. This is used for things like
+				// titles.
+				return;
+			}
+
+			// Wrap the text into an unparsed string and add it to the container.
+			UnparsedString content = new UnparsedString(reader.Value);
+			container.UnparsedContents.Add(content);
 		}
 
 		#endregion

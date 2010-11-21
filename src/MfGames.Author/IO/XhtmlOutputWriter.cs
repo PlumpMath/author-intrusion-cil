@@ -1,9 +1,12 @@
 #region Namespaces
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
 using MfGames.Author.Contract.Constants;
+using MfGames.Author.Contract.Contents;
 using MfGames.Author.Contract.IO;
 using MfGames.Author.Contract.Structures;
 
@@ -73,12 +76,34 @@ namespace MfGames.Author.IO
 		}
 
 		/// <summary>
+		/// Writes out the contents of a paragraph.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		/// <param name="paragraph">The paragraph.</param>
+		private static void WriteParagraph(
+			XmlWriter writer,
+			Paragraph paragraph)
+		{
+			// Build up a list of strings sentences in the paragraph.
+			List<string> sentences = new List<string>();
+
+			// Go through the unparsed content.
+			foreach (UnparsedString unparsedString in paragraph.UnparsedContents)
+			{
+				sentences.Add(unparsedString.Contents);
+			}
+
+			// Write out the resulting paragraph.
+			writer.WriteString(String.Join(" ", sentences.ToArray()));
+		}
+
+		/// <summary>
 		/// Writes out the structure element to the given writer.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		/// <param name="structure">The structure.</param>
 		/// <param name="depth">The depth.</param>
-		private void WriteStructure(
+		private static void WriteStructure(
 			XmlWriter writer,
 			StructureBase structure,
 			int depth)
@@ -97,7 +122,7 @@ namespace MfGames.Author.IO
 				foreach (Paragraph paragraph in container.Paragraphs)
 				{
 					writer.WriteStartElement("p", Namespaces.Xhtml11);
-					writer.WriteString("contents");
+					WriteParagraph(writer, paragraph);
 					writer.WriteEndElement();
 				}
 

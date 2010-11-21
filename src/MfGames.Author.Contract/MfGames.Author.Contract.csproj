@@ -38,6 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Namespaces.cs" />
+    <Compile Include="Contents\Collections\ContentList.cs" />
+    <Compile Include="Contents\ContentBase.cs" />
+    <Compile Include="Contents\Interfaces\IUnparsedContentContainer.cs" />
+    <Compile Include="Contents\UnparsedString.cs" />
     <Compile Include="IO\IInputManager.cs" />
     <Compile Include="IO\IInputReader.cs" />
     <Compile Include="IO\IOutputManager.cs" />
