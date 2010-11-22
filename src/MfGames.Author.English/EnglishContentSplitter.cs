@@ -3,7 +3,7 @@
 using System.Text.RegularExpressions;
 
 using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Contents.Collections;
+using MfGames.Author.Contract.Collections;
 using MfGames.Author.Contract.Languages;
 
 #endregion
@@ -40,7 +40,7 @@ namespace MfGames.Author.English
 			ContentList parsed = new ContentList();
 
 			// Go through each of the individual contents passed into the method.
-			foreach (ContentBase content in contents)
+			foreach (Content content in contents)
 			{
 				if (content is Quote)
 				{
@@ -58,10 +58,10 @@ namespace MfGames.Author.English
 					continue;
 				}
 
-				if (content is UnparsedString)
+				if (content is Unparsed)
 				{
 					// Unparsed strings require splitting into elements.
-					UnparsedString unparsed = (UnparsedString) content;
+					Unparsed unparsed = (Unparsed) content;
 
 					// Split the parsed content and add it to the list.
 					parsed.AddRange(ParseString(unparsed.Contents));

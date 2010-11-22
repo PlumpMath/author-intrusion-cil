@@ -36,7 +36,7 @@ namespace MfGames.Author.Languages
 		/// Parses the contents of the given structure.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
-		public void Parse(StructureBase structure)
+		public void Parse(Structure structure)
 		{
 			// Check the inputs.
 			if (structure == null)
@@ -49,7 +49,7 @@ namespace MfGames.Author.Languages
 			{
 				SectionParagraphContainerBase container = (SectionParagraphContainerBase) structure;
 
-				foreach (Paragraph paragraph in container.Paragraphs)
+				foreach (ContentContainerStructure paragraph in container.Paragraphs)
 				{
 					Parse(paragraph);
 				}
@@ -74,7 +74,7 @@ namespace MfGames.Author.Languages
 					break;
 
 				case "Paragraph":
-					Paragraph paragraph = (Paragraph) structure;
+					ContentContainerStructure paragraph = (ContentContainerStructure) structure;
 
 					if (!paragraph.IsParsed)
 					{

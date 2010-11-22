@@ -10,7 +10,7 @@ namespace MfGames.Author.Contract.Contents
 	/// Represents a block of text that has not been parsed into other content
 	/// elements.
 	/// </summary>
-	public class UnparsedString : ContentBase
+	public class Unparsed : Content
 	{
 		#region Constructors
 
@@ -18,7 +18,7 @@ namespace MfGames.Author.Contract.Contents
 		/// Initializes a new instance of the <see cref="UnparsedString"/> class.
 		/// </summary>
 		/// <param name="contents">The contents.</param>
-		public UnparsedString(string contents)
+		public Unparsed(string contents)
 		{
 			if (contents == null)
 			{
@@ -31,6 +31,12 @@ namespace MfGames.Author.Contract.Contents
 		#endregion
 
 		#region Contents
+
+		public override ContentType ContentType {
+			get {
+				return ContentType.Unparsed;
+			}
+		}
 
 		private readonly string contents;
 

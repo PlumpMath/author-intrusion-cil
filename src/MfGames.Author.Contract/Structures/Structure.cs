@@ -3,7 +3,7 @@ namespace MfGames.Author.Contract.Structures
 	/// <summary>
 	/// The common root for all the structural elements.
 	/// </summary>
-	public abstract class StructureBase
+	public abstract class Structure
 	{
 		#region Structural Relationships
 
@@ -11,7 +11,7 @@ namespace MfGames.Author.Contract.Structures
 		/// Gets or sets the parent structure element.
 		/// </summary>
 		/// <value>The parent.</value>
-		public StructureBase Parent { get; set; }
+		public Structure Parent { get; set; }
 
 		#endregion
 	}

@@ -48,7 +48,7 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="inputFile">The input file.</param>
 		/// <returns></returns>
-		public StructureBase Read(FileInfo inputFile)
+		public Structure Read(FileInfo inputFile)
 		{
 			// Make sure the file exists for reading.
 			if (inputFile == null)
@@ -75,7 +75,7 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <returns></returns>
-		public StructureBase Read(Stream inputStream)
+		public Structure Read(Stream inputStream)
 		{
 			throw new NotImplementedException();
 		}
@@ -87,7 +87,7 @@ namespace MfGames.Author.IO
 		/// <param name="inputStream">The input stream.</param>
 		/// <param name="filename">The filename.</param>
 		/// <returns></returns>
-		private StructureBase Read(Stream inputStream, string filename)
+		private Structure Read(Stream inputStream, string filename)
 		{
 			// Build up a list of possible readers based on filename.
 			List<IInputReader> readers = new List<IInputReader>();

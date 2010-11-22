@@ -49,7 +49,7 @@ namespace MfGames.Author.Contract.IO
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <returns></returns>
-		StructureBase Read(Stream inputStream);
+		Structure Read(Stream inputStream);
 
 		#endregion
 	}

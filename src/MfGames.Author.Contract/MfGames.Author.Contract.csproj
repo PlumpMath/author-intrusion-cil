@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -34,20 +34,15 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MfGames, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79, processorArchitecture=MSIL">
+    <Reference Include="System" />
+    <Reference Include="MfGames, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MfGames.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Namespaces.cs" />
-    <Compile Include="Contents\Collections\ContentList.cs" />
-    <Compile Include="Contents\ContentBase.cs" />
-    <Compile Include="Contents\Interfaces\IUnparsedContentContainer.cs" />
     <Compile Include="Contents\Sentence.cs" />
-    <Compile Include="Contents\Terminator.cs" />
-    <Compile Include="Contents\UnparsedString.cs" />
     <Compile Include="Contents\Word.cs" />
     <Compile Include="IO\IInputManager.cs" />
     <Compile Include="IO\IInputReader.cs" />
@@ -57,21 +52,24 @@
     <Compile Include="Languages\ILanguageManager.cs" />
     <Compile Include="Languages\ILanguageSpecific.cs" />
     <Compile Include="Languages\IParagraphParser.cs" />
-    <Compile Include="Structures\Collections\ChapterList.cs" />
-    <Compile Include="Structures\Collections\ParagraphList.cs" />
-    <Compile Include="Structures\Collections\SectionList.cs" />
-    <Compile Include="Structures\Collections\StructureBaseList.cs" />
-    <Compile Include="Structures\Interfaces\IParagraphContainer.cs" />
-    <Compile Include="Structures\Interfaces\ISectionContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\Book.cs" />
-    <Compile Include="Structures\Chapter.cs" />
-    <Compile Include="Structures\Article.cs" />
-    <Compile Include="Structures\Section.cs" />
-    <Compile Include="Structures\Paragraph.cs" />
-    <Compile Include="Structures\SectionParagraphContainerBase.cs" />
-    <Compile Include="Structures\StructureBase.cs" />
-    <Compile Include="Contents\Quote.cs" />
+    <Compile Include="Contents\Content.cs" />
+    <Compile Include="Contents\Unparsed.cs" />
+    <Compile Include="Structures\ContentContainerStructure.cs" />
+    <Compile Include="Structures\StructureContentContainerStructure.cs" />
+    <Compile Include="Structures\Structure.cs" />
+    <Compile Include="Structures\StructureContainerStructure.cs" />
+    <Compile Include="Interfaces\IContentContainer.cs" />
+    <Compile Include="Interfaces\IStructureContainer.cs" />
+    <Compile Include="Collections\StructureList.cs" />
+    <Compile Include="Collections\ContentList.cs" />
+    <Compile Include="Enumerations\ContentType.cs" />
+    <Compile Include="Contents\ContentContainerContent.cs" />
+    <Compile Include="Contents\Punctuation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Enumerations\" />
+  </ItemGroup>
 </Project>

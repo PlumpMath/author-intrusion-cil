@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Contents.Collections;
+using MfGames.Author.Contract.Collections;
 using MfGames.Author.Contract.Languages;
 using MfGames.Author.Contract.Structures;
 
@@ -27,7 +27,7 @@ namespace MfGames.Author.English
 		/// </summary>
 		/// <param name="paragraph">The paragraph with unparsed contents.</param>
 		/// <returns>True if successfully parsed, false if not.</returns>
-		public void Parse(Paragraph paragraph)
+		public void Parse(ContentContainerStructure paragraph)
 		{
 			// Pull out the paragraphs' unparsed content.
 			ContentList unparsed = paragraph.UnparsedContents;

@@ -3,16 +3,16 @@
 using System;
 using System.Collections.Generic;
 
+using MfGames.Author.Contract.Structures;
+
 #endregion
 
-namespace MfGames.Author.Contract.Structures.Collections
+namespace MfGames.Author.Contract.Collections
 {
 	/// <summary>
-	/// Implements a list that manages structure base elements.
+	/// Implements a list that manages structure elements.
 	/// </summary>
-	/// <typeparam name="TStructure">The type of the structure.</typeparam>
-	public class StructureBaseList<TStructure> : List<TStructure>
-		where TStructure: StructureBase
+	public class StructureList : List<Structure>
 	{
 		#region Constructors
 
@@ -20,7 +20,7 @@ namespace MfGames.Author.Contract.Structures.Collections
 		/// Initializes a new instance of the <see cref="StructureBaseList&lt;TStructure&gt;"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
-		public StructureBaseList(StructureBase parent)
+		public StructureList(Structure parent)
 		{
 			this.parent = parent;
 		}
@@ -29,13 +29,13 @@ namespace MfGames.Author.Contract.Structures.Collections
 
 		#region Structural Relationship
 
-		private readonly StructureBase parent;
+		private readonly Structure parent;
 
 		/// <summary>
 		/// Gets the parent structural element.
 		/// </summary>
 		/// <value>The parent.</value>
-		public StructureBase Parent
+		public Structure Parent
 		{
 			get { return parent; }
 		}
@@ -48,7 +48,7 @@ namespace MfGames.Author.Contract.Structures.Collections
 		/// Adds the specified structure to the list.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
-		public new void Add(TStructure structure)
+		public new void Add(Structure structure)
 		{
 			if (structure == null)
 			{

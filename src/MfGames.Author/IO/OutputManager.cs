@@ -51,7 +51,7 @@ namespace MfGames.Author.IO
 		/// <returns></returns>
 		public void Write(
 			FileInfo outputFile,
-			StructureBase structure)
+			Structure structure)
 		{
 			// Make sure the file exists for writing.
 			if (outputFile == null)
@@ -79,7 +79,7 @@ namespace MfGames.Author.IO
 		/// <returns></returns>
 		private void Write(
 			Stream outputStream,
-			StructureBase structure,
+			Structure structure,
 			string filename)
 		{
 			// Build up a list of possible writers based on filename.

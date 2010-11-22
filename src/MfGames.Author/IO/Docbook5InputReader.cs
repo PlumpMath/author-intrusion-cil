@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Xml;
 
 using MfGames.Author.Contract.Constants;
-using MfGames.Author.Contract.Contents.Interfaces;
+using MfGames.Author.Contract.Interfaces;
 using MfGames.Author.Contract.Structures;
-using MfGames.Author.Contract.Structures.Interfaces;
 
 #endregion
 
@@ -70,13 +69,13 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		protected override StructureBase Read(XmlReader reader)
+		protected override Structure Read(XmlReader reader)
 		{
 			// This implements a very simple Docbook 5 XML reader that ignores
 			// all the elements outside of the scope of this application and 
 			// creates a simplified structure.
-			List<StructureBase> structureContext = new List<StructureBase>();
-			StructureBase rootStructure = null;
+			List<Structure> structureContext = new List<Structure>();
+			Structure rootStructure = null;
 
 			while (reader.Read())
 			{
@@ -107,13 +106,13 @@ namespace MfGames.Author.IO
 				throw new Exception("Cannot identify the root level element");
 			}
 
-			if (!(rootStructure is StructureBase))
+			if (!(rootStructure is Structure))
 			{
 				throw new Exception("Root structure does not define StructureBase");
 			}
 
 			// There is nothing wrong with the parse, so return the root.
-			return rootStructure as StructureBase;
+			return rootStructure as Structure;
 		}
 
 		/// <summary>
@@ -123,7 +122,7 @@ namespace MfGames.Author.IO
 		/// <param name="context">The context.</param>
 		private static void ReadElement(
 			XmlReader reader,
-			List<StructureBase> context)
+			List<Structure> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
 			if (reader.NamespaceURI != Namespaces.Docbook5)
@@ -132,7 +131,7 @@ namespace MfGames.Author.IO
 			}
 
 			// Get the last item in the context.
-			StructureBase parent = null;
+			Structure parent = null;
 
 			if (context.Count > 0)
 			{
@@ -140,45 +139,45 @@ namespace MfGames.Author.IO
 			}
 
 			// Switch based on the local tag.
-			StructureBase structure;
+			Structure structure;
 
 			switch (reader.LocalName)
 			{
 				case "book":
-					structure = new Book();
+					structure = new StructureContainerStructure();
 					break;
 
 				case "chapter":
-					var chapter = new Chapter();
+					var chapter = new StructureContentContainerStructure();
 					structure = chapter;
 
-					if (parent != null && parent is Book)
+					if (parent != null && parent is IStructureContainer)
 					{
-						((Book) parent).Chapters.Add(chapter);
+						((IStructureContainer) parent).Structures.Add(chapter);
 					}
 					break;
 
 				case "article":
-					structure = new Article();
+					structure = new StructureContentContainerStructure();
 					break;
 
 				case "section":
-					var section = new Section();
+					var section = new StructureContainerStructure();
 					structure = section;
 
-					if (parent != null && parent is ISectionContainer)
+					if (parent != null && parent is IStructureContainer)
 					{
-						((ISectionContainer) parent).Sections.Add(section);
+						((IStructureContainer) parent).Structures.Add(chapter);
 					}
 					break;
 
 				case "para":
-					var paragraph = new Paragraph();
+					var paragraph = new ContentContainerStructure();
 					structure = paragraph;
 
-					if (parent != null && parent is IParagraphContainer)
+					if (parent != null && parent is IStructureContainer)
 					{
-						((IParagraphContainer) parent).Paragraphs.Add(paragraph);
+						((IStructureContainer) parent).Structures.Add(chapter);
 					}
 					break;
 
@@ -198,7 +197,7 @@ namespace MfGames.Author.IO
 		/// <param name="context">The context.</param>
 		private static void ReadEndElement(
 			XmlReader reader,
-			List<StructureBase> context)
+			List<Structure> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
 			if (reader.NamespaceURI != Namespaces.Docbook5)
@@ -225,7 +224,7 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <param name="context">The context.</param>
-		private static void ReadText(XmlReader reader, List<StructureBase> context)
+		private static void ReadText(XmlReader reader, List<Structure> context)
 		{
 			// Figure out where to put this text content.
 			if (context.Count == 0)
@@ -234,7 +233,7 @@ namespace MfGames.Author.IO
 			}
 
 			// Make sure the last item in the context can contain contents.
-			IUnparsedContentContainer container = context[context.Count - 1] as IUnparsedContentContainer;
+			IContentContainer container = context[context.Count - 1] as IContentContainer;
 
 			if (container == null)
 			{
@@ -244,7 +243,7 @@ namespace MfGames.Author.IO
 			}
 
 			// Wrap the text into an unparsed string and add it to the container.
-			container.UnparsedContents.Add(reader.Value);
+			container.Contents.Add(reader.Value);
 		}
 
 		#endregion

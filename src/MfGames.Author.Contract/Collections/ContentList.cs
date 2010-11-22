@@ -3,14 +3,16 @@
 using System.Collections.Generic;
 using System.Text;
 
+using MfGames.Author.Contract.Contents;
+
 #endregion
 
-namespace MfGames.Author.Contract.Contents.Collections
+namespace MfGames.Author.Contract.Collections
 {
 	/// <summary>
 	/// Implements an ordered list of content elements.
 	/// </summary>
-	public class ContentList : List<ContentBase>
+	public class ContentList : List<Content>
 	{
 		#region List Operations
 		
@@ -22,7 +24,7 @@ namespace MfGames.Author.Contract.Contents.Collections
 		/// </param>
 		public void Add(string parsedContent)
 		{
-			Add(new UnparsedString(parsedContent));
+			Add(new Unparsed(parsedContent));
 		}
 		
 		#endregion
@@ -40,7 +42,7 @@ namespace MfGames.Author.Contract.Contents.Collections
 			StringBuilder buffer = new StringBuilder();
 			bool first = true;
 
-			foreach (ContentBase content in this)
+			foreach (Content content in this)
 			{
 				if (first)
 				{
@@ -48,7 +50,7 @@ namespace MfGames.Author.Contract.Contents.Collections
 				}
 				else
 				{
-					if (!(content is Terminator))
+					if (content.ContentType == ContentType.Terminator)
 					{
 						buffer.Append(" ");
 					}

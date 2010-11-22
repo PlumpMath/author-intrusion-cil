@@ -22,7 +22,7 @@ namespace MfGames.Author.Contract.IO
 		/// </summary>
 		/// <param name="inputFile">The input file.</param>
 		/// <returns></returns>
-		StructureBase Read(FileInfo inputFile);
+		Structure Read(FileInfo inputFile);
 
 		/// <summary>
 		/// Reads the specified input stream and returns a structure elements.
@@ -31,7 +31,7 @@ namespace MfGames.Author.Contract.IO
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <returns></returns>
-		StructureBase Read(Stream inputStream);
+		Structure Read(Stream inputStream);
 
 		#endregion
 	}

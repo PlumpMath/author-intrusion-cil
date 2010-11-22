@@ -40,7 +40,7 @@ namespace MfGames.Author.Contract.IO
 		/// <param name="structure">The structure.</param>
 		void Write(
 			Stream outputStream,
-			StructureBase structure);
+			Structure structure);
 
 		#endregion
 	}

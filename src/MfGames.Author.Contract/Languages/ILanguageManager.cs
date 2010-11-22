@@ -17,7 +17,7 @@ namespace MfGames.Author.Contract.Languages
 		/// Parses the contents of the given structure.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
-		void Parse(StructureBase structure);
+		void Parse(Structure structure);
 
 		#endregion
 	}

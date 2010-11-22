@@ -52,7 +52,7 @@ namespace MfGames.Author.IO
 		/// <param name="rootStructure">The root structure.</param>
 		public void Write (
 			Stream outputStream,
-			StructureBase rootStructure)
+			Structure rootStructure)
 		{
 			// Write this using the XHTML writer.
 			var settings = new XmlWriterSettings ();
@@ -91,13 +91,13 @@ namespace MfGames.Author.IO
 		/// <param name="paragraph">The paragraph.</param>
 		private static void WriteParagraph(
 			XmlWriter writer,
-			Paragraph paragraph)
+			ContentContainerStructure paragraph)
 		{
 			// Build up a list of strings sentences in the paragraph.
 			List<string> sentences = new List<string>();
 
 			// Go through the unparsed content.
-			foreach (UnparsedString unparsedString in paragraph.UnparsedContents)
+			foreach (Unparsed unparsedString in paragraph.UnparsedContents)
 			{
 				sentences.Add(unparsedString.Contents);
 			}
@@ -123,7 +123,7 @@ namespace MfGames.Author.IO
 		/// <param name="depth">The depth.</param>
 		private static void WriteStructure(
 			XmlWriter writer,
-			StructureBase structure,
+			Structure structure,
 			int depth)
 		{
 			// Write out the header for the section.
@@ -137,7 +137,7 @@ namespace MfGames.Author.IO
 				SectionParagraphContainerBase container = (SectionParagraphContainerBase) structure;
 
 				// Write out the paragraphs inside the container.
-				foreach (Paragraph paragraph in container.Paragraphs)
+				foreach (ContentContainerStructure paragraph in container.Paragraphs)
 				{
 					writer.WriteStartElement("p", Namespaces.Xhtml11);
 					WriteParagraph(writer, paragraph);

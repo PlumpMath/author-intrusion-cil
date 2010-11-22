@@ -24,7 +24,7 @@ namespace MfGamesAuthorCli
 			Console.WriteLine("Reading {0} {1}", inputFile, inputFile.Exists);
 
 			IInputManager inputManager = manager.InputManager;
-			StructureBase rootStructure = inputManager.Read(inputFile);
+			Structure rootStructure = inputManager.Read(inputFile);
 
 			// Parse the contents of the root.
 			ILanguageManager languageManager = manager.LanguageManager;

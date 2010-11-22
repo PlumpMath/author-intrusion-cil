@@ -91,7 +91,7 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <returns>An StructureBase containing the top-level element.</returns>
-		public StructureBase Read(Stream inputStream)
+		public Structure Read(Stream inputStream)
 		{
 			// Wrap the stream in an XmlReader so we can parse the top-level
 			// element.
@@ -110,7 +110,7 @@ namespace MfGames.Author.IO
 		/// <returns>
 		/// An StructureBase containing the top-level element.
 		/// </returns>
-		protected abstract StructureBase Read(XmlReader reader);
+		protected abstract Structure Read(XmlReader reader);
 
 		#endregion
 

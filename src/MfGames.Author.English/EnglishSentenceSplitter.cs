@@ -30,7 +30,7 @@ namespace MfGames.Author.English
 			ContentList current = new ContentList();
 			sentences.Add(current);
 
-			foreach (ContentBase content in contents)
+			foreach (Content content in contents)
 			{
 				// Add the content to the current sentence.
 				current.Add(content);

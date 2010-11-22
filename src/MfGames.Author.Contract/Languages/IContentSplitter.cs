@@ -1,6 +1,6 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Contents.Collections;
+using MfGames.Author.Contract.Collections;
 
 #endregion
 

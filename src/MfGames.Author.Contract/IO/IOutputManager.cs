@@ -24,7 +24,7 @@ namespace MfGames.Author.Contract.IO
 		/// <param name="rootStructure">The root structure.</param>
 		void Write(
 			FileInfo inputFile,
-			StructureBase rootStructure);
+			Structure rootStructure);
 
 		#endregion
 	}

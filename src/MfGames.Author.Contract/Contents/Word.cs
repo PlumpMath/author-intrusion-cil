@@ -5,7 +5,7 @@ namespace MfGames.Author.Contract.Contents
 	/// <summary>
 	/// Contains a single sematic word for parsing.
 	/// </summary>
-	public class Word : ContentBase
+	public class Word : Content
 	{
 		#region Constructors
 
@@ -21,6 +21,13 @@ namespace MfGames.Author.Contract.Contents
 		#endregion
 
 		#region Properties
+
+
+		public override ContentType ContentType {
+			get {
+				return ContentType.Word;
+			}
+		}
 
 		private readonly string text;
 

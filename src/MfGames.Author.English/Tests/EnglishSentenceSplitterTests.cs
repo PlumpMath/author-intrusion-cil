@@ -26,7 +26,7 @@ namespace MfGames.Author.English.Tests
 		public void SimpleSentence()
 		{
 			ContentList sentence = TestSingleSentence(
-				new UnparsedString("This is a simple sentence."));
+				new Unparsed("This is a simple sentence."));
 
 			Assert.AreEqual(
 				6,
@@ -40,7 +40,7 @@ namespace MfGames.Author.English.Tests
 		[Test]
 		public void SentenceWithHonorific()
 		{
-			TestSingleSentence(new UnparsedString("I saw Mr. Smith."));
+			TestSingleSentence(new Unparsed("I saw Mr. Smith."));
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace MfGames.Author.English.Tests
 		public void SentenceWithQuote()
 		{
 			TestSingleSentence(
-				new UnparsedString("I said, "),
+				new Unparsed("I said, "),
 				new Quote("You like me."));
 		}
 
@@ -61,7 +61,7 @@ namespace MfGames.Author.English.Tests
 		public void SentenceWithMultipleSentenceQuote()
 		{
 			TestSingleSentence(
-				new UnparsedString("I said, "),
+				new Unparsed("I said, "),
 				new Quote("You like me. And then she hit me."));
 		}
 
@@ -72,9 +72,9 @@ namespace MfGames.Author.English.Tests
 		public void SentenceWithSplitQuote()
 		{
 			TestSingleSentence(
-				new UnparsedString("I said, "),
+				new Unparsed("I said, "),
 				new Quote("You like me,"),
-				new UnparsedString(" while flinching."));
+				new Unparsed(" while flinching."));
 		}
 
 		#endregion
@@ -86,20 +86,20 @@ namespace MfGames.Author.English.Tests
 		/// the resulting sentence is verify that it is parsed correctly.
 		/// </summary>
 		/// <param name="contents">The contents.</param>
-		private static ContentList TestSingleSentence(params ContentBase[] contents)
+		private static ContentList TestSingleSentence(params Content[] contents)
 		{
 			// Create the paragraph and add the sentence to the unparsed content.
 			var unparsed = new ContentList();
 			unparsed.Add(
-				new UnparsedString("This is the first sentence."));
+				new Unparsed("This is the first sentence."));
 
-			foreach (ContentBase content in contents)
+			foreach (Content content in contents)
 			{
 				unparsed.Add(content);
 			}
 
 			unparsed.Add(
-				new UnparsedString("This is the third sentence."));
+				new Unparsed("This is the third sentence."));
 
 			// Split the input into parsed content.
 			EnglishContentSplitter contentSplitter = new EnglishContentSplitter();
