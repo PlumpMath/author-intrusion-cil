@@ -1,7 +1,9 @@
-using System;
+#region Namespaces
 
 using MfGames.Author.Contract.Collections;
 using MfGames.Author.Contract.Interfaces;
+
+#endregion
 
 namespace MfGames.Author.Contract.Structures
 {
@@ -12,15 +14,26 @@ namespace MfGames.Author.Contract.Structures
 	/// </summary>
 	public class StructureContainerStructure : Structure, IStructureContainer
 	{
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StructureContainerStructure"/> class.
+		/// </summary>
 		public StructureContainerStructure()
 		{
 			structures = new StructureList(this);
 		}
 
+		#endregion
+
 		#region Structures
 
-		private StructureList structures;
+		private readonly StructureList structures;
 
+		/// <summary>
+		/// Contains a list of structures inside the container.
+		/// </summary>
+		/// <value>The child structures or an empty list.</value>
 		public StructureList Structures
 		{
 			get { return structures; }

@@ -2,8 +2,9 @@
 
 using System.Collections.Generic;
 
+using MfGames.Author.Contract.Collections;
 using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Contents.Collections;
+using MfGames.Author.Contract.Enumerations;
 
 using NUnit.Framework;
 
@@ -25,12 +26,15 @@ namespace MfGames.Author.English.Tests
 		[Test]
 		public void SimpleSentence()
 		{
-			ContentList sentence = TestSingleSentence(
-				new Unparsed("This is a simple sentence."));
+			Sentence sentence = TestSingleSentence(
+				new Unparsed("This is a simple sentence.")) as Sentence;
 
+			Assert.IsNotNull(
+				sentence, 
+				"Content type was not expected");
 			Assert.AreEqual(
 				6,
-				sentence.Count, 
+				sentence.Contents.Count, 
 				"Unexpected number of content elements in results");
 		}
 
@@ -86,36 +90,37 @@ namespace MfGames.Author.English.Tests
 		/// the resulting sentence is verify that it is parsed correctly.
 		/// </summary>
 		/// <param name="contents">The contents.</param>
-		private static ContentList TestSingleSentence(params Content[] contents)
+		private static Content TestSingleSentence(params Content[] contents)
 		{
 			// Create the paragraph and add the sentence to the unparsed content.
-			var unparsed = new ContentList();
-			unparsed.Add(
+			var parsed = new ContentList();
+			parsed.Add(
 				new Unparsed("This is the first sentence."));
 
 			foreach (Content content in contents)
 			{
-				unparsed.Add(content);
+				parsed.Add(content);
 			}
 
-			unparsed.Add(
+			parsed.Add(
 				new Unparsed("This is the third sentence."));
 
 			// Split the input into parsed content.
-			EnglishContentSplitter contentSplitter = new EnglishContentSplitter();
-			ContentList parsed = contentSplitter.SplitContents(unparsed);
+			var contentSplitter = new EnglishUnparsedSplitter();
+			contentSplitter.Parse(parsed);
 
 			// Split the sentences out and compare the results.
-			List<ContentList> sentences = EnglishSentenceSplitter.SplitSentences(parsed);
+			var sentenceSplitter = new EnglishSentenceSplitter();
+			sentenceSplitter.Parse(parsed);
 
 			Assert.AreEqual(
 				3,
-				sentences.Count,
+				parsed.Count,
 				"Could not parse isolate the sentence with the splitter.");
 
 			// Return the parsed sentence if we got this far. We don't bother with
 			// the first and third since those are just used to detect run-ons.
-			return sentences[1];
+			return parsed[1];
 		}
 
 		#endregion

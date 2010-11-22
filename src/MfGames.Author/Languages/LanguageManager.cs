@@ -1,7 +1,10 @@
 #region Namespaces
 
 using System;
+using System.Collections.Generic;
 
+using MfGames.Author.Contract.Enumerations;
+using MfGames.Author.Contract.Interfaces;
 using MfGames.Author.Contract.Languages;
 using MfGames.Author.Contract.Structures;
 
@@ -20,17 +23,17 @@ namespace MfGames.Author.Languages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LanguageManager"/> class.
 		/// </summary>
-		/// <param name="paragraphParser">The paragraph parser.</param>
-		public LanguageManager(IParagraphParser paragraphParser)
+		/// <param name="contentParsers">The content parsers.</param>
+		public LanguageManager(IContentParser[] contentParsers)
 		{
-			this.paragraphParser = paragraphParser;
+			this.contentParsers = contentParsers;
 		}
 
 		#endregion
 
 		#region Parsing
 
-		private readonly IParagraphParser paragraphParser;
+		private readonly IContentParser[] contentParsers;
 
 		/// <summary>
 		/// Parses the contents of the given structure.
@@ -44,45 +47,72 @@ namespace MfGames.Author.Languages
 				throw new ArgumentNullException("structure");
 			}
 
-			// If we are a section/paragraph container, simplify processing.
-			if (structure is SectionParagraphContainerBase)
+			// If we have content, we need to parse those first.
+			if (structure is IContentContainer)
 			{
-				SectionParagraphContainerBase container = (SectionParagraphContainerBase) structure;
+				// Create a list of parsers we currently have in this manager
+				// and strip out the ones that don't apply to the language.
+				List<IContentParser> parsers = new List<IContentParser>();
+				parsers.AddRange(contentParsers);
 
-				foreach (ContentContainerStructure paragraph in container.Paragraphs)
+				var contentContainer = (IContentContainer) structure;
+
+				while (true)
 				{
-					Parse(paragraph);
-				}
+					// Keep track of the parsers that need to be removed from the
+					// list. We also keep track if we have at least one successful
+					// parse since that will let us try the deferred parsers again.
+					List<IContentParser> removedParsers = new List<IContentParser>();
+					bool hadSuccessfulParse = false;
 
-				foreach (Section section in container.Sections)
-				{
-					Parse(section);
-				}
+					// Go through all the parsers on the list.
+					foreach (var parser in parsers)
+					{
+						// Attempt to parse the contents with this one.
+						var results = parser.Parse(contentContainer.Contents);
 
-				return;
+						switch (results)
+						{
+							case ParserStatus.Succeeded:
+								// Mark that we are successful to loop again and
+								// add the parser to the remove list.
+								hadSuccessfulParse = true;
+								removedParsers.Add(parser);
+								break;
+
+							case ParserStatus.Failed:
+								// Add the parser to the remove list so we don't
+								// try it again.
+								removedParsers.Add(parser);
+								break;
+						}
+					}
+
+					// Remove any parsers on the remove list.
+					foreach (var parser in removedParsers)
+					{
+						parsers.Remove(parser);
+					}
+
+					// If we don't have any parsers left or if we didn't have
+					// at least one successful one, we break out of the loop.
+					if (!hadSuccessfulParse || parsers.Count == 0)
+					{
+						break;
+					}
+				}
 			}
 
-			// For the remaining items, figure out what to do.
-			switch (structure.GetType().Name)
+			// For structure containers, pass the parsing into the child
+			// structures.
+			if (structure is IStructureContainer)
 			{
-				case "Book":
-					foreach (Chapter chapter in ((Book) structure).Chapters)
-					{
-						Parse(chapter);
-					}
-
-					break;
-
-				case "Paragraph":
-					ContentContainerStructure paragraph = (ContentContainerStructure) structure;
-
-					if (!paragraph.IsParsed)
-					{
-						paragraphParser.Parse(paragraph);
-						paragraph.UnparsedContents.Clear();
-					}
-
-					break;
+				var structureContainer = (IStructureContainer) structure;
+				
+				foreach (var childStructure in structureContainer.Structures)
+				{
+					Parse(childStructure);
+				}
 			}
 		}
 

@@ -1,12 +1,10 @@
 #region Namespaces
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
 using MfGames.Author.Contract.Constants;
-using MfGames.Author.Contract.Contents;
+using MfGames.Author.Contract.Interfaces;
 using MfGames.Author.Contract.IO;
 using MfGames.Author.Contract.Structures;
 
@@ -46,82 +44,12 @@ namespace MfGames.Author.IO
 		#region Writing
 
 		/// <summary>
-		/// Writes out the root structure to the given output stream.
-		/// </summary>
-		/// <param name="outputStream">The output stream.</param>
-		/// <param name="rootStructure">The root structure.</param>
-		public void Write (
-			Stream outputStream,
-			Structure rootStructure)
-		{
-			// Write this using the XHTML writer.
-			var settings = new XmlWriterSettings ();
-			settings.Indent = true;
-			settings.CloseOutput = false;
-			settings.OmitXmlDeclaration = false;
-		
-			using (XmlWriter writer = XmlWriter.Create (outputStream, settings))
-			{
-				// Write out the XML headers.
-				writer.WriteStartElement ("html", Namespaces.Xhtml11);
-
-				// Write out the head tag.
-				writer.WriteStartElement ("head");
-				writer.WriteStartElement ("link");
-				writer.WriteAttributeString("rel", "stylesheet");
-				writer.WriteAttributeString("type", "text/css");
-				writer.WriteAttributeString("href", "style.css");
-				writer.WriteEndElement();
-				writer.WriteEndElement();
-				
-				// Write out the body tag.
-				writer.WriteStartElement("body", Namespaces.Xhtml11);
-				WriteStructure(writer, rootStructure, 0);
-				writer.WriteEndElement();
-
-				// Finish up the XHTML.
-				writer.WriteEndElement();
-			}
-		}
-
-		/// <summary>
-		/// Writes out the contents of a paragraph.
-		/// </summary>
-		/// <param name="writer">The writer.</param>
-		/// <param name="paragraph">The paragraph.</param>
-		private static void WriteParagraph(
-			XmlWriter writer,
-			ContentContainerStructure paragraph)
-		{
-			// Build up a list of strings sentences in the paragraph.
-			List<string> sentences = new List<string>();
-
-			// Go through the unparsed content.
-			foreach (Unparsed unparsedString in paragraph.UnparsedContents)
-			{
-				sentences.Add(unparsedString.Contents);
-			}
-
-			// Write out the resulting paragraph.
-			writer.WriteString(String.Join(" ", sentences.ToArray()));
-
-			// Write out the sentences in the paragraph.
-			foreach (Sentence sentence in paragraph.Sentences)
-			{
-				writer.WriteStartElement("span");
-				writer.WriteAttributeString("class", "sentence");
-				writer.WriteString(sentence.ToString());
-				writer.WriteEndElement();
-			}
-		}
-
-		/// <summary>
 		/// Writes out the structure element to the given writer.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		/// <param name="structure">The structure.</param>
 		/// <param name="depth">The depth.</param>
-		private static void WriteStructure(
+		private static void Write(
 			XmlWriter writer,
 			Structure structure,
 			int depth)
@@ -131,35 +59,64 @@ namespace MfGames.Author.IO
 			writer.WriteString(structure.GetType().Name);
 			writer.WriteEndElement();
 
-			// Write out any paragraphs associated with the item.
-			if (structure is SectionParagraphContainerBase)
+			// Write out any content associated with the item.
+			if (structure is IContentContainer)
 			{
-				SectionParagraphContainerBase container = (SectionParagraphContainerBase) structure;
+				var contentContainer = (IContentContainer) structure;
 
-				// Write out the paragraphs inside the container.
-				foreach (ContentContainerStructure paragraph in container.Paragraphs)
-				{
-					writer.WriteStartElement("p", Namespaces.Xhtml11);
-					WriteParagraph(writer, paragraph);
-					writer.WriteEndElement();
-				}
-
-				// Write out the inner sections.
-				foreach (Section section in container.Sections)
-				{
-					WriteStructure(writer, section, depth + 1);
-				}
+				writer.WriteStartElement("p", Namespaces.Xhtml11);
+				writer.WriteString(contentContainer.ContentString);
+				writer.WriteEndElement();
 			}
 
-			// Catch any other components.
-			if (structure is Book)
+			// Write out any child structures associated with the item.
+			if (structure is IStructureContainer)
 			{
-				Book book = (Book) structure;
+				var structureContainer = (IStructureContainer) structure;
 
-				foreach (Chapter chapter in book.Chapters)
+				foreach (Structure childStructure in structureContainer.Structures)
 				{
-					WriteStructure(writer, chapter, depth + 1);
+					Write(writer, childStructure, depth + 1);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Writes out the root structure to the given output stream.
+		/// </summary>
+		/// <param name="outputStream">The output stream.</param>
+		/// <param name="rootStructure">The root structure.</param>
+		public void Write(
+			Stream outputStream,
+			Structure rootStructure)
+		{
+			// Write this using the XHTML writer.
+			var settings = new XmlWriterSettings();
+			settings.Indent = true;
+			settings.CloseOutput = false;
+			settings.OmitXmlDeclaration = false;
+
+			using (XmlWriter writer = XmlWriter.Create(outputStream, settings))
+			{
+				// Write out the XML headers.
+				writer.WriteStartElement("html", Namespaces.Xhtml11);
+
+				// Write out the head tag.
+				writer.WriteStartElement("head");
+				writer.WriteStartElement("link");
+				writer.WriteAttributeString("rel", "stylesheet");
+				writer.WriteAttributeString("type", "text/css");
+				writer.WriteAttributeString("href", "style.css");
+				writer.WriteEndElement();
+				writer.WriteEndElement();
+
+				// Write out the body tag.
+				writer.WriteStartElement("body", Namespaces.Xhtml11);
+				Write(writer, rootStructure, 0);
+				writer.WriteEndElement();
+
+				// Finish up the XHTML.
+				writer.WriteEndElement();
 			}
 		}
 

@@ -1,7 +1,8 @@
 #region Namespaces
 
+using MfGames.Author.Contract.Collections;
 using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Contents.Collections;
+using MfGames.Author.Contract.Enumerations;
 
 using NUnit.Framework;
 
@@ -27,20 +28,20 @@ namespace MfGames.Author.English.Tests
 
 			Assert.AreEqual(4, contents.Count, "Unexpected number of contents");
 			Assert.AreEqual(
-				typeof(Word),
-				contents[0].GetType(),
+				ContentType.Word,
+				contents[0].ContentType,
 				"contents[0] type is unexpected");
 			Assert.AreEqual(
-				typeof(Word),
-				contents[1].GetType(),
+				ContentType.Word,
+				contents[1].ContentType,
 				"contents[1] type is unexpected");
 			Assert.AreEqual(
-				typeof(Word),
-				contents[2].GetType(),
+				ContentType.Word,
+				contents[2].ContentType,
 				"contents[2] type is unexpected");
 			Assert.AreEqual(
-				typeof(Terminator),
-				contents[3].GetType(),
+				ContentType.Terminator,
+				contents[3].ContentType,
 				"contents[3] type is unexpected");
 		}
 
@@ -60,16 +61,16 @@ namespace MfGames.Author.English.Tests
 
 			Assert.AreEqual(3, contents.Count, "Unexpected number of contents");
 			Assert.AreEqual(
-				typeof(Word),
-				contents[0].GetType(),
+				ContentType.Word,
+				contents[0].ContentType,
 				"contents[0] type is unexpected");
 			Assert.AreEqual(
-				typeof(Word),
-				contents[1].GetType(),
+				ContentType.Word,
+				contents[1].ContentType,
 				"contents[1] type is unexpected");
 			Assert.AreEqual(
-				typeof(Quote),
-				contents[2].GetType(),
+				ContentType.Quote,
+				contents[2].ContentType,
 				"contents[2] type is unexpected");
 
 			// Assert the contents of the quote.
@@ -80,12 +81,12 @@ namespace MfGames.Author.English.Tests
 				quote.Contents.Count, 
 				"Unexpeted content count in quote");
 			Assert.AreEqual(
-				typeof(Word),
-				quote.Contents[0].GetType(),
+				ContentType.Word,
+				quote.Contents[0].ContentType,
 				"quote.contents[0] type is unexpected");
 			Assert.AreEqual(
-				typeof(Terminator),
-				quote.Contents[1].GetType(),
+				ContentType.Terminator,
+				quote.Contents[1].ContentType,
 				"quote.contents[1] type is unexpected");
 		}
 
@@ -114,9 +115,9 @@ namespace MfGames.Author.English.Tests
 		private static ContentList SplitContents(ContentList contents)
 		{
 			// Split the contents.
-			EnglishContentSplitter splitter = new EnglishContentSplitter();
-			ContentList parsed = splitter.SplitContents(contents);
-			return parsed;
+			EnglishUnparsedSplitter splitter = new EnglishUnparsedSplitter();
+			splitter.Parse(contents);
+			return contents;
 		}
 
 		#endregion

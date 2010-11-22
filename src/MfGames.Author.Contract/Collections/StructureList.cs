@@ -17,7 +17,7 @@ namespace MfGames.Author.Contract.Collections
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StructureBaseList&lt;TStructure&gt;"/> class.
+		/// Initializes a new instance of the <see cref="StructureList"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
 		public StructureList(Structure parent)
@@ -27,7 +27,7 @@ namespace MfGames.Author.Contract.Collections
 
 		#endregion
 
-		#region Structural Relationship
+		#region Structures
 
 		private readonly Structure parent;
 
@@ -61,6 +61,5 @@ namespace MfGames.Author.Contract.Collections
 		}
 
 		#endregion
-
 	}
 }

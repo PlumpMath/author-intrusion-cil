@@ -26,7 +26,7 @@ namespace MfGames.Author.English
 		{
 			// Register the individual input components.
 			container.Register(
-				AllTypes.FromThisAssembly().BasedOn<IParagraphParser>().WithService.
+				AllTypes.FromThisAssembly().BasedOn<IContentParser>().WithService.
 					DefaultInterface());
 		}
 	}

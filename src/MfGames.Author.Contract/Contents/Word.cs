@@ -1,4 +1,8 @@
-using System;
+#region Namespaces
+
+using MfGames.Author.Contract.Enumerations;
+
+#endregion
 
 namespace MfGames.Author.Contract.Contents
 {
@@ -20,39 +24,35 @@ namespace MfGames.Author.Contract.Contents
 
 		#endregion
 
-		#region Properties
-
-
-		public override ContentType ContentType {
-			get {
-				return ContentType.Word;
-			}
-		}
+		#region Contents
 
 		private readonly string text;
 
 		/// <summary>
-		/// Gets the text.
+		/// Contains a flattened representation of the content.
+		/// </summary>
+		/// <value>The content string.</value>
+		public override string ContentString
+		{
+			get { return text; }
+		}
+
+		/// <summary>
+		/// Gets the type of content this object represents.
+		/// </summary>
+		/// <value>The type of the content.</value>
+		public override ContentType ContentType
+		{
+			get { return ContentType.Word; }
+		}
+
+		/// <summary>
+		/// Gets the text of this word.
 		/// </summary>
 		/// <value>The text.</value>
 		public string Text
 		{
 			get { return text; }
-		}
-
-		#endregion
-
-		#region Conversion
-
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
-		public override string ToString()
-		{
-			return text;
 		}
 
 		#endregion

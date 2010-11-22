@@ -1,8 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Collections;
+
 
 #endregion
+
+using MfGames.Author.Contract.Enumerations;
 
 namespace MfGames.Author.Contract.Contents
 {
@@ -11,7 +13,17 @@ namespace MfGames.Author.Contract.Contents
 	/// </summary>
 	public class Sentence : ContentContainerContent
 	{
+		#region Contents
+
+		/// <summary>
+		/// Gets the type of content this object represents.
+		/// </summary>
+		/// <value>The type of the content.</value>
 		public override ContentType ContentType
-		{ get { return ContentType.Sentence; }}
+		{
+			get { return ContentType.Sentence; }
+		}
+
+		#endregion
 	}
 }

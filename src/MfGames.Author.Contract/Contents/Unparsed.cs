@@ -2,6 +2,8 @@
 
 using System;
 
+using MfGames.Author.Contract.Enumerations;
+
 #endregion
 
 namespace MfGames.Author.Contract.Contents
@@ -15,38 +17,50 @@ namespace MfGames.Author.Contract.Contents
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UnparsedString"/> class.
+		/// Initializes a new instance of the <see cref="Unparsed"/> class.
 		/// </summary>
-		/// <param name="contents">The contents.</param>
-		public Unparsed(string contents)
+		/// <param name="text">The text.</param>
+		public Unparsed(string text)
 		{
-			if (contents == null)
+			if (text == null)
 			{
-				throw new ArgumentNullException("contents");
+				throw new ArgumentNullException("text");
 			}
 
-			this.contents = contents;
+			this.text = text;
 		}
 
 		#endregion
 
 		#region Contents
 
-		public override ContentType ContentType {
-			get {
-				return ContentType.Unparsed;
-			}
+		private readonly string text;
+
+		/// <summary>
+		/// Contains a flattened representation of the content.
+		/// </summary>
+		/// <value>The content string.</value>
+		public override string ContentString
+		{
+			get { return text; }
 		}
 
-		private readonly string contents;
+		/// <summary>
+		/// Gets the type of content this object represents.
+		/// </summary>
+		/// <value>The type of the content.</value>
+		public override ContentType ContentType
+		{
+			get { return ContentType.Unparsed; }
+		}
 
 		/// <summary>
 		/// Gets the contents of the unparsed string.
 		/// </summary>
 		/// <value>The contents.</value>
-		public string Contents
+		public string Text
 		{
-			get { return contents; }
+			get { return text; }
 		}
 
 		#endregion

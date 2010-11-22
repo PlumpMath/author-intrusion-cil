@@ -1,73 +1,99 @@
 #region Namespaces
 
-using System;
-using System.Collections.Generic;
-
+using MfGames.Author.Contract.Collections;
 using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Contents.Collections;
+using MfGames.Author.Contract.Enumerations;
+using MfGames.Author.Contract.Extensions;
+using MfGames.Author.Contract.Languages;
 
 #endregion
 
 namespace MfGames.Author.English
 {
 	/// <summary>
-	/// Implements a sentence splitter and
+	/// Implements a sentence splitter that takes the parsed contents and
+	/// creates sentence objects from it.
 	/// </summary>
-	public class EnglishSentenceSplitter
+	public class EnglishSentenceSplitter : EnglishSpecificBase, IContentParser
 	{
+		#region Parsing
+
 		/// <summary>
-		/// Splits the content list into one or more sentences.
+		/// Parses the content of the content container and replaces the contents
+		/// with parsed data.
 		/// </summary>
-		/// <param name="contents">A list of parsed content elements.</param>
-		/// <returns></returns>
-		public static List<ContentList> SplitSentences(ContentList contents)
+		/// <param name="contents">The content container.</param>
+		/// <returns>The status result from the parse.</returns>
+		public ParserStatus Parse(ContentList contents)
 		{
-			// Create a list of individual sentences.
-			List<ContentList> sentences = new List<ContentList>();
+			// If we have unparsed content, then we can't operation on this
+			// container at this time.
+			if (contents.GetUnparsedCount() > 0)
+			{
+				return ParserStatus.Deferred;
+			}
 
-			// Start at the beginning and look for puncuation that would indicate
-			// the end of a sentence.
-			ContentList current = new ContentList();
-			sentences.Add(current);
+			// Create a list of individual sentences which we'll be building
+			// or passing on if they were already created.
+			var sentences = new ContentList();
+			Sentence current = null;
 
+			// Go through the content to build up the sentences.
 			foreach (Content content in contents)
 			{
-				// Add the content to the current sentence.
-				current.Add(content);
+				// Check to see if this is already a sentence.
+				if (content.ContentType == ContentType.Sentence)
+				{
+					// Already parsed, so add it to the list.
+					sentences.Add(content);
+					continue;
+				}
 
-				// Check for a sentence terminator.
+				// If we don't have a current sentence, create it and add it to
+				// the list.
+				if (current == null)
+				{
+					current = new Sentence();
+					sentences.Add(current);
+				}
+
+				// Add the content to the current sentence.
+				current.Contents.Add(content);
+
+				// Check for a sentence terminator either in this content or
+				// at the end of a quote since English allows for the period
+				// to be inside the quote.
 				bool hasTerminator = false;
 
-				if (content is Terminator)
+				if (content.ContentType == ContentType.Terminator)
 				{
 					hasTerminator = true;
 				}
 
 				// If the sentence has a quote, see if we have a terminator
 				// at the end of that quote.
-				if (content is Quote)
+				if (content.ContentType == ContentType.Quote)
 				{
-					Quote quote = (Quote) content;
-					hasTerminator = quote.EndsWithTerminator;
+					var quote = (Quote) content;
+					hasTerminator = quote.GetEndsWithTerminator();
 				}
 
 				// We are at the end of the sentence. Start a new one.
 				if (hasTerminator)
 				{
-					current = new ContentList();
-					sentences.Add(current);
+					// We are done with the sentence, so just clear out the
+					// current sentence.
+					current = null;
 				}
 			}
 
-			// If the current sentence is blank, remove it.
-			if (current.Count == 0)
-			{
-				// The current one is always at the end of the list.
-				sentences.RemoveAt(sentences.Count - 1);
-			}
+			// Replace the contents with the new parsed contents.
+			contents.Replace(sentences);
 
-			// Return the resulting sentences.
-			return sentences;
+			// Return that we parsed it successfully.
+			return ParserStatus.Succeeded;
 		}
+
+		#endregion
 	}
 }

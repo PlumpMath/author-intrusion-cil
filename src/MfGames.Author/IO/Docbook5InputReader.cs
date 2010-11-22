@@ -148,7 +148,7 @@ namespace MfGames.Author.IO
 					break;
 
 				case "chapter":
-					var chapter = new StructureContentContainerStructure();
+					var chapter = new StructureContainerStructure();
 					structure = chapter;
 
 					if (parent != null && parent is IStructureContainer)
@@ -158,7 +158,7 @@ namespace MfGames.Author.IO
 					break;
 
 				case "article":
-					structure = new StructureContentContainerStructure();
+					structure = new StructureContainerStructure();
 					break;
 
 				case "section":
@@ -167,7 +167,7 @@ namespace MfGames.Author.IO
 
 					if (parent != null && parent is IStructureContainer)
 					{
-						((IStructureContainer) parent).Structures.Add(chapter);
+						((IStructureContainer) parent).Structures.Add(section);
 					}
 					break;
 
@@ -177,7 +177,7 @@ namespace MfGames.Author.IO
 
 					if (parent != null && parent is IStructureContainer)
 					{
-						((IStructureContainer) parent).Structures.Add(chapter);
+						((IStructureContainer) parent).Structures.Add(paragraph);
 					}
 					break;
 
