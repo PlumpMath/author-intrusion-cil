@@ -13,5 +13,11 @@
 			This is the not first paragraph in the document. But, this one has
 			multiple sentences which makes it more difficult to parse.
 		</para>
+
+		<para>
+			This is the not first paragraph in the document. But, this one has
+			multiple sentences which makes it more difficult to parse. It also
+			has a <quote>quotation</quote> inside it.
+		</para>
 	</chapter>
 </book>

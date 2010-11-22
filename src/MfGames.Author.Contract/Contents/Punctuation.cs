@@ -40,8 +40,8 @@ namespace MfGames.Author.Contract.Contents
 
 		#region Contents
 
+		private readonly string text;
 		private bool isTerminating;
-		private string text;
 
 		/// <summary>
 		/// Contains a flattened representation of the content.
@@ -72,6 +72,16 @@ namespace MfGames.Author.Contract.Contents
 		{
 			get { return isTerminating; }
 			set { isTerminating = value; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this content is normally formatted
+		/// with a leading space.
+		/// </summary>
+		/// <value><c>true</c> if [needs leading space]; otherwise, <c>false</c>.</value>
+		public override bool NeedsLeadingSpace
+		{
+			get { return false; }
 		}
 
 		#endregion

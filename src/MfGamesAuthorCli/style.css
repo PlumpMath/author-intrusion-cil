@@ -1,5 +1,25 @@
 ﻿.sentence
 {
-	border: 1px dotted #999;
-	margin-right: 1em;
+	border: 1px solid #666;
+}
+
+.punctuation
+{
+	background: #FCC;
+}
+
+.terminator
+{
+	background: #F99;
+}
+
+.word
+{
+	background: #9F9;
+}
+
+.quote
+{
+	border: 2px solid #66F;
+	background: #CCC;
 }

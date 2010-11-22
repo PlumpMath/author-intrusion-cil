@@ -1,9 +1,12 @@
 #region Namespaces
 
+using System;
 using System.IO;
 using System.Xml;
 
+using MfGames.Author.Contract.Collections;
 using MfGames.Author.Contract.Constants;
+using MfGames.Author.Contract.Contents;
 using MfGames.Author.Contract.Interfaces;
 using MfGames.Author.Contract.IO;
 using MfGames.Author.Contract.Structures;
@@ -65,7 +68,7 @@ namespace MfGames.Author.IO
 				var contentContainer = (IContentContainer) structure;
 
 				writer.WriteStartElement("p", Namespaces.Xhtml11);
-				writer.WriteString(contentContainer.ContentString);
+				WriteContents(writer, contentContainer.Contents);
 				writer.WriteEndElement();
 			}
 
@@ -98,6 +101,12 @@ namespace MfGames.Author.IO
 
 			using (XmlWriter writer = XmlWriter.Create(outputStream, settings))
 			{
+				// Check for null coming out of the create.
+				if (writer == null)
+				{
+					throw new Exception("Could not create XML writer");
+				}
+
 				// Write out the XML headers.
 				writer.WriteStartElement("html", Namespaces.Xhtml11);
 
@@ -116,6 +125,54 @@ namespace MfGames.Author.IO
 				writer.WriteEndElement();
 
 				// Finish up the XHTML.
+				writer.WriteEndElement();
+			}
+		}
+
+		/// <summary>
+		/// Writes out the content, wrapping each element in a span tag.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		/// <param name="contents">The contents.</param>
+		private static void WriteContents(XmlWriter writer, ContentList contents)
+		{
+			// Go through the contents and write out each content with
+			// classes for each content type.
+			bool isFirst = true;
+
+			foreach (Content content in contents)
+			{
+				// Check to see if we need a space before this content.
+				if (isFirst)
+				{
+					// No leading space in the buffer.
+					isFirst = false;
+				}
+				else if (content.NeedsLeadingSpace)
+				{
+					writer.WriteString(" ");
+				}
+
+				// Write out the span and class.
+				writer.WriteStartElement("span");
+				writer.WriteAttributeString(
+					"class",
+					content.ContentType.ToString().ToLower());
+
+				// If we are writing a container, we need to recursively go into
+				// the container, otherwise just write out the string.
+				if (content is IContentContainer)
+				{
+					var contentContainer = (IContentContainer) content;
+					WriteContents(writer, contentContainer.Contents);
+				}
+				else
+				{
+					// Write out the content string of a non-container.
+					writer.WriteString(content.ContentString);
+				}
+
+				// Finish up the span tag.
 				writer.WriteEndElement();
 			}
 		}

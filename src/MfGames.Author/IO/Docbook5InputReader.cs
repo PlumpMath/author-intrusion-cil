@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using MfGames.Author.Contract.Constants;
+using MfGames.Author.Contract.Contents;
 using MfGames.Author.Contract.Interfaces;
 using MfGames.Author.Contract.Structures;
 
@@ -179,7 +180,18 @@ namespace MfGames.Author.IO
 					{
 						((IStructureContainer) parent).Structures.Add(paragraph);
 					}
+
 					break;
+
+				case "quote":
+					var quote = new Quote();
+
+					if (parent != null && parent is IContentContainer)
+					{
+						((IContentContainer) parent).Contents.Add(quote);
+					}
+
+					return;
 
 				default:
 					// Unknown type, so just skip it.
