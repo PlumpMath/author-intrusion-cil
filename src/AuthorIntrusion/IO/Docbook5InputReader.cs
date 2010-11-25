@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
-using MfGames.Author.Contract.Constants;
-using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Interfaces;
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Constants;
+using AuthorIntrusion.Contracts.Contents;
+using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.IO
+namespace AuthorIntrusion.IO
 {
 	/// <summary>
 	/// Defines an input reader that takes Docbook 5 XML and produces the
@@ -75,7 +75,7 @@ namespace MfGames.Author.IO
 			// This implements a very simple Docbook 5 XML reader that ignores
 			// all the elements outside of the scope of this application and 
 			// creates a simplified structure.
-			List<Structure> structureContext = new List<Structure>();
+			var structureContext = new List<Structure>();
 			Structure rootStructure = null;
 
 			while (reader.Read())
@@ -113,7 +113,7 @@ namespace MfGames.Author.IO
 			}
 
 			// There is nothing wrong with the parse, so return the root.
-			return rootStructure as Structure;
+			return rootStructure;
 		}
 
 		/// <summary>
@@ -236,7 +236,9 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <param name="context">The context.</param>
-		private static void ReadText(XmlReader reader, List<Structure> context)
+		private static void ReadText(
+			XmlReader reader,
+			List<Structure> context)
 		{
 			// Figure out where to put this text content.
 			if (context.Count == 0)
@@ -245,7 +247,7 @@ namespace MfGames.Author.IO
 			}
 
 			// Make sure the last item in the context can contain contents.
-			IContentContainer container = context[context.Count - 1] as IContentContainer;
+			var container = context[context.Count - 1] as IContentContainer;
 
 			if (container == null)
 			{

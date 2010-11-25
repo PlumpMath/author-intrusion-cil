@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Castle.Core;
+using AuthorIntrusion.Contracts.IO;
+using AuthorIntrusion.Contracts.Structures;
 
-using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Structures;
+using Castle.Core;
 
 #endregion
 
-namespace MfGames.Author.IO
+namespace AuthorIntrusion.IO
 {
 	/// <summary>
 	/// A singleton class that manages the input and reading of documents and
@@ -62,7 +62,9 @@ namespace MfGames.Author.IO
 			}
 
 			// Read the file and return the structure.
-			using (FileStream fileStream = inputFile.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+			using (
+				FileStream fileStream = inputFile.Open(
+					FileMode.Open, FileAccess.Read, FileShare.Read))
 			{
 				return Read(fileStream, inputFile.Name);
 			}
@@ -87,10 +89,12 @@ namespace MfGames.Author.IO
 		/// <param name="inputStream">The input stream.</param>
 		/// <param name="filename">The filename.</param>
 		/// <returns></returns>
-		private Structure Read(Stream inputStream, string filename)
+		private Structure Read(
+			Stream inputStream,
+			string filename)
 		{
 			// Build up a list of possible readers based on filename.
-			List<IInputReader> readers = new List<IInputReader>();
+			var readers = new List<IInputReader>();
 
 			if (String.IsNullOrEmpty(filename))
 			{
@@ -119,14 +123,14 @@ namespace MfGames.Author.IO
 			// the files with the remaining readers.
 			if (inputStream.CanSeek)
 			{
-				List<IInputReader> filteredReaders = new List<IInputReader>();
+				var filteredReaders = new List<IInputReader>();
 
 				foreach (IInputReader inputReader in readers)
 				{
 					// See if this input reader thinks it is capable of handling
 					// the given file.
 					inputStream.Seek(0, SeekOrigin.Begin);
-					
+
 					if (inputReader.CanRead(inputStream))
 					{
 						filteredReaders.Add(inputReader);
@@ -157,6 +161,5 @@ namespace MfGames.Author.IO
 		}
 
 		#endregion
-
 	}
 }

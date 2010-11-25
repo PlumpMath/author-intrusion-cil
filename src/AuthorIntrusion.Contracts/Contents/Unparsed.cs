@@ -2,11 +2,11 @@
 
 using System;
 
-using MfGames.Author.Contract.Enumerations;
+using AuthorIntrusion.Contracts.Enumerations;
 
 #endregion
 
-namespace MfGames.Author.Contract.Contents
+namespace AuthorIntrusion.Contracts.Contents
 {
 	/// <summary>
 	/// Represents a block of text that has not been parsed into other content

@@ -1,10 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Languages;
+using AuthorIntrusion.Contracts.Languages;
 
 #endregion
 
-namespace MfGames.Author.English
+namespace AuthorIntrusion.English
 {
 	/// <summary>
 	/// Base class that handles the common processing for English classes.
@@ -25,10 +25,7 @@ namespace MfGames.Author.English
 		/// <value>The language codes.</value>
 		public string[] LanguageCodes
 		{
-			get
-			{
-				return new[] { "eng" };
-			}
+			get { return new[] { "eng" }; }
 		}
 
 		#endregion

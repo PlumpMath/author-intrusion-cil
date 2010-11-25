@@ -1,4 +1,4 @@
-namespace MfGames.Author.Contract.Languages
+namespace AuthorIntrusion.Contracts.Languages
 {
 	/// <summary>
 	/// An interface that indicates that an element is specific to one or more

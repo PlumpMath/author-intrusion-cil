@@ -2,11 +2,11 @@
 
 using System.IO;
 
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.Contract.IO
+namespace AuthorIntrusion.Contracts.IO
 {
 	/// <summary>
 	/// Defines the signature for something that can translate the internal

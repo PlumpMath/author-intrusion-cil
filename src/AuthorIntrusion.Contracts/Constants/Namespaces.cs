@@ -1,4 +1,4 @@
-namespace MfGames.Author.Contract.Constants
+namespace AuthorIntrusion.Contracts.Constants
 {
 	/// <summary>
 	/// Contains the various namespace constants.

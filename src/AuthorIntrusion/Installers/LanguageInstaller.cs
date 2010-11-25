@@ -1,14 +1,14 @@
 #region Namespaces
 
+using AuthorIntrusion.Contracts.Languages;
+
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
-using MfGames.Author.Contract.Languages;
-
 #endregion
 
-namespace MfGames.Author.Installers
+namespace AuthorIntrusion.Installers
 {
 	/// <summary>
 	/// Installs the various language-specific elements into the Windsor container.

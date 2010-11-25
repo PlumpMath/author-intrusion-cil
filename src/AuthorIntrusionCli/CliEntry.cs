@@ -3,24 +3,24 @@
 using System;
 using System.IO;
 
-using MfGames.Author;
-using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Languages;
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion;
+using AuthorIntrusion.Contracts.IO;
+using AuthorIntrusion.Contracts.Languages;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGamesAuthorCli
+namespace AuthorIntrusionCli
 {
 	internal class CliEntry
 	{
 		public static void Main(string[] args)
 		{
 			// Initialize the author system.
-			Manager manager = new Manager();
+			var manager = new Manager();
 
 			// Read the input file.
-			FileInfo inputFile = new FileInfo(args[0]);
+			var inputFile = new FileInfo(args[0]);
 			Console.WriteLine("Reading {0} {1}", inputFile, inputFile.Exists);
 
 			IInputManager inputManager = manager.InputManager;
@@ -31,7 +31,7 @@ namespace MfGamesAuthorCli
 			languageManager.Parse(rootStructure);
 
 			// Write out the HTML
-			FileInfo outputFile = new FileInfo(args[1]);
+			var outputFile = new FileInfo(args[1]);
 			Console.WriteLine("Writing {0} {1}", outputFile, outputFile.Exists);
 
 			IOutputManager outputManager = manager.OutputManager;

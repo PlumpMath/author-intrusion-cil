@@ -1,4 +1,4 @@
-namespace MfGames.Author.Contract.Enumerations
+namespace AuthorIntrusion.Contracts.Enumerations
 {
 	/// <summary>
 	/// Indicates the results of a parse attempt.

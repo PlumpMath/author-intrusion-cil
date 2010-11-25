@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Delegates;
-using MfGames.Author.Contract.Enumerations;
-using MfGames.Author.Contract.Interfaces;
+using AuthorIntrusion.Contracts.Contents;
+using AuthorIntrusion.Contracts.Delegates;
+using AuthorIntrusion.Contracts.Enumerations;
+using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
 
-namespace MfGames.Author.Contract.Collections
+namespace AuthorIntrusion.Contracts.Collections
 {
 	/// <summary>
 	/// Implements an ordered list of content elements.

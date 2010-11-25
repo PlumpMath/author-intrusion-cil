@@ -1,10 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Collections;
+using AuthorIntrusion.Contracts.Collections;
 
 #endregion
 
-namespace MfGames.Author.Contract.Interfaces
+namespace AuthorIntrusion.Contracts.Interfaces
 {
 	/// <summary>
 	/// Describes a structure element that contain zero or more sections.

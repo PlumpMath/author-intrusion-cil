@@ -1,11 +1,11 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Interfaces;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
 
-namespace MfGames.Author.Contract.Structures
+namespace AuthorIntrusion.Contracts.Structures
 {
 	/// <summary>
 	/// Defines the common functionality of a structure that contains other

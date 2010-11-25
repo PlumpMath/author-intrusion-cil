@@ -2,19 +2,19 @@
 
 using System;
 
+using AuthorIntrusion.Contracts.IO;
+using AuthorIntrusion.Contracts.Languages;
+using AuthorIntrusion.IO;
+using AuthorIntrusion.Languages;
+
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 
-using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Languages;
-using MfGames.Author.IO;
-using MfGames.Author.Languages;
-
 #endregion
 
-namespace MfGames.Author
+namespace AuthorIntrusion
 {
 	/// <summary>
 	/// Manages the entire author process, including extensions.

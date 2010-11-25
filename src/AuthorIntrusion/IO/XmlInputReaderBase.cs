@@ -3,12 +3,12 @@
 using System.IO;
 using System.Xml;
 
-using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.IO;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.IO
+namespace AuthorIntrusion.IO
 {
 	/// <summary>
 	/// Handles the common code for reading XML files.
@@ -22,19 +22,13 @@ namespace MfGames.Author.IO
 		/// input reader.
 		/// </summary>
 		/// <value>The file mask.</value>
-		public abstract string[] FileExtensions
-		{
-			get;
-		}
+		public abstract string[] FileExtensions { get; }
 
 		/// <summary>
 		/// Gets the name of the input file.
 		/// </summary>
 		/// <value>The name.</value>
-		public abstract string Name
-		{
-			get;
-		}
+		public abstract string Name { get; }
 
 		/// <summary>
 		/// Determines whether this reader can read the specified input stream.
@@ -115,6 +109,5 @@ namespace MfGames.Author.IO
 		#endregion
 
 		#endregion
-
 	}
 }

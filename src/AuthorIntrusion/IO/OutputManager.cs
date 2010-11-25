@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Castle.Core;
+using AuthorIntrusion.Contracts.IO;
+using AuthorIntrusion.Contracts.Structures;
 
-using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Structures;
+using Castle.Core;
 
 #endregion
 
-namespace MfGames.Author.IO
+namespace AuthorIntrusion.IO
 {
 	/// <summary>
 	/// A singleton class that manages the output and writing of documents and
@@ -61,9 +61,8 @@ namespace MfGames.Author.IO
 
 			// Write the file and return the structure.
 			using (
-				FileStream fileStream = outputFile.Open(FileMode.Create,
-				                                        FileAccess.Write,
-				                                        FileShare.None))
+				FileStream fileStream = outputFile.Open(
+					FileMode.Create, FileAccess.Write, FileShare.None))
 			{
 				Write(fileStream, structure, outputFile.Name);
 			}

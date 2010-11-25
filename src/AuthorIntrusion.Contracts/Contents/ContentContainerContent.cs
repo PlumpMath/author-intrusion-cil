@@ -1,15 +1,11 @@
 #region Namespaces
 
-using System;
-using System.Text;
-
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Delegates;
-using MfGames.Author.Contract.Interfaces;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
 
-namespace MfGames.Author.Contract.Contents
+namespace AuthorIntrusion.Contracts.Contents
 {
 	/// <summary>
 	/// Defines content that contains other content, such as quotes or
@@ -34,24 +30,21 @@ namespace MfGames.Author.Contract.Contents
 		private readonly ContentList contents;
 
 		/// <summary>
-		/// Contains a flattened representation of the content.
-		/// </summary>
-		/// <value>The content string.</value>
-		public override string ContentString
-		{
-			get
-			{
-				return contents.ContentString;
-			}
-		}
-
-		/// <summary>
 		/// Gets the child contents inside this container.
 		/// </summary>
 		/// <value>The contents.</value>
 		public ContentList Contents
 		{
 			get { return contents; }
+		}
+
+		/// <summary>
+		/// Contains a flattened representation of the content.
+		/// </summary>
+		/// <value>The content string.</value>
+		public override string ContentString
+		{
+			get { return contents.ContentString; }
 		}
 
 		#endregion

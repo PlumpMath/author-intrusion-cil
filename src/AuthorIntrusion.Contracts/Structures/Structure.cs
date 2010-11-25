@@ -1,4 +1,4 @@
-namespace MfGames.Author.Contract.Structures
+namespace AuthorIntrusion.Contracts.Structures
 {
 	/// <summary>
 	/// The common root for all the structural elements.

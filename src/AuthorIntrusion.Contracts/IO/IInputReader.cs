@@ -2,11 +2,11 @@
 
 using System.IO;
 
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.Contract.IO
+namespace AuthorIntrusion.Contracts.IO
 {
 	/// <summary>
 	/// Identifies the classes used for identifying and reading input streams

@@ -1,10 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Enumerations;
+using AuthorIntrusion.Contracts.Enumerations;
 
 #endregion
 
-namespace MfGames.Author.Contract.Contents
+namespace AuthorIntrusion.Contracts.Contents
 {
 	/// <summary>
 	/// Contains a single sematic word for parsing.

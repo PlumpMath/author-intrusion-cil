@@ -1,14 +1,14 @@
 #region Namespaces
 
+using AuthorIntrusion.Contracts.IO;
+
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
-using MfGames.Author.Contract.IO;
-
 #endregion
 
-namespace MfGames.Author.Installers
+namespace AuthorIntrusion.Installers
 {
 	/// <summary>
 	/// Implements the installer for IInputReader instances.

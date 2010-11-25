@@ -1,4 +1,4 @@
-namespace MfGames.Author.Contract.Enumerations
+namespace AuthorIntrusion.Contracts.Enumerations
 {
 	/// <summary>
 	/// Defines the type of contents that the system uses.

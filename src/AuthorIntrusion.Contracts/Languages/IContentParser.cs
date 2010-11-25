@@ -1,12 +1,11 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Enumerations;
-using MfGames.Author.Contract.Interfaces;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Enumerations;
 
 #endregion
 
-namespace MfGames.Author.Contract.Languages
+namespace AuthorIntrusion.Contracts.Languages
 {
 	/// <summary>
 	/// Describes a class that can parse the unparsed contents of a paragraph

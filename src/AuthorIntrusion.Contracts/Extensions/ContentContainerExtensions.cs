@@ -1,12 +1,12 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Enumerations;
-using MfGames.Author.Contract.Interfaces;
+using AuthorIntrusion.Contracts.Contents;
+using AuthorIntrusion.Contracts.Enumerations;
+using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
 
-namespace MfGames.Author.Contract.Extensions
+namespace AuthorIntrusion.Contracts.Extensions
 {
 	/// <summary>
 	/// Defines the various extensions that operate on the IContentContainer

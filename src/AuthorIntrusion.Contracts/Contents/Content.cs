@@ -1,10 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Enumerations;
+using AuthorIntrusion.Contracts.Enumerations;
 
 #endregion
 
-namespace MfGames.Author.Contract.Contents
+namespace AuthorIntrusion.Contracts.Contents
 {
 	/// <summary>
 	/// Base class for all content elements.

@@ -1,12 +1,10 @@
 #region Namespaces
 
-
+using AuthorIntrusion.Contracts.Enumerations;
 
 #endregion
 
-using MfGames.Author.Contract.Enumerations;
-
-namespace MfGames.Author.Contract.Contents
+namespace AuthorIntrusion.Contracts.Contents
 {
 	/// <summary>
 	/// Represents a single sentence in the structure.

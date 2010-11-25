@@ -1,10 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Contents;
+using AuthorIntrusion.Contracts.Contents;
 
 #endregion
 
-namespace MfGames.Author.Contract.Delegates
+namespace AuthorIntrusion.Contracts.Delegates
 {
 	/// <summary>
 	/// Defines the delegate which takes content and returns if the content

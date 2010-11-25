@@ -1,10 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.Contract.Languages
+namespace AuthorIntrusion.Contracts.Languages
 {
 	/// <summary>
 	/// Defines the signature for anything that processes languages.

@@ -3,16 +3,16 @@
 using System;
 using System.Text.RegularExpressions;
 
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Enumerations;
-using MfGames.Author.Contract.Extensions;
-using MfGames.Author.Contract.Interfaces;
-using MfGames.Author.Contract.Languages;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Contents;
+using AuthorIntrusion.Contracts.Enumerations;
+using AuthorIntrusion.Contracts.Extensions;
+using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.Languages;
 
 #endregion
 
-namespace MfGames.Author.English
+namespace AuthorIntrusion.English
 {
 	/// <summary>
 	/// Parses content items, including unparsed content, a convert the various

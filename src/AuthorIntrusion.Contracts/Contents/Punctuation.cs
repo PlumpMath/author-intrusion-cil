@@ -1,10 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Enumerations;
+using AuthorIntrusion.Contracts.Enumerations;
 
 #endregion
 
-namespace MfGames.Author.Contract.Contents
+namespace AuthorIntrusion.Contracts.Contents
 {
 	/// <summary>
 	/// Represents a puncuation symbol in the string. This can be terminating

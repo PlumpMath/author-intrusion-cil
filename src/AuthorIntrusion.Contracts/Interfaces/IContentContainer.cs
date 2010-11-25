@@ -1,11 +1,10 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Delegates;
+using AuthorIntrusion.Contracts.Collections;
 
 #endregion
 
-namespace MfGames.Author.Contract.Interfaces
+namespace AuthorIntrusion.Contracts.Interfaces
 {
 	/// <summary>
 	/// Defines an item that can contain unparsed contents.

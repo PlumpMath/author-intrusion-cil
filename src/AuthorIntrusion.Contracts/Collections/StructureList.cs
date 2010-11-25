@@ -3,11 +3,11 @@
 using System;
 using System.Collections.Generic;
 
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.Contract.Collections
+namespace AuthorIntrusion.Contracts.Collections
 {
 	/// <summary>
 	/// Implements a list that manages structure elements.

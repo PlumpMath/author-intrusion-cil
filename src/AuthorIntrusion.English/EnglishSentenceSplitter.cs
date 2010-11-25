@@ -1,14 +1,14 @@
 #region Namespaces
 
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Enumerations;
-using MfGames.Author.Contract.Extensions;
-using MfGames.Author.Contract.Languages;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Contents;
+using AuthorIntrusion.Contracts.Enumerations;
+using AuthorIntrusion.Contracts.Extensions;
+using AuthorIntrusion.Contracts.Languages;
 
 #endregion
 
-namespace MfGames.Author.English
+namespace AuthorIntrusion.English
 {
 	/// <summary>
 	/// Implements a sentence splitter that takes the parsed contents and

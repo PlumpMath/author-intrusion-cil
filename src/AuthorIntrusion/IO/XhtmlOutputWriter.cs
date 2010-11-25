@@ -4,16 +4,16 @@ using System;
 using System.IO;
 using System.Xml;
 
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Constants;
-using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Interfaces;
-using MfGames.Author.Contract.IO;
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Constants;
+using AuthorIntrusion.Contracts.Contents;
+using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.IO;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.IO
+namespace AuthorIntrusion.IO
 {
 	/// <summary>
 	/// Implements a writer that takes the internal structure and outputs a single
@@ -134,7 +134,9 @@ namespace MfGames.Author.IO
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		/// <param name="contents">The contents.</param>
-		private static void WriteContents(XmlWriter writer, ContentList contents)
+		private static void WriteContents(
+			XmlWriter writer,
+			ContentList contents)
 		{
 			// Go through the contents and write out each content with
 			// classes for each content type.
@@ -156,8 +158,7 @@ namespace MfGames.Author.IO
 				// Write out the span and class.
 				writer.WriteStartElement("span");
 				writer.WriteAttributeString(
-					"class",
-					content.ContentType.ToString().ToLower());
+					"class", content.ContentType.ToString().ToLower());
 
 				// If we are writing a container, we need to recursively go into
 				// the container, otherwise just write out the string.

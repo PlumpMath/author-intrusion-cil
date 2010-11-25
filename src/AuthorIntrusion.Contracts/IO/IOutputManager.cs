@@ -2,11 +2,11 @@
 
 using System.IO;
 
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.Contract.IO
+namespace AuthorIntrusion.Contracts.IO
 {
 	/// <summary>
 	/// Interface that describes the manager that deals with writing out files

@@ -3,14 +3,14 @@
 using System;
 using System.Collections.Generic;
 
-using MfGames.Author.Contract.Enumerations;
-using MfGames.Author.Contract.Interfaces;
-using MfGames.Author.Contract.Languages;
-using MfGames.Author.Contract.Structures;
+using AuthorIntrusion.Contracts.Enumerations;
+using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.Languages;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
-namespace MfGames.Author.Languages
+namespace AuthorIntrusion.Languages
 {
 	/// <summary>
 	/// Defines the basic language manager which handles parsing and processing
@@ -52,7 +52,7 @@ namespace MfGames.Author.Languages
 			{
 				// Create a list of parsers we currently have in this manager
 				// and strip out the ones that don't apply to the language.
-				List<IContentParser> parsers = new List<IContentParser>();
+				var parsers = new List<IContentParser>();
 				parsers.AddRange(contentParsers);
 
 				var contentContainer = (IContentContainer) structure;
@@ -62,14 +62,14 @@ namespace MfGames.Author.Languages
 					// Keep track of the parsers that need to be removed from the
 					// list. We also keep track if we have at least one successful
 					// parse since that will let us try the deferred parsers again.
-					List<IContentParser> removedParsers = new List<IContentParser>();
+					var removedParsers = new List<IContentParser>();
 					bool hadSuccessfulParse = false;
 
 					// Go through all the parsers on the list.
-					foreach (var parser in parsers)
+					foreach (IContentParser parser in parsers)
 					{
 						// Attempt to parse the contents with this one.
-						var results = parser.Parse(contentContainer.Contents);
+						ParserStatus results = parser.Parse(contentContainer.Contents);
 
 						switch (results)
 						{
@@ -89,7 +89,7 @@ namespace MfGames.Author.Languages
 					}
 
 					// Remove any parsers on the remove list.
-					foreach (var parser in removedParsers)
+					foreach (IContentParser parser in removedParsers)
 					{
 						parsers.Remove(parser);
 					}
@@ -108,8 +108,8 @@ namespace MfGames.Author.Languages
 			if (structure is IStructureContainer)
 			{
 				var structureContainer = (IStructureContainer) structure;
-				
-				foreach (var childStructure in structureContainer.Structures)
+
+				foreach (Structure childStructure in structureContainer.Structures)
 				{
 					Parse(childStructure);
 				}

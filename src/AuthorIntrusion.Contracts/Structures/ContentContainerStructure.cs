@@ -1,14 +1,11 @@
 #region Namespaces
 
-using System;
-
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Delegates;
-using MfGames.Author.Contract.Interfaces;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
 
-namespace MfGames.Author.Contract.Structures
+namespace AuthorIntrusion.Contracts.Structures
 {
 	/// <summary>
 	/// Represents a single paragraph within the document.

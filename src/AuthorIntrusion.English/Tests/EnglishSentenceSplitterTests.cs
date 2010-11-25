@@ -1,16 +1,13 @@
 #region Namespaces
 
-using System.Collections.Generic;
-
-using MfGames.Author.Contract.Collections;
-using MfGames.Author.Contract.Contents;
-using MfGames.Author.Contract.Enumerations;
+using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Contents;
 
 using NUnit.Framework;
 
 #endregion
 
-namespace MfGames.Author.English.Tests
+namespace AuthorIntrusion.English.Tests
 {
 	/// <summary>
 	/// Contains various sentence splitter tests.
@@ -19,24 +16,6 @@ namespace MfGames.Author.English.Tests
 	public class EnglishSentenceSplitterTests
 	{
 		#region Tests
-
-		/// <summary>
-		/// Tests a simple sentence.
-		/// </summary>
-		[Test]
-		public void SimpleSentence()
-		{
-			Sentence sentence = TestSingleSentence(
-				new Unparsed("This is a simple sentence.")) as Sentence;
-
-			Assert.IsNotNull(
-				sentence, 
-				"Content type was not expected");
-			Assert.AreEqual(
-				6,
-				sentence.Contents.Count, 
-				"Unexpected number of content elements in results");
-		}
 
 		/// <summary>
 		/// Tests a sentence with an honorific.
@@ -48,25 +27,22 @@ namespace MfGames.Author.English.Tests
 		}
 
 		/// <summary>
-		/// Tests a sentence with a quote.
-		/// </summary>
-		[Test]
-		public void SentenceWithQuote()
-		{
-			TestSingleSentence(
-				new Unparsed("I said, "),
-				new Quote("You like me."));
-		}
-
-		/// <summary>
 		/// Tests a sentence with a quote that contains two sentences.
 		/// </summary>
 		[Test]
 		public void SentenceWithMultipleSentenceQuote()
 		{
 			TestSingleSentence(
-				new Unparsed("I said, "),
-				new Quote("You like me. And then she hit me."));
+				new Unparsed("I said, "), new Quote("You like me. And then she hit me."));
+		}
+
+		/// <summary>
+		/// Tests a sentence with a quote.
+		/// </summary>
+		[Test]
+		public void SentenceWithQuote()
+		{
+			TestSingleSentence(new Unparsed("I said, "), new Quote("You like me."));
 		}
 
 		/// <summary>
@@ -79,6 +55,22 @@ namespace MfGames.Author.English.Tests
 				new Unparsed("I said, "),
 				new Quote("You like me,"),
 				new Unparsed(" while flinching."));
+		}
+
+		/// <summary>
+		/// Tests a simple sentence.
+		/// </summary>
+		[Test]
+		public void SimpleSentence()
+		{
+			var sentence =
+				TestSingleSentence(new Unparsed("This is a simple sentence.")) as Sentence;
+
+			Assert.IsNotNull(sentence, "Content type was not expected");
+			Assert.AreEqual(
+				6,
+				sentence.Contents.Count,
+				"Unexpected number of content elements in results");
 		}
 
 		#endregion
@@ -94,16 +86,14 @@ namespace MfGames.Author.English.Tests
 		{
 			// Create the paragraph and add the sentence to the unparsed content.
 			var parsed = new ContentList();
-			parsed.Add(
-				new Unparsed("This is the first sentence."));
+			parsed.Add(new Unparsed("This is the first sentence."));
 
 			foreach (Content content in contents)
 			{
 				parsed.Add(content);
 			}
 
-			parsed.Add(
-				new Unparsed("This is the third sentence."));
+			parsed.Add(new Unparsed("This is the third sentence."));
 
 			// Split the input into parsed content.
 			var contentSplitter = new EnglishUnparsedSplitter();
@@ -114,9 +104,7 @@ namespace MfGames.Author.English.Tests
 			sentenceSplitter.Parse(parsed);
 
 			Assert.AreEqual(
-				3,
-				parsed.Count,
-				"Could not parse isolate the sentence with the splitter.");
+				3, parsed.Count, "Could not parse isolate the sentence with the splitter.");
 
 			// Return the parsed sentence if we got this far. We don't bother with
 			// the first and third since those are just used to detect run-ons.
