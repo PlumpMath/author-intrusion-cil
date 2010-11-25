@@ -41,10 +41,6 @@
       <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>
       <Name>MfGames.Author.Contract</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MfGames.Author\MfGames.Author.csproj">
-      <Project>{957BD171-18E1-4EA0-8CBE-D6096BCD3654}</Project>
-      <Name>MfGames.Author</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExampleDocbook5.xml">
