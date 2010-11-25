@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
+using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Constants;
 using AuthorIntrusion.Contracts.Contents;
 using AuthorIntrusion.Contracts.Interfaces;
@@ -75,7 +76,7 @@ namespace AuthorIntrusion.IO
 			// This implements a very simple Docbook 5 XML reader that ignores
 			// all the elements outside of the scope of this application and 
 			// creates a simplified structure.
-			var structureContext = new List<Structure>();
+			var context = new List<Element>();
 			Structure rootStructure = null;
 
 			while (reader.Read())
@@ -83,20 +84,20 @@ namespace AuthorIntrusion.IO
 				switch (reader.NodeType)
 				{
 					case XmlNodeType.Element:
-						ReadElement(reader, structureContext);
+						ReadElement(reader, context);
 
-						if (structureContext.Count == 1)
+						if (context.Count == 1)
 						{
-							rootStructure = structureContext[0];
+							rootStructure = context[0] as Structure;
 						}
 						break;
 
 					case XmlNodeType.EndElement:
-						ReadEndElement(reader, structureContext);
+						ReadEndElement(reader, context);
 						break;
 
 					case XmlNodeType.Text:
-						ReadText(reader, structureContext);
+						ReadText(reader, context);
 						break;
 				}
 			}
@@ -107,9 +108,9 @@ namespace AuthorIntrusion.IO
 				throw new Exception("Cannot identify the root level element");
 			}
 
-			if (!(rootStructure is Structure))
+			if (rootStructure == null)
 			{
-				throw new Exception("Root structure does not define StructureBase");
+				throw new Exception("Root element is not a structure");
 			}
 
 			// There is nothing wrong with the parse, so return the root.
@@ -123,7 +124,7 @@ namespace AuthorIntrusion.IO
 		/// <param name="context">The context.</param>
 		private static void ReadElement(
 			XmlReader reader,
-			List<Structure> context)
+			List<Element> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
 			if (reader.NamespaceURI != Namespaces.Docbook5)
@@ -136,21 +137,21 @@ namespace AuthorIntrusion.IO
 
 			if (context.Count > 0)
 			{
-				parent = context[context.Count - 1];
+				parent = context[context.Count - 1] as Structure;
 			}
 
 			// Switch based on the local tag.
-			Structure structure;
+			Element element;
 
 			switch (reader.LocalName)
 			{
 				case "book":
-					structure = new StructureContainerStructure();
+					element = new StructureContainerStructure();
 					break;
 
 				case "chapter":
 					var chapter = new StructureContainerStructure();
-					structure = chapter;
+					element = chapter;
 
 					if (parent != null && parent is IStructureContainer)
 					{
@@ -159,12 +160,12 @@ namespace AuthorIntrusion.IO
 					break;
 
 				case "article":
-					structure = new StructureContainerStructure();
+					element = new StructureContainerStructure();
 					break;
 
 				case "section":
 					var section = new StructureContainerStructure();
-					structure = section;
+					element = section;
 
 					if (parent != null && parent is IStructureContainer)
 					{
@@ -174,7 +175,7 @@ namespace AuthorIntrusion.IO
 
 				case "para":
 					var paragraph = new ContentContainerStructure();
-					structure = paragraph;
+					element = paragraph;
 
 					if (parent != null && parent is IStructureContainer)
 					{
@@ -185,13 +186,14 @@ namespace AuthorIntrusion.IO
 
 				case "quote":
 					var quote = new Quote();
+					element = quote;
 
 					if (parent != null && parent is IContentContainer)
 					{
 						((IContentContainer) parent).Contents.Add(quote);
 					}
 
-					return;
+					break;
 
 				default:
 					// Unknown type, so just skip it.
@@ -199,7 +201,7 @@ namespace AuthorIntrusion.IO
 			}
 
 			// Add the structure to the context.
-			context.Add(structure);
+			context.Add(element);
 		}
 
 		/// <summary>
@@ -209,7 +211,7 @@ namespace AuthorIntrusion.IO
 		/// <param name="context">The context.</param>
 		private static void ReadEndElement(
 			XmlReader reader,
-			List<Structure> context)
+			List<Element> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
 			if (reader.NamespaceURI != Namespaces.Docbook5)
@@ -225,6 +227,7 @@ namespace AuthorIntrusion.IO
 				case "article":
 				case "section":
 				case "para":
+				case "quote":
 					// Remove the last item which should be this element.
 					context.RemoveAt(context.Count - 1);
 					break;
@@ -238,7 +241,7 @@ namespace AuthorIntrusion.IO
 		/// <param name="context">The context.</param>
 		private static void ReadText(
 			XmlReader reader,
-			List<Structure> context)
+			List<Element> context)
 		{
 			// Figure out where to put this text content.
 			if (context.Count == 0)
