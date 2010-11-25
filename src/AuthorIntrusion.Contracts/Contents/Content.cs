@@ -9,7 +9,7 @@ namespace AuthorIntrusion.Contracts.Contents
 	/// <summary>
 	/// Base class for all content elements.
 	/// </summary>
-	public abstract class Content
+	public abstract class Content : Element
 	{
 		#region Contents
 

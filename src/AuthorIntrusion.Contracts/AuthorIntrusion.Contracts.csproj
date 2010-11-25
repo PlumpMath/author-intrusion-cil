@@ -49,6 +49,7 @@
     <Compile Include="Contents\Sentence.cs" />
     <Compile Include="Contents\Word.cs" />
     <Compile Include="Delegates\ContentFilter.cs" />
+    <Compile Include="Element.cs" />
     <Compile Include="Enumerations\ParserStatus.cs" />
     <Compile Include="Extensions\ContentContainerExtensions.cs" />
     <Compile Include="IO\IInputManager.cs" />

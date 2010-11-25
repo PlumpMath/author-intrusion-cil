@@ -3,7 +3,7 @@ namespace AuthorIntrusion.Contracts.Structures
 	/// <summary>
 	/// The common root for all the structural elements.
 	/// </summary>
-	public abstract class Structure
+	public abstract class Structure : Element
 	{
 		#region Structural Relationships
 
