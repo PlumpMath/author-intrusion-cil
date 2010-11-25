@@ -8,8 +8,8 @@
     <ProjectGuid>{0A289A49-0AA9-4D4B-810F-0EA64CD1578C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MfGames.Author.English</RootNamespace>
-    <AssemblyName>MfGames.Author.English</AssemblyName>
+    <RootNamespace>AuthorIntrusion.English</RootNamespace>
+    <AssemblyName>AuthorIntrusion.English</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -70,9 +70,9 @@
     <Compile Include="Tests\EnglishSentenceSplitterTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MfGames.Author.Contract\MfGames.Author.Contract.csproj">
+    <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
       <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>
-      <Name>MfGames.Author.Contract</Name>
+      <Name>AuthorIntrusion.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9CCC778E-9A54-459F-AB8F-ADDF8CCE9B9E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MfGamesAuthorCli</RootNamespace>
-    <AssemblyName>MfGamesAuthorCli</AssemblyName>
+    <RootNamespace>AuthorIntrusionCli</RootNamespace>
+    <AssemblyName>AuthorIntrusionCli</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -37,9 +37,13 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MfGames.Author.Contract\MfGames.Author.Contract.csproj">
+    <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
       <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>
       <Name>MfGames.Author.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
+      <Project>{957BD171-18E1-4EA0-8CBE-D6096BCD3654}</Project>
+      <Name>AuthorIntrusion</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

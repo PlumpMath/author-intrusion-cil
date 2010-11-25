@@ -59,9 +59,9 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MfGames.Author.Contract\MfGames.Author.Contract.csproj">
+    <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
       <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>
-      <Name>MfGames.Author.Contract</Name>
+      <Name>AuthorIntrusion.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

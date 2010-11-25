@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>MfGames.Author.Contract</RootNamespace>
-    <AssemblyName>MfGames.Author.Contract</AssemblyName>
+    <RootNamespace>AuthorIntrusion.Contracts</RootNamespace>
+    <AssemblyName>AuthorIntrusion.Contracts</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>..\..\bin\Debug\MfGames.Author.Contract.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\AuthorIntrusion.Contracts.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -30,7 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>..\..\bin\Debug\MfGames.Author.Contract.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\AuthorIntrusion.Contracts.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
