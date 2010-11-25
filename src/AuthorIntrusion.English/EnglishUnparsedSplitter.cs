@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Contents;
 using AuthorIntrusion.Contracts.Enumerations;
-using AuthorIntrusion.Contracts.Extensions;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Languages;
 
@@ -77,7 +76,7 @@ namespace AuthorIntrusion.English
 					// without processing.
 					var childContentContainer = (IContentContainer) content;
 
-					if (childContentContainer.GetUnparsedCount() > 0)
+					if (childContentContainer.Contents.GetUnparsedCount() > 0)
 					{
 						// There is unparsed content inside this container. We don't
 						// care about the return value since this class doesn't

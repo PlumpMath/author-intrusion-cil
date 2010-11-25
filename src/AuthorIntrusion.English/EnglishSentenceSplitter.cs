@@ -3,7 +3,6 @@
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Contents;
 using AuthorIntrusion.Contracts.Enumerations;
-using AuthorIntrusion.Contracts.Extensions;
 using AuthorIntrusion.Contracts.Languages;
 
 #endregion
@@ -75,7 +74,7 @@ namespace AuthorIntrusion.English
 				if (content.ContentType == ContentType.Quote)
 				{
 					var quote = (Quote) content;
-					hasTerminator = quote.GetEndsWithTerminator();
+					hasTerminator = quote.Contents.GetEndsWithTerminator();
 				}
 
 				// We are at the end of the sentence. Start a new one.
