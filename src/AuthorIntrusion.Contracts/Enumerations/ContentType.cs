@@ -36,5 +36,10 @@ namespace AuthorIntrusion.Contracts.Enumerations
 		/// Indicates that the content is a sentence.
 		/// </summary>
 		Sentence,
+
+		/// <summary>
+		/// Indicates a phrase of text.
+		/// </summary>
+		Phrase,
 	}
 }

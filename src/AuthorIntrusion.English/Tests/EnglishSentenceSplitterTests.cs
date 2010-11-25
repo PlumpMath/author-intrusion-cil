@@ -1,3 +1,4 @@
+#if DISABLED
 #region Namespaces
 
 using AuthorIntrusion.Contracts.Collections;
@@ -114,3 +115,4 @@ namespace AuthorIntrusion.English.Tests
 		#endregion
 	}
 }
+#endif

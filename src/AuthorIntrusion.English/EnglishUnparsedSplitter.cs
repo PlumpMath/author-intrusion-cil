@@ -1,3 +1,4 @@
+#if DISABLED
 #region Namespaces
 
 using System;
@@ -150,3 +151,4 @@ namespace AuthorIntrusion.English
 		#endregion
 	}
 }
+#endif

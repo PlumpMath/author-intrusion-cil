@@ -1,5 +1,7 @@
 #region Namespaces
 
+using System.Diagnostics;
+
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Interfaces;
 
@@ -33,6 +35,7 @@ namespace AuthorIntrusion.Contracts.Contents
 		/// Gets the child contents inside this container.
 		/// </summary>
 		/// <value>The contents.</value>
+		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 		public ContentList Contents
 		{
 			get { return contents; }

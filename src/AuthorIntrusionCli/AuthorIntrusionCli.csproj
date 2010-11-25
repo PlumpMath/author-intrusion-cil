@@ -30,6 +30,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MfGames, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MfGames.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -39,11 +43,13 @@
   <ItemGroup>
     <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
       <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>
-      <Name>MfGames.Author.Contract</Name>
+      <Name>AuthorIntrusion.Contracts</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
       <Project>{957BD171-18E1-4EA0-8CBE-D6096BCD3654}</Project>
       <Name>AuthorIntrusion</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

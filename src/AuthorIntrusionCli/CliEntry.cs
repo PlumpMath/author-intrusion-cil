@@ -8,6 +8,8 @@ using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Languages;
 using AuthorIntrusion.Contracts.Structures;
 
+using MfGames.Logging;
+
 #endregion
 
 namespace AuthorIntrusionCli
@@ -19,9 +21,13 @@ namespace AuthorIntrusionCli
 			// Initialize the author system.
 			var manager = new Manager();
 
+			// Set up logging for the console.
+			ConsoleLogger logger = new ConsoleLogger("{0,5} {2}");
+			manager.Register<ILogger>(logger);
+
 			// Read the input file.
 			var inputFile = new FileInfo(args[0]);
-			Console.WriteLine("Reading {0} {1}", inputFile, inputFile.Exists);
+			logger.Info("Entry", "Reading {0} {1}", inputFile, inputFile.Exists);
 
 			IInputManager inputManager = manager.InputManager;
 			Structure rootStructure = inputManager.Read(inputFile);
@@ -32,7 +38,7 @@ namespace AuthorIntrusionCli
 
 			// Write out the HTML
 			var outputFile = new FileInfo(args[1]);
-			Console.WriteLine("Writing {0} {1}", outputFile, outputFile.Exists);
+			logger.Info("Entry", "Writing {0} {1}", outputFile, outputFile.Exists);
 
 			IOutputManager outputManager = manager.OutputManager;
 			outputManager.Write(outputFile, rootStructure);

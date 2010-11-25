@@ -64,6 +64,16 @@ namespace AuthorIntrusion
 
 		private WindsorContainer container;
 
+		/// <summary>
+		/// Registers the specified instance for a given interface type.
+		/// </summary>
+		/// <typeparam name="TInterface">The type of the interface.</typeparam>
+		/// <param name="instance">The instance.</param>
+		public void Register<TInterface>(TInterface instance)
+		{
+			container.Register(Component.For<TInterface>().Instance(instance));
+		}
+
 		#endregion
 
 		#region Managers
