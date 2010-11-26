@@ -165,13 +165,18 @@ namespace AuthorIntrusion.EnglishSharpNlp
 			// Go through the children of this parent object.
 			foreach (var child in parent.GetChildren())
 			{
+				// Create a token to represent this item.
+				var span = child.Span;
+				var token = child.Text.Substring(span.Start, (span.End) - (span.Start));
+
 				// Figure out what is this component.
 				bool isPartOfSpeech = PartsOfSpeechUtility.IsPartOfSpeech(child.Type);
 				bool isPhrase = PartsOfSpeechUtility.IsPhraseType(child.Type);
 
 				if (!isPartOfSpeech && !isPhrase)
 				{
-					throw new Exception("Cannot parse type: " + child.Type);
+					log.Error("Cannot parse {0}: {1}", child.Type, token);
+					continue;
 				}
 
 				if (isPhrase)
@@ -189,10 +194,6 @@ namespace AuthorIntrusion.EnglishSharpNlp
 				}
 				else
 				{
-					// Create a word to represent this item.
-					var span = child.Span;
-					var token = child.Text.Substring(span.Start, (span.End) - (span.Start));
-
 					// Figure out the part of speech associated with this token.
 					PartOfSpeech partOfSpeech =
 						PartsOfSpeechUtility.GetPartOfSpeech(child.Type);

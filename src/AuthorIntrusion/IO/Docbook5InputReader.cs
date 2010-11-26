@@ -174,6 +174,7 @@ namespace AuthorIntrusion.IO
 					break;
 
 				case "para":
+				case "simpara":
 					var paragraph = new ContentContainerStructure();
 					element = paragraph;
 
@@ -227,6 +228,7 @@ namespace AuthorIntrusion.IO
 				case "article":
 				case "section":
 				case "para":
+				case "simpara":
 				case "quote":
 					// Remove the last item which should be this element.
 					context.RemoveAt(context.Count - 1);
