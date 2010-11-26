@@ -89,5 +89,13 @@ namespace AuthorIntrusion.English.Enumerations
 		[Description("Noun Phrase")]
 		[TreebankCode("NP")]
 		NounPhrase,
+
+		[Description("WH-Noun Phrase")]
+		[TreebankCode("WHNP")]
+		WhNounPhrase,
+
+		[Description("Simple Declarative Phrase")]
+		[TreebankCode("S")]
+		SimpleDeclarativePhrase,
 	}
 }

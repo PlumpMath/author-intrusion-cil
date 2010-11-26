@@ -1,6 +1,7 @@
 #region Namespaces
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -57,11 +58,6 @@ namespace AuthorIntrusion.IO
 			Structure structure,
 			int depth)
 		{
-			// Write out the header for the section.
-			writer.WriteStartElement("h" + (depth + 1), Namespaces.Xhtml11);
-			writer.WriteString(structure.GetType().Name);
-			writer.WriteEndElement();
-
 			// Write out any content associated with the item.
 			if (structure is IContentContainer)
 			{
@@ -95,7 +91,7 @@ namespace AuthorIntrusion.IO
 		{
 			// Write this using the XHTML writer.
 			var settings = new XmlWriterSettings();
-			settings.Indent = true;
+			settings.Indent = false;
 			settings.CloseOutput = false;
 			settings.OmitXmlDeclaration = false;
 
@@ -155,10 +151,20 @@ namespace AuthorIntrusion.IO
 					writer.WriteString(" ");
 				}
 
+				// Figure out all the classes associated with this.
+				List<string> classes = new List<string>();
+				classes.Add(content.ContentType.ToString());
+
+				foreach (IElementTag tag in content.Tags)
+				{
+					classes.Add(tag.ToString());
+				}
+
 				// Write out the span and class.
 				writer.WriteStartElement("span");
 				writer.WriteAttributeString(
-					"class", content.ContentType.ToString().ToLower());
+					"class",
+				    String.Join(" ", classes.ToArray()).ToLower());
 
 				// If we are writing a container, we need to recursively go into
 				// the container, otherwise just write out the string.

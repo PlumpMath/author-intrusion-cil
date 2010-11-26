@@ -10,7 +10,7 @@ namespace AuthorIntrusion.English.Tags
 	/// <summary>
 	/// Implements a tag that defines an English phrase.
 	/// </summary>
-	public class EnglishPhraseTag : IElementTag
+	public class EnglishPhraseTypeTag : IElementTag
 	{
 		#region Constructors
 
@@ -18,16 +18,16 @@ namespace AuthorIntrusion.English.Tags
 		/// Initializes a new instance of the <see cref="EnglishPhraseTag"/> class.
 		/// </summary>
 		/// <param name="phraseType">Type of the phrase.</param>
-		public EnglishPhraseTag(PhraseType phraseType)
+		public EnglishPhraseTypeTag(PhraseType phraseType)
 		{
-			this.phraseType = phraseType;
+			this.partOfSpeech = phraseType;
 		}
 
 		#endregion
 
 		#region English
 
-		private readonly PhraseType phraseType;
+		private readonly PhraseType partOfSpeech;
 
 		/// <summary>
 		/// Gets the type of the phrase.
@@ -35,7 +35,16 @@ namespace AuthorIntrusion.English.Tags
 		/// <value>The type of the phrase.</value>
 		public PhraseType PhraseType
 		{
-			get { return phraseType; }
+			get { return partOfSpeech; }
+		}
+
+		#endregion
+
+		#region Conversion
+
+		public override string ToString()
+		{
+			return partOfSpeech.ToString();
 		}
 
 		#endregion

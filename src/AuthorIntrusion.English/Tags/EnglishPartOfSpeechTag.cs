@@ -20,14 +20,14 @@ namespace AuthorIntrusion.English.Tags
 		/// <param name="phraseType">Type of the phrase.</param>
 		public EnglishPartOfSpeechTag(PartOfSpeech phraseType)
 		{
-			this.phraseType = phraseType;
+			this.partOfSpeech = phraseType;
 		}
 
 		#endregion
 
 		#region English
 
-		private readonly PartOfSpeech phraseType;
+		private readonly PartOfSpeech partOfSpeech;
 
 		/// <summary>
 		/// Gets the type of the phrase.
@@ -35,7 +35,16 @@ namespace AuthorIntrusion.English.Tags
 		/// <value>The type of the phrase.</value>
 		public PartOfSpeech PartOfSpeech
 		{
-			get { return phraseType; }
+			get { return partOfSpeech; }
+		}
+
+		#endregion
+
+		#region Conversion
+
+		public override string ToString()
+		{
+			return partOfSpeech.ToString();
 		}
 
 		#endregion

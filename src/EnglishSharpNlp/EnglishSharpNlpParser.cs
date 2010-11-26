@@ -1,4 +1,4 @@
-﻿#region Namespaces
+#region Namespaces
 
 using System;
 using System.Collections.Generic;
@@ -37,15 +37,15 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		/// <param name="logger">The logger.</param>
 		public EnglishSharpNlpParser(ILogger logger)
 		{
-			this.logger = logger;
 			modelDirectory = new DirectoryInfo("models");
+			log = new Log(this, logger);
 		}
 
 		#endregion
 
 		#region SharpNLP
 
-		private ILogger logger;
+		private Log log;
 		private DirectoryInfo modelDirectory;
 		private ISentenceDetector sentenceDetector;
 		private EnglishTreebankParser englishTreebankParser;
@@ -60,8 +60,8 @@ namespace AuthorIntrusion.EnglishSharpNlp
 			{
 				if (englishTreebankParser == null)
 				{
-					logger.Info(this, "Creating English treebank parser");
-					englishTreebankParser = new EnglishTreebankParser(modelDirectory.FullName);
+					log.Info("Creating English treebank parser");
+					englishTreebankParser = new EnglishTreebankParser(modelDirectory.FullName, true, false);
 				}
 
 				return englishTreebankParser;
@@ -78,7 +78,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 			{
 				if (sentenceDetector == null)
 				{
-					logger.Info(this, "Creating sentence detector from EnglishSD.nbin");
+					log.Info("Creating sentence detector from EnglishSD.nbin");
 					sentenceDetector =
 						new EnglishMaximumEntropySentenceDetector(
 							modelDirectory.GetDirectoryInfo("EnglishSD.nbin").FullName);
@@ -116,7 +116,18 @@ namespace AuthorIntrusion.EnglishSharpNlp
 				sentences.Add(sentence);
 
 				// Parse the sentence using the English treebank parser.
-				Parse parse = EnglishTreebankParser.DoParse(sentenceString);
+				Parse parse;
+
+				try
+				{
+					parse = EnglishTreebankParser.DoParse(sentenceString);
+				}
+				catch (Exception exception)
+				{
+					// Can't parse this line, so report it and skip it.
+					log.Error("Cannot parse: {0}: {1}", sentenceString, exception);
+					continue;
+				}
 
 				// Move into the top node.
 				if (parse.Type == MaximumEntropyParser.TopNode)
@@ -171,7 +182,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 
 					// Tag the phrase with the type.
 					PhraseType phraseType = PartsOfSpeechUtility.GetPhraseType(child.Type);
-					phrase.Tags.Add(new EnglishPhraseTag(phraseType));
+					phrase.Tags.Add(new EnglishPhraseTypeTag(phraseType));
 
 					// Recurse into the phrase.
 					CreateContents(phrase, child);
@@ -179,13 +190,41 @@ namespace AuthorIntrusion.EnglishSharpNlp
 				else
 				{
 					// Create a word to represent this item.
-					Word word = new Word(child.Text);
-					contents.Contents.Add(word);
+					var span = child.Span;
+					var token = child.Text.Substring(span.Start, (span.End) - (span.Start));
 
-					// Tag the word with the part of speech.
+					// Figure out the part of speech associated with this token.
 					PartOfSpeech partOfSpeech =
 						PartsOfSpeechUtility.GetPartOfSpeech(child.Type);
-					word.Tags.Add(new EnglishPartOfSpeechTag(partOfSpeech));
+
+					// The part of speech determines what type of item we're
+					// going to be creating out of the content.
+					Content content;
+
+					switch (partOfSpeech)
+					{
+						case PartOfSpeech.SentenceFinalPunctuation:
+							content = new Puncuation(token, true);
+							break;
+						case PartOfSpeech.Symbol:
+						case PartOfSpeech.RightParenthesis:
+						case PartOfSpeech.LeftParenthesis:
+						case PartOfSpeech.CloseDoubleQuote:
+						case PartOfSpeech.OpenDoubleQuote:
+						case PartOfSpeech.Colon:
+						case PartOfSpeech.Comma:
+						case PartOfSpeech.Dollarsign:
+						case PartOfSpeech.Poundsign:
+							content = new Puncuation(token, false);
+							break;
+						default:
+							content = new Word(token);
+							break;
+					}
+
+					// Add the content to the list.
+					content.Tags.Add(new EnglishPartOfSpeechTag(partOfSpeech));
+					contents.Contents.Add(content);
 				}
 			}
 		}

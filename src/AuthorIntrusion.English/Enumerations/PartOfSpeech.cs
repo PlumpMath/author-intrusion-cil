@@ -93,9 +93,9 @@ namespace AuthorIntrusion.English.Enumerations
 		/// <summary>
 		/// 
 		/// </summary>
-		[Description("Pase Tense Verb")]
+		[Description("Past Tense Verb")]
 		[TreebankCode("VBD")]
-		PaseTenseVerb,
+		PastTenseVerb,
 
 		/// <summary>
 		/// 
