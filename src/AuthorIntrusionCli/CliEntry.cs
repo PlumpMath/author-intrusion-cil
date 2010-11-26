@@ -22,12 +22,13 @@ namespace AuthorIntrusionCli
 			var manager = new Manager();
 
 			// Set up logging for the console.
-			ConsoleLogger logger = new ConsoleLogger("{0,5} {2}");
+			ILogger logger = new ConsoleLogger("{1,5} {2}");
 			manager.Register<ILogger>(logger);
+			Log log = new Log(typeof(CliEntry), logger);
 
 			// Read the input file.
 			var inputFile = new FileInfo(args[0]);
-			logger.Info("Entry", "Reading {0} {1}", inputFile, inputFile.Exists);
+			log.Info("Reading {0} {1}", inputFile, inputFile.Exists);
 
 			IInputManager inputManager = manager.InputManager;
 			Structure rootStructure = inputManager.Read(inputFile);
@@ -38,7 +39,7 @@ namespace AuthorIntrusionCli
 
 			// Write out the HTML
 			var outputFile = new FileInfo(args[1]);
-			logger.Info("Entry", "Writing {0} {1}", outputFile, outputFile.Exists);
+			log.Info("Writing {0} {1}", outputFile, outputFile.Exists);
 
 			IOutputManager outputManager = manager.OutputManager;
 			outputManager.Write(outputFile, rootStructure);
