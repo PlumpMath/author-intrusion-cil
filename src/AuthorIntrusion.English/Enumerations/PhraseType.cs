@@ -10,6 +10,8 @@ namespace AuthorIntrusion.English.Enumerations
 {
 	/// <summary>
 	/// Defines the various types of English phrases.
+	///
+	/// http://bulba.sdsu.edu/jeanette/thesis/PennTags.html
 	/// </summary>
 	public enum PhraseType
 	{
@@ -94,8 +96,28 @@ namespace AuthorIntrusion.English.Enumerations
 		[TreebankCode("WHNP")]
 		WhNounPhrase,
 
+		[Description("WH-Adverb Phrase")]
+		[TreebankCode("WHADVP")]
+		WhAdverbPhrase,
+
 		[Description("Simple Declarative Phrase")]
 		[TreebankCode("S")]
 		SimpleDeclarativePhrase,
+
+		[Description("Quantified Phrase")]
+		[TreebankCode("QP")]
+		QuantifiedPhrase,
+
+		[Description("Parenthetical")]
+		[TreebankCode("PRN")]
+		Parenthetical,
+
+		[Description("Inverted Question")]
+		[TreebankCode("SQ")]
+		InvertedQuestion,
+
+		[Description("Wh-Adjective Phrase")]
+		[TreebankCode("WHADJP")]
+		WhAdjectivePhrase,
 	}
 }
