@@ -29,6 +29,20 @@ namespace AuthorIntrusion.Contracts.Structures
 		private readonly ContentList contents;
 
 		/// <summary>
+		/// Gets a count of content container content (i.e. paragraphs) in this
+		/// object or child objects.
+		/// </summary>
+		public override int ContentContainerStructureCount
+		{
+			get
+			{
+				// This has content, so just include itself. It won't have child
+				// structures so the result is just 1.
+				return 1;
+			}
+		}
+
+		/// <summary>
 		/// Gets the contents inside the structure.
 		/// </summary>
 		/// <value>The contents.</value>

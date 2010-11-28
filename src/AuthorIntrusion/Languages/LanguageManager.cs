@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Enumerations;
+using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Languages;
 using AuthorIntrusion.Contracts.Structures;
@@ -38,6 +39,20 @@ namespace AuthorIntrusion.Languages
 
 		#endregion
 
+		#region Events
+
+		public event EventHandler<ParseProgressEventArgs> ParseProgress;
+
+		private void FireParseProgress(ParseProgressEventArgs args)
+		{
+			if (ParseProgress != null)
+			{
+				ParseProgress(this, args);
+			}
+		}
+
+		#endregion
+
 		#region Parsing
 
 		private readonly Log log;
@@ -55,6 +70,17 @@ namespace AuthorIntrusion.Languages
 				throw new ArgumentNullException("structure");
 			}
 
+			// Keep track of the paragraphs we'll be parsing so we can give a good progress
+			// status.
+			int paragraphCount = structure.ContentContainerStructureCount;
+			int paragraphProcessed = 0;
+
+			// Process the structure and paragraphs.
+			Parse(structure, paragraphCount, ref paragraphProcessed);
+		}
+
+		private void Parse(Structure structure, int paragraphCount, ref int paragraphsProcessed)
+		{
 			// If we have content, we need to parse those first.
 			if (structure is IContentContainer)
 			{
@@ -109,6 +135,10 @@ namespace AuthorIntrusion.Languages
 						break;
 					}
 				}
+
+				// We are done processing this paragraph.
+				paragraphsProcessed++;
+				FireParseProgress(new ParseProgressEventArgs(paragraphsProcessed, paragraphCount));
 			}
 
 			// For structure containers, pass the parsing into the child
@@ -119,7 +149,7 @@ namespace AuthorIntrusion.Languages
 
 				foreach (Structure childStructure in structureContainer.Structures)
 				{
-					Parse(childStructure);
+					Parse(childStructure, paragraphCount, ref paragraphsProcessed);
 				}
 			}
 		}

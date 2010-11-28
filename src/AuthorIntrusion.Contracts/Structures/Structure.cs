@@ -8,6 +8,12 @@ namespace AuthorIntrusion.Contracts.Structures
 		#region Structural Relationships
 
 		/// <summary>
+		/// Gets a count of content container content (i.e. paragraphs) in this
+		/// object or child objects.
+		/// </summary>
+		public abstract int ContentContainerStructureCount { get; }
+
+		/// <summary>
 		/// Gets or sets the parent structure element.
 		/// </summary>
 		/// <value>The parent.</value>

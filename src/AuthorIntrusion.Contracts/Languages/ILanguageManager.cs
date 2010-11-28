@@ -1,5 +1,8 @@
 #region Namespaces
 
+using System;
+
+using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.Structures;
 
 #endregion
@@ -11,6 +14,12 @@ namespace AuthorIntrusion.Contracts.Languages
 	/// </summary>
 	public interface ILanguageManager
 	{
+		#region Events
+
+		event EventHandler<ParseProgressEventArgs> ParseProgress;
+
+		#endregion
+
 		#region Parsing
 
 		/// <summary>
