@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -38,6 +38,7 @@
     <Reference Include="MfGames, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MfGames.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -46,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Constants\Namespaces.cs" />
     <Compile Include="Contents\Phrase.cs" />
-    <Compile Include="Contents\Quote.cs" />
     <Compile Include="Contents\Sentence.cs" />
     <Compile Include="Contents\Word.cs" />
     <Compile Include="Delegates\ContentFilter.cs" />
@@ -76,7 +76,4 @@
     <Compile Include="Events\ParseProgressEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
 </Project>

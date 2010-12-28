@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2009, Moonfire Games
+// Copyright (c) 2005-2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,59 +22,31 @@
 
 #endregion
 
-#region Namespaces
-
-using System;
-
-#endregion
-
-namespace AuthorIntrusion.Contracts.Events
+namespace AuthorIntrusion.English.Enumerations
 {
 	/// <summary>
-	/// Defines the event arguments for showing the parsing progress.
+	/// Defines the types of elements in the English Treebank.
 	/// </summary>
-	public class ParseProgressEventArgs : EventArgs
+	public enum EnglishTreebankClassification
 	{
-		#region Constructors
+		/// <summary>
+		/// Indicates that the given type is a word or word phrase.
+		/// </summary>
+		Word,
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ParseProgressEventArgs"/> class.
+		/// Indicates that the given type is puncutation of some form.
 		/// </summary>
-		/// <param name="paragraphsProcessed">The paragraphs processed.</param>
-		/// <param name="paragraphCount">The paragraph count.</param>
-		public ParseProgressEventArgs(
-			int paragraphsProcessed,
-			int paragraphCount)
-		{
-			this.paragraphsProcessed = paragraphsProcessed;
-			this.paragraphCount = paragraphCount;
-		}
-
-		#endregion
-
-		#region Progress
-
-		private readonly int paragraphCount;
-		private readonly int paragraphsProcessed;
+		Puncuation,
 
 		/// <summary>
-		/// Gets the total paragraph count.
+		/// Indicates that the given type is a terminal puncuctuation.
 		/// </summary>
-		/// <value>The paragraph count.</value>
-		public int ParagraphCount
-		{
-			get { return paragraphCount; }
-		}
+		Terminating,
 
 		/// <summary>
-		/// Gets the number of paragraphs processed.
+		/// Indicates that the given type is phrase which contains more codes.
 		/// </summary>
-		/// <value>The paragraphs processed.</value>
-		public int ParagraphsProcessed
-		{
-			get { return paragraphsProcessed; }
-		}
-
-		#endregion
+		Phrase,
 	}
 }

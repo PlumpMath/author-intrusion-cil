@@ -26,6 +26,7 @@ namespace AuthorIntrusion.Languages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LanguageManager"/> class.
 		/// </summary>
+		/// <param name="logger">The logger.</param>
 		/// <param name="contentParsers">The content parsers.</param>
 		public LanguageManager(ILogger logger, IContentParser[] contentParsers)
 		{
@@ -41,8 +42,16 @@ namespace AuthorIntrusion.Languages
 
 		#region Events
 
+		/// <summary>
+		/// Occurs when the parsing progresses forward. Used for showing process
+		/// dialogs.
+		/// </summary>
 		public event EventHandler<ParseProgressEventArgs> ParseProgress;
 
+		/// <summary>
+		/// Fires the parse progress event.
+		/// </summary>
+		/// <param name="args">The <see cref="AuthorIntrusion.Contracts.Events.ParseProgressEventArgs"/> instance containing the event data.</param>
 		private void FireParseProgress(ParseProgressEventArgs args)
 		{
 			if (ParseProgress != null)

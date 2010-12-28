@@ -186,15 +186,12 @@ namespace AuthorIntrusion.IO
 					break;
 
 				case "quote":
-					var quote = new Quote();
-					element = quote;
-
 					if (parent != null && parent is IContentContainer)
 					{
-						((IContentContainer) parent).Contents.Add(quote);
+						((IContentContainer) parent).Contents.Add("\"");
 					}
 
-					break;
+					return;
 
 				default:
 					// Unknown type, so just skip it.
@@ -223,13 +220,17 @@ namespace AuthorIntrusion.IO
 			// Switch based on the local tag.
 			switch (reader.LocalName)
 			{
+				case "quote":
+					IContentContainer parent = (IContentContainer) context[context.Count - 1]; 
+					parent.Contents.Add("\"");
+					break;
+
 				case "book":
 				case "chapter":
 				case "article":
 				case "section":
 				case "para":
 				case "simpara":
-				case "quote":
 					// Remove the last item which should be this element.
 					context.RemoveAt(context.Count - 1);
 					break;

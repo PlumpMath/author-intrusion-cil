@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -67,19 +67,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\TreebankCodeAttribute.cs" />
     <Compile Include="EnglishInstaller.cs" />
     <Compile Include="EnglishSpecificBase.cs" />
+    <Compile Include="EnglishTreebankUtility.cs" />
     <Compile Include="EnglishUnparsedSplitter.cs" />
-    <Compile Include="Enumerations\PartOfSpeech.cs" />
-    <Compile Include="Enumerations\PhraseType.cs" />
-    <Compile Include="PartsOfSpeechUtility.cs" />
+    <Compile Include="Enumerations\EnglishTreebankClassification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnglishSentenceSplitter.cs" />
-    <Compile Include="Tags\EnglishPartOfSpeechTag.cs" />
+    <Compile Include="Tags\EnglishTreebankTag.cs" />
     <Compile Include="Tests\EnglishContentSplitterTests.cs" />
     <Compile Include="Tests\EnglishSentenceSplitterTests.cs" />
-    <Compile Include="Tags\EnglishPhraseTypeTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">

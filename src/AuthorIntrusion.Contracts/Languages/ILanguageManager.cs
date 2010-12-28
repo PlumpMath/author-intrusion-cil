@@ -16,6 +16,10 @@ namespace AuthorIntrusion.Contracts.Languages
 	{
 		#region Events
 
+		/// <summary>
+		/// Occurs when the parsing progresses forward. Used for showing process
+		/// dialogs.
+		/// </summary>
 		event EventHandler<ParseProgressEventArgs> ParseProgress;
 
 		#endregion
