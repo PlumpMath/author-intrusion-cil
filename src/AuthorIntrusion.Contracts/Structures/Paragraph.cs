@@ -10,14 +10,14 @@ namespace AuthorIntrusion.Contracts.Structures
 	/// <summary>
 	/// Represents a single paragraph within the document.
 	/// </summary>
-	public class ContentContainerStructure : Structure, IContentContainer
+	public class Paragraph : Structure, IContentContainer
 	{
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ContentContainerStructure"/> class.
+		/// Initializes a new instance of the <see cref="Paragraph"/> class.
 		/// </summary>
-		public ContentContainerStructure()
+		public Paragraph()
 		{
 			contents = new ContentList();
 		}

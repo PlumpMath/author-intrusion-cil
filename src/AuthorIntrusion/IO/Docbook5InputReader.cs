@@ -146,11 +146,11 @@ namespace AuthorIntrusion.IO
 			switch (reader.LocalName)
 			{
 				case "book":
-					element = new StructureContainerStructure();
+					element = new Section();
 					break;
 
 				case "chapter":
-					var chapter = new StructureContainerStructure();
+					var chapter = new Section();
 					element = chapter;
 
 					if (parent != null && parent is IStructureContainer)
@@ -160,11 +160,11 @@ namespace AuthorIntrusion.IO
 					break;
 
 				case "article":
-					element = new StructureContainerStructure();
+					element = new Section();
 					break;
 
 				case "section":
-					var section = new StructureContainerStructure();
+					var section = new Section();
 					element = section;
 
 					if (parent != null && parent is IStructureContainer)
@@ -175,7 +175,7 @@ namespace AuthorIntrusion.IO
 
 				case "para":
 				case "simpara":
-					var paragraph = new ContentContainerStructure();
+					var paragraph = new Paragraph();
 					element = paragraph;
 
 					if (parent != null && parent is IStructureContainer)

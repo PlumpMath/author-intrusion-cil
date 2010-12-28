@@ -12,14 +12,14 @@ namespace AuthorIntrusion.Contracts.Structures
 	/// structures. For example, a DocBook 5's &lt;book /&gt; element can
 	/// contain other structural elements.
 	/// </summary>
-	public class StructureContainerStructure : Structure, IStructureContainer
+	public class Section : Structure, IStructureContainer
 	{
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StructureContainerStructure"/> class.
+		/// Initializes a new instance of the <see cref="Section"/> class.
 		/// </summary>
-		public StructureContainerStructure()
+		public Section()
 		{
 			structures = new StructureList(this);
 		}
