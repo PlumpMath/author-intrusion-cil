@@ -136,7 +136,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 				string token = child.Text.Substring(span.Start, (span.End) - (span.Start));
 
 				// Figure out the type of speech this is.
-				var treebankTag = new EnglishTreebankTag(child.Type);
+				var treebankTag = new EnglishTreebankTag(child.Type, this);
 				EnglishTreebankClassification classification =
 					EnglishTreebankUtility.GetClassification(child.Type);
 				Content content;
