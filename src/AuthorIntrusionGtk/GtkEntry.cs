@@ -1,4 +1,4 @@
-#region Copyright and License
+﻿#region Copyright and License
 
 // Copyright (c) 2005-2011, Moonfire Games
 // 
@@ -24,50 +24,31 @@
 
 #region Namespaces
 
-using System.Collections.Generic;
-
-using AuthorIntrusion.Contracts.Enumerations;
-using AuthorIntrusion.Contracts.Structures;
+using Gtk;
 
 #endregion
 
-namespace AuthorIntrusion.Contracts.Languages
+namespace AuthorIntrusionGtk
 {
 	/// <summary>
-	/// Defines the signature for an analyzer, a class that parses through
-	/// the content in a non-changing way and adds various tags.
+	/// Main entry point into the Gtk application.
 	/// </summary>
-	public interface IContentAnalyzer
+	internal static class GtkEntry
 	{
-		#region Analyzing
-
 		/// <summary>
-		/// Analyzes the given paragraph and adds various tags as needed.
+		/// The main entry point for the application.
 		/// </summary>
-		/// <param name="paragraph">The paragraph.</param>
-		/// <returns>The status result from the analysis.</returns>
-		ProcessStatus Analyze(Paragraph paragraph);
+		public static void Main()
+		{
+			// Initialize Gtk.
+			Application.Init();
 
-		#endregion
+			//Create the Window
+			var mainWindow = new MainWindow();
+			mainWindow.ShowAll();
 
-		#region Dependencies
-
-		/// <summary>
-		/// Gets the analyzers this specific analyzer provides.
-		/// </summary>
-		/// <value>The provides analyzers.</value>
-		/// <remarks>This is never null.</remarks>
-		HashSet<string> ProvideAnalyzers { get; }
-
-		/// <summary>
-		/// Gets the analyzers that must have successfully run before this
-		/// analyzer can process. If the analyzer never has its requirements
-		/// fulfilled, it will be noted.
-		/// </summary>
-		/// <value>The require analyzers.</value>
-		/// <remarks>This is never null.</remarks>
-		HashSet<string> RequireAnalyzers { get; }
-
-		#endregion
+			// Start the application and run it.
+			Application.Run();
+		}
 	}
 }
