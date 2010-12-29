@@ -35,7 +35,7 @@ namespace AuthorIntrusionCli
 			Structure rootStructure = inputManager.Read(inputFile);
 
 			// Parse the contents of the root.
-			log.Info("Paragraphs {0:N0}", rootStructure.ContentContainerStructureCount);
+			log.Info("Paragraphs {0:N0}", rootStructure.ParagraphCount);
 
 			DateTime lastReport = DateTime.UtcNow;
 			ILanguageManager languageManager = manager.LanguageManager;
