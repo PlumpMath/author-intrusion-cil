@@ -1,12 +1,34 @@
+#region Copyright and License
+
+// Copyright (c) 2005-2011, Moonfire Games
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+#endregion
+
 #region Namespaces
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Events;
-using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Languages;
 using AuthorIntrusion.Contracts.Structures;
 
@@ -29,7 +51,9 @@ namespace AuthorIntrusion.Languages
 		/// </summary>
 		/// <param name="logger">The logger.</param>
 		/// <param name="contentParsers">The content parsers.</param>
-		public LanguageManager(ILogger logger, IContentParser[] contentParsers)
+		public LanguageManager(
+			ILogger logger,
+			IContentParser[] contentParsers)
 		{
 			// Save the various lists in member variables.
 			this.contentParsers = contentParsers;
@@ -44,12 +68,6 @@ namespace AuthorIntrusion.Languages
 		#region Events
 
 		/// <summary>
-		/// Occurs when the parsing progresses forward. Used for showing process
-		/// dialogs.
-		/// </summary>
-		public event EventHandler<ParseProgressEventArgs> ParseProgress;
-
-		/// <summary>
 		/// Fires the parse progress event.
 		/// </summary>
 		/// <param name="args">The <see cref="AuthorIntrusion.Contracts.Events.ParseProgressEventArgs"/> instance containing the event data.</param>
@@ -61,12 +79,78 @@ namespace AuthorIntrusion.Languages
 			}
 		}
 
+		/// <summary>
+		/// Occurs when the parsing progresses forward. Used for showing process
+		/// dialogs.
+		/// </summary>
+		public event EventHandler<ParseProgressEventArgs> ParseProgress;
+
 		#endregion
 
 		#region Parsing
 
-		private readonly Log log;
 		private readonly IContentParser[] contentParsers;
+		private readonly Log log;
+
+		/// <summary>
+		/// Parses a single paragraph before returning.
+		/// </summary>
+		/// <param name="state">The state.</param>
+		private void DoParseParagraph(object state)
+		{
+			// Get the paragraph we are dealing with.
+			var paragraph = (Paragraph) state;
+
+			// Create a list of parsers we currently have in this manager
+			// and strip out the ones that don't apply to the language.
+			var parsers = new List<IContentParser>();
+			parsers.AddRange(contentParsers);
+
+			while (true)
+			{
+				// Keep track of the parsers that need to be removed from the
+				// list. We also keep track if we have at least one successful
+				// parse since that will let us try the deferred parsers again.
+				var removedParsers = new List<IContentParser>();
+				bool hadSuccessfulParse = false;
+
+				// Go through all the parsers on the list.
+				foreach (IContentParser parser in parsers)
+				{
+					// Attempt to parse the contents with this one.
+					ProcessStatus results = parser.Parse(paragraph.Contents);
+
+					switch (results)
+					{
+						case ProcessStatus.Succeeded:
+							// Mark that we are successful to loop again and
+							// add the parser to the remove list.
+							hadSuccessfulParse = true;
+							removedParsers.Add(parser);
+							break;
+
+						case ProcessStatus.Failed:
+							// Add the parser to the remove list so we don't
+							// try it again.
+							removedParsers.Add(parser);
+							break;
+					}
+				}
+
+				// Remove any parsers on the remove list.
+				foreach (IContentParser parser in removedParsers)
+				{
+					parsers.Remove(parser);
+				}
+
+				// If we don't have any parsers left or if we didn't have
+				// at least one successful one, we break out of the loop.
+				if (!hadSuccessfulParse || parsers.Count == 0)
+				{
+					break;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Parses the contents of the given structure.
@@ -98,66 +182,6 @@ namespace AuthorIntrusion.Languages
 				paragraphsProcessed++;
 				FireParseProgress(
 					new ParseProgressEventArgs(paragraphsProcessed, paragraphCount));
-			}
-		}
-
-		/// <summary>
-		/// Parses a single paragraph before returning.
-		/// </summary>
-		/// <param name="state">The state.</param>
-		private void DoParseParagraph(object state)
-		{
-			// Get the paragraph we are dealing with.
-			Paragraph paragraph = (Paragraph) state;
-
-			// Create a list of parsers we currently have in this manager
-			// and strip out the ones that don't apply to the language.
-			var parsers = new List<IContentParser>();
-			parsers.AddRange(contentParsers);
-
-			while (true)
-			{
-				// Keep track of the parsers that need to be removed from the
-				// list. We also keep track if we have at least one successful
-				// parse since that will let us try the deferred parsers again.
-				var removedParsers = new List<IContentParser>();
-				bool hadSuccessfulParse = false;
-
-				// Go through all the parsers on the list.
-				foreach (IContentParser parser in parsers)
-				{
-					// Attempt to parse the contents with this one.
-					ParserStatus results = parser.Parse(paragraph.Contents);
-
-					switch (results)
-					{
-						case ParserStatus.Succeeded:
-							// Mark that we are successful to loop again and
-							// add the parser to the remove list.
-							hadSuccessfulParse = true;
-							removedParsers.Add(parser);
-							break;
-
-						case ParserStatus.Failed:
-							// Add the parser to the remove list so we don't
-							// try it again.
-							removedParsers.Add(parser);
-							break;
-					}
-				}
-
-				// Remove any parsers on the remove list.
-				foreach (IContentParser parser in removedParsers)
-				{
-					parsers.Remove(parser);
-				}
-
-				// If we don't have any parsers left or if we didn't have
-				// at least one successful one, we break out of the loop.
-				if (!hadSuccessfulParse || parsers.Count == 0)
-				{
-					break;
-				}
 			}
 		}
 

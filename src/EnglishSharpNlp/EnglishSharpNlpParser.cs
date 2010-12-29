@@ -180,7 +180,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		/// </summary>
 		/// <param name="contents">The content container.</param>
 		/// <returns>The status result from the parse.</returns>
-		public ParserStatus Parse(ContentList contents)
+		public ProcessStatus Parse(ContentList contents)
 		{
 			// The SharpNlp works off a string, so we just getting the content
 			// string from the contents and we'll parse that. Once we're done,
@@ -233,7 +233,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 			}
 
 			// Return a successful parse.
-			return ParserStatus.Succeeded;
+			return ProcessStatus.Succeeded;
 		}
 
 		#endregion

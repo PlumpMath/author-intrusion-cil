@@ -51,7 +51,8 @@
     <Compile Include="Contents\Word.cs" />
     <Compile Include="Delegates\ContentFilter.cs" />
     <Compile Include="Element.cs" />
-    <Compile Include="Enumerations\ParserStatus.cs" />
+    <Compile Include="Enumerations\ProcessStatus.cs" />
+    <Compile Include="Languages\IContentAnalyzer.cs" />
     <Compile Include="Interfaces\IElementTag.cs" />
     <Compile Include="IO\IInputManager.cs" />
     <Compile Include="IO\IInputReader.cs" />

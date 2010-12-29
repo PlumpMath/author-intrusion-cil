@@ -3,7 +3,7 @@ namespace AuthorIntrusion.Contracts.Enumerations
 	/// <summary>
 	/// Indicates the results of a parse attempt.
 	/// </summary>
-	public enum ParserStatus
+	public enum ProcessStatus
 	{
 		/// <summary>
 		/// Indicates that the parse has succeeded.

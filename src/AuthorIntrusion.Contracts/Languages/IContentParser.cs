@@ -9,7 +9,8 @@ namespace AuthorIntrusion.Contracts.Languages
 {
 	/// <summary>
 	/// Describes a class that can parse the unparsed contents of a paragraph
-	/// and populate it a parsed sentences.
+	/// and populate it a parsed sentences. This changes the contents and
+	/// structure of a content list.
 	/// </summary>
 	public interface IContentParser : ILanguageSpecific
 	{
@@ -21,7 +22,7 @@ namespace AuthorIntrusion.Contracts.Languages
 		/// </summary>
 		/// <param name="contents">The content container.</param>
 		/// <returns>The status result from the parse.</returns>
-		ParserStatus Parse(ContentList contents);
+		ProcessStatus Parse(ContentList contents);
 
 		#endregion
 	}
