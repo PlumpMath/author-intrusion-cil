@@ -49,12 +49,6 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// <value>The paragraph list.</value>
 		public abstract IList<Paragraph> ParagraphList { get; }
 
-		/// <summary>
-		/// Gets or sets the parent structure element.
-		/// </summary>
-		/// <value>The parent.</value>
-		public Structure Parent { get; set; }
-
 		#endregion
 	}
 }

@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
@@ -23,6 +24,16 @@ namespace AuthorIntrusion.Contracts
 		{
 			tags = new HashSet<IElementTag>();
 		}
+
+		#endregion
+
+		#region Relationships
+
+		/// <summary>
+		/// Gets or sets the parent structure element.
+		/// </summary>
+		/// <value>The parent.</value>
+		public Element Parent { get; set; }
 
 		#endregion
 

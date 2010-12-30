@@ -1,0 +1,37 @@
+﻿<ui>
+	<menubar name='MenuBar'>
+		<menu action='FileMenu'>
+			<menuitem action='New'/>
+			<menuitem action='Open'/>
+
+			<separator/>
+			<menuitem action='Save'/>
+			<menuitem action='SaveAs'/>
+
+			<separator/>
+			<menuitem action='Properties'/>
+			
+			<separator/>
+			<menuitem action='Close'/>
+			<menuitem action='Quit'/>
+		</menu>
+
+		<menu action='EditMenu'>
+			<menuitem action='Cut'/>
+			<menuitem action='Copy'/>
+			<menuitem action='Paste'/>
+
+			<separator/>
+			<menuitem action='Preferences'/>
+		</menu>
+
+		<menu action='ViewMenu'>
+		</menu>
+
+		<menu action='GoMenu'>
+		</menu>
+
+		<menu action='HelpMenu'>
+		</menu>
+	</menubar>
+</ui>

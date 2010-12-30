@@ -25,6 +25,7 @@
 #region Namespaces
 
 using System;
+using System.IO;
 
 using Gtk;
 
@@ -92,29 +93,13 @@ namespace AuthorIntrusionGtk
 		/// <returns></returns>
 		private Widget CreateGuiMenu()
 		{
-			// Defines the menu
-			const string uiInfo =
-				"<ui>" + "  <menubar name='MenuBar'>" + "    <menu action='FileMenu'>" +
-				"      <menuitem action='Quit'/>" + "    </menu>" + "  </menubar>" + "</ui>";
-
-			// Set up the actions
-			var entries = new[]
-			              {
-			              	// "File" Menu
-			              	new ActionEntry(
-			              		"FileMenu", null, "_File", null, null, null),
-			              	new ActionEntry(
-			              		"Quit",
-			              		Stock.Quit,
-			              		"_Quit",
-			              		"<control>Q",
-			              		"Quit",
-			              		OnQuitAction),
-			              };
-
 			// Build up the actions
 			var actions = new ActionGroup("group");
-			actions.Add(entries);
+			actions.Add(CreateGuiMenuFile());
+			actions.Add(CreateGuiMenuEdit());
+			actions.Add(CreateGuiMenuView());
+			actions.Add(CreateGuiMenuGo());
+			actions.Add(CreateGuiMenuHelp());
 
 			// Create the UI manager and add the various entries and actions
 			// into it.
@@ -123,9 +108,219 @@ namespace AuthorIntrusionGtk
 			AddAccelGroup(uiManager.AccelGroup);
 
 			// Set up the interfaces from XML
-			uiManager.AddUiFromString(uiInfo);
+			uiManager.AddUiFromResource("AuthorIntrusionGtk.ui.xml");
+
+			// TODO Disable various items until they are implemented.
+			uiManager.GetWidget("/MenuBar/FileMenu/New").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/FileMenu/Open").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/FileMenu/Save").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/FileMenu/SaveAs").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/FileMenu/Properties").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/FileMenu/Close").Sensitive = false;
+
+			uiManager.GetWidget("/MenuBar/EditMenu/Cut").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/EditMenu/Copy").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/EditMenu/Paste").Sensitive = false;
+			uiManager.GetWidget("/MenuBar/EditMenu/Preferences").Sensitive = false;
+
+			// Return the top-level menu bar.
 			return uiManager.GetWidget("/MenuBar");
 		}
+
+		#region Menu Actions
+
+		/// <summary>
+		/// Creates the GUI Edit menu entries.
+		/// </summary>
+		/// <returns></returns>
+		private static ActionEntry[] CreateGuiMenuEdit()
+		{
+			// Set up the actions
+			ActionEntry[] entries = new[]
+			{
+				// "Edit" Menu
+				new ActionEntry(
+					"EditMenu",
+					null,
+					"Edit",
+					null,
+					null,
+					null),
+				new ActionEntry(
+					"Cut",
+					Stock.Cut,
+					"Cu_t",
+					"<control>X",
+					"Cuts the current selection.",
+					null),
+				new ActionEntry(
+					"Copy",
+					Stock.Copy,
+					"_Copy",
+					"<control>O",
+					"Opens an existing document.",
+					null),
+				new ActionEntry(
+					"Paste",
+					Stock.Paste,
+					"_Paste",
+					"<control>V",
+					"Pastes the current selection.",
+					null),
+
+				new ActionEntry(
+					"Preferences",
+					Stock.Preferences,
+					"Preference_s",
+					null,
+					"Edits the application preferences.",
+					null),
+			};
+
+			return entries;
+		}
+
+		/// <summary>
+		/// Creates the GUI file menu entries.
+		/// </summary>
+		/// <returns></returns>
+		private static ActionEntry[] CreateGuiMenuFile()
+		{
+			// Set up the actions
+			ActionEntry[] entries = new[]
+			{
+				// "File" Menu
+				new ActionEntry(
+					"FileMenu",
+					null,
+					"_File",
+					null,
+					null,
+					null),
+				new ActionEntry(
+					"New",
+					Stock.New,
+					"_New",
+					"<control>N",
+					"Creates a new document.",
+					null),
+				new ActionEntry(
+					"Open",
+					Stock.Open,
+					"_Open...",
+					"<control>O",
+					"Opens an existing document.",
+					null),
+
+				new ActionEntry(
+					"Save",
+					Stock.Save,
+					"_Save",
+					"<control>S",
+					"Saves a current document.",
+					null),
+				new ActionEntry(
+					"SaveAs",
+					Stock.SaveAs,
+					"Save _As...",
+					null,
+					"Saves the current document with a new name.",
+					null),
+
+				new ActionEntry(
+					"Properties",
+					Stock.Properties,
+					"_Properties...",
+					null,
+					"Edits the properties of the current document.",
+					null),
+
+				new ActionEntry(
+					"Close",
+					Stock.Close,
+					"_Close",
+					"<control>W",
+					"Closes the current document.",
+					null),
+				new ActionEntry(
+					"Quit",
+					Stock.Quit,
+					"_Quit",
+					"<control>Q",
+					"Quits the application.",
+					OnQuitAction),
+			};
+
+			return entries;
+		}
+
+		/// <summary>
+		/// Creates the GUI Go menu entries.
+		/// </summary>
+		/// <returns></returns>
+		private static ActionEntry[] CreateGuiMenuGo()
+		{
+			// Set up the actions
+			ActionEntry[] entries = new[]
+			{
+				// "Go" Menu
+				new ActionEntry(
+					"GoMenu",
+					null,
+					"_Go",
+					null,
+					null,
+					null),
+			};
+
+			return entries;
+		}
+
+		/// <summary>
+		/// Creates the GUI Help menu entries.
+		/// </summary>
+		/// <returns></returns>
+		private static ActionEntry[] CreateGuiMenuHelp()
+		{
+			// Set up the actions
+			ActionEntry[] entries = new[]
+			{
+				// "Help" Menu
+				new ActionEntry(
+					"HelpMenu",
+					null,
+					"_Help",
+					null,
+					null,
+					null),
+			};
+
+			return entries;
+		}
+
+		/// <summary>
+		/// Creates the GUI View menu entries.
+		/// </summary>
+		/// <returns></returns>
+		private static ActionEntry[] CreateGuiMenuView()
+		{
+			// Set up the actions
+			ActionEntry[] entries = new[]
+			{
+				// "View" Menu
+				new ActionEntry(
+					"ViewMenu",
+					null,
+					"_View",
+					null,
+					null,
+					null),
+			};
+
+			return entries;
+		}
+
+		#endregion
 
 		#endregion
 
