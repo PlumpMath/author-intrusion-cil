@@ -76,7 +76,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		private ISentenceDetector sentenceDetector;
 
 		/// <summary>
-		/// Lazy loads the english treebank parser.
+		/// Lazy loads the English treebank parser.
 		/// </summary>
 		/// <value>The english treebank parser.</value>
 		private EnglishTreebankParser EnglishTreebankParser

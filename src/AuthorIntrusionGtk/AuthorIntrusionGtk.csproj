@@ -75,6 +75,12 @@
   <ItemGroup>
     <EmbeddedResource Include="ui.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.LineTextEditor\MfGames.GtkExt.LineTextEditor.csproj">
+      <Project>{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}</Project>
+      <Name>MfGames.GtkExt.LineTextEditor</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
