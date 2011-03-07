@@ -47,10 +47,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MfGames.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Installers\InputInstaller.cs" />
@@ -66,6 +62,10 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ext\mfgames-cil\src\MfGames\MfGames.csproj">
+      <Project>{3BABBE73-CD1D-494E-A81F-E4EA40107FA9}</Project>
+      <Name>MfGames</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
       <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>
       <Name>AuthorIntrusion.Contracts</Name>

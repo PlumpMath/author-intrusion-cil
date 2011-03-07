@@ -37,7 +37,7 @@ using AuthorIntrusion.English;
 using AuthorIntrusion.English.Enumerations;
 using AuthorIntrusion.English.Tags;
 
-using MfGames.Extensions.IO;
+using MfGames.Extensions.System.IO;
 using MfGames.Logging;
 
 using OpenNLP.Tools.Parser;

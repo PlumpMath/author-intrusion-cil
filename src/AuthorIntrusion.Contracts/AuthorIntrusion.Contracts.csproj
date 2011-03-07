@@ -35,11 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="MfGames, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MfGames.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -75,6 +70,12 @@
     <Compile Include="Contents\ContentContainerContent.cs" />
     <Compile Include="Contents\Punctuation.cs" />
     <Compile Include="Events\ParseProgressEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ext\mfgames-cil\src\MfGames\MfGames.csproj">
+      <Project>{3BABBE73-CD1D-494E-A81F-E4EA40107FA9}</Project>
+      <Name>MfGames</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
