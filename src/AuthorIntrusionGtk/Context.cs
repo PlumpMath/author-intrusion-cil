@@ -1,4 +1,4 @@
-﻿#region Copyright and License
+#region Copyright and License
 
 // Copyright (c) 2005-2011, Moonfire Games
 // 
@@ -25,35 +25,36 @@
 #region Namespaces
 
 using AuthorIntrusion;
-
-using Gtk;
+using AuthorIntrusion.Contracts;
 
 #endregion
 
 namespace AuthorIntrusionGtk
 {
 	/// <summary>
-	/// Main entry point into the Gtk application.
+	/// A static class for holding the various components of the system for
+	/// the Gtk client.
 	/// </summary>
-	internal static class GtkEntry
+	public static class Context
 	{
+		#region Common
+
 		/// <summary>
-		/// The main entry point for the application.
+		/// Gets or sets the Author Intrusion manager.
 		/// </summary>
-		public static void Main()
-		{
-			// Initialize Gtk.
-			Application.Init();
+		/// <value>The manager.</value>
+		public static Manager Manager { get; set; }
 
-			// Initialize the Author Intrusion manager.
-			var manager = new Manager();
-			Context.Manager = manager;
+		#endregion
 
-			// Create the window and show it.
-			var mainWindow = new MainWindow();
-			mainWindow.ShowAll();
+		#region Document
 
-			Application.Run();
-		}
+		/// <summary>
+		/// Gets or sets the current loaded document.
+		/// </summary>
+		/// <value>The document.</value>
+		public static Document Document { get; set; }
+
+		#endregion
 	}
 }

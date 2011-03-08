@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.cs" />
     <Compile Include="GtkEntry.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +81,14 @@
     <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.LineTextEditor\MfGames.GtkExt.LineTextEditor.csproj">
       <Project>{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}</Project>
       <Name>MfGames.GtkExt.LineTextEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
+      <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>
+      <Name>AuthorIntrusion.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
+      <Project>{957BD171-18E1-4EA0-8CBE-D6096BCD3654}</Project>
+      <Name>AuthorIntrusion</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

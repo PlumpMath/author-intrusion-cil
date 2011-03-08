@@ -27,6 +27,10 @@
 using System;
 using System.IO;
 
+using AuthorIntrusion;
+using AuthorIntrusion.Contracts;
+using AuthorIntrusion.Contracts.IO;
+
 using Gtk;
 
 #endregion
@@ -112,7 +116,6 @@ namespace AuthorIntrusionGtk
 
 			// TODO Disable various items until they are implemented.
 			uiManager.GetWidget("/MenuBar/FileMenu/New").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/FileMenu/Open").Sensitive = false;
 			uiManager.GetWidget("/MenuBar/FileMenu/Save").Sensitive = false;
 			uiManager.GetWidget("/MenuBar/FileMenu/SaveAs").Sensitive = false;
 			uiManager.GetWidget("/MenuBar/FileMenu/Properties").Sensitive = false;
@@ -184,7 +187,7 @@ namespace AuthorIntrusionGtk
 		/// Creates the GUI file menu entries.
 		/// </summary>
 		/// <returns></returns>
-		private static ActionEntry[] CreateGuiMenuFile()
+		private ActionEntry[] CreateGuiMenuFile()
 		{
 			// Set up the actions
 			ActionEntry[] entries = new[]
@@ -210,7 +213,7 @@ namespace AuthorIntrusionGtk
 					"_Open...",
 					"<control>O",
 					"Opens an existing document.",
-					null),
+					OnFileOpen),
 
 				new ActionEntry(
 					"Save",
@@ -345,6 +348,45 @@ namespace AuthorIntrusionGtk
 		{
 			Application.Quit();
 		}
+
+		#region File Menu
+
+		/// <summary>
+		/// Called when the file open item is selected.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+		private void OnFileOpen(object sender, EventArgs args)
+		{
+			var dialog = new FileChooserDialog(
+				"Choose the document to open",
+				this,
+				FileChooserAction.Open,
+				"Cancel", ResponseType.Cancel,
+				"Open", ResponseType.Accept);
+
+			try
+			{
+				// If the user cancelled, then just break out.
+				if (dialog.Run() != (int) ResponseType.Accept)
+				{
+					return;
+				}
+
+				// The user accepted it, so attempt to parse the document.
+				IInputManager inputManager = Context.Manager.InputManager;
+				var file = new FileInfo(dialog.Filename);
+				Document document = inputManager.Read(file);
+
+				Context.Document = document;
+			}
+			finally
+			{
+				dialog.Destroy();
+			}
+		}
+
+		#endregion
 
 		#endregion
 
