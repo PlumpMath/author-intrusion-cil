@@ -43,13 +43,12 @@ namespace AuthorIntrusion.Contracts.IO
 		#region Reading
 
 		/// <summary>
-		/// Reads the specified input stream and returns a structure elements.
-		/// If there is any problems with reading the input, this should throw
-		/// an exception and never return a null root structure.
+		/// Reads the specified input stream and returns a document representing
+		/// the document.
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
-		/// <returns></returns>
-		Structure Read(Stream inputStream);
+		/// <returns>A document representing the stream.</returns>
+		Document Read(Stream inputStream);
 
 		#endregion
 	}

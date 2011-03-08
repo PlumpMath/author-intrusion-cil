@@ -21,10 +21,10 @@ namespace AuthorIntrusion.Contracts.IO
 		/// the file format from the loaded output writers.
 		/// </summary>
 		/// <param name="inputFile">The input file.</param>
-		/// <param name="rootStructure">The root structure.</param>
+		/// <param name="document">The document to write out.</param>
 		void Write(
 			FileInfo inputFile,
-			Structure rootStructure);
+			Document document);
 
 		#endregion
 	}

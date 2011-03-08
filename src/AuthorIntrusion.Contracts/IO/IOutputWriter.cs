@@ -37,10 +37,10 @@ namespace AuthorIntrusion.Contracts.IO
 		/// Writes out the root structure to the given output stream.
 		/// </summary>
 		/// <param name="outputStream">The output stream.</param>
-		/// <param name="structure">The structure.</param>
+		/// <param name="document">The document to write out.</param>
 		void Write(
 			Stream outputStream,
-			Structure structure);
+			Document document);
 
 		#endregion
 	}

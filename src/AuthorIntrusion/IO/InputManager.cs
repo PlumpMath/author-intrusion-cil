@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Structures;
 
@@ -48,7 +49,7 @@ namespace AuthorIntrusion.IO
 		/// </summary>
 		/// <param name="inputFile">The input file.</param>
 		/// <returns></returns>
-		public Structure Read(FileInfo inputFile)
+		public Document Read(FileInfo inputFile)
 		{
 			// Make sure the file exists for reading.
 			if (inputFile == null)
@@ -71,25 +72,13 @@ namespace AuthorIntrusion.IO
 		}
 
 		/// <summary>
-		/// Reads the specified input stream and returns a structure elements.
-		/// If there is any problems with reading the input, this should throw
-		/// an exception and never return a null root structure.
-		/// </summary>
-		/// <param name="inputStream">The input stream.</param>
-		/// <returns></returns>
-		public Structure Read(Stream inputStream)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
 		/// Uses the given filename and input stream to read the file using one
 		/// of the registered input readers.
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <param name="filename">The filename.</param>
 		/// <returns></returns>
-		private Structure Read(
+		private Document Read(
 			Stream inputStream,
 			string filename)
 		{

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
+using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Constants;
 using AuthorIntrusion.Contracts.Contents;
@@ -48,7 +49,7 @@ namespace AuthorIntrusion.IO
 		#region Writing
 
 		/// <summary>
-		/// Writes out the structure element to the given writer.
+		/// Writes the specified writer.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		/// <param name="structure">The structure.</param>
@@ -84,11 +85,22 @@ namespace AuthorIntrusion.IO
 		/// Writes out the root structure to the given output stream.
 		/// </summary>
 		/// <param name="outputStream">The output stream.</param>
-		/// <param name="rootStructure">The root structure.</param>
+		/// <param name="document">The document to write out.</param>
 		public void Write(
 			Stream outputStream,
-			Structure rootStructure)
+			Document document)
 		{
+			// Verify our values.
+			if (outputStream == null)
+			{
+				throw new ArgumentNullException("writer");
+			}
+
+			if (document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
+
 			// Write this using the XHTML writer.
 			var settings = new XmlWriterSettings();
 			settings.Indent = false;
@@ -117,7 +129,7 @@ namespace AuthorIntrusion.IO
 
 				// Write out the body tag.
 				writer.WriteStartElement("body", Namespaces.Xhtml11);
-				Write(writer, rootStructure, 0);
+				Write(writer, document.Structure, 0);
 				writer.WriteEndElement();
 
 				// Finish up the XHTML.

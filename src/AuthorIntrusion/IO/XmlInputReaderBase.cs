@@ -3,6 +3,7 @@
 using System.IO;
 using System.Xml;
 
+using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Structures;
 
@@ -85,7 +86,7 @@ namespace AuthorIntrusion.IO
 		/// </summary>
 		/// <param name="inputStream">The input stream.</param>
 		/// <returns>An StructureBase containing the top-level element.</returns>
-		public Structure Read(Stream inputStream)
+		public Document Read(Stream inputStream)
 		{
 			// Wrap the stream in an XmlReader so we can parse the top-level
 			// element.
@@ -104,7 +105,7 @@ namespace AuthorIntrusion.IO
 		/// <returns>
 		/// An StructureBase containing the top-level element.
 		/// </returns>
-		protected abstract Structure Read(XmlReader reader);
+		protected abstract Document Read(XmlReader reader);
 
 		#endregion
 

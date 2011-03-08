@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Structures;
 
@@ -47,11 +48,10 @@ namespace AuthorIntrusion.IO
 		/// an exception and never return a null root structure.
 		/// </summary>
 		/// <param name="outputFile">The output file.</param>
-		/// <param name="structure">The structure.</param>
-		/// <returns></returns>
+		/// <param name="document">The document.</param>
 		public void Write(
 			FileInfo outputFile,
-			Structure structure)
+			Document document)
 		{
 			// Make sure the file exists for writing.
 			if (outputFile == null)
@@ -64,7 +64,7 @@ namespace AuthorIntrusion.IO
 				FileStream fileStream = outputFile.Open(
 					FileMode.Create, FileAccess.Write, FileShare.None))
 			{
-				Write(fileStream, structure, outputFile.Name);
+				Write(fileStream, document, outputFile.Name);
 			}
 		}
 
@@ -73,12 +73,11 @@ namespace AuthorIntrusion.IO
 		/// of the registered output writers.
 		/// </summary>
 		/// <param name="outputStream">The output stream.</param>
-		/// <param name="structure">The structure.</param>
+		/// <param name="document">The document.</param>
 		/// <param name="filename">The filename.</param>
-		/// <returns></returns>
 		private void Write(
 			Stream outputStream,
-			Structure structure,
+			Document document,
 			string filename)
 		{
 			// Build up a list of possible writers based on filename.
@@ -120,7 +119,7 @@ namespace AuthorIntrusion.IO
 
 			// Use the first writer in the list, regardless of count.
 			IOutputWriter writer = writers[0];
-			writer.Write(outputStream, structure);
+			writer.Write(outputStream, document);
 		}
 
 		#endregion

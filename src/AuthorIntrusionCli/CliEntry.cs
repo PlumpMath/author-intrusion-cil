@@ -4,6 +4,7 @@ using System;
 using System.IO;
 
 using AuthorIntrusion;
+using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Languages;
@@ -32,10 +33,10 @@ namespace AuthorIntrusionCli
 			log.Info("Reading {0} {1}", inputFile, inputFile.Exists);
 
 			IInputManager inputManager = manager.InputManager;
-			Structure rootStructure = inputManager.Read(inputFile);
+			Document document = inputManager.Read(inputFile);
 
 			// Parse the contents of the root.
-			log.Info("Paragraphs {0:N0}", rootStructure.ParagraphCount);
+			log.Info("Paragraphs {0:N0}", document.Structure.ParagraphCount);
 
 			DateTime lastReport = DateTime.UtcNow;
 			ILanguageManager languageManager = manager.LanguageManager;
@@ -51,14 +52,14 @@ namespace AuthorIntrusionCli
 					         100.0 * progressArgs.ParagraphsProcessed / progressArgs.ParagraphCount);
 					}
 				};
-			languageManager.Parse(rootStructure);
+			languageManager.Parse(document.Structure);
 
 			// Write out the HTML
 			var outputFile = new FileInfo(args[1]);
 			log.Info("Writing {0} {1}", outputFile, outputFile.Exists);
 
 			IOutputManager outputManager = manager.OutputManager;
-			outputManager.Write(outputFile, rootStructure);
+			outputManager.Write(outputFile, document);
 
 			// Just set up the input.
 			log.Info("Press ENTER to exit");

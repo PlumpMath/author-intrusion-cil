@@ -71,7 +71,7 @@ namespace AuthorIntrusion.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		protected override Structure Read(XmlReader reader)
+		protected override Document Read(XmlReader reader)
 		{
 			// This implements a very simple Docbook 5 XML reader that ignores
 			// all the elements outside of the scope of this application and 
@@ -114,7 +114,11 @@ namespace AuthorIntrusion.IO
 			}
 
 			// There is nothing wrong with the parse, so return the root.
-			return rootStructure;
+			var document = new Document();
+
+			document.Structure = rootStructure;
+
+			return document;
 		}
 
 		/// <summary>
