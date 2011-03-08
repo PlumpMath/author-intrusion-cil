@@ -117,7 +117,6 @@ namespace AuthorIntrusionGtk
 			// TODO Disable various items until they are implemented.
 			uiManager.GetWidget("/MenuBar/FileMenu/New").Sensitive = false;
 			uiManager.GetWidget("/MenuBar/FileMenu/Save").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/FileMenu/SaveAs").Sensitive = false;
 			uiManager.GetWidget("/MenuBar/FileMenu/Properties").Sensitive = false;
 			uiManager.GetWidget("/MenuBar/FileMenu/Close").Sensitive = false;
 
@@ -228,7 +227,7 @@ namespace AuthorIntrusionGtk
 					"Save _As...",
 					null,
 					"Saves the current document with a new name.",
-					null),
+					OnFileSaveAs),
 
 				new ActionEntry(
 					"Properties",
@@ -379,6 +378,40 @@ namespace AuthorIntrusionGtk
 				Document document = inputManager.Read(file);
 
 				Context.Document = document;
+			}
+			finally
+			{
+				dialog.Destroy();
+			}
+		}
+
+		/// <summary>
+		/// Called when the File's Save As is selected.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+		private void OnFileSaveAs(object sender, EventArgs args)
+		{
+			var dialog = new FileChooserDialog(
+				"Choose where to save the file",
+				this,
+				FileChooserAction.Save,
+				"Cancel", ResponseType.Cancel,
+				"Save", ResponseType.Accept);
+
+			try
+			{
+				// If the user cancelled, then just break out.
+				if (dialog.Run() != (int) ResponseType.Accept)
+				{
+					return;
+				}
+
+				// The user accepted it, so attempt to parse the document.
+				IOutputManager outputManager = Context.Manager.OutputManager;
+				var file = new FileInfo(dialog.Filename);
+
+				outputManager.Write(file, Context.Document);
 			}
 			finally
 			{
