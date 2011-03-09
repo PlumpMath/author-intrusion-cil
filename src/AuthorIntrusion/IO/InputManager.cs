@@ -29,14 +29,23 @@ namespace AuthorIntrusion.IO
 		/// <param name="inputReaders">The input readers.</param>
 		public InputManager(IInputReader[] inputReaders)
 		{
-			this.inputReaders = inputReaders;
+			this.readers = inputReaders;
 		}
 
 		#endregion
 
 		#region InputReader Management
 
-		private readonly IInputReader[] inputReaders;
+		private readonly IInputReader[] readers;
+
+		/// <summary>
+		/// Gets all the input readers associated with this manager.
+		/// </summary>
+		/// <value>The input readers.</value>
+		public IInputReader[] Readers
+		{
+			get { return readers; }
+		}
 
 		#endregion
 
@@ -89,14 +98,14 @@ namespace AuthorIntrusion.IO
 			{
 				// We don't have a filename, so we need to test all the input
 				// readers to figure out which one we can use.
-				readers.AddRange(inputReaders);
+				readers.AddRange(this.readers);
 			}
 			else
 			{
 				// Use the filename to par down the list of readers.
 				string fileExtension = Path.GetExtension(filename);
 
-				foreach (IInputReader inputReader in inputReaders)
+				foreach (IInputReader inputReader in this.readers)
 				{
 					foreach (string readerExtension in inputReader.FileExtensions)
 					{

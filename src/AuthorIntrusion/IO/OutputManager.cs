@@ -29,14 +29,23 @@ namespace AuthorIntrusion.IO
 		/// <param name="outputWriters">The output writers.</param>
 		public OutputManager(IOutputWriter[] outputWriters)
 		{
-			this.outputWriters = outputWriters;
+			this.writers = outputWriters;
 		}
 
 		#endregion
 
 		#region OutputWriter Management
 
-		private readonly IOutputWriter[] outputWriters;
+		private readonly IOutputWriter[] writers;
+
+		/// <summary>
+		/// Gets the writers associated with the manager.
+		/// </summary>
+		/// <value>The writers.</value>
+		public IOutputWriter[] Writers
+		{
+			get { return writers; }
+		}
 
 		#endregion
 
@@ -87,14 +96,14 @@ namespace AuthorIntrusion.IO
 			{
 				// We don't have a filename, so we need to test all the output
 				// writers to figure out which one we can use.
-				writers.AddRange(outputWriters);
+				writers.AddRange(this.writers);
 			}
 			else
 			{
 				// Use the filename to par down the list of writers.
 				string fileExtension = Path.GetExtension(filename);
 
-				foreach (IOutputWriter outputWriter in outputWriters)
+				foreach (IOutputWriter outputWriter in this.writers)
 				{
 					foreach (string writerExtension in outputWriter.FileExtensions)
 					{

@@ -24,6 +24,12 @@ namespace AuthorIntrusion.Contracts.IO
 		string[] FileExtensions { get; }
 
 		/// <summary>
+		/// Gets the MIME types associated with this writer.
+		/// </summary>
+		/// <value>The MIME types.</value>
+		string[] MimeTypes { get; }
+
+		/// <summary>
 		/// Gets the name of the output format.
 		/// </summary>
 		/// <value>The name.</value>

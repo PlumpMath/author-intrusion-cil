@@ -24,6 +24,8 @@
 
 #region Namespaces
 
+using AuthorIntrusion.Contracts.IO;
+
 using Gtk;
 
 #endregion
@@ -51,6 +53,35 @@ namespace AuthorIntrusionGtk.Dialogs
 				"Open",
 				ResponseType.Accept)
 		{
+			// Add the files to represent the types of files we can open.
+			IInputManager inputManager = Context.Manager.InputManager;
+
+			var allFilter = new FileFilter();
+			allFilter.Name = "All Supported Files";
+			AddFilter(allFilter);
+
+			foreach (IInputReader reader in inputManager.Readers)
+			{
+				// Create a file-specific filter.
+				var filter = new FileFilter();
+
+				filter.Name = reader.Name;
+
+				AddFilter(filter);
+
+				// Add the reader's extension and MIME to both filters.
+				foreach (string extension in reader.FileExtensions)
+				{
+					allFilter.AddPattern("*" + extension);
+					filter.AddPattern("*" + extension);
+				}
+
+				foreach (string mimeType in reader.MimeTypes)
+				{
+					allFilter.AddMimeType(mimeType);
+					filter.AddMimeType(mimeType);
+				}
+			}
 		}
 
 		#endregion

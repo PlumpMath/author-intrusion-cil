@@ -1,3 +1,5 @@
+using AuthorIntrusion.Contracts.IO;
+
 using Gtk;
 
 namespace AuthorIntrusionGtk.Dialogs
@@ -23,6 +25,29 @@ namespace AuthorIntrusionGtk.Dialogs
 				"Save",
 				ResponseType.Accept)
 		{
+			// Add the files to represent the types of files we can open.
+			IOutputManager outputManager = Context.Manager.OutputManager;
+
+			foreach (IOutputWriter writer in outputManager.Writers)
+			{
+				// Create a file-specific filter.
+				var filter = new FileFilter();
+
+				filter.Name = writer.Name;
+
+				AddFilter(filter);
+
+				// Add the writer's extension and MIME to the filter.
+				foreach (string extension in writer.FileExtensions)
+				{
+					filter.AddPattern("*" + extension);
+				}
+
+				foreach (string mimeType in writer.MimeTypes)
+				{
+					filter.AddMimeType(mimeType);
+				}
+			}
 		}
 
 		#endregion

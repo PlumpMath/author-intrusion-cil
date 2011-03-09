@@ -36,6 +36,18 @@ namespace AuthorIntrusion.IO
 		}
 
 		/// <summary>
+		/// Gets the MIME types associated with this writer.
+		/// </summary>
+		/// <value>The MIME types.</value>
+		public string[] MimeTypes
+		{
+			get
+			{
+				return new[] { "text/html" };
+			}
+		}
+
+		/// <summary>
 		/// Gets the name of the output format.
 		/// </summary>
 		/// <value>The name.</value>

@@ -13,6 +13,16 @@ namespace AuthorIntrusion.Contracts.IO
 	/// </summary>
 	public interface IInputManager
 	{
+		#region Readers
+
+		/// <summary>
+		/// Gets all the input readers associated with this manager.
+		/// </summary>
+		/// <value>The input readers.</value>
+		IInputReader[] Readers { get; }
+
+		#endregion
+
 		#region Reading
 
 		/// <summary>

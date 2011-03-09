@@ -14,6 +14,16 @@ namespace AuthorIntrusion.Contracts.IO
 	/// </summary>
 	public interface IOutputManager
 	{
+		#region Writers
+
+		/// <summary>
+		/// Gets the writers associated with the manager.
+		/// </summary>
+		/// <value>The writers.</value>
+		IOutputWriter[] Writers { get; }
+
+		#endregion
+
 		#region Writing
 
 		/// <summary>
