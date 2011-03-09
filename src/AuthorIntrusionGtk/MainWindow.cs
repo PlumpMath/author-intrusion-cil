@@ -227,7 +227,7 @@ namespace AuthorIntrusionGtk
 					"SaveAs",
 					Stock.SaveAs,
 					"Save _As...",
-					null,
+					"<control><shift>S",
 					"Saves the current document with a new name.",
 					OnFileSaveAs),
 
