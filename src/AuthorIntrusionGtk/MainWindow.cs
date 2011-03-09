@@ -31,6 +31,8 @@ using AuthorIntrusion;
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
 
+using AuthorIntrusionGtk.Dialogs;
+
 using Gtk;
 
 #endregion
@@ -357,12 +359,7 @@ namespace AuthorIntrusionGtk
 		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void OnFileOpen(object sender, EventArgs args)
 		{
-			var dialog = new FileChooserDialog(
-				"Choose the document to open",
-				this,
-				FileChooserAction.Open,
-				"Cancel", ResponseType.Cancel,
-				"Open", ResponseType.Accept);
+			var dialog = new OpenDocumentDialog(this);
 
 			try
 			{
@@ -392,12 +389,7 @@ namespace AuthorIntrusionGtk
 		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void OnFileSaveAs(object sender, EventArgs args)
 		{
-			var dialog = new FileChooserDialog(
-				"Choose where to save the file",
-				this,
-				FileChooserAction.Save,
-				"Cancel", ResponseType.Cancel,
-				"Save", ResponseType.Accept);
+			var dialog = new SaveDocumentAsDialog(this);
 
 			try
 			{
