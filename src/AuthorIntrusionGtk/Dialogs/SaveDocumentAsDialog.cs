@@ -1,5 +1,7 @@
 using AuthorIntrusion.Contracts.IO;
 
+using AuthorIntrusionGtk.Resources;
+
 using Gtk;
 
 namespace AuthorIntrusionGtk.Dialogs
@@ -17,12 +19,12 @@ namespace AuthorIntrusionGtk.Dialogs
 		/// <param name="parent">The parent.</param>
 		public SaveDocumentAsDialog(Window parent)
 			: base(
-				"Choose the name of the document",
+				DialogResources.SaveDocumentAsTitle,
 				parent,
 				FileChooserAction.Save,
-				"Cancel",
+				DialogResources.CancelButtonText,
 				ResponseType.Cancel,
-				"Save",
+				DialogResources.SaveButtonText,
 				ResponseType.Accept)
 		{
 			// Add the files to represent the types of files we can open.

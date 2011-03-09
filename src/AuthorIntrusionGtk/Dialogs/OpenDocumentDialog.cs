@@ -26,6 +26,8 @@
 
 using AuthorIntrusion.Contracts.IO;
 
+using AuthorIntrusionGtk.Resources;
+
 using Gtk;
 
 #endregion
@@ -45,12 +47,12 @@ namespace AuthorIntrusionGtk.Dialogs
 		/// <param name="parent">The parent.</param>
 		public OpenDocumentDialog(Window parent)
 			: base(
-				"Choose the document to open",
+				DialogResources.OpenDocumentDialogTitle,
 				parent,
 				FileChooserAction.Open,
-				"Cancel",
+				DialogResources.CancelButtonText,
 				ResponseType.Cancel,
-				"Open",
+				DialogResources.OpenButtonText,
 				ResponseType.Accept)
 		{
 			// Add the files to represent the types of files we can open.
