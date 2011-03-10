@@ -27,13 +27,19 @@
 using System;
 using System.IO;
 
-using AuthorIntrusion;
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
 
 using AuthorIntrusionGtk.Dialogs;
 
 using Gtk;
+
+using MfGames.GtkExt.LineTextEditor;
+using MfGames.GtkExt.LineTextEditor.Buffers;
+using MfGames.GtkExt.LineTextEditor.Enumerations;
+using MfGames.GtkExt.LineTextEditor.Indicators;
+using MfGames.GtkExt.LineTextEditor.Interfaces;
+using MfGames.GtkExt.LineTextEditor.Visuals;
 
 #endregion
 
@@ -52,7 +58,12 @@ namespace AuthorIntrusionGtk
 		public MainWindow()
 			: base("Author Intrusion")
 		{
+			// Set up the GUI.
 			ConfigureGui();
+
+			// Hook up events to the context.
+			Context.UnloadedDocument += OnUnloadedDocument;
+			Context.LoadedDocument += OnLoadedDocument;
 		}
 
 		#endregion
@@ -61,7 +72,9 @@ namespace AuthorIntrusionGtk
 
 		#region Setup
 
+		private LineIndicatorBar lineIndicatorBar;
 		private Statusbar statusbar;
+		private TextEditor textEditor;
 		private UIManager uiManager;
 
 		/// <summary>
@@ -79,18 +92,53 @@ namespace AuthorIntrusionGtk
 			var box = new VBox();
 			Add(box);
 
-			// Add the menu
+			// Add the menu on the top.
 			box.PackStart(CreateGuiMenu(), false, false, 0);
 
-			// Create a label for the middle.
-			var label = new Label("Hello, World.");
-			box.PackStart(label, true, true, 0);
+			// Create the primary text control.
+			box.PackStart(CreateGuiEditor(), true, true, 0);
 
 			// Add the status bar
 			statusbar = new Statusbar();
 			statusbar.Push(0, "Welcome!");
 			statusbar.HasResizeGrip = true;
 			box.PackStart(statusbar, false, false, 0);
+
+			// Set up the initial indicator bar theme.
+			// Update the theme with some additional colors.
+			Theme theme = textEditor.Theme;
+
+			theme.IndicatorRenderStyle = IndicatorRenderStyle.Ratio;
+			theme.IndicatorPixelHeight = 2;
+			theme.IndicatorRatioPixelGap = 1;
+		}
+
+		/// <summary>
+		/// Creates the GUI editor and related components.
+		/// </summary>
+		/// <returns></returns>
+		private Widget CreateGuiEditor()
+		{
+			// Create the text editor.
+			// TODO Remove this parameter from the MfGames.GtkExt.LineTextEditor.
+			textEditor = new TextEditor(null);
+
+			// Wrap the text editor in a scrollbar.
+			var scrolledWindow = new ScrolledWindow();
+			scrolledWindow.VscrollbarPolicy = PolicyType.Always;
+			scrolledWindow.Add(textEditor);
+
+			// Create the indicator bar that is 10 px wide.
+			lineIndicatorBar = new LineIndicatorBar(textEditor);
+			lineIndicatorBar.SetSizeRequest(20, 1);
+
+			// Add the editor and bar to the hbox and return it.
+			var hbox = new HBox(false, 0);
+
+			hbox.PackStart(scrolledWindow, true, true, 0);
+			hbox.PackStart(lineIndicatorBar, false, false, 4);
+
+			return hbox;
 		}
 
 		/// <summary>
@@ -171,7 +219,6 @@ namespace AuthorIntrusionGtk
 					"<control>V",
 					"Pastes the current selection.",
 					null),
-
 				new ActionEntry(
 					"Preferences",
 					Stock.Preferences,
@@ -215,7 +262,6 @@ namespace AuthorIntrusionGtk
 					"<control>O",
 					"Opens an existing document.",
 					OnFileOpen),
-
 				new ActionEntry(
 					"Save",
 					Stock.Save,
@@ -230,7 +276,6 @@ namespace AuthorIntrusionGtk
 					"<control><shift>S",
 					"Saves the current document with a new name.",
 					OnFileSaveAs),
-
 				new ActionEntry(
 					"Properties",
 					Stock.Properties,
@@ -238,7 +283,6 @@ namespace AuthorIntrusionGtk
 					null,
 					"Edits the properties of the current document.",
 					null),
-
 				new ActionEntry(
 					"Close",
 					Stock.Close,
@@ -331,6 +375,37 @@ namespace AuthorIntrusionGtk
 		#region Events
 
 		/// <summary>
+		/// Called when a document is loaded.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+		private void OnLoadedDocument(
+			object sender,
+			EventArgs args)
+		{
+			// Wrap the document in the various line buffers.
+			// Create a patterned line buffer and make it read-write.
+			ILineBuffer lineBuffer = new MemoryLineBuffer();
+
+			// A markup buffer that highlights keywords and wrap it in one that
+			// handles simple mouse selections.
+			ILineMarkupBuffer markupBuffer = new UnformattedLineMarkupBuffer(lineBuffer);
+
+			markupBuffer = new SimpleSelectionLineMarkupBuffer(markupBuffer);
+
+			// Provide a simple layout buffer that doesn't do anything.
+			ILineLayoutBuffer layoutBuffer =
+				new SimpleLineLayoutBuffer(markupBuffer);
+
+			// Finally, wrap it in a cached buffer.
+			layoutBuffer = new CachedLineLayoutBuffer(layoutBuffer);
+
+			// Set the buffers on the controls.
+			textEditor.LineLayoutBuffer = layoutBuffer;
+			lineIndicatorBar.LineIndicatorBuffer = null;
+		}
+
+		/// <summary>
 		/// Triggers the quit menu.
 		/// </summary>
 		private static void OnQuitAction(
@@ -338,6 +413,20 @@ namespace AuthorIntrusionGtk
 			EventArgs args)
 		{
 			Application.Quit();
+		}
+
+		/// <summary>
+		/// Called when a document is unloaded.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+		private void OnUnloadedDocument(
+			object sender,
+			EventArgs args)
+		{
+			// Clear out the buffers on the displays.
+			textEditor.LineLayoutBuffer = null;
+			lineIndicatorBar.LineIndicatorBuffer = null;
 		}
 
 		/// <summary>
@@ -357,7 +446,9 @@ namespace AuthorIntrusionGtk
 		/// </summary>
 		/// <param name="sender">The sender.</param>
 		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void OnFileOpen(object sender, EventArgs args)
+		private void OnFileOpen(
+			object sender,
+			EventArgs args)
 		{
 			var dialog = new OpenDocumentDialog(this);
 
@@ -387,7 +478,9 @@ namespace AuthorIntrusionGtk
 		/// </summary>
 		/// <param name="sender">The sender.</param>
 		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void OnFileSaveAs(object sender, EventArgs args)
+		private void OnFileSaveAs(
+			object sender,
+			EventArgs args)
 		{
 			var dialog = new SaveDocumentAsDialog(this);
 

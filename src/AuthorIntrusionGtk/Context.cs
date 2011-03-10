@@ -24,6 +24,9 @@
 
 #region Namespaces
 
+using System;
+using System.Diagnostics;
+
 using AuthorIntrusion;
 using AuthorIntrusion.Contracts;
 
@@ -49,11 +52,70 @@ namespace AuthorIntrusionGtk
 
 		#region Document
 
+		private static Document document;
+
 		/// <summary>
 		/// Gets or sets the current loaded document.
 		/// </summary>
 		/// <value>The document.</value>
-		public static Document Document { get; set; }
+		public static Document Document
+		{
+			[DebuggerStepThrough]
+			get { return document; }
+			set
+			{
+				// Check to see if we already have a document.
+				if (document != null)
+				{
+					FireUnloadedDocument();
+				}
+
+				// Set the new document.
+				document = value;
+
+				// Raise the event that we have a new document.
+				if (document != null)
+				{
+					FireLoadedDocument();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Fires the loaded document event.
+		/// </summary>
+		private static void FireLoadedDocument()
+		{
+			var listeners = LoadedDocument;
+
+			if (listeners != null)
+			{
+				listeners(Document, EventArgs.Empty);
+			}
+		}
+
+		/// <summary>
+		/// Fires the unloaded document event.
+		/// </summary>
+		private static void FireUnloadedDocument()
+		{
+			var listeners = UnloadedDocument;
+
+			if (listeners != null)
+			{
+				listeners(Document, EventArgs.Empty);
+			}
+		}
+
+		/// <summary>
+		/// Occurs when the current document is loaded.
+		/// </summary>
+		public static event EventHandler LoadedDocument;
+
+		/// <summary>
+		/// Occurs when a document is unloaded from memory.
+		/// </summary>
+		public static event EventHandler UnloadedDocument;
 
 		#endregion
 	}
