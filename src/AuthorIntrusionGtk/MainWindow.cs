@@ -39,6 +39,7 @@ using MfGames.GtkExt.LineTextEditor.Buffers;
 using MfGames.GtkExt.LineTextEditor.Enumerations;
 using MfGames.GtkExt.LineTextEditor.Indicators;
 using MfGames.GtkExt.LineTextEditor.Interfaces;
+using MfGames.GtkExt.LineTextEditor.Renderers.Cache;
 using MfGames.GtkExt.LineTextEditor.Visuals;
 
 #endregion
@@ -72,7 +73,7 @@ namespace AuthorIntrusionGtk
 
 		#region Setup
 
-		private LineIndicatorBar lineIndicatorBar;
+		private TextIndicatorBar indicatorBar;
 		private Statusbar statusbar;
 		private TextEditor textEditor;
 		private UIManager uiManager;
@@ -121,7 +122,7 @@ namespace AuthorIntrusionGtk
 		{
 			// Create the text editor.
 			// TODO Remove this parameter from the MfGames.GtkExt.LineTextEditor.
-			textEditor = new TextEditor(null);
+			textEditor = new TextEditor();
 
 			// Wrap the text editor in a scrollbar.
 			var scrolledWindow = new ScrolledWindow();
@@ -129,14 +130,14 @@ namespace AuthorIntrusionGtk
 			scrolledWindow.Add(textEditor);
 
 			// Create the indicator bar that is 10 px wide.
-			lineIndicatorBar = new LineIndicatorBar(textEditor);
-			lineIndicatorBar.SetSizeRequest(20, 1);
+			indicatorBar = new TextIndicatorBar(textEditor);
+			indicatorBar.SetSizeRequest(20, 1);
 
 			// Add the editor and bar to the hbox and return it.
 			var hbox = new HBox(false, 0);
 
 			hbox.PackStart(scrolledWindow, true, true, 0);
-			hbox.PackStart(lineIndicatorBar, false, false, 4);
+			hbox.PackStart(indicatorBar, false, false, 4);
 
 			return hbox;
 		}
@@ -383,26 +384,12 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
-			// Wrap the document in the various line buffers.
-			// Create a patterned line buffer and make it read-write.
-			ILineBuffer lineBuffer = new MemoryLineBuffer();
-
-			// A markup buffer that highlights keywords and wrap it in one that
-			// handles simple mouse selections.
-			ILineMarkupBuffer markupBuffer = new UnformattedLineMarkupBuffer(lineBuffer);
-
-			markupBuffer = new SimpleSelectionLineMarkupBuffer(markupBuffer);
-
-			// Provide a simple layout buffer that doesn't do anything.
-			ILineLayoutBuffer layoutBuffer =
-				new SimpleLineLayoutBuffer(markupBuffer);
-
-			// Finally, wrap it in a cached buffer.
-			layoutBuffer = new CachedLineLayoutBuffer(layoutBuffer);
+			// TODO Create a placeholder document until we can hook up the document to the editor.
+			var lineBuffer = new MemoryLineBuffer();
+			var renderer = new CachedTextRenderer(textEditor, lineBuffer);
 
 			// Set the buffers on the controls.
-			textEditor.LineLayoutBuffer = layoutBuffer;
-			lineIndicatorBar.LineIndicatorBuffer = null;
+			textEditor.SetTextRenderer(renderer);
 		}
 
 		/// <summary>
@@ -425,8 +412,7 @@ namespace AuthorIntrusionGtk
 			EventArgs args)
 		{
 			// Clear out the buffers on the displays.
-			textEditor.LineLayoutBuffer = null;
-			lineIndicatorBar.LineIndicatorBuffer = null;
+			textEditor.SetTextRenderer(null);
 		}
 
 		/// <summary>
