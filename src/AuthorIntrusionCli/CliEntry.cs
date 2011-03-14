@@ -25,7 +25,7 @@ namespace AuthorIntrusionCli
 
 			// Set up logging for the console.
 			ILogger logger = new ConsoleLogger("{1,5} {2}");
-			manager.Register<ILogger>(logger);
+			manager.Register(logger);
 			Log log = new Log(typeof(CliEntry), logger);
 
 			// Read the input file.

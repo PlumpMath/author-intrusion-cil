@@ -6,9 +6,6 @@ using System.IO;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
-using AuthorIntrusion.Contracts.Structures;
-
-using Castle.Core;
 
 #endregion
 
@@ -18,7 +15,6 @@ namespace AuthorIntrusion.IO
 	/// A singleton class that manages the input and reading of documents and
 	/// converting them into the internal structure.
 	/// </summary>
-	[Singleton]
 	public class InputManager : IInputManager
 	{
 		#region Constructors

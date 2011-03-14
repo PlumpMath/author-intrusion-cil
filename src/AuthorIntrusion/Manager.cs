@@ -4,13 +4,8 @@ using System;
 
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Languages;
-using AuthorIntrusion.IO;
-using AuthorIntrusion.Languages;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers.SpecializedResolvers;
-using Castle.Windsor;
-using Castle.Windsor.Installer;
+using StructureMap;
 
 #endregion
 
@@ -28,18 +23,27 @@ namespace AuthorIntrusion
 		/// </summary>
 		public Manager()
 		{
-			// Set up Windsor container along with the extensions.
-			container = new WindsorContainer();
-			container.Install(
-				FromAssembly.This(),
-				FromAssembly.InDirectory(new AssemblyFilter("Extensions", "*.dll")));
-			container.Kernel.Resolver.AddSubResolver(
-				new CollectionResolver(container.Kernel, true));
+			// Set up StructureMap with the classes in this assembly and
+			// everything in the Extensions folder.
+			ObjectFactory.Initialize(
+				x => x.Scan(
+				     	scanner =>
+				     	{
+							// List the places we are searching for assemblies.
+				     		scanner.TheCallingAssembly();
+				     		scanner.AssembliesFromPath("Extensions");
 
-			container.Register(
-				Component.For<IInputManager>().ImplementedBy<InputManager>(),
-				Component.For<IOutputManager>().ImplementedBy<OutputManager>(),
-				Component.For<ILanguageManager>().ImplementedBy<LanguageManager>());
+							// List the common types we need to load.
+				     		scanner.AddAllTypesOf<IInputManager>();
+				     		scanner.AddAllTypesOf<IInputReader>();
+
+				     		scanner.AddAllTypesOf<IOutputManager>();
+				     		scanner.AddAllTypesOf<IOutputWriter>();
+
+				     		scanner.AddAllTypesOf<ILanguageManager>();
+
+				     		scanner.AddAllTypesOf<IContentParser>();
+				     	}));
 		}
 
 		#endregion
@@ -51,18 +55,12 @@ namespace AuthorIntrusion
 		/// </summary>
 		public void Dispose()
 		{
-			if (container != null)
-			{
-				container.Dispose();
-				container = null;
-			}
+			// TODO REMOVE
 		}
 
 		#endregion
 
 		#region IOC
-
-		private WindsorContainer container;
 
 		/// <summary>
 		/// Registers the specified instance for a given interface type.
@@ -71,7 +69,7 @@ namespace AuthorIntrusion
 		/// <param name="instance">The instance.</param>
 		public void Register<TInterface>(TInterface instance)
 		{
-			container.Register(Component.For<TInterface>().Instance(instance));
+			ObjectFactory.Inject(instance);
 		}
 
 		#endregion
@@ -84,7 +82,10 @@ namespace AuthorIntrusion
 		/// <value>The input manager.</value>
 		public IInputManager InputManager
 		{
-			get { return container.Resolve<IInputManager>(); }
+			get
+			{
+				return ObjectFactory.GetInstance<IInputManager>();
+			}
 		}
 
 		/// <summary>
@@ -93,7 +94,10 @@ namespace AuthorIntrusion
 		/// <value>The language manager.</value>
 		public ILanguageManager LanguageManager
 		{
-			get { return container.Resolve<ILanguageManager>(); }
+			get
+			{
+				return ObjectFactory.GetInstance<ILanguageManager>();
+			}
 		}
 
 		/// <summary>
@@ -102,7 +106,10 @@ namespace AuthorIntrusion
 		/// <value>The output manager.</value>
 		public IOutputManager OutputManager
 		{
-			get { return container.Resolve<IOutputManager>(); }
+			get
+			{
+				return ObjectFactory.GetInstance<IOutputManager>();
+			}
 		}
 
 		#endregion

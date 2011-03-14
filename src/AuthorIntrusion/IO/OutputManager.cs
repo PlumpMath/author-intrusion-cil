@@ -6,9 +6,6 @@ using System.IO;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
-using AuthorIntrusion.Contracts.Structures;
-
-using Castle.Core;
 
 #endregion
 
@@ -18,7 +15,6 @@ namespace AuthorIntrusion.IO
 	/// A singleton class that manages the output and writing of documents and
 	/// converting them from the internal structure.
 	/// </summary>
-	[Singleton]
 	public class OutputManager : IOutputManager
 	{
 		#region Constructors
