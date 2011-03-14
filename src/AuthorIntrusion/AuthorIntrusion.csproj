@@ -53,7 +53,7 @@
     <Compile Include="IO\XmlInputReaderBase.cs" />
     <Compile Include="Languages\LanguageManager.cs" />
     <Compile Include="Manager.cs" />
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ext\mfgames-cil\src\MfGames\MfGames.csproj">
