@@ -27,6 +27,7 @@
 using System;
 
 using AuthorIntrusion.Contracts;
+using AuthorIntrusion.Contracts.Structures;
 
 using MfGames.GtkExt.LineTextEditor.Buffers;
 using MfGames.GtkExt.LineTextEditor.Interfaces;
@@ -52,6 +53,11 @@ namespace AuthorIntrusionGtk.Editors
 			}
 
 			this.document = document;
+
+			// Perform the initial counts on the document.
+			LineBufferVisitor visitor = new LineBufferVisitor(this);
+
+			visitor.Visit(document);
 		}
 
 		#endregion
@@ -104,5 +110,52 @@ namespace AuthorIntrusionGtk.Editors
 		}
 
 		#endregion
+
+		private class LineBufferVisitor : DocumentVisitor
+		{
+			public LineBufferVisitor(DocumentLineIndicatorBuffer buffer)
+			{
+				this.buffer =  buffer;
+			}
+
+			private DocumentLineIndicatorBuffer buffer;
+
+			public override bool OnBeginStructure (Structure structure)
+			{
+				// Create a structure info and assign it to the structure. Every
+				// structure has at least one item, which will be the title for
+				// sections and the paragraph itself.
+				var structureInfo = new StructureInfo();
+
+				structureInfo.StructureCount = 1;
+
+				structure.DataDictionary[buffer] = structureInfo;
+
+				// Recurse into the inner structures.
+				return true;
+			}
+
+			public override void OnEndSection (Section section)
+			{
+				// For sections, add to the structure info.
+				StructureInfo structureInfo = (StructureInfo) section.DataDictionary[buffer];
+
+				foreach (Structure structure in section.Structures)
+				{
+					StructureInfo innerInfo = (StructureInfo) structure.DataDictionary[buffer];
+
+					structureInfo.StructureCount += innerInfo.StructureCount;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Contains information about a structure that is used by the parent
+		/// class to provide LineBuffer implementation.
+		/// </summary>
+		private class StructureInfo
+		{
+			public int StructureCount { get; set; }
+		}
 	}
 }

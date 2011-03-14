@@ -16,24 +16,44 @@ namespace AuthorIntrusion.Contracts
 
 		#region Actions
 
-		public Action<Document> BeginDocument { get; set; }
+		public Func<Document, bool> BeginDocument { get; set; }
 
 		public Action<Document> EndDocument { get; set; }
 
-		public Action<Structure> BeginStructure { get; set; }
+		public Func<Structure, bool> BeginStructure { get; set; }
 
 		public Action<Structure> EndStructure { get; set; }
+
+		public Func<Section, bool> BeginSection { get; set; }
+
+		public Action<Section> EndSection { get; set; }
+
+		public Func<Paragraph, bool> BeginParagraph { get; set; }
+
+		public Action<Paragraph> EndParagraph { get; set; }
 
 		#endregion
 
 		#region Events
 
-		public override void OnBeginDocument (Document document)
+		public override bool OnBeginParagraph (Paragraph paragraph)
+		{
+			if (BeginParagraph != null)
+			{
+				return BeginParagraph(paragraph);
+			}
+
+			return base.OnBeginParagraph(paragraph);
+		}
+
+		public override bool OnBeginDocument (Document document)
 		{
 			if (BeginDocument != null)
 			{
-				BeginDocument(document);
+				return BeginDocument(document);
 			}
+
+			return base.OnBeginDocument(document);
 		}
 
 		public override void OnEndDocument (Document document)
@@ -44,12 +64,14 @@ namespace AuthorIntrusion.Contracts
 			}
 		}
 
-		public override void OnBeginStructure (Structure structure)
+		public override bool OnBeginStructure (Structure structure)
 		{
 			if (BeginStructure != null)
 			{
-				BeginStructure(structure);
+				return BeginStructure(structure);
 			}
+
+			return base.OnBeginStructure(structure);
 		}
 
 		public override void OnEndStructure (Structure structure)
@@ -57,6 +79,24 @@ namespace AuthorIntrusion.Contracts
 			if (EndStructure != null)
 			{
 				EndStructure(structure);
+			}
+		}
+
+		public override bool OnBeginSection(Section section)
+		{
+			if (BeginSection != null)
+			{
+				return BeginSection(section);
+			}
+
+			return base.OnBeginSection(section);
+		}
+
+		public override void OnEndSection(Section section)
+		{
+			if (EndSection != null)
+			{
+				EndSection(section);
 			}
 		}
 
