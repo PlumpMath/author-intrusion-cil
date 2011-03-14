@@ -66,6 +66,71 @@ namespace AuthorIntrusionGtk.Editors
 
 		private Document document;
 
+		private Structure GetStructure(int structureIndex)
+		{
+			// Go through the structure tree until we find the correct one.
+			return GetStructure(document.Structure, structureIndex);
+		}
+
+		private StructureInfo GetStructureInfo(Structure structure)
+		{
+			return (StructureInfo) structure.DataDictionary[this];
+		}
+
+		private Structure GetStructure(Structure structure, int structureIndex)
+		{
+			// If the index is zero, then we mean this structure.
+			if (structureIndex == 0)
+			{
+				return structure;
+			}
+
+			// Decrement the count and cycle through the children.
+			structureIndex--;
+
+			if (structure is Section)
+			{
+				Section section = (Section) structure;
+
+				foreach (Structure childStructure in section.Structures)
+				{
+					// Pull out the structure info and use that to determine
+					// if the index is inside this child structure.
+					StructureInfo structureInfo =
+						GetStructureInfo(childStructure);
+
+					if (structureIndex < structureInfo.StructureCount)
+					{
+						// This is the child structure we need to recurse into.
+						return GetStructure(childStructure, structureIndex);
+					}
+
+					// This child isn't it, but we need to decrement the count
+					// from this child to keep the relative index.
+					structureIndex -= structureInfo.StructureCount;
+				}
+			}
+
+			// We can't find it, so throw an exception.
+			throw new ArgumentOutOfRangeException(
+				"structureIndex",
+			    "Cannot find the structure from the given index.");
+		}
+
+		private string GetStructureText(int structureIndex)
+		{
+			Structure structure = GetStructure(structureIndex);
+
+			if (structure is Paragraph)
+			{
+				Paragraph paragraph = (Paragraph) structure;
+
+				return paragraph.ContentString;
+			}
+
+			return "Section Title";
+		}
+
 		#endregion
 
 		#region Buffer
@@ -74,7 +139,7 @@ namespace AuthorIntrusionGtk.Editors
 		/// Gets the number of lines in the buffer.
 		/// </summary>
 		/// <value>The line count.</value>
-		public override int LineCount { get { return 1; } }
+		public override int LineCount { get { return GetStructureInfo(document.Structure).StructureCount; } }
 
 		/// <summary>
 		/// If set to <see langword="true"/>, the buffer is read-only and the editing
@@ -88,17 +153,21 @@ namespace AuthorIntrusionGtk.Editors
 
 		public override int GetLineLength(int lineIndex)
 		{
-			return document != null ? 3 : 3;
+			return GetStructureText(lineIndex).Length;
 		}
 
-		public override string GetLineNumber(int lineIndex)
+		public override string GetLineNumber (int lineIndex)
 		{
-			return "1";
+			return String.Empty;
 		}
 
 		public override string GetLineText(int lineIndex, int startIndex, int endIndex)
 		{
-			return "Bob";
+			string text = GetStructureText(lineIndex);
+
+			endIndex = Math.Min(endIndex, text.Length);
+
+			return text.Substring(startIndex, endIndex - startIndex);
 		}
 
 		#endregion
