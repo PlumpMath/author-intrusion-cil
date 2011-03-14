@@ -27,7 +27,6 @@
 using System;
 using System.Diagnostics;
 
-using AuthorIntrusion;
 using AuthorIntrusion.Contracts;
 
 #endregion
@@ -35,30 +34,19 @@ using AuthorIntrusion.Contracts;
 namespace AuthorIntrusionGtk
 {
 	/// <summary>
-	/// A static class for holding the various components of the system for
-	/// the Gtk client.
+	/// A context object which contains much of the common 
 	/// </summary>
-	public static class Context
+	public class Context
 	{
-		#region Common
-
-		/// <summary>
-		/// Gets or sets the Author Intrusion manager.
-		/// </summary>
-		/// <value>The manager.</value>
-		public static Manager Manager { get; set; }
-
-		#endregion
-
 		#region Document
 
-		private static Document document;
+		private Document document;
 
 		/// <summary>
 		/// Gets or sets the current loaded document.
 		/// </summary>
 		/// <value>The document.</value>
-		public static Document Document
+		public Document Document
 		{
 			[DebuggerStepThrough]
 			get { return document; }
@@ -84,7 +72,7 @@ namespace AuthorIntrusionGtk
 		/// <summary>
 		/// Fires the loaded document event.
 		/// </summary>
-		private static void FireLoadedDocument()
+		private void FireLoadedDocument()
 		{
 			var listeners = LoadedDocument;
 
@@ -97,7 +85,7 @@ namespace AuthorIntrusionGtk
 		/// <summary>
 		/// Fires the unloaded document event.
 		/// </summary>
-		private static void FireUnloadedDocument()
+		private void FireUnloadedDocument()
 		{
 			var listeners = UnloadedDocument;
 
@@ -110,12 +98,12 @@ namespace AuthorIntrusionGtk
 		/// <summary>
 		/// Occurs when the current document is loaded.
 		/// </summary>
-		public static event EventHandler LoadedDocument;
+		public event EventHandler LoadedDocument;
 
 		/// <summary>
 		/// Occurs when a document is unloaded from memory.
 		/// </summary>
-		public static event EventHandler UnloadedDocument;
+		public event EventHandler UnloadedDocument;
 
 		#endregion
 	}

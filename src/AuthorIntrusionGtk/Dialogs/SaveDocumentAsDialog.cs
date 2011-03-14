@@ -17,7 +17,8 @@ namespace AuthorIntrusionGtk.Dialogs
 		/// Initializes a new instance of the <see cref="SaveDocumentAsDialog"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
-		public SaveDocumentAsDialog(Window parent)
+		/// <param name="outputManager">The output manager.</param>
+		public SaveDocumentAsDialog(MainWindow parent, IOutputManager outputManager)
 			: base(
 				DialogResources.SaveDocumentAsTitle,
 				parent,
@@ -27,9 +28,7 @@ namespace AuthorIntrusionGtk.Dialogs
 				DialogResources.SaveButtonText,
 				ResponseType.Accept)
 		{
-			// Add the files to represent the types of files we can open.
-			IOutputManager outputManager = Context.Manager.OutputManager;
-
+			// Go through all the output formats.
 			foreach (IOutputWriter writer in outputManager.Writers)
 			{
 				// Create a file-specific filter.

@@ -28,6 +28,8 @@ using AuthorIntrusion;
 
 using Gtk;
 
+using StructureMap;
+
 #endregion
 
 namespace AuthorIntrusionGtk
@@ -46,11 +48,10 @@ namespace AuthorIntrusionGtk
 			Application.Init();
 
 			// Initialize the Author Intrusion manager.
-			var manager = new Manager();
-			Context.Manager = manager;
+			Manager.Setup();
 
 			// Create the window and show it.
-			var mainWindow = new MainWindow();
+			var mainWindow = ObjectFactory.GetInstance<MainWindow>();
 			mainWindow.ShowAll();
 
 			Application.Run();

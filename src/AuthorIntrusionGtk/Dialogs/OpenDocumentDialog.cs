@@ -45,7 +45,7 @@ namespace AuthorIntrusionGtk.Dialogs
 		/// Initializes a new instance of the <see cref="OpenDocumentDialog"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
-		public OpenDocumentDialog(Window parent)
+		public OpenDocumentDialog(MainWindow parent, IInputManager inputManager)
 			: base(
 				DialogResources.OpenDocumentDialogTitle,
 				parent,
@@ -55,9 +55,7 @@ namespace AuthorIntrusionGtk.Dialogs
 				DialogResources.OpenButtonText,
 				ResponseType.Accept)
 		{
-			// Add the files to represent the types of files we can open.
-			IInputManager inputManager = Context.Manager.InputManager;
-
+			// Create a filter of all supported input types.
 			var allFilter = new FileFilter();
 			allFilter.Name = "All Supported Files";
 			AddFilter(allFilter);

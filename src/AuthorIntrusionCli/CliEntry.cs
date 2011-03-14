@@ -8,9 +8,10 @@ using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Languages;
-using AuthorIntrusion.Contracts.Structures;
 
 using MfGames.Logging;
+
+using StructureMap;
 
 #endregion
 
@@ -20,26 +21,27 @@ namespace AuthorIntrusionCli
 	{
 		public static void Main(string[] args)
 		{
-			// Initialize the author system.
-			var manager = new Manager();
+			// Set up the manager.
+			Manager.Setup();
 
 			// Set up logging for the console.
 			ILogger logger = new ConsoleLogger("{1,5} {2}");
-			manager.Register(logger);
+			Manager.Register(logger);
 			Log log = new Log(typeof(CliEntry), logger);
 
 			// Read the input file.
 			var inputFile = new FileInfo(args[0]);
 			log.Info("Reading {0} {1}", inputFile, inputFile.Exists);
 
-			IInputManager inputManager = manager.InputManager;
+			var inputManager = ObjectFactory.GetInstance<IInputManager>();
 			Document document = inputManager.Read(inputFile);
 
 			// Parse the contents of the root.
 			log.Info("Paragraphs {0:N0}", document.Structure.ParagraphCount);
 
 			DateTime lastReport = DateTime.UtcNow;
-			ILanguageManager languageManager = manager.LanguageManager;
+			var languageManager = ObjectFactory.GetInstance<ILanguageManager>();
+
 			languageManager.ParseProgress += delegate(object sender, ParseProgressEventArgs progressArgs)
 				{
 					if ((DateTime.UtcNow - lastReport).TotalMilliseconds > 1000)
@@ -58,7 +60,7 @@ namespace AuthorIntrusionCli
 			var outputFile = new FileInfo(args[1]);
 			log.Info("Writing {0} {1}", outputFile, outputFile.Exists);
 
-			IOutputManager outputManager = manager.OutputManager;
+			var outputManager = ObjectFactory.GetInstance<IOutputManager>();
 			outputManager.Write(outputFile, document);
 
 			// Just set up the input.

@@ -38,9 +38,10 @@ using MfGames.GtkExt.LineTextEditor;
 using MfGames.GtkExt.LineTextEditor.Buffers;
 using MfGames.GtkExt.LineTextEditor.Enumerations;
 using MfGames.GtkExt.LineTextEditor.Indicators;
-using MfGames.GtkExt.LineTextEditor.Interfaces;
 using MfGames.GtkExt.LineTextEditor.Renderers.Cache;
 using MfGames.GtkExt.LineTextEditor.Visuals;
+
+using StructureMap;
 
 #endregion
 
@@ -51,20 +52,27 @@ namespace AuthorIntrusionGtk
 	/// </summary>
 	public class MainWindow : Window
 	{
+		private readonly Context context;
+
 		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MainWindow"/> class.
 		/// </summary>
-		public MainWindow()
+		public MainWindow(Context context)
 			: base("Author Intrusion")
 		{
+			if (context == null)
+			{
+				throw new ArgumentNullException("context");
+			}
+			this.context = context;
 			// Set up the GUI.
 			ConfigureGui();
 
 			// Hook up events to the context.
-			Context.UnloadedDocument += OnUnloadedDocument;
-			Context.LoadedDocument += OnLoadedDocument;
+			context.UnloadedDocument += OnUnloadedDocument;
+			context.LoadedDocument += OnLoadedDocument;
 		}
 
 		#endregion
@@ -436,7 +444,7 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
-			var dialog = new OpenDocumentDialog(this);
+			var dialog = ObjectFactory.GetInstance<OpenDocumentDialog>();
 
 			try
 			{
@@ -447,11 +455,11 @@ namespace AuthorIntrusionGtk
 				}
 
 				// The user accepted it, so attempt to parse the document.
-				IInputManager inputManager = Context.Manager.InputManager;
+				var inputManager = ObjectFactory.GetInstance<IInputManager>();
 				var file = new FileInfo(dialog.Filename);
-				Document document = inputManager.Read(file);
 
-				Context.Document = document;
+				Document document = inputManager.Read(file);
+				context.Document = document;
 			}
 			finally
 			{
@@ -468,7 +476,7 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
-			var dialog = new SaveDocumentAsDialog(this);
+			var dialog = ObjectFactory.GetInstance<SaveDocumentAsDialog>();
 
 			try
 			{
@@ -479,10 +487,10 @@ namespace AuthorIntrusionGtk
 				}
 
 				// The user accepted it, so attempt to parse the document.
-				IOutputManager outputManager = Context.Manager.OutputManager;
+				var outputManager = ObjectFactory.GetInstance<IOutputManager>();
 				var file = new FileInfo(dialog.Filename);
 
-				outputManager.Write(file, Context.Document);
+				outputManager.Write(file, context.Document);
 			}
 			finally
 			{
