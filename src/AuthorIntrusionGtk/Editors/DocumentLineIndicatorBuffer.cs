@@ -179,6 +179,14 @@ namespace AuthorIntrusionGtk.Editors
 			return text.Substring(startIndex, endIndex - startIndex);
 		}
 
+		public override string GetLineStyleName (int lineIndex)
+		{
+			//Structure structure = GetStructure(lineIndex);
+
+			// TODO return structure.StructureType.ToString();
+			return "Text";
+		}
+
 		#endregion
 
 		#region Operations

@@ -73,6 +73,7 @@
     <Compile Include="Events\ParseProgressEventArgs.cs" />
     <Compile Include="Algorithms\DocumentVisitor.cs" />
     <Compile Include="Algorithms\DocumentActionVisitor.cs" />
+    <Compile Include="Enumerations\StructureType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ext\mfgames-cil\src\MfGames\MfGames.csproj">

@@ -48,6 +48,11 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		private Dictionary<object, object> dataDictionary;
 
+		public abstract StructureType StructureType
+		{
+			get;
+		}
+
 		/// <summary>
 		/// Contains a data dictionary which can be used to associate data
 		/// with a given structure.

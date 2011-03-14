@@ -50,6 +50,16 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		#endregion
 
+		#region Properties
+
+		public override StructureType StructureType {
+			get {
+				return StructureType.Paragraph;
+			}
+		}
+
+		#endregion
+
 		#region Contents
 
 		private readonly ContentList contents;

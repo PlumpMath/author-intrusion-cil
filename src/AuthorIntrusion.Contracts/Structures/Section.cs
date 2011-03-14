@@ -24,6 +24,7 @@
 
 #region Namespaces
 
+using System;
 using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Collections;
@@ -50,11 +51,38 @@ namespace AuthorIntrusion.Contracts.Structures
 			structures = new StructureList(this);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Section"/> class.
+		/// </summary>
+		public Section(StructureType structureType)
+			: this()
+		{
+			SetStructureType(structureType);
+		}
+
 		#endregion
 
 		#region Properties
 
+		private StructureType structureType;
+
 		public string Title { get; set; }
+
+		public override StructureType StructureType {
+			get {
+				return structureType;
+			}
+		}
+
+		public void SetStructureType(StructureType newStructureType)
+		{
+			if (newStructureType == StructureType.Paragraph)
+			{
+				throw new ArgumentOutOfRangeException("newStructureType", "Cannot assign a Paragraph type to sections.");
+			}
+
+			structureType = newStructureType;
+		}
 
 		#endregion
 
