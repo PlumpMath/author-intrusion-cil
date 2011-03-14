@@ -229,6 +229,16 @@ namespace AuthorIntrusion.IO
 
 					return;
 
+				case "title":
+					Section sectionInfo = parent as Section;
+
+					if (sectionInfo != null)
+					{
+						sectionInfo.Title = reader.ReadElementString();
+					}
+
+					return;
+
 				default:
 					// Unknown type, so just skip it.
 					return;

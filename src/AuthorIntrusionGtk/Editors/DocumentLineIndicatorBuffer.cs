@@ -130,7 +130,14 @@ namespace AuthorIntrusionGtk.Editors
 				return Regex.Replace(contents, "\\s+", " ");
 			}
 
-			return "Section Title";
+			if (structure is Section)
+			{
+				Section section = (Section) structure;
+
+				return section.Title ?? "<Untitled>";
+			}
+
+			return "UNKNOWN";
 		}
 
 		#endregion

@@ -52,6 +52,12 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		#endregion
 
+		#region Properties
+
+		public string Title { get; set; }
+
+		#endregion
+
 		#region Structures
 
 		private readonly StructureList structures;
