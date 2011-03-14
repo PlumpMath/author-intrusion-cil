@@ -25,6 +25,7 @@
 #region Namespaces
 
 using System;
+using System.Text.RegularExpressions;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Structures;
@@ -124,8 +125,9 @@ namespace AuthorIntrusionGtk.Editors
 			if (structure is Paragraph)
 			{
 				Paragraph paragraph = (Paragraph) structure;
+				string contents = paragraph.ContentString.Trim();
 
-				return paragraph.ContentString;
+				return Regex.Replace(contents, "\\s+", " ");
 			}
 
 			return "Section Title";
