@@ -2,6 +2,7 @@
 *.user
 *.pidb
 *.suo
+*.resources
 
 bin
 obj
