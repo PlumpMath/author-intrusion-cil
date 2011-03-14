@@ -24,9 +24,11 @@
 
 #region Namespaces
 
+using System;
 using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
@@ -52,9 +54,17 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		#region Properties
 
-		public override StructureType StructureType {
-			get {
-				return StructureType.Paragraph;
+		/// <summary>
+		/// Gets the type of the structure.
+		/// </summary>
+		/// <value>The type of the structure.</value>
+		public override StructureType StructureType
+		{
+			get { return StructureType.Paragraph; }
+			set
+			{
+				throw new NotSupportedException(
+					"Cannot set a structure type on a Paragraph.");
 			}
 		}
 

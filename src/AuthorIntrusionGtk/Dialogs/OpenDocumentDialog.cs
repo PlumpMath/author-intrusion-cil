@@ -45,7 +45,9 @@ namespace AuthorIntrusionGtk.Dialogs
 		/// Initializes a new instance of the <see cref="OpenDocumentDialog"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
-		public OpenDocumentDialog(MainWindow parent, IInputManager inputManager)
+		public OpenDocumentDialog(
+			MainWindow parent,
+			IInputManager inputManager)
 			: base(
 				DialogResources.OpenDocumentDialogTitle,
 				parent,

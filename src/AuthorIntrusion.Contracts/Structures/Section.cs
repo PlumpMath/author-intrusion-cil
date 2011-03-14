@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
@@ -57,7 +58,7 @@ namespace AuthorIntrusion.Contracts.Structures
 		public Section(StructureType structureType)
 			: this()
 		{
-			SetStructureType(structureType);
+			StructureType = structureType;
 		}
 
 		#endregion
@@ -66,23 +67,30 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		private StructureType structureType;
 
-		public string Title { get; set; }
-
-		public override StructureType StructureType {
-			get {
-				return structureType;
-			}
-		}
-
-		public void SetStructureType(StructureType newStructureType)
+		/// <summary>
+		/// Gets the type of the structure.
+		/// </summary>
+		/// <value>The type of the structure.</value>
+		public override StructureType StructureType
 		{
-			if (newStructureType == StructureType.Paragraph)
+			get { return structureType; }
+			set
 			{
-				throw new ArgumentOutOfRangeException("newStructureType", "Cannot assign a Paragraph type to sections.");
-			}
+				if (value == StructureType.Paragraph)
+				{
+					throw new ArgumentOutOfRangeException(
+						"value", "Cannot assign a Paragraph type to sections.");
+				}
 
-			structureType = newStructureType;
+				structureType = value;
+			}
 		}
+
+		/// <summary>
+		/// Gets or sets the title of the section.
+		/// </summary>
+		/// <value>The title.</value>
+		public string Title { get; set; }
 
 		#endregion
 

@@ -58,7 +58,7 @@
     <Compile Include="Context.cs" />
     <Compile Include="Dialogs\OpenDocumentDialog.cs" />
     <Compile Include="Dialogs\SaveDocumentAsDialog.cs" />
-    <Compile Include="Editors\DocumentLineIndicatorBuffer.cs" />
+    <Compile Include="Editors\DocumentLineBuffer.cs" />
     <Compile Include="GtkEntry.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

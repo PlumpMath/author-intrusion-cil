@@ -26,6 +26,8 @@
 
 using System.Collections.Generic;
 
+using AuthorIntrusion.Contracts.Enumerations;
+
 #endregion
 
 namespace AuthorIntrusion.Contracts.Structures
@@ -37,6 +39,9 @@ namespace AuthorIntrusion.Contracts.Structures
 	{
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Structure"/> class.
+		/// </summary>
 		protected Structure()
 		{
 			dataDictionary = new Dictionary<object, object>();
@@ -46,12 +51,7 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		#region Properties
 
-		private Dictionary<object, object> dataDictionary;
-
-		public abstract StructureType StructureType
-		{
-			get;
-		}
+		private readonly Dictionary<object, object> dataDictionary;
 
 		/// <summary>
 		/// Contains a data dictionary which can be used to associate data
@@ -61,6 +61,12 @@ namespace AuthorIntrusion.Contracts.Structures
 		{
 			get { return dataDictionary; }
 		}
+
+		/// <summary>
+		/// Gets the type of the structure.
+		/// </summary>
+		/// <value>The type of the structure.</value>
+		public abstract StructureType StructureType { get; set; }
 
 		#endregion
 

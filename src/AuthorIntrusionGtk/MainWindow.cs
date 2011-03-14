@@ -36,7 +36,6 @@ using AuthorIntrusionGtk.Editors;
 using Gtk;
 
 using MfGames.GtkExt.LineTextEditor;
-using MfGames.GtkExt.LineTextEditor.Buffers;
 using MfGames.GtkExt.LineTextEditor.Enumerations;
 using MfGames.GtkExt.LineTextEditor.Indicators;
 using MfGames.GtkExt.LineTextEditor.Renderers.Cache;
@@ -394,7 +393,7 @@ namespace AuthorIntrusionGtk
 			EventArgs args)
 		{
 			// Wrap the document in a line buffer and update the editor.
-			var lineBuffer = new DocumentLineIndicatorBuffer(context.Document);
+			var lineBuffer = new DocumentLineBuffer(context.Document);
 			var renderer = new CachedTextRenderer(textEditor, lineBuffer);
 
 			// Set the buffers on the controls.
