@@ -31,6 +31,7 @@ using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
 
 using AuthorIntrusionGtk.Dialogs;
+using AuthorIntrusionGtk.Editors;
 
 using Gtk;
 
@@ -392,8 +393,8 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
-			// TODO Create a placeholder document until we can hook up the document to the editor.
-			var lineBuffer = new MemoryLineBuffer();
+			// Wrap the document in a line buffer and update the editor.
+			var lineBuffer = new DocumentLineIndicatorBuffer(context.Document);
 			var renderer = new CachedTextRenderer(textEditor, lineBuffer);
 
 			// Set the buffers on the controls.

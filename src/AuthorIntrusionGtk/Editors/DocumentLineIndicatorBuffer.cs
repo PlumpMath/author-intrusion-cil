@@ -24,6 +24,11 @@
 
 #region Namespaces
 
+using System;
+
+using AuthorIntrusion.Contracts;
+
+using MfGames.GtkExt.LineTextEditor.Buffers;
 using MfGames.GtkExt.LineTextEditor.Interfaces;
 
 #endregion
@@ -34,7 +39,70 @@ namespace AuthorIntrusionGtk.Editors
 	/// Implements an indicator buffer wrapped around an Author Intrusion
 	/// document.
 	/// </summary>
-	public class DocumentLineIndicatorBuffer
+	public class DocumentLineIndicatorBuffer : LineBuffer
 	{
+		#region Constructors
+
+		public DocumentLineIndicatorBuffer(Document document)
+		{
+			// Save the member variables.
+			if (document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
+
+			this.document = document;
+		}
+
+		#endregion
+
+		#region Document
+
+		private Document document;
+
+		#endregion
+
+		#region Buffer
+
+		/// <summary>
+		/// Gets the number of lines in the buffer.
+		/// </summary>
+		/// <value>The line count.</value>
+		public override int LineCount { get { return 1; } }
+
+		/// <summary>
+		/// If set to <see langword="true"/>, the buffer is read-only and the editing
+		/// commands should throw an <see cref="InvalidOperationException"/>.
+		/// </summary>
+		public override bool ReadOnly { get { return false; } }
+
+		#endregion
+
+		#region Lines
+
+		public override int GetLineLength(int lineIndex)
+		{
+			return document != null ? 3 : 3;
+		}
+
+		public override string GetLineNumber(int lineIndex)
+		{
+			return "1";
+		}
+
+		public override string GetLineText(int lineIndex, int startIndex, int endIndex)
+		{
+			return "Bob";
+		}
+
+		#endregion
+
+		#region Operations
+
+		public override void Do(ILineBufferOperation operation)
+		{
+		}
+
+		#endregion
 	}
 }
