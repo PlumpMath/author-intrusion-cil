@@ -35,7 +35,31 @@ namespace AuthorIntrusion.Contracts.Structures
 	/// </summary>
 	public abstract class Structure : Element
 	{
-		#region Structural Relationships
+		#region Constructors
+
+		protected Structure()
+		{
+			dataDictionary = new Dictionary<object, object>();
+		}
+
+		#endregion
+
+		#region Properties
+
+		private Dictionary<object, object> dataDictionary;
+
+		/// <summary>
+		/// Contains a data dictionary which can be used to associate data
+		/// with a given structure.
+		/// </summary>
+		public IDictionary<object, object> DataDictionary
+		{
+			get { return dataDictionary; }
+		}
+
+		#endregion
+
+		#region Relationships
 
 		/// <summary>
 		/// Gets a count of content container content (i.e. paragraphs) in this
