@@ -127,7 +127,7 @@ namespace AuthorIntrusionGtk.Editors
 
 			if (structure is Paragraph)
 			{
-				Paragraph paragraph = (Paragraph) structure;
+				var paragraph = (Paragraph) structure;
 				string contents = paragraph.ContentString.Trim();
 
 				return Regex.Replace(contents, "\\s+", " ");
@@ -135,7 +135,7 @@ namespace AuthorIntrusionGtk.Editors
 
 			if (structure is Section)
 			{
-				Section section = (Section) structure;
+				var section = (Section) structure;
 
 				return section.Title ?? "<Untitled>";
 			}

@@ -31,23 +31,39 @@ namespace AuthorIntrusion.Contracts.Enumerations
 	public enum StructureType
 	{
 		/// <summary>
-		/// Identifies a section structure.
+		/// Represents a stand-alone article.
 		/// </summary>
-		Section,
+		Article,
 
 		/// <summary>
-		/// Represents a paragraph, a structure with content.
-		/// </summary>
-		Paragraph,
-
-		/// <summary>
-		/// Identifies a book structure.
+		/// Represents a book which usually contains chapters.
 		/// </summary>
 		Book,
 
 		/// <summary>
-		/// Identifies a chapter structure.
+		/// Represents a chapter which contains sections.
 		/// </summary>
 		Chapter,
+
+		/// <summary>
+		/// Represents a section in a chapter or article.
+		/// </summary>
+		Section,
+
+		/// <summary>
+		/// Represents a section within a section.
+		/// </summary>
+		SubSection,
+
+		/// <summary>
+		/// Represents a section within a subsection.
+		/// </summary>
+		SubSubSection,
+
+		/// <summary>
+		/// Represents a paragraph, a structure with content but no other
+		/// structures.
+		/// </summary>
+		Paragraph,
 	}
 }

@@ -30,6 +30,7 @@ using System.Xml;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Constants;
+using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Structures;
 
@@ -97,6 +98,11 @@ namespace AuthorIntrusion.IO
 		#region Reading
 
 		/// <summary>
+		/// Contains the number of recursive &lt;sect&gt; elements we've parsed.
+		/// </summary>
+		private int sectionDepth = 0;
+
+		/// <summary>
 		/// Reads the specified input stream and returns a structure elements.
 		/// If there is any problems with reading the input, this should throw
 		/// an exception and never return a null root structure.
@@ -158,7 +164,7 @@ namespace AuthorIntrusion.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <param name="context">The context.</param>
-		private static void ReadElement(
+		private void ReadElement(
 			XmlReader reader,
 			List<Element> context)
 		{
@@ -182,11 +188,11 @@ namespace AuthorIntrusion.IO
 			switch (reader.LocalName)
 			{
 				case "book":
-					element = new Section();
+					element = new Section(StructureType.Book);
 					break;
 
 				case "chapter":
-					var chapter = new Section();
+					var chapter = new Section(StructureType.Chapter);
 					element = chapter;
 
 					if (parent != null && parent is IStructureContainer)
@@ -196,11 +202,30 @@ namespace AuthorIntrusion.IO
 					break;
 
 				case "article":
-					element = new Section();
+					element = new Section(StructureType.Article);
 					break;
 
 				case "section":
-					var section = new Section();
+					// Increment the section counter and figure out the section.
+					Section section;
+
+					sectionDepth++;
+
+					switch (sectionDepth)
+					{
+						case 1:
+							section = new Section(StructureType.Section);
+							break;
+						case 2:
+							section = new Section(StructureType.SubSection);
+							break;
+						case 3:
+							section = new Section(StructureType.SubSubSection);
+							break;
+						default:
+							throw new Exception("Cannot handle a <sect> depths greater than 3.");
+					}
+
 					element = section;
 
 					if (parent != null && parent is IStructureContainer)
@@ -253,7 +278,7 @@ namespace AuthorIntrusion.IO
 		/// </summary>
 		/// <param name="reader">The reader.</param>
 		/// <param name="context">The context.</param>
-		private static void ReadEndElement(
+		private void ReadEndElement(
 			XmlReader reader,
 			List<Element> context)
 		{
@@ -267,14 +292,21 @@ namespace AuthorIntrusion.IO
 			switch (reader.LocalName)
 			{
 				case "quote":
-					IContentContainer parent = (IContentContainer) context[context.Count - 1];
+					var parent = (IContentContainer) context[context.Count - 1];
 					parent.Contents.Add("\"");
+					break;
+
+				case "section":
+					// Remove the last item which should be this element.
+					context.RemoveAt(context.Count - 1);
+
+					// Decrement the section depths.
+					sectionDepth--;
 					break;
 
 				case "book":
 				case "chapter":
 				case "article":
-				case "section":
 				case "para":
 				case "simpara":
 					// Remove the last item which should be this element.
