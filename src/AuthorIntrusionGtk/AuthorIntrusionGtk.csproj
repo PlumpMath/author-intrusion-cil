@@ -33,10 +33,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="C5, Version=1.1.1.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ext\mfgames-gtkext-cil\lib\C5.dll</HintPath>
+    </Reference>
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="gtk-dotnet, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="StructureMap, Version=2.6.1.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\StructureMap.dll</HintPath>
@@ -59,6 +64,7 @@
     <Compile Include="Dialogs\OpenDocumentDialog.cs" />
     <Compile Include="Dialogs\SaveDocumentAsDialog.cs" />
     <Compile Include="Editors\DocumentLineBuffer.cs" />
+    <Compile Include="Editors\ThemeHelper.cs" />
     <Compile Include="GtkEntry.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +104,10 @@
     <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.LineTextEditor\MfGames.GtkExt.LineTextEditor.csproj">
       <Project>{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}</Project>
       <Name>MfGames.GtkExt.LineTextEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt\MfGames.GtkExt.csproj">
+      <Project>{DC4BE5FB-0A89-4210-BC19-B4D01E5D901F}</Project>
+      <Name>MfGames.GtkExt</Name>
     </ProjectReference>
     <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
       <Project>{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}</Project>

@@ -179,12 +179,18 @@ namespace AuthorIntrusionGtk.Editors
 			return String.Empty;
 		}
 
+		/// <summary>
+		/// Returns the style based on the structure found at the given line
+		/// index.
+		/// </summary>
+		/// <param name="lineIndex">The line index in the buffer or Int32.MaxValue for
+		/// the last line.</param>
+		/// <returns></returns>
 		public override string GetLineStyleName(int lineIndex)
 		{
-			//Structure structure = GetStructure(lineIndex);
+			Structure structure = GetStructure(lineIndex);
 
-			// TODO return structure.StructureType.ToString();
-			return "Text";
+			return structure.StructureType.ToString();
 		}
 
 		public override string GetLineText(

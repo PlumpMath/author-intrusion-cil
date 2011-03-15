@@ -143,6 +143,7 @@ namespace AuthorIntrusionGtk
 			// Create the text editor.
 			// TODO Remove this parameter from the MfGames.GtkExt.LineTextEditor.
 			textEditor = new TextEditor();
+			ThemeHelper.SetupTheme(textEditor.Theme);
 
 			// Wrap the text editor in a scrollbar.
 			var scrolledWindow = new ScrolledWindow();
