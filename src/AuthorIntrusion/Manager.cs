@@ -41,23 +41,11 @@ namespace AuthorIntrusion
 		#region IOC
 
 		/// <summary>
-		/// Registers the specified instance for a given interface type.
-		/// </summary>
-		/// <typeparam name="TInterface">The type of the interface.</typeparam>
-		/// <param name="instance">The instance.</param>
-		public static void Register<TInterface>(TInterface instance)
-		{
-			ObjectFactory.Inject(instance);
-		}
-
-		/// <summary>
 		/// Sets up the IoC library and extensions.
 		/// </summary>
-		public static void Setup()
+		public static Container Setup()
 		{
-			// Set up StructureMap with the classes in this assembly and
-			// everything in the Extensions folder.
-			ObjectFactory.Initialize(
+			var container = new Container(
 				x => x.Scan(
 				     	scanner =>
 				     	{
@@ -77,7 +65,7 @@ namespace AuthorIntrusion
 				     		scanner.AddAllTypesOf<IContentParser>();
 				     	}));
 
-			//System.Diagnostics.Debug.WriteLine(ObjectFactory.Container.WhatDoIHave());
+			return container;
 		}
 
 		#endregion

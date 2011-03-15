@@ -30,6 +30,8 @@ using Gtk;
 
 using StructureMap;
 
+using Container=StructureMap.Container;
+
 #endregion
 
 namespace AuthorIntrusionGtk
@@ -48,10 +50,11 @@ namespace AuthorIntrusionGtk
 			Application.Init();
 
 			// Initialize the Author Intrusion manager.
-			Manager.Setup();
+			Container container = Manager.Setup();
+			System.Diagnostics.Debug.WriteLine(container.WhatDoIHave());
 
 			// Create the window and show it.
-			var mainWindow = ObjectFactory.GetInstance<MainWindow>();
+			var mainWindow = container.GetInstance<MainWindow>();
 			mainWindow.ShowAll();
 
 			Application.Run();

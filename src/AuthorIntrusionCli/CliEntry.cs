@@ -46,25 +46,25 @@ namespace AuthorIntrusionCli
 		public static void Main(string[] args)
 		{
 			// Set up the manager.
-			Manager.Setup();
+			Container container = Manager.Setup();
 
 			// Set up logging for the console.
 			ILogger logger = new ConsoleLogger("{1,5} {2}");
-			Manager.Register(logger);
+			container.Inject(logger);
 			Log log = new Log(typeof(CliEntry), logger);
 
 			// Read the input file.
 			var inputFile = new FileInfo(args[0]);
 			log.Info("Reading {0} {1}", inputFile, inputFile.Exists);
 
-			var inputManager = ObjectFactory.GetInstance<IInputManager>();
+			var inputManager = container.GetInstance<IInputManager>();
 			Document document = inputManager.Read(inputFile);
 
 			// Parse the contents of the root.
 			log.Info("Paragraphs {0:N0}", document.Structure.ParagraphCount);
 
 			DateTime lastReport = DateTime.UtcNow;
-			var languageManager = ObjectFactory.GetInstance<ILanguageManager>();
+			var languageManager = container.GetInstance<ILanguageManager>();
 
 			languageManager.ParseProgress += delegate(object sender,
 			                                          ParseProgressEventArgs progressArgs)
@@ -88,7 +88,7 @@ namespace AuthorIntrusionCli
 			var outputFile = new FileInfo(args[1]);
 			log.Info("Writing {0} {1}", outputFile, outputFile.Exists);
 
-			var outputManager = ObjectFactory.GetInstance<IOutputManager>();
+			var outputManager = container.GetInstance<IOutputManager>();
 			outputManager.Write(outputFile, document);
 
 			// Just set up the input.

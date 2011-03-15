@@ -43,6 +43,8 @@ using MfGames.GtkExt.LineTextEditor.Visuals;
 
 using StructureMap;
 
+using Container=StructureMap.Container;
+
 #endregion
 
 namespace AuthorIntrusionGtk
@@ -52,6 +54,7 @@ namespace AuthorIntrusionGtk
 	/// </summary>
 	public class MainWindow : Window
 	{
+		private readonly IContainer container;
 		private readonly Context context;
 
 		#region Constructors
@@ -59,14 +62,23 @@ namespace AuthorIntrusionGtk
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MainWindow"/> class.
 		/// </summary>
-		public MainWindow(Context context)
+		public MainWindow(IContainer container, Context context)
 			: base("Author Intrusion")
 		{
+			// Store the member variables.
+			if (container == null)
+			{
+				throw new ArgumentNullException("container");
+			}
+
 			if (context == null)
 			{
 				throw new ArgumentNullException("context");
 			}
+
+			this.container = container;
 			this.context = context;
+
 			// Set up the GUI.
 			ConfigureGui();
 
@@ -444,7 +456,7 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
-			var dialog = ObjectFactory.GetInstance<OpenDocumentDialog>();
+			var dialog = container.GetInstance<OpenDocumentDialog>();
 
 			try
 			{
@@ -455,7 +467,7 @@ namespace AuthorIntrusionGtk
 				}
 
 				// The user accepted it, so attempt to parse the document.
-				var inputManager = ObjectFactory.GetInstance<IInputManager>();
+				var inputManager = container.GetInstance<IInputManager>();
 				var file = new FileInfo(dialog.Filename);
 
 				Document document = inputManager.Read(file);
@@ -476,7 +488,7 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
-			var dialog = ObjectFactory.GetInstance<SaveDocumentAsDialog>();
+			var dialog = container.GetInstance<SaveDocumentAsDialog>();
 
 			try
 			{
@@ -487,7 +499,7 @@ namespace AuthorIntrusionGtk
 				}
 
 				// The user accepted it, so attempt to parse the document.
-				var outputManager = ObjectFactory.GetInstance<IOutputManager>();
+				var outputManager = container.GetInstance<IOutputManager>();
 				var file = new FileInfo(dialog.Filename);
 
 				outputManager.Write(file, context.Document);

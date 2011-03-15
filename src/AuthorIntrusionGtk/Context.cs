@@ -29,6 +29,8 @@ using System.Diagnostics;
 
 using AuthorIntrusion.Contracts;
 
+using StructureMap;
+
 #endregion
 
 namespace AuthorIntrusionGtk
