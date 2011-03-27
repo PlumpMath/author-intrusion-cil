@@ -35,6 +35,7 @@ using AuthorIntrusionGtk.Editors;
 
 using Gtk;
 
+using MfGames.GtkExt.Actions;
 using MfGames.GtkExt.TextEditor;
 using MfGames.GtkExt.TextEditor.Models.Styles;
 
@@ -105,6 +106,9 @@ namespace AuthorIntrusionGtk
 
 			// Hook up events.
 			DeleteEvent += OnWindowDelete;
+
+			// Set up the action manager, keybindings, and layouts.
+			var actionManager = new ActionManager(this);
 
 			// Create the window frame
 			var box = new VBox();

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<action-layout xmlns="urn:mfgames.com/mfgames-gtkext-cil/action-layout/0">
+  <layout-group id="Main">
+    <layout-list label="_File">
+      <action name='New'/>
+      <action name='Open'/>
+      
+      <separator/>
+      <action name='Save'/>
+      <action name='SaveAs'/>
+      
+      <separator/>
+      <action name='Properties'/>
+
+      <separator/>
+      <action name='Close'/>
+      <action name="Quit"/>
+    </layout-list>
+    <layout-list label="_Edit">
+      <action name='Cut'/>
+      <action name='Copy'/>
+      <action name='Paste'/>
+
+      <separator/>
+      <action name='Preferences'/>
+    </layout-list>
+  </layout-group>
+</action-layout>

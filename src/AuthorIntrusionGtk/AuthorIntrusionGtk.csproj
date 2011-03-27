@@ -103,6 +103,10 @@
     <EmbeddedResource Include="ui.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.Actions\MfGames.GtkExt.Actions.csproj">
+      <Project>{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}</Project>
+      <Name>MfGames.GtkExt.Actions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.TextEditor.Models\MfGames.GtkExt.TextEditor.Models.csproj">
       <Project>{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}</Project>
       <Name>MfGames.GtkExt.TextEditor.Models</Name>
@@ -123,6 +127,14 @@
       <Project>{957BD171-18E1-4EA0-8CBE-D6096BCD3654}</Project>
       <Name>AuthorIntrusion</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="keybindings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="layout.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

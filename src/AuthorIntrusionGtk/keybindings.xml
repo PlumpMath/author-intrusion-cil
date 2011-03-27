@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<action-keybindings xmlns="urn:mfgames.com/mfgames-gtkext-cil/action-keybindings/0">
+  <action name="Close" keybinding="/Control+W"/>
+  <action name="Quit" keybinding="/Control+Q"/>
+</action-keybindings>
