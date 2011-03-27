@@ -38,7 +38,7 @@ using AuthorIntrusion.English.Enumerations;
 using AuthorIntrusion.English.Tags;
 
 using MfGames.Extensions.System.IO;
-using MfGames.Logging;
+using MfGames.Reporting;
 
 using OpenNLP.Tools.Parser;
 using OpenNLP.Tools.SentenceDetect;
@@ -60,17 +60,17 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		/// Initializes a new instance of the <see cref="EnglishSharpNlpParser"/> class.
 		/// </summary>
 		/// <param name="logger">The logger.</param>
-		public EnglishSharpNlpParser(ILogger logger)
+		public EnglishSharpNlpParser()
 		{
 			modelDirectory = new DirectoryInfo("models");
-			log = new Log(this, logger);
+			log = new Logger(this);
 		}
 
 		#endregion
 
 		#region SharpNLP
 
-		private readonly Log log;
+		private readonly Logger log;
 		private readonly DirectoryInfo modelDirectory;
 		private EnglishTreebankParser englishTreebankParser;
 		private ISentenceDetector sentenceDetector;

@@ -35,11 +35,8 @@ using AuthorIntrusionGtk.Editors;
 
 using Gtk;
 
-using MfGames.GtkExt.LineTextEditor;
-using MfGames.GtkExt.LineTextEditor.Enumerations;
-using MfGames.GtkExt.LineTextEditor.Indicators;
-using MfGames.GtkExt.LineTextEditor.Renderers.Cache;
-using MfGames.GtkExt.LineTextEditor.Visuals;
+using MfGames.GtkExt.TextEditor;
+using MfGames.GtkExt.TextEditor.Models.Styles;
 
 using StructureMap;
 
@@ -93,9 +90,9 @@ namespace AuthorIntrusionGtk
 
 		#region Setup
 
-		private TextIndicatorBar indicatorBar;
+		private IndicatorView indicatorView;
 		private Statusbar statusbar;
-		private TextEditor textEditor;
+		private EditorView editorView;
 		private UIManager uiManager;
 
 		/// <summary>
@@ -127,7 +124,7 @@ namespace AuthorIntrusionGtk
 
 			// Set up the initial indicator bar theme.
 			// Update the theme with some additional colors.
-			Theme theme = textEditor.Theme;
+			Theme theme = editorView.Theme;
 
 			theme.IndicatorRenderStyle = IndicatorRenderStyle.Ratio;
 			theme.IndicatorPixelHeight = 2;
@@ -141,24 +138,23 @@ namespace AuthorIntrusionGtk
 		private Widget CreateGuiEditor()
 		{
 			// Create the text editor.
-			// TODO Remove this parameter from the MfGames.GtkExt.LineTextEditor.
-			textEditor = new TextEditor();
-			ThemeHelper.SetupTheme(textEditor.Theme);
+			editorView = new EditorView();
+			ThemeHelper.SetupTheme(editorView.Theme);
 
 			// Wrap the text editor in a scrollbar.
 			var scrolledWindow = new ScrolledWindow();
 			scrolledWindow.VscrollbarPolicy = PolicyType.Always;
-			scrolledWindow.Add(textEditor);
+			scrolledWindow.Add(editorView);
 
 			// Create the indicator bar that is 10 px wide.
-			indicatorBar = new TextIndicatorBar(textEditor);
-			indicatorBar.SetSizeRequest(20, 1);
+			indicatorView = new IndicatorView(editorView);
+			indicatorView.SetSizeRequest(20, 1);
 
 			// Add the editor and bar to the hbox and return it.
 			var hbox = new HBox(false, 0);
 
 			hbox.PackStart(scrolledWindow, true, true, 0);
-			hbox.PackStart(indicatorBar, false, false, 4);
+			hbox.PackStart(indicatorView, false, false, 4);
 
 			return hbox;
 		}
@@ -405,12 +401,8 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
-			// Wrap the document in a line buffer and update the editor.
 			var lineBuffer = new DocumentLineBuffer(context.Document);
-			var renderer = new CachedTextRenderer(textEditor, lineBuffer);
-
-			// Set the buffers on the controls.
-			textEditor.SetTextRenderer(renderer);
+			editorView.SetLineBuffer(lineBuffer);
 		}
 
 		/// <summary>
@@ -433,7 +425,7 @@ namespace AuthorIntrusionGtk
 			EventArgs args)
 		{
 			// Clear out the buffers on the displays.
-			textEditor.SetTextRenderer(null);
+			editorView.ClearLineBuffer();
 		}
 
 		/// <summary>

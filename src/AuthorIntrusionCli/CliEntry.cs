@@ -33,7 +33,7 @@ using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Languages;
 
-using MfGames.Logging;
+using MfGames.Reporting;
 
 using StructureMap;
 
@@ -49,9 +49,7 @@ namespace AuthorIntrusionCli
 			Container container = Manager.Setup();
 
 			// Set up logging for the console.
-			ILogger logger = new ConsoleLogger("{1,5} {2}");
-			container.Inject(logger);
-			Log log = new Log(typeof(CliEntry), logger);
+			var log = new Logger(typeof(CliEntry));
 
 			// Read the input file.
 			var inputFile = new FileInfo(args[0]);

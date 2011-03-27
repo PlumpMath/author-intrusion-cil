@@ -32,7 +32,7 @@ using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.Languages;
 using AuthorIntrusion.Contracts.Structures;
 
-using MfGames.Logging;
+using MfGames.Reporting;
 
 #endregion
 
@@ -49,17 +49,15 @@ namespace AuthorIntrusion.Languages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LanguageManager"/> class.
 		/// </summary>
-		/// <param name="logger">The logger.</param>
 		/// <param name="contentParsers">The content parsers.</param>
 		public LanguageManager(
-			ILogger logger,
 			IContentParser[] contentParsers)
 		{
 			// Save the various lists in member variables.
 			this.contentParsers = contentParsers;
 
 			// Report the wiring in the logger.
-			log = new Log("LanguageManager", logger);
+			log = new Logger("LanguageManager");
 			log.Info("ContentParsers: {0:N0}", contentParsers.Length);
 		}
 
@@ -90,7 +88,7 @@ namespace AuthorIntrusion.Languages
 		#region Parsing
 
 		private readonly IContentParser[] contentParsers;
-		private readonly Log log;
+		private readonly Logger log;
 
 		/// <summary>
 		/// Parses a single paragraph before returning.

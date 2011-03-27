@@ -19,7 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.GtkExt", "..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt\MfGames.GtkExt.csproj", "{DC4BE5FB-0A89-4210-BC19-B4D01E5D901F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.GtkExt.LineTextEditor", "..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.LineTextEditor\MfGames.GtkExt.LineTextEditor.csproj", "{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.GtkExt.TextEditor", "..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.TextEditor\MfGames.GtkExt.TextEditor.csproj", "{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.GtkExt.TextEditor.Models", "..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.TextEditor.Models\MfGames.GtkExt.TextEditor.Models.csproj", "{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.GtkExt.Actions", "..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.Actions\MfGames.GtkExt.Actions.csproj", "{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,10 +127,30 @@ Global
 		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Debug|x86.Build.0 = Debug|x86
 		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|x86.ActiveCfg = Release|x86
 		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}.Release|x86.Build.0 = Release|x86
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}.Release|x86.ActiveCfg = Release|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +159,8 @@ Global
 		{3BABBE73-CD1D-494E-A81F-E4EA40107FA9} = {58B79F60-7EB8-420C-A075-7C0AB8D3CED4}
 		{DC4BE5FB-0A89-4210-BC19-B4D01E5D901F} = {58B79F60-7EB8-420C-A075-7C0AB8D3CED4}
 		{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF} = {58B79F60-7EB8-420C-A075-7C0AB8D3CED4}
+		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0} = {58B79F60-7EB8-420C-A075-7C0AB8D3CED4}
+		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A} = {58B79F60-7EB8-420C-A075-7C0AB8D3CED4}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MfGames.Author.Contract\MfGames.Author.Contract.csproj

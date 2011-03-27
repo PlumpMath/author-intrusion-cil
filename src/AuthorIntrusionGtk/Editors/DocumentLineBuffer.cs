@@ -31,8 +31,8 @@ using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Algorithms;
 using AuthorIntrusion.Contracts.Structures;
 
-using MfGames.GtkExt.LineTextEditor.Buffers;
-using MfGames.GtkExt.LineTextEditor.Interfaces;
+using MfGames.GtkExt.TextEditor.Models;
+using MfGames.GtkExt.TextEditor.Models.Buffers;
 
 #endregion
 
@@ -42,7 +42,7 @@ namespace AuthorIntrusionGtk.Editors
 	/// Implements an indicator buffer wrapped around an Author Intrusion
 	/// document.
 	/// </summary>
-	public class DocumentLineBuffer : LineBuffer
+	public class DocumentLineBuffer : MultiplexedOperationLineBuffer
 	{
 		#region Constructors
 
@@ -169,7 +169,7 @@ namespace AuthorIntrusionGtk.Editors
 
 		#region Lines
 
-		public override int GetLineLength(int lineIndex)
+		public override int GetLineLength(int lineIndex, LineContexts lineContexts)
 		{
 			return GetStructureText(lineIndex).Length;
 		}
@@ -186,31 +186,50 @@ namespace AuthorIntrusionGtk.Editors
 		/// <param name="lineIndex">The line index in the buffer or Int32.MaxValue for
 		/// the last line.</param>
 		/// <returns></returns>
-		public override string GetLineStyleName(int lineIndex)
+		public override string GetLineStyleName(int lineIndex, LineContexts lineContexts)
 		{
 			Structure structure = GetStructure(lineIndex);
 
 			return structure.StructureType.ToString();
 		}
 
-		public override string GetLineText(
-			int lineIndex,
-			int startIndex,
-			int endIndex)
+		public override string GetLineText(int lineIndex, CharacterRange characters, LineContexts lineContexts)
 		{
 			string text = GetStructureText(lineIndex);
+			int endIndex = characters.EndIndex;
 
 			endIndex = Math.Min(endIndex, text.Length);
 
-			return text.Substring(startIndex, endIndex - startIndex);
+			return text.Substring(characters.StartIndex, endIndex - characters.StartIndex);
 		}
 
 		#endregion
 
 		#region Operations
 
-		public override void Do(ILineBufferOperation operation)
+		protected override LineBufferOperationResults Do(InsertTextOperation operation)
 		{
+			throw new NotImplementedException();
+		}
+
+		protected override LineBufferOperationResults Do(DeleteTextOperation operation)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override LineBufferOperationResults Do(SetTextOperation operation)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override LineBufferOperationResults Do(InsertLinesOperation operation)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override LineBufferOperationResults Do(DeleteLinesOperation operation)
+		{
+			throw new NotImplementedException();
 		}
 
 		#endregion

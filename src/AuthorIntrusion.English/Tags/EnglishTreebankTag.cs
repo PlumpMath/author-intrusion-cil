@@ -29,7 +29,7 @@ using System;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Languages;
 
-using MfGames.Enumerations;
+using MfGames.Reporting;
 
 #endregion
 

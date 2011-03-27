@@ -24,7 +24,7 @@
 
 #region Namespaces
 
-using MfGames.Enumerations;
+using MfGames.Reporting;
 
 #endregion
 

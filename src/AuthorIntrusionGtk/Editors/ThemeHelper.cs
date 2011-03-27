@@ -3,7 +3,7 @@ using System;
 using AuthorIntrusion.Contracts.Enumerations;
 
 using MfGames.GtkExt;
-using MfGames.GtkExt.LineTextEditor.Visuals;
+using MfGames.GtkExt.TextEditor.Models.Styles;
 
 namespace AuthorIntrusionGtk.Editors
 {
@@ -23,7 +23,7 @@ namespace AuthorIntrusionGtk.Editors
 			var textStyle = theme.TextLineStyle;
 
 			// Create the section style container.
-			var sectionStyle = new LineStyle(textStyle);
+			var sectionStyle = new LineBlockStyle(textStyle);
 
 			sectionStyle.StyleUsage = StyleUsage.Application;
 
@@ -33,7 +33,7 @@ namespace AuthorIntrusionGtk.Editors
 			foreach (StructureType structureType in Enum.GetValues(typeof(StructureType)))
 			{
 				// Create the basic style.
-				var lineStyle = new LineStyle(
+				var lineStyle = new LineBlockStyle(
 					structureType == StructureType.Paragraph ? textStyle : sectionStyle);
 
 				lineStyle.StyleUsage = StyleUsage.Application;

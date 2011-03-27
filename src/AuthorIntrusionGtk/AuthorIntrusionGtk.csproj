@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -101,9 +103,13 @@
     <EmbeddedResource Include="ui.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.LineTextEditor\MfGames.GtkExt.LineTextEditor.csproj">
+    <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.TextEditor.Models\MfGames.GtkExt.TextEditor.Models.csproj">
+      <Project>{1F3AD3B8-7459-41EA-A730-334DF89EB6F0}</Project>
+      <Name>MfGames.GtkExt.TextEditor.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt.TextEditor\MfGames.GtkExt.TextEditor.csproj">
       <Project>{C4AADFA8-6268-4D61-B44B-78F1A69D3EAF}</Project>
-      <Name>MfGames.GtkExt.LineTextEditor</Name>
+      <Name>MfGames.GtkExt.TextEditor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ext\mfgames-gtkext-cil\src\MfGames.GtkExt\MfGames.GtkExt.csproj">
       <Project>{DC4BE5FB-0A89-4210-BC19-B4D01E5D901F}</Project>
