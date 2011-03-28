@@ -80,6 +80,9 @@ namespace AuthorIntrusionGtk
 			// Set up the GUI.
 			ConfigureGui();
 
+			// Set up the keybindings.
+			context.ActionManager.AttachToRootWindow(this);
+
 			// Hook up events to the context.
 			context.UnloadedDocument += OnUnloadedDocument;
 			context.LoadedDocument += OnLoadedDocument;
@@ -94,7 +97,6 @@ namespace AuthorIntrusionGtk
 		private IndicatorView indicatorView;
 		private Statusbar statusbar;
 		private EditorView editorView;
-		private UIManager uiManager;
 
 		/// <summary>
 		/// Configures the GUI.
@@ -107,15 +109,14 @@ namespace AuthorIntrusionGtk
 			// Hook up events.
 			DeleteEvent += OnWindowDelete;
 
-			// Set up the action manager, keybindings, and layouts.
-			var actionManager = new ActionManager(this);
-
 			// Create the window frame
 			var box = new VBox();
 			Add(box);
 
 			// Add the menu on the top.
-			box.PackStart(CreateGuiMenu(), false, false, 0);
+			var menuBar = new MenuBar();
+			context.ActionManager.Layout.Populate(menuBar, "Main");
+			box.PackStart(menuBar, false, false, 0);
 
 			// Create the primary text control.
 			box.PackStart(CreateGuiEditor(), true, true, 0);
@@ -163,235 +164,6 @@ namespace AuthorIntrusionGtk
 			return hbox;
 		}
 
-		/// <summary>
-		/// Creates the GUI menu and returns it.
-		/// </summary>
-		/// <returns></returns>
-		private Widget CreateGuiMenu()
-		{
-			// Build up the actions
-			var actions = new ActionGroup("group");
-			actions.Add(CreateGuiMenuFile());
-			actions.Add(CreateGuiMenuEdit());
-			actions.Add(CreateGuiMenuView());
-			actions.Add(CreateGuiMenuGo());
-			actions.Add(CreateGuiMenuHelp());
-
-			// Create the UI manager and add the various entries and actions
-			// into it.
-			uiManager = new UIManager();
-			uiManager.InsertActionGroup(actions, 0);
-			AddAccelGroup(uiManager.AccelGroup);
-
-			// Set up the interfaces from XML
-			uiManager.AddUiFromResource("AuthorIntrusionGtk.ui.xml");
-
-			// TODO Disable various items until they are implemented.
-			uiManager.GetWidget("/MenuBar/FileMenu/New").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/FileMenu/Save").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/FileMenu/Properties").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/FileMenu/Close").Sensitive = false;
-
-			uiManager.GetWidget("/MenuBar/EditMenu/Cut").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/EditMenu/Copy").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/EditMenu/Paste").Sensitive = false;
-			uiManager.GetWidget("/MenuBar/EditMenu/Preferences").Sensitive = false;
-
-			// Return the top-level menu bar.
-			return uiManager.GetWidget("/MenuBar");
-		}
-
-		#region Menu Actions
-
-		/// <summary>
-		/// Creates the GUI Edit menu entries.
-		/// </summary>
-		/// <returns></returns>
-		private static ActionEntry[] CreateGuiMenuEdit()
-		{
-			// Set up the actions
-			ActionEntry[] entries = new[]
-			{
-				// "Edit" Menu
-				new ActionEntry(
-					"EditMenu",
-					null,
-					"Edit",
-					null,
-					null,
-					null),
-				new ActionEntry(
-					"Cut",
-					Stock.Cut,
-					"Cu_t",
-					"<control>X",
-					"Cuts the current selection.",
-					null),
-				new ActionEntry(
-					"Copy",
-					Stock.Copy,
-					"_Copy",
-					"<control>O",
-					"Opens an existing document.",
-					null),
-				new ActionEntry(
-					"Paste",
-					Stock.Paste,
-					"_Paste",
-					"<control>V",
-					"Pastes the current selection.",
-					null),
-				new ActionEntry(
-					"Preferences",
-					Stock.Preferences,
-					"Preference_s",
-					null,
-					"Edits the application preferences.",
-					null),
-			};
-
-			return entries;
-		}
-
-		/// <summary>
-		/// Creates the GUI file menu entries.
-		/// </summary>
-		/// <returns></returns>
-		private ActionEntry[] CreateGuiMenuFile()
-		{
-			// Set up the actions
-			ActionEntry[] entries = new[]
-			{
-				// "File" Menu
-				new ActionEntry(
-					"FileMenu",
-					null,
-					"_File",
-					null,
-					null,
-					null),
-				new ActionEntry(
-					"New",
-					Stock.New,
-					"_New",
-					"<control>N",
-					"Creates a new document.",
-					null),
-				new ActionEntry(
-					"Open",
-					Stock.Open,
-					"_Open...",
-					"<control>O",
-					"Opens an existing document.",
-					OnFileOpen),
-				new ActionEntry(
-					"Save",
-					Stock.Save,
-					"_Save",
-					"<control>S",
-					"Saves a current document.",
-					null),
-				new ActionEntry(
-					"SaveAs",
-					Stock.SaveAs,
-					"Save _As...",
-					"<control><shift>S",
-					"Saves the current document with a new name.",
-					OnFileSaveAs),
-				new ActionEntry(
-					"Properties",
-					Stock.Properties,
-					"_Properties...",
-					null,
-					"Edits the properties of the current document.",
-					null),
-				new ActionEntry(
-					"Close",
-					Stock.Close,
-					"_Close",
-					"<control>W",
-					"Closes the current document.",
-					null),
-				new ActionEntry(
-					"Quit",
-					Stock.Quit,
-					"_Quit",
-					"<control>Q",
-					"Quits the application.",
-					OnQuitAction),
-			};
-
-			return entries;
-		}
-
-		/// <summary>
-		/// Creates the GUI Go menu entries.
-		/// </summary>
-		/// <returns></returns>
-		private static ActionEntry[] CreateGuiMenuGo()
-		{
-			// Set up the actions
-			ActionEntry[] entries = new[]
-			{
-				// "Go" Menu
-				new ActionEntry(
-					"GoMenu",
-					null,
-					"_Go",
-					null,
-					null,
-					null),
-			};
-
-			return entries;
-		}
-
-		/// <summary>
-		/// Creates the GUI Help menu entries.
-		/// </summary>
-		/// <returns></returns>
-		private static ActionEntry[] CreateGuiMenuHelp()
-		{
-			// Set up the actions
-			ActionEntry[] entries = new[]
-			{
-				// "Help" Menu
-				new ActionEntry(
-					"HelpMenu",
-					null,
-					"_Help",
-					null,
-					null,
-					null),
-			};
-
-			return entries;
-		}
-
-		/// <summary>
-		/// Creates the GUI View menu entries.
-		/// </summary>
-		/// <returns></returns>
-		private static ActionEntry[] CreateGuiMenuView()
-		{
-			// Set up the actions
-			ActionEntry[] entries = new[]
-			{
-				// "View" Menu
-				new ActionEntry(
-					"ViewMenu",
-					null,
-					"_View",
-					null,
-					null,
-					null),
-			};
-
-			return entries;
-		}
-
-		#endregion
-
 		#endregion
 
 		#region Events
@@ -407,16 +179,6 @@ namespace AuthorIntrusionGtk
 		{
 			var lineBuffer = new DocumentLineBuffer(context.Document);
 			editorView.SetLineBuffer(lineBuffer);
-		}
-
-		/// <summary>
-		/// Triggers the quit menu.
-		/// </summary>
-		private static void OnQuitAction(
-			object sender,
-			EventArgs args)
-		{
-			Application.Quit();
 		}
 
 		/// <summary>
@@ -441,73 +203,6 @@ namespace AuthorIntrusionGtk
 		{
 			Application.Quit();
 		}
-
-		#region File Menu
-
-		/// <summary>
-		/// Called when the file open item is selected.
-		/// </summary>
-		/// <param name="sender">The sender.</param>
-		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void OnFileOpen(
-			object sender,
-			EventArgs args)
-		{
-			var dialog = container.GetInstance<OpenDocumentDialog>();
-
-			try
-			{
-				// If the user cancelled, then just break out.
-				if (dialog.Run() != (int) ResponseType.Accept)
-				{
-					return;
-				}
-
-				// The user accepted it, so attempt to parse the document.
-				var inputManager = container.GetInstance<IInputManager>();
-				var file = new FileInfo(dialog.Filename);
-
-				Document document = inputManager.Read(file);
-				context.Document = document;
-			}
-			finally
-			{
-				dialog.Destroy();
-			}
-		}
-
-		/// <summary>
-		/// Called when the File's Save As is selected.
-		/// </summary>
-		/// <param name="sender">The sender.</param>
-		/// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void OnFileSaveAs(
-			object sender,
-			EventArgs args)
-		{
-			var dialog = container.GetInstance<SaveDocumentAsDialog>();
-
-			try
-			{
-				// If the user cancelled, then just break out.
-				if (dialog.Run() != (int) ResponseType.Accept)
-				{
-					return;
-				}
-
-				// The user accepted it, so attempt to parse the document.
-				var outputManager = container.GetInstance<IOutputManager>();
-				var file = new FileInfo(dialog.Filename);
-
-				outputManager.Write(file, context.Document);
-			}
-			finally
-			{
-				dialog.Destroy();
-			}
-		}
-
-		#endregion
 
 		#endregion
 

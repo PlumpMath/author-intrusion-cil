@@ -2,18 +2,18 @@
 <action-layout xmlns="urn:mfgames.com/mfgames-gtkext-cil/action-layout/0">
   <layout-group id="Main">
     <layout-list label="_File">
-      <action name='New'/>
-      <action name='Open'/>
+      <action name='FileNew'/>
+      <action name='FileOpen'/>
       
       <separator/>
-      <action name='Save'/>
-      <action name='SaveAs'/>
+      <action name='FileSave'/>
+      <action name='FileSaveAs'/>
       
       <separator/>
       <action name='Properties'/>
 
       <separator/>
-      <action name='Close'/>
+      <action name='FileClose'/>
       <action name="Quit"/>
     </layout-list>
     <layout-list label="_Edit">

@@ -29,6 +29,8 @@ using System.Diagnostics;
 
 using AuthorIntrusion.Contracts;
 
+using AuthorIntrusionGtk.Actions;
+
 using StructureMap;
 
 #endregion
@@ -38,8 +40,42 @@ namespace AuthorIntrusionGtk
 	/// <summary>
 	/// A context object which contains much of the common 
 	/// </summary>
+	[PluginFamily(IsSingleton = true)]
 	public class Context
 	{
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Context"/> class.
+		/// </summary>
+		/// <param name="container">The container.</param>
+		public Context(IContainer container)
+		{
+			Container = container;
+		}
+
+		#endregion
+
+		#region Operations
+
+		/// <summary>
+		/// Gets or sets the StructureMap container.
+		/// </summary>
+		/// <value>The container.</value>
+		public IContainer Container
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Gets the action manager.
+		/// </summary>
+		/// <value>The action manager.</value>
+		public GlobalActionManager ActionManager { get; set; }
+
+		#endregion
+
 		#region Document
 
 		private Document document;
