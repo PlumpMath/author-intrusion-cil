@@ -69,6 +69,19 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		#endregion
 
+		#region Relationships
+
+		/// <summary>
+		/// Creates an version of itself, but with no text or contents.
+		/// </summary>
+		/// <returns></returns>
+		public override Structure CreateEmptyClone()
+		{
+			return new Paragraph();
+		}
+
+		#endregion
+
 		#region Contents
 
 		private readonly ContentList contents;

@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -81,6 +81,21 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// </summary>
 		/// <value>The paragraph list.</value>
 		public abstract IList<Paragraph> ParagraphList { get; }
+
+		/// <summary>
+		/// Gets the parent section for this structure element.
+		/// </summary>
+		/// <value>The parent section.</value>
+		public Section ParentSection
+		{
+			get { return (Section) Parent; }
+		}
+
+		/// <summary>
+		/// Creates an version of itself, but with no text or contents.
+		/// </summary>
+		/// <returns></returns>
+		public abstract Structure CreateEmptyClone();
 
 		#endregion
 

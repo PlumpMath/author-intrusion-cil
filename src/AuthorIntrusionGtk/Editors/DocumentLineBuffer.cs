@@ -57,9 +57,7 @@ namespace AuthorIntrusionGtk.Editors
 			this.document = document;
 
 			// Perform the initial counts on the document.
-			LineBufferVisitor visitor = new LineBufferVisitor(this);
-
-			visitor.Visit(document);
+			RebuildIndexes();
 		}
 
 		#endregion
@@ -67,6 +65,16 @@ namespace AuthorIntrusionGtk.Editors
 		#region Document
 
 		private Document document;
+
+		/// <summary>
+		/// Goes through the entire document and rebuilds the internal indexes.
+		/// </summary>
+		private void RebuildIndexes()
+		{
+			var visitor = new LineBufferVisitor(this);
+
+			visitor.Visit(document);
+		}
 
 		private Structure GetStructure(int structureIndex)
 		{
@@ -376,7 +384,42 @@ namespace AuthorIntrusionGtk.Editors
 		/// </returns>
 		protected override LineBufferOperationResults Do(InsertLinesOperation operation)
 		{
-			throw new NotImplementedException();
+			// We don't allow duplication of the top-level element.
+			int structureIndex = operation.LineIndex;
+
+			if (structureIndex == 0)
+			{
+				return new LineBufferOperationResults();
+			}
+
+			// When we insert a line, we figure out what the element is at the
+			// point of inserting and create an identical element.
+			Structure structure = GetStructure(structureIndex);
+
+			// Figure out the parent structure and the index of this structure
+			// inside that parent.
+			var parent = structure.ParentSection;
+			int parentIndex = parent.IndexOf(structure);
+
+			// Now, insert an empty version of the structure after the
+			// line index.
+			for (int i = 0; i < operation.Count; i++)
+			{
+				Structure newStructure = structure.CreateEmptyClone();
+				parent.Structures.Insert(parentIndex, newStructure);
+			}
+
+			// Once we are done, we have to rebuild the indexes.
+			RebuildIndexes();
+
+			// Fire an insert line change.
+			RaiseLinesInserted(
+				new LineRangeEventArgs(operation.LineIndex, operation.Count));
+
+			// Return the appropriate results.
+			return
+				new LineBufferOperationResults(
+					new BufferPosition(operation.LineIndex + operation.Count, 0));
 		}
 
 		/// <summary>

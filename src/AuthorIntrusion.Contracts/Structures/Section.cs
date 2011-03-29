@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -93,6 +93,20 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		#endregion
 
+		#region Relationships
+
+		/// <summary>
+		/// Creates an version of itself, but with no text or contents.
+		/// </summary>
+		/// <returns></returns>
+		public override Structure CreateEmptyClone()
+		{
+			var section = new Section(structureType);
+			return section;
+		}
+
+		#endregion
+
 		#region Structures
 
 		private readonly StructureList structures;
@@ -142,6 +156,16 @@ namespace AuthorIntrusion.Contracts.Structures
 		public StructureList Structures
 		{
 			get { return structures; }
+		}
+
+		/// <summary>
+		/// Gets the index of a given child structure.
+		/// </summary>
+		/// <param name="structure">The structure.</param>
+		/// <returns></returns>
+		public int IndexOf(Structure structure)
+		{
+			return structures.IndexOf(structure);
 		}
 
 		#endregion
