@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 using AuthorIntrusion.Contracts;
@@ -307,8 +308,17 @@ namespace AuthorIntrusion.IO
 				case "book":
 				case "chapter":
 				case "article":
+					// Remove the last item which should be this element.
+					context.RemoveAt(context.Count - 1);
+					break;
+
 				case "para":
 				case "simpara":
+					// For paragraphs, also trim the contents.
+					var paragraph = (Paragraph) context[context.Count - 1];
+					paragraph.SetText(
+						Regex.Replace(paragraph.ContentString.Trim(), @"\s+", " "));
+
 					// Remove the last item which should be this element.
 					context.RemoveAt(context.Count - 1);
 					break;

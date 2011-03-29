@@ -45,23 +45,23 @@ namespace AuthorIntrusionGtk.Editors
 				{
 					case StructureType.Book:
 						lineStyle.FontDescription =
-							FontDescriptionCache.GetFontDescription("Sans Bold 24");
+							FontDescriptionCache.GetFontDescription("Courier New Bold 18");
 						break;
 
 					case StructureType.Chapter:
 					case StructureType.Article:
 						lineStyle.FontDescription =
-							FontDescriptionCache.GetFontDescription("Sans Bold 20");
+							FontDescriptionCache.GetFontDescription("Courier New Bold 14");
 						break;
 				}
 			}
 
 			// Update the styles to make them a little more distinct as a default.
 			theme.TextLineStyle.FontDescription =
-				FontDescriptionCache.GetFontDescription("Serif 12");
+				FontDescriptionCache.GetFontDescription("Courier New 12");
 
 			sectionStyle.FontDescription =
-				FontDescriptionCache.GetFontDescription("Sans 12");
+				FontDescriptionCache.GetFontDescription("Courier New Bold 12");
 
 			// Return the resulting theme.
 			return;

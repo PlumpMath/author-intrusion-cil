@@ -85,5 +85,16 @@ namespace AuthorIntrusion.Contracts.Structures
 		public abstract IList<Paragraph> ParagraphList { get; }
 
 		#endregion
+
+		#region Contents
+
+		/// <summary>
+		/// Sets the text of the structure. For sections, this will be the title
+		/// and for paragraphs, it will be the unparsed contents.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		public abstract void SetText(string text);
+
+		#endregion
 	}
 }

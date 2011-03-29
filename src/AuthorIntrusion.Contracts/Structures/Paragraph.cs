@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -118,6 +118,18 @@ namespace AuthorIntrusion.Contracts.Structures
 				paragraphs.Add(this);
 				return paragraphs;
 			}
+		}
+
+		/// <summary>
+		/// Sets the text of the structure. For sections, this will be the title
+		/// and for paragraphs, it will be the unparsed contents.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		public override void SetText(string text)
+		{
+			// Clear out the previous contents and set the new contents.
+			contents.Clear();
+			contents.Add(text);
 		}
 
 		#endregion

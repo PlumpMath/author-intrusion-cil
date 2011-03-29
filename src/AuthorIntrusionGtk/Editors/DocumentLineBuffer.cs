@@ -121,18 +121,37 @@ namespace AuthorIntrusionGtk.Editors
 			return (StructureInfo) structure.DataDictionary[this];
 		}
 
+		/// <summary>
+		/// Gets the text from a given structure index from the beginning.
+		/// </summary>
+		/// <param name="structureIndex">Index of the structure.</param>
+		/// <returns></returns>
 		private string GetStructureText(int structureIndex)
 		{
+			// Get the structure element and use that to determine how we
+			// retrieve the contents.
 			Structure structure = GetStructure(structureIndex);
 
+			return GetStructureText(structure);
+		}
+
+		/// <summary>
+		/// Gets the structure text from a given structure element.
+		/// </summary>
+		/// <param name="structure">The structure.</param>
+		/// <returns></returns>
+		private static string GetStructureText(Structure structure)
+		{
+			// For paragraphs, we get the the content string.
 			if (structure is Paragraph)
 			{
 				var paragraph = (Paragraph) structure;
-				string contents = paragraph.ContentString.Trim();
+				string contents = paragraph.ContentString;
 
-				return Regex.Replace(contents, "\\s+", " ");
+				return contents;
 			}
 
+			// For sections, we return the title of the section.
 			if (structure is Section)
 			{
 				var section = (Section) structure;
@@ -140,7 +159,10 @@ namespace AuthorIntrusionGtk.Editors
 				return section.Title ?? "<Untitled>";
 			}
 
-			return "UNKNOWN";
+			// This is an unknown structure, so throw an exception because we
+			// shouldn't be getting this.
+			throw new Exception(
+				"Cannot find structure text of unknown type: " + structure.GetType());
 		}
 
 		#endregion
@@ -169,11 +191,22 @@ namespace AuthorIntrusionGtk.Editors
 
 		#region Lines
 
+		/// <summary>
+		/// Gets the length of the line.
+		/// </summary>
+		/// <param name="lineIndex">The line index in the buffer.</param>
+		/// <param name="lineContexts">The line contexts.</param>
+		/// <returns>The length of the line.</returns>
 		public override int GetLineLength(int lineIndex, LineContexts lineContexts)
 		{
 			return GetStructureText(lineIndex).Length;
 		}
 
+		/// <summary>
+		/// Gets the formatted line number for a given line.
+		/// </summary>
+		/// <param name="lineIndex">The line index in the buffer.</param>
+		/// <returns>A formatted line number.</returns>
 		public override string GetLineNumber(int lineIndex)
 		{
 			return String.Empty;
@@ -193,6 +226,13 @@ namespace AuthorIntrusionGtk.Editors
 			return structure.StructureType.ToString();
 		}
 
+		/// <summary>
+		/// Gets the text of a given line in the buffer.
+		/// </summary>
+		/// <param name="lineIndex">The line index in the buffer. If the index is beyond the end of the buffer, the last line is used.</param>
+		/// <param name="characters">The character range to pull the text.</param>
+		/// <param name="lineContexts">The line contexts.</param>
+		/// <returns></returns>
 		public override string GetLineText(int lineIndex, CharacterRange characters, LineContexts lineContexts)
 		{
 			string text = GetStructureText(lineIndex);
@@ -207,26 +247,116 @@ namespace AuthorIntrusionGtk.Editors
 
 		#region Operations
 
+		/// <summary>
+		/// Inserts text into the buffer.
+		/// </summary>
+		/// <param name="operation">The operation to perform.</param>
+		/// <returns>
+		/// The results to the changes to the buffer.
+		/// </returns>
 		protected override LineBufferOperationResults Do(InsertTextOperation operation)
 		{
-			throw new NotImplementedException();
+			// Get the structure and its text for a given line.
+			int structureIndex = operation.BufferPosition.LineIndex;
+			Structure structure = GetStructure(structureIndex);
+			string text = GetStructureText(structure);
+
+			// Figure out what the line would look like with the text inserted.
+			int characterIndex = Math.Min(
+				operation.BufferPosition.CharacterIndex, text.Length);
+
+			string newText = text.Insert(characterIndex, operation.Text);
+
+			// Set the structure text which enables the internal parsing.
+			structure.SetText(newText);
+
+			// Fire a line changed operation.
+			RaiseLineChanged(new LineChangedArgs(structureIndex));
+
+			// Return the appropriate results.
+			return
+				new LineBufferOperationResults(
+					new BufferPosition(structureIndex, characterIndex + operation.Text.Length));
 		}
 
+		/// <summary>
+		/// Deletes text from the buffer.
+		/// </summary>
+		/// <param name="operation">The operation to perform.</param>
+		/// <returns>
+		/// The results to the changes to the buffer.
+		/// </returns>
 		protected override LineBufferOperationResults Do(DeleteTextOperation operation)
 		{
-			throw new NotImplementedException();
+			// Get the structure and its text for a given line.
+			int structureIndex = operation.LineIndex;
+			Structure structure = GetStructure(structureIndex);
+			string text = GetStructureText(structure);
+
+			// Figure out what the line would look like with the text inserted.
+			int endCharacterIndex = Math.Min(
+				operation.CharacterRange.EndIndex, text.Length);
+
+			string newText = text.Remove(
+				operation.CharacterRange.StartIndex,
+				endCharacterIndex - operation.CharacterRange.StartIndex);
+
+			// Set the structure text which enables the internal parsing.
+			structure.SetText(newText);
+
+			// Fire a line changed operation.
+			RaiseLineChanged(new LineChangedArgs(structureIndex));
+
+			// Return the appropriate results.
+			return
+				new LineBufferOperationResults(
+					new BufferPosition(structureIndex, operation.CharacterRange.StartIndex));
 		}
 
+		/// <summary>
+		/// Performs the set text operation on the buffer.
+		/// </summary>
+		/// <param name="operation">The operation to perform.</param>
+		/// <returns>
+		/// The results to the changes to the buffer.
+		/// </returns>
 		protected override LineBufferOperationResults Do(SetTextOperation operation)
 		{
-			throw new NotImplementedException();
+			// Get the structure for a given line.
+			int structureIndex = operation.LineIndex;
+			Structure structure = GetStructure(structureIndex);
+
+			// Set the text of the line.
+			structure.SetText(operation.Text);
+
+			// Fire a line changed operation.
+			RaiseLineChanged(new LineChangedArgs(operation.LineIndex));
+
+			// Return the appropriate results.
+			return
+				new LineBufferOperationResults(
+					new BufferPosition(operation.LineIndex, operation.Text.Length));
 		}
 
+		/// <summary>
+		/// Performs the insert lines operation on the buffer.
+		/// </summary>
+		/// <param name="operation">The operation to perform.</param>
+		/// <returns>
+		/// The results to the changes to the buffer.
+		/// </returns>
 		protected override LineBufferOperationResults Do(InsertLinesOperation operation)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Performs the delete lines operation on the buffer.
+		/// </summary>
+		/// <param name="operation">The operation to perform.</param>
+		/// <returns>
+		/// The results to the changes to the buffer.
+		/// </returns>
 		protected override LineBufferOperationResults Do(DeleteLinesOperation operation)
 		{
 			throw new NotImplementedException();
