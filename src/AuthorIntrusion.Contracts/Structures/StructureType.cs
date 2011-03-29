@@ -22,77 +22,58 @@
 
 #endregion
 
-#region Namespaces
-
-using System.Collections.Generic;
-
-#endregion
-
 namespace AuthorIntrusion.Contracts.Structures
 {
 	/// <summary>
-	/// The common root for all the structural elements.
+	/// Defines the types of structure. Except for Paragraph, all the others are
+	/// more of hints used by the system for rendering.
 	/// </summary>
-	public abstract class Structure : Element
+	public enum StructureType
 	{
-		#region Constructors
+		/// <summary>
+		/// Represents a stand-alone article.
+		/// </summary>
+		[ContainsStructure(Section)]
+		[ContainsStructure(Paragraph)]
+		Article,
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Structure"/> class.
+		/// Represents a book which usually contains chapters.
 		/// </summary>
-		protected Structure()
-		{
-			dataDictionary = new Dictionary<object, object>();
-		}
-
-		#endregion
-
-		#region Properties
-
-		private readonly Dictionary<object, object> dataDictionary;
+		[ContainsStructure(Chapter)]
+		Book,
 
 		/// <summary>
-		/// Contains a data dictionary which can be used to associate data
-		/// with a given structure.
+		/// Represents a chapter which contains sections.
 		/// </summary>
-		public IDictionary<object, object> DataDictionary
-		{
-			get { return dataDictionary; }
-		}
+		[ContainsStructure(Section)]
+		[ContainsStructure(Paragraph)]
+		Chapter,
 
 		/// <summary>
-		/// Gets the type of the structure.
+		/// Represents a section in a chapter or article.
 		/// </summary>
-		/// <value>The type of the structure.</value>
-		public abstract StructureType StructureType { get; set; }
-
-		#endregion
-
-		#region Relationships
+		[ContainsStructure(SubSection)]
+		[ContainsStructure(Paragraph)]
+		Section,
 
 		/// <summary>
-		/// Gets a count of content container content (i.e. paragraphs) in this
-		/// object or child objects.
+		/// Represents a section within a section.
 		/// </summary>
-		public abstract int ParagraphCount { get; }
+		[ContainsStructure(SubSubSection)]
+		[ContainsStructure(Paragraph)]
+		SubSection,
 
 		/// <summary>
-		/// Gets a flattened list of all paragraphs inside the structure.
+		/// Represents a section within a subsection.
 		/// </summary>
-		/// <value>The paragraph list.</value>
-		public abstract IList<Paragraph> ParagraphList { get; }
-
-		#endregion
-
-		#region Contents
+		[ContainsStructure(Paragraph)]
+		SubSubSection,
 
 		/// <summary>
-		/// Sets the text of the structure. For sections, this will be the title
-		/// and for paragraphs, it will be the unparsed contents.
+		/// Represents a paragraph, a structure with content but no other
+		/// structures.
 		/// </summary>
-		/// <param name="text">The text.</param>
-		public abstract void SetText(string text);
-
-		#endregion
+		Paragraph,
 	}
 }

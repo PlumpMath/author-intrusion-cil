@@ -1,6 +1,6 @@
 using System;
 
-using AuthorIntrusion.Contracts.Enumerations;
+using AuthorIntrusion.Contracts.Structures;
 
 using Cairo;
 

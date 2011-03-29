@@ -31,7 +31,6 @@ using System.Xml;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Constants;
-using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Structures;
 

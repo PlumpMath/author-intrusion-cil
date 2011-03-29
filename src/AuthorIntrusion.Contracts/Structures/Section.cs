@@ -28,7 +28,6 @@ using System;
 using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Collections;
-using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Interfaces;
 
 #endregion
