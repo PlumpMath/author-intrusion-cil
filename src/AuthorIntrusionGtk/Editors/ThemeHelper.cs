@@ -2,6 +2,8 @@ using System;
 
 using AuthorIntrusion.Contracts.Enumerations;
 
+using Cairo;
+
 using MfGames.GtkExt;
 using MfGames.GtkExt.TextEditor.Models.Styles;
 
@@ -39,6 +41,15 @@ namespace AuthorIntrusionGtk.Editors
 				lineStyle.StyleUsage = StyleUsage.Application;
 
 				theme.LineStyles[structureType.ToString()] = lineStyle;
+
+				// Create a style if the line is empty. This defaults to a
+				// grayed out line.
+				var emptyLineStyle = new LineBlockStyle(lineStyle);
+
+				emptyLineStyle.StyleUsage = StyleUsage.Application;
+				emptyLineStyle.ForegroundColor = new Color(0.8, 0.8, 0.8);
+
+				theme.LineStyles["Blank " + structureType] = emptyLineStyle;
 
 				// Perform type-specific initialization.
 				switch (structureType)

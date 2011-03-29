@@ -89,7 +89,7 @@ namespace AuthorIntrusionGtk.Editors
 
 			if (structure is Section)
 			{
-				Section section = (Section) structure;
+				var section = (Section) structure;
 
 				foreach (Structure childStructure in section.Structures)
 				{
@@ -116,6 +116,11 @@ namespace AuthorIntrusionGtk.Editors
 				"Cannot find the structure from the given index.");
 		}
 
+		/// <summary>
+		/// Gets the structure info from a given structure.
+		/// </summary>
+		/// <param name="structure">The structure.</param>
+		/// <returns></returns>
 		private StructureInfo GetStructureInfo(Structure structure)
 		{
 			return (StructureInfo) structure.DataDictionary[this];
@@ -221,9 +226,21 @@ namespace AuthorIntrusionGtk.Editors
 		/// <returns></returns>
 		public override string GetLineStyleName(int lineIndex, LineContexts lineContexts)
 		{
+			// Get the structure and its text.
 			Structure structure = GetStructure(lineIndex);
+			string text = GetStructureText(structure);
 
-			return structure.StructureType.ToString();
+			// The default style is the structure type. If the structure is
+			// blank, then we prepend "Blank " to the front to allow the user
+			// to style those paragraphs differently.
+			string styleName = structure.StructureType.ToString();
+
+			if (text.Length == 0)
+			{
+				styleName = "Blank " + styleName;
+			}
+
+			return styleName;
 		}
 
 		/// <summary>
@@ -235,7 +252,19 @@ namespace AuthorIntrusionGtk.Editors
 		/// <returns></returns>
 		public override string GetLineText(int lineIndex, CharacterRange characters, LineContexts lineContexts)
 		{
-			string text = GetStructureText(lineIndex);
+			// Get the text of the structure.
+			Structure structure = GetStructure(lineIndex);
+			string text = GetStructureText(structure);
+
+			// TODO: Make the placeholder text user configurable.
+
+			// If the text is blank, change the text to a placeholder text.
+			if (text.Length == 0)
+			{
+				text = "<New " + structure.StructureType + ">";
+			}
+
+			// Pull out the requested substring and return it.
 			int endIndex = characters.EndIndex;
 
 			endIndex = Math.Min(endIndex, text.Length);
