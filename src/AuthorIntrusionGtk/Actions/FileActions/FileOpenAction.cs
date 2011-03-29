@@ -48,14 +48,17 @@ namespace AuthorIntrusionGtk.Actions.FileActions
 		/// Initializes a new instance of the <see cref="FileOpenAction"/> class.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public FileOpenAction(Context context)
+		public FileOpenAction(Context context, IInputManager inputManager)
 			: base(context, "FileOpen", "_Open...", null, Stock.Open)
 		{
+			this.inputManager = inputManager;
 		}
 
 		#endregion
 
 		#region Actions
+
+		private readonly IInputManager inputManager;
 
 		/// <summary>
 		/// Called when the action is activated.
@@ -73,7 +76,6 @@ namespace AuthorIntrusionGtk.Actions.FileActions
 				}
 
 				// The user accepted it, so attempt to parse the document.
-				var inputManager = Context.Container.GetInstance<IInputManager>();
 				var file = new FileInfo(dialog.Filename);
 
 				Document document = inputManager.Read(file);

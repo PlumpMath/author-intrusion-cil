@@ -25,8 +25,11 @@
 #region Namespaces
 
 using System.Diagnostics;
+using System.IO;
 
 using AuthorIntrusion;
+using AuthorIntrusion.Contracts;
+using AuthorIntrusion.Contracts.IO;
 
 using AuthorIntrusionGtk.Actions;
 
@@ -46,7 +49,7 @@ namespace AuthorIntrusionGtk
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
-		public static void Main()
+		public static void Main(string[] args)
 		{
 			// Initialize Gtk.
 			Application.Init();
@@ -75,6 +78,20 @@ namespace AuthorIntrusionGtk
 			// Create the window and show it.
 			var mainWindow = container.GetInstance<MainWindow>();
 			mainWindow.ShowAll();
+
+			// If we have a command-line option that is a file, open it.
+			if (args.Length > 0)
+			{
+				// Find out if the first argument is a file.
+				var file = new FileInfo(args[0]);
+
+				if (file.Exists)
+				{
+					var inputManager = container.GetInstance<IInputManager>();
+					Document document = inputManager.Read(file);
+					context.Document = document;
+				}
+			}
 
 			Debug.WriteLine(container.WhatDoIHave());
 
