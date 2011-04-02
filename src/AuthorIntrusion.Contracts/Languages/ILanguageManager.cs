@@ -27,7 +27,7 @@
 using System;
 
 using AuthorIntrusion.Contracts.Events;
-using AuthorIntrusion.Contracts.Structures;
+using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 
@@ -54,7 +54,7 @@ namespace AuthorIntrusion.Contracts.Languages
 		/// Parses the contents of the given structure.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
-		void Parse(Structure structure);
+		void Parse(Matter structure);
 
 		#endregion
 	}

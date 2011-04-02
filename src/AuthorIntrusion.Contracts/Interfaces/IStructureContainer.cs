@@ -24,7 +24,7 @@
 
 #region Namespaces
 
-using AuthorIntrusion.Contracts.Collections;
+using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 
@@ -39,6 +39,6 @@ namespace AuthorIntrusion.Contracts.Interfaces
 		/// Contains a list of structures inside the container.
 		/// </summary>
 		/// <value>The child structures or an empty list.</value>
-		StructureList Structures { get; }
+		DocumentMatterList Structures { get; }
 	}
 }

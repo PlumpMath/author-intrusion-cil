@@ -26,6 +26,7 @@
 
 using System;
 
+using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
 #endregion
@@ -57,7 +58,7 @@ namespace AuthorIntrusion.Contracts.Algorithms
 			// Loop through the structure of the document.
 			if (shouldRecurse)
 			{
-				Visit(document.Structure);
+				Visit(document.Matters);
 			}
 
 			// Finish up with the end document.
@@ -65,67 +66,90 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		}
 
 		/// <summary>
-		/// Visits the specified structure, expanding out for sections and
-		/// paragraphs.
+		/// Goes through the given list, processing the matter and contents
+		/// in a recursive manner.
 		/// </summary>
-		/// <param name="structure">The structure.</param>
-		protected void Visit(Structure structure)
+		/// <param name="list">The list.</param>
+		private void Visit(DocumentMatterList list)
 		{
-			// We always call the start structure to determine if we
-			// should recurse into the structure.
-			bool shouldRecurse = OnBeginStructure(structure);
-
-			// Determine the type of structure we should work with.
-			if (structure is Section)
+			// Start at the top of the list and go through it. We don't provide
+			for (int index = 0; index < list.Count; index++)
 			{
-				Section section = (Section) structure;
-
-				Visit(section, shouldRecurse);
+				// Visit each item in turn.
+				Visit(list[index], ref index);
 			}
-			else if (structure is Paragraph)
-			{
-				Paragraph paragraph = (Paragraph) structure;
-
-				Visit(paragraph, shouldRecurse);
-			}
-
-			OnEndStructure(structure);
 		}
 
 		/// <summary>
-		/// Visits the specified section with optional recursion.
+		/// Visits a single matter item at the given index. The processing
+		/// of the matter may result in the index being incremented.
 		/// </summary>
-		/// <param name="section">The section.</param>
-		/// <param name="shouldRecurse">if set to <c>true</c> [should recurse].</param>
-		private void Visit(
-			Section section,
-			bool shouldRecurse)
+		/// <param name="matter">The matter.</param>
+		/// <param name="index">The index.</param>
+		private void Visit(Matter matter, ref int index)
 		{
-			shouldRecurse |= OnBeginSection(section);
+			// Start with the begin which determines if we continue.
+			bool shouldRecurse = OnBeginMatter(matter);
 
 			if (shouldRecurse)
 			{
-				foreach (var structure in section.Structures)
+				// Figure out what to do based on the type.
+				switch (matter.MatterType)
 				{
-					Visit(structure);
+					case MatterType.Paragraph:
+						Visit((Paragraph) matter, ref index);
+						break;
+
+					case MatterType.Region:
+						Visit((Region) matter, ref index);
+						break;
+
+					default:
+						throw new Exception("Unknown matter type: " + matter.MatterType);
 				}
 			}
 
-			OnEndSection(section);
+			// Finish up the matter.
+			OnEndMatter(matter);
 		}
 
 		/// <summary>
-		/// Visits the specified paragraph with option recursion into the content.
+		/// Visits the specified paragraph.
 		/// </summary>
 		/// <param name="paragraph">The paragraph.</param>
-		/// <param name="shouldRecurse">if set to <c>true</c> [should recurse].</param>
-		private void Visit(
-			Paragraph paragraph,
-			bool shouldRecurse)
+		/// <param name="index">The index.</param>
+		private void Visit(Paragraph paragraph, ref int index)
 		{
 			OnBeginParagraph(paragraph);
-
+			index++;
 			OnEndParagraph(paragraph);
+		}
+
+		/// <summary>
+		/// Visits the specified region and increments it by its length.
+		/// </summary>
+		/// <param name="region">The region.</param>
+		/// <param name="index">The index.</param>
+		private void Visit(Region region, ref int index)
+		{
+			// Increment the index for the title of the region.
+			index++;
+
+			// Start processing the region and determine if we should recurse.
+			bool shouldRecurse = OnBeginRegion(region);
+
+			if (shouldRecurse)
+			{
+				// Loop through the region's matters and allow the index to
+				// be incremented for those items.
+				foreach (Matter matter in region.Matters)
+				{
+					Visit(matter, ref index);
+				}
+			}
+
+			// Finish up the region and return.
+			OnEndRegion(region);
 		}
 
 		#endregion
@@ -153,22 +177,22 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		}
 
 		/// <summary>
-		/// Called when the visitor enters a section.
+		/// Called when the visitor enters a region.
 		/// </summary>
 		/// <param name="section">The section.</param>
 		/// <returns>True if the visitor should continue to recurse.</returns>
-		protected virtual bool OnBeginSection(Section section)
+		protected virtual bool OnBeginRegion(Region section)
 		{
 			return true;
 		}
 
 		/// <summary>
 		/// Called when the visitor enters a structure. This is always called
-		/// before <see cref="OnBeginSection"/> and <see cref="OnBeginParagraph"/>.
+		/// before <see cref="OnBeginRegion"/> and <see cref="OnBeginParagraph"/>.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
 		/// <returns>True if the visitor should continue to recurse.</returns>
-		protected virtual bool OnBeginStructure(Structure structure)
+		protected virtual bool OnBeginMatter(Matter structure)
 		{
 			return true;
 		}
@@ -183,7 +207,7 @@ namespace AuthorIntrusion.Contracts.Algorithms
 
 		/// <summary>
 		/// Called when the visitor leaves a paragraph. This is called before
-		/// <see cref="OnEndStructure"/>.
+		/// <see cref="OnEndMatter"/>.
 		/// </summary>
 		/// <param name="paragraph">The paragraph.</param>
 		protected virtual void OnEndParagraph(Paragraph paragraph)
@@ -192,19 +216,19 @@ namespace AuthorIntrusion.Contracts.Algorithms
 
 		/// <summary>
 		/// Called when the visitor leaves a section. This is called before
-		/// <see cref="OnEndStructure"/>.
+		/// <see cref="OnEndRegion"/>.
 		/// </summary>
 		/// <param name="section">The section.</param>
-		protected virtual void OnEndSection(Section section)
+		protected virtual void OnEndRegion(Region section)
 		{
 		}
 
 		/// <summary>
 		/// Called when the visitor leaves a structure. This is called after
-		/// <see cref="OnEndSection"/> and <see cref="OnEndParagraph"/>.
+		/// <see cref="OnEndRegion"/> and <see cref="OnEndParagraph"/>.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
-		protected virtual void OnEndStructure(Structure structure)
+		protected virtual void OnEndMatter(Matter structure)
 		{
 		}
 

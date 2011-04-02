@@ -28,19 +28,27 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace AuthorIntrusion.Contracts.Structures
+namespace AuthorIntrusion.Contracts.Matters
 {
 	/// <summary>
-	/// The common root for all the structural elements.
+	/// Represents document matter (i.e., front, body, and back) for a document.
+	/// These represent either regions in the document (chapter, section, etc.),
+	/// paragraphs (text contents), or breaks of various types.
 	/// </summary>
-	public abstract class Structure : Element
+	public abstract class Matter : Element
 	{
+		#region Fields
+
+		private readonly Dictionary<object, object> dataDictionary;
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Structure"/> class.
+		/// Initializes a new instance of the <see cref="Matter"/> class.
 		/// </summary>
-		protected Structure()
+		protected Matter()
 		{
 			dataDictionary = new Dictionary<object, object>();
 		}
@@ -48,8 +56,6 @@ namespace AuthorIntrusion.Contracts.Structures
 		#endregion
 
 		#region Properties
-
-		private readonly Dictionary<object, object> dataDictionary;
 
 		/// <summary>
 		/// Contains a data dictionary which can be used to associate data
@@ -64,68 +70,18 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// Gets the type of the structure.
 		/// </summary>
 		/// <value>The type of the structure.</value>
-		public abstract StructureType StructureType { get; set; }
+		public abstract MatterType MatterType { get; }
 
 		#endregion
 
-		#region Relationships
+		#region Document Editing
 
 		/// <summary>
-		/// Gets the depth of the structure in the document.
-		/// </summary>
-		/// <value>The depth.</value>
-		public int Depth
-		{
-			get { return ParentSection == null ? 0 : ParentSection.Depth + 1; }
-		}
-
-		/// <summary>
-		/// Gets a count of content container content (i.e. paragraphs) in this
-		/// object or child objects.
-		/// </summary>
-		public abstract int ParagraphCount { get; }
-
-		/// <summary>
-		/// Gets a flattened list of all paragraphs inside the structure.
-		/// </summary>
-		/// <value>The paragraph list.</value>
-		public abstract IList<Paragraph> ParagraphList { get; }
-
-		/// <summary>
-		/// Gets the index of the structure inside parent section.
-		/// </summary>
-		/// <value>
-		/// The index of the parent.
-		/// </value>
-		public int ParentIndex
-		{
-			get
-			{
-				// If we don't have a section, return negative one.
-				if (ParentSection == null)
-				{
-					return -1;
-				}
-
-				// Get the index inside the parent.
-				return ParentSection.Structures.IndexOf(this);
-			}
-		}
-
-		/// <summary>
-		/// Gets the parent section for this structure element.
-		/// </summary>
-		/// <value>The parent section.</value>
-		public Section ParentSection
-		{
-			get { return (Section) Parent; }
-		}
-
-		/// <summary>
-		/// Creates an version of itself, but with no text or contents.
+		/// Creates an version of itself, but with no text or contents. This is
+		/// used to duplicate lines in the text editor.
 		/// </summary>
 		/// <returns></returns>
-		public abstract Structure CreateEmptyClone();
+		public abstract Matter CreateEmptyClone();
 
 		#endregion
 
@@ -135,15 +91,15 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// Retrieves the string for the structural context. This will be the
 		/// title for sections and content for paragraphs.
 		/// </summary>
-		/// <returns></returns>
-		public abstract string GetText();
+		/// <returns>An unformatted string representing the contents.</returns>
+		public abstract string GetContents();
 
 		/// <summary>
 		/// Sets the text of the structure. For sections, this will be the title
 		/// and for paragraphs, it will be the unparsed contents.
 		/// </summary>
-		/// <param name="text">The text.</param>
-		public abstract void SetText(string text);
+		/// <param name="text">The contexts text to set.</param>
+		public abstract void SetContents(string text);
 
 		#endregion
 	}

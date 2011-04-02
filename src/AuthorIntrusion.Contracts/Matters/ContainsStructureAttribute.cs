@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,58 +22,46 @@
 
 #endregion
 
+#region Namespaces
+
+using System;
+
+using AuthorIntrusion.Contracts.Matters;
+
+#endregion
+
 namespace AuthorIntrusion.Contracts.Structures
 {
 	/// <summary>
-	/// Defines the types of structure. Except for Paragraph, all the others are
-	/// more of hints used by the system for rendering.
+	/// Used to identify what types of structures can be contained inside the
+	/// given structure. This is put on the <see cref="MatterType"/> enumeration and used by
+	/// <see cref="StructureTypeHelper"/>.
 	/// </summary>
-	public enum StructureType
+	[AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+	public class ContainsStructureAttribute : Attribute
 	{
-		/// <summary>
-		/// Represents a stand-alone article.
-		/// </summary>
-		[ContainsStructure(Section)]
-		[ContainsStructure(Paragraph)]
-		Article,
+		#region Constructors
 
 		/// <summary>
-		/// Represents a book which usually contains chapters.
+		/// Initializes a new instance of the <see cref="ContainsStructureAttribute"/> class.
 		/// </summary>
-		[ContainsStructure(Chapter)]
-		Book,
+		/// <param name="matterType">Type of the structure.</param>
+		public ContainsStructureAttribute(MatterType matterType)
+		{
+			MatterType = matterType;
+		}
+
+		#endregion
+
+		#region Properties
 
 		/// <summary>
-		/// Represents a chapter which contains sections.
+		/// Gets the type of the structure that can be contained in the given
+		/// type.
 		/// </summary>
-		[ContainsStructure(Section)]
-		[ContainsStructure(Paragraph)]
-		Chapter,
+		/// <value>The type of the structure.</value>
+		public MatterType MatterType { get; private set; }
 
-		/// <summary>
-		/// Represents a section in a chapter or article.
-		/// </summary>
-		[ContainsStructure(SubSection)]
-		[ContainsStructure(Paragraph)]
-		Section,
-
-		/// <summary>
-		/// Represents a section within a section.
-		/// </summary>
-		[ContainsStructure(SubSubSection)]
-		[ContainsStructure(Paragraph)]
-		SubSection,
-
-		/// <summary>
-		/// Represents a section within a subsection.
-		/// </summary>
-		[ContainsStructure(Paragraph)]
-		SubSubSection,
-
-		/// <summary>
-		/// Represents a paragraph, a structure with content but no other
-		/// structures.
-		/// </summary>
-		Paragraph,
+		#endregion
 	}
 }

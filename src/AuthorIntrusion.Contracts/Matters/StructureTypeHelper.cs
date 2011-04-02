@@ -22,44 +22,15 @@
 
 #endregion
 
-#region Namespaces
-
-using System;
-
-#endregion
+using AuthorIntrusion.Contracts.Matters;
 
 namespace AuthorIntrusion.Contracts.Structures
 {
 	/// <summary>
-	/// Used to identify what types of structures can be contained inside the
-	/// given structure. This is put on the <see cref="StructureType"/> enumeration and used by
-	/// <see cref="StructureTypeHelper"/>.
+	/// Helper class that works with <see cref="MatterType"/>, provides
+	/// extensions and also manages the parent/child relationships.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-	public class ContainsStructureAttribute : Attribute
+	public static class StructureTypeHelper
 	{
-		#region Constructors
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ContainsStructureAttribute"/> class.
-		/// </summary>
-		/// <param name="structureType">Type of the structure.</param>
-		public ContainsStructureAttribute(StructureType structureType)
-		{
-			StructureType = structureType;
-		}
-
-		#endregion
-
-		#region Properties
-
-		/// <summary>
-		/// Gets the type of the structure that can be contained in the given
-		/// type.
-		/// </summary>
-		/// <value>The type of the structure.</value>
-		public StructureType StructureType { get; private set; }
-
-		#endregion
 	}
 }

@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@
 
 using System;
 
+using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
 #endregion
@@ -49,21 +50,21 @@ namespace AuthorIntrusion.Contracts.Algorithms
 
 		/// <summary>
 		/// Gets or sets the function to be called during 
+		/// <see cref="OnBeginMatter"/>.
+		/// </summary>
+		public Func<Matter, bool> BeginMatter { get; set; }
+
+		/// <summary>
+		/// Gets or sets the function to be called during 
 		/// <see cref="OnBeginParagraph"/>.
 		/// </summary>
 		public Func<Paragraph, bool> BeginParagraph { get; set; }
 
 		/// <summary>
 		/// Gets or sets the function to be called during 
-		/// <see cref="OnBeginSection"/>.
+		/// <see cref="OnBeginRegion"/>.
 		/// </summary>
-		public Func<Section, bool> BeginSection { get; set; }
-
-		/// <summary>
-		/// Gets or sets the function to be called during 
-		/// <see cref="OnBeginStructure"/>.
-		/// </summary>
-		public Func<Structure, bool> BeginStructure { get; set; }
+		public Func<Region, bool> BeginRegion { get; set; }
 
 		/// <summary>
 		/// Gets or sets the action to be called during <see cref="OnEndDocument"/>.
@@ -71,19 +72,19 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		public Action<Document> EndDocument { get; set; }
 
 		/// <summary>
+		/// Gets or sets the action to be called during <see cref="OnEndMatter"/>.
+		/// </summary>
+		public Action<Matter> EndMatter { get; set; }
+
+		/// <summary>
 		/// Gets or sets the action to be called during <see cref="OnEndParagraph"/>.
 		/// </summary>
 		public Action<Paragraph> EndParagraph { get; set; }
 
 		/// <summary>
-		/// Gets or sets the action to be called during <see cref="OnEndSection"/>.
+		/// Gets or sets the action to be called during <see cref="OnEndRegion"/>.
 		/// </summary>
-		public Action<Section> EndSection { get; set; }
-
-		/// <summary>
-		/// Gets or sets the action to be called during <see cref="OnEndStructure"/>.
-		/// </summary>
-		public Action<Structure> EndStructure { get; set; }
+		public Action<Region> EndRegion { get; set; }
 
 		#endregion
 
@@ -104,6 +105,24 @@ namespace AuthorIntrusion.Contracts.Algorithms
 			}
 
 			return base.OnBeginDocument(document);
+		}
+
+		/// <summary>
+		/// Called when the visitor enters a structure. This is always called
+		/// before <see cref="OnBeginRegion"/> and <see cref="OnBeginParagraph"/>.
+		/// </summary>
+		/// <param name="structure">The structure.</param>
+		/// <returns>
+		/// True if the visitor should continue to recurse.
+		/// </returns>
+		protected override bool OnBeginMatter(Matter structure)
+		{
+			if (BeginMatter != null)
+			{
+				return BeginMatter(structure);
+			}
+
+			return base.OnBeginMatter(structure);
 		}
 
 		/// <summary>
@@ -130,32 +149,14 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		/// <returns>
 		/// True if the visitor should continue to recurse.
 		/// </returns>
-		protected override bool OnBeginSection(Section section)
+		protected override bool OnBeginRegion(Region section)
 		{
-			if (BeginSection != null)
+			if (BeginRegion != null)
 			{
-				return BeginSection(section);
+				return BeginRegion(section);
 			}
 
-			return base.OnBeginSection(section);
-		}
-
-		/// <summary>
-		/// Called when the visitor enters a structure. This is always called
-		/// before <see cref="OnBeginSection"/> and <see cref="OnBeginParagraph"/>.
-		/// </summary>
-		/// <param name="structure">The structure.</param>
-		/// <returns>
-		/// True if the visitor should continue to recurse.
-		/// </returns>
-		protected override bool OnBeginStructure(Structure structure)
-		{
-			if (BeginStructure != null)
-			{
-				return BeginStructure(structure);
-			}
-
-			return base.OnBeginStructure(structure);
+			return base.OnBeginRegion(section);
 		}
 
 		/// <summary>
@@ -171,8 +172,21 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		}
 
 		/// <summary>
+		/// Called when the visitor leaves a structure. This is called after
+		/// <see cref="OnEndRegion"/> and <see cref="OnEndParagraph"/>.
+		/// </summary>
+		/// <param name="structure">The structure.</param>
+		protected override void OnEndMatter(Matter structure)
+		{
+			if (EndMatter != null)
+			{
+				EndMatter(structure);
+			}
+		}
+
+		/// <summary>
 		/// Called when the visitor leaves a paragraph. This is called before
-		/// <see cref="OnEndStructure"/>.
+		/// <see cref="OnEndMatter"/>.
 		/// </summary>
 		/// <param name="paragraph">The paragraph.</param>
 		protected override void OnEndParagraph(Paragraph paragraph)
@@ -185,27 +199,14 @@ namespace AuthorIntrusion.Contracts.Algorithms
 
 		/// <summary>
 		/// Called when the visitor leaves a section. This is called before
-		/// <see cref="OnEndStructure"/>.
+		/// <see cref="OnEndRegion"/>.
 		/// </summary>
 		/// <param name="section">The section.</param>
-		protected override void OnEndSection(Section section)
+		protected override void OnEndRegion(Region section)
 		{
-			if (EndSection != null)
+			if (EndRegion != null)
 			{
-				EndSection(section);
-			}
-		}
-
-		/// <summary>
-		/// Called when the visitor leaves a structure. This is called after
-		/// <see cref="OnEndSection"/> and <see cref="OnEndParagraph"/>.
-		/// </summary>
-		/// <param name="structure">The structure.</param>
-		protected override void OnEndStructure(Structure structure)
-		{
-			if (EndStructure != null)
-			{
-				EndStructure(structure);
+				EndRegion(section);
 			}
 		}
 

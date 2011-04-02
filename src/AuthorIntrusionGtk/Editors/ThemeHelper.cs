@@ -1,6 +1,6 @@
 using System;
 
-using AuthorIntrusion.Contracts.Structures;
+using AuthorIntrusion.Contracts.Matters;
 
 using Cairo;
 
@@ -32,11 +32,11 @@ namespace AuthorIntrusionGtk.Editors
 			theme.LineStyles["Section"] = sectionStyle;
 
 			// Go through all the structure types and create a theme for them.
-			foreach (StructureType structureType in Enum.GetValues(typeof(StructureType)))
+			foreach (MatterType structureType in Enum.GetValues(typeof(MatterType)))
 			{
 				// Create the basic style.
 				var lineStyle = new LineBlockStyle(
-					structureType == StructureType.Paragraph ? textStyle : sectionStyle);
+					structureType == MatterType.Paragraph ? textStyle : sectionStyle);
 
 				lineStyle.StyleUsage = StyleUsage.Application;
 
@@ -54,13 +54,13 @@ namespace AuthorIntrusionGtk.Editors
 				// Perform type-specific initialization.
 				switch (structureType)
 				{
-					case StructureType.Book:
+					case MatterType.Book:
 						lineStyle.FontDescription =
 							FontDescriptionCache.GetFontDescription("Courier New Bold 18");
 						break;
 
-					case StructureType.Chapter:
-					case StructureType.Article:
+					case MatterType.Chapter:
+					case MatterType.Article:
 						lineStyle.FontDescription =
 							FontDescriptionCache.GetFontDescription("Courier New Bold 14");
 						break;

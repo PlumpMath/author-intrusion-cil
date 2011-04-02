@@ -30,6 +30,7 @@ using System.IO;
 using System.Text;
 
 using AuthorIntrusion.Contracts.Algorithms;
+using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 
@@ -144,13 +145,13 @@ namespace AuthorIntrusion.Contracts.Structures
 
 		/// <summary>
 		/// Called when the visitor enters a structure. This is always called
-		/// before OnBeginSection and OnBeginParagraph.
+		/// before OnBeginRegion and OnBeginParagraph.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
 		/// <returns>
 		/// True if the visitor should continue to recurse.
 		/// </returns>
-		protected override bool OnBeginStructure(Structure structure)
+		protected override bool OnBeginMatter(Matter structure)
 		{
 			// Build up a formatted string.
 			var builder = new StringBuilder();
@@ -199,13 +200,13 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// OnEndSection and OnEndParagraph.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
-		protected override void OnEndStructure(Structure structure)
+		protected override void OnEndMatter(Matter structure)
 		{
 			// Reduce the prefix by one step.
 			prefix = prefix.Substring(1);
 
 			// Call the base implementation.
-			base.OnEndStructure(structure);
+			base.OnEndMatter(structure);
 		}
 
 		#endregion

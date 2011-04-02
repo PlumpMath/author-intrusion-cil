@@ -24,11 +24,9 @@
 
 #region Namespaces
 
-using System;
-using System.Collections.Generic;
-
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 
@@ -37,8 +35,14 @@ namespace AuthorIntrusion.Contracts.Structures
 	/// <summary>
 	/// Represents a single paragraph within the document.
 	/// </summary>
-	public class Paragraph : Structure, IContentContainer
+	public class Paragraph : Matter, IContentContainer
 	{
+		#region Fields
+
+		private readonly ContentList contents;
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>
@@ -56,7 +60,7 @@ namespace AuthorIntrusion.Contracts.Structures
 		public Paragraph(string initialText)
 			: this()
 		{
-			SetText(initialText);
+			SetContents(initialText);
 		}
 
 		#endregion
@@ -67,14 +71,9 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// Gets the type of the structure.
 		/// </summary>
 		/// <value>The type of the structure.</value>
-		public override StructureType StructureType
+		public override MatterType MatterType
 		{
-			get { return StructureType.Paragraph; }
-			set
-			{
-				throw new NotSupportedException(
-					"Cannot set a structure type on a Paragraph.");
-			}
+			get { return MatterType.Paragraph; }
 		}
 
 		#endregion
@@ -85,7 +84,7 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// Creates an version of itself, but with no text or contents.
 		/// </summary>
 		/// <returns></returns>
-		public override Structure CreateEmptyClone()
+		public override Matter CreateEmptyClone()
 		{
 			return new Paragraph();
 		}
@@ -93,8 +92,6 @@ namespace AuthorIntrusion.Contracts.Structures
 		#endregion
 
 		#region Contents
-
-		private readonly ContentList contents;
 
 		/// <summary>
 		/// Gets the contents inside the structure.
@@ -108,38 +105,12 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// <summary>
 		/// Gets a flattened string that represents the entire container.
 		/// </summary>
-		/// <value>The content string.</value>
+		/// <value>
+		/// The content string.
+		/// </value>
 		public string ContentString
 		{
 			get { return contents.ContentString; }
-		}
-
-		/// <summary>
-		/// Gets a count of content container content (i.e. paragraphs) in this
-		/// object or child objects.
-		/// </summary>
-		public override int ParagraphCount
-		{
-			get
-			{
-				// This has content, so just include itself. It won't have child
-				// structures so the result is just 1.
-				return 1;
-			}
-		}
-
-		/// <summary>
-		/// Gets a flattened list of all paragraphs inside the structure.
-		/// </summary>
-		/// <value>The paragraph list.</value>
-		public override IList<Paragraph> ParagraphList
-		{
-			get
-			{
-				var paragraphs = new List<Paragraph>();
-				paragraphs.Add(this);
-				return paragraphs;
-			}
 		}
 
 		/// <summary>
@@ -147,7 +118,7 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// title for sections and content for paragraphs.
 		/// </summary>
 		/// <returns></returns>
-		public override string GetText()
+		public override string GetContents()
 		{
 			return ContentString;
 		}
@@ -157,7 +128,7 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// and for paragraphs, it will be the unparsed contents.
 		/// </summary>
 		/// <param name="text">The text.</param>
-		public override void SetText(string text)
+		public override void SetContents(string text)
 		{
 			// Clear out the previous contents and set the new contents.
 			contents.Clear();

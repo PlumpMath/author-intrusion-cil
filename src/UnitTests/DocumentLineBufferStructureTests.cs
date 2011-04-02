@@ -1,6 +1,7 @@
 using System.Text;
 
 using AuthorIntrusion.Contracts;
+using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
 using AuthorIntrusionGtk.Editors;
@@ -30,48 +31,48 @@ namespace UnitTests
 		public void Setup()
 		{
 			// Create a standard large document layout.
-			var article = new Section(StructureType.Article, "A1");
+			var article = new Region(MatterType.Article, "A1");
 			article.Structures.Add(new Paragraph("P01"));
 			article.Structures.Add(new Paragraph("P02"));
 			article.Structures.Add(new Paragraph("P03"));
 
-			var sect1 = new Section(StructureType.Section, "1");
+			var sect1 = new Region(MatterType.Section, "1");
 			sect1.Structures.Add(new Paragraph("P04"));
 			sect1.Structures.Add(new Paragraph("P05"));
 			sect1.Structures.Add(new Paragraph("P06"));
 			article.Structures.Add(sect1);
 
-			sect1 = new Section(StructureType.Section, "2");
+			sect1 = new Region(MatterType.Section, "2");
 			sect1.Structures.Add(new Paragraph("P07"));
 			sect1.Structures.Add(new Paragraph("P08"));
 			sect1.Structures.Add(new Paragraph("P09"));
 			article.Structures.Add(sect1);
 
-			var sect2 = new Section(StructureType.SubSection, "2.1");
+			var sect2 = new Region(MatterType.SubSection, "2.1");
 			sect2.Structures.Add(new Paragraph("P10"));
 			sect2.Structures.Add(new Paragraph("P11"));
 			sect2.Structures.Add(new Paragraph("P12"));
 			sect1.Structures.Add(sect2);
 
-			var sect3 = new Section(StructureType.SubSubSection, "2.1.1");
+			var sect3 = new Region(MatterType.SubSubSection, "2.1.1");
 			sect3.Structures.Add(new Paragraph("P13"));
 			sect3.Structures.Add(new Paragraph("P14"));
 			sect3.Structures.Add(new Paragraph("P15"));
 			sect2.Structures.Add(sect3);
 
-			sect2 = new Section(StructureType.SubSection, "2.2");
+			sect2 = new Region(MatterType.SubSection, "2.2");
 			sect2.Structures.Add(new Paragraph("P16"));
 			sect2.Structures.Add(new Paragraph("P17"));
 			sect2.Structures.Add(new Paragraph("P18"));
 			sect1.Structures.Add(sect2);
 
-			sect3 = new Section(StructureType.SubSubSection, "2.2.1");
+			sect3 = new Region(MatterType.SubSubSection, "2.2.1");
 			sect3.Structures.Add(new Paragraph("P19"));
 			sect3.Structures.Add(new Paragraph("P20"));
 			sect3.Structures.Add(new Paragraph("P21"));
 			sect2.Structures.Add(sect3);
 
-			sect3 = new Section(StructureType.SubSubSection, "2.2.2");
+			sect3 = new Region(MatterType.SubSubSection, "2.2.2");
 			sect3.Structures.Add(new Paragraph("P22"));
 			sect3.Structures.Add(new Paragraph("P23"));
 			sect3.Structures.Add(new Paragraph("P24"));
@@ -81,18 +82,18 @@ namespace UnitTests
 			largeDocument.Structure = article;
 
 			// Set up the standard small document.
-			article = new Section(StructureType.Article, "A1");
+			article = new Region(MatterType.Article, "A1");
 			article.Structures.Add(new Paragraph("P01"));
 			article.Structures.Add(new Paragraph("P02"));
 			article.Structures.Add(new Paragraph("P03"));
 
-			sect1 = new Section(StructureType.Section, "1");
+			sect1 = new Region(MatterType.Section, "1");
 			sect1.Structures.Add(new Paragraph("P04"));
 			sect1.Structures.Add(new Paragraph("P05"));
 			sect1.Structures.Add(new Paragraph("P06"));
 			article.Structures.Add(sect1);
 
-			sect1 = new Section(StructureType.Section, "2");
+			sect1 = new Region(MatterType.Section, "2");
 			sect1.Structures.Add(new Paragraph("P07"));
 			sect1.Structures.Add(new Paragraph("P08"));
 			sect1.Structures.Add(new Paragraph("P09"));
@@ -372,7 +373,7 @@ namespace UnitTests
 		/// </summary>
 		/// <param name="builder">The builder.</param>
 		/// <param name="structure">The structure.</param>
-		private static void GetStructureThumbprint(StringBuilder builder, Structure structure)
+		private static void GetStructureThumbprint(StringBuilder builder, Matter structure)
 		{
 			// If we are null, then just return.
 			if (structure == null)
@@ -381,26 +382,26 @@ namespace UnitTests
 			}
 
 			// Add the structure's thumbprint to the builder.
-			string thumbprint = structure.StructureType.ToString()[0].ToString();
+			string thumbprint = structure.MatterType.ToString()[0].ToString();
 
-			switch (structure.StructureType)
+			switch (structure.MatterType)
 			{
-				case StructureType.Paragraph:
+				case MatterType.Paragraph:
 					// We want paragraphs to be lowercase P.
 					thumbprint = "p";
 					break;
 
-				case StructureType.Section:
+				case MatterType.Section:
 					// We convert sections into numerical levels.
 					thumbprint = "1";
 					break;
 
-				case StructureType.SubSection:
+				case MatterType.SubSection:
 					// We convert sections into numerical levels.
 					thumbprint = "2";
 					break;
 
-				case StructureType.SubSubSection:
+				case MatterType.SubSubSection:
 					// We convert sections into numerical levels.
 					thumbprint = "3";
 					break;
@@ -409,11 +410,11 @@ namespace UnitTests
 			builder.Append(thumbprint);
 
 			// If we are a section object, then recursively go into it.
-			if (structure is Section)
+			if (structure is Region)
 			{
-				var section = (Section) structure;
+				var section = (Region) structure;
 
-				foreach (Structure child in section.Structures)
+				foreach (Matter child in section.Structures)
 				{
 					GetStructureThumbprint(builder, child);
 				}

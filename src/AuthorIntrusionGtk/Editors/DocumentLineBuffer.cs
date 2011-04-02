@@ -28,6 +28,7 @@ using System;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Algorithms;
+using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
 using C5;
@@ -80,14 +81,14 @@ namespace AuthorIntrusionGtk.Editors
 			get { return document; }
 		}
 
-		private Structure GetStructure(int structureIndex)
+		private Matter GetStructure(int structureIndex)
 		{
 			// Go through the structure tree until we find the correct one.
 			return GetStructure(document.Structure, structureIndex);
 		}
 
-		private Structure GetStructure(
-			Structure structure,
+		private Matter GetStructure(
+			Matter structure,
 			int structureIndex)
 		{
 			// If the index is zero, then we mean this structure.
@@ -99,11 +100,11 @@ namespace AuthorIntrusionGtk.Editors
 			// Decrement the count and cycle through the children.
 			structureIndex--;
 
-			if (structure is Section)
+			if (structure is Region)
 			{
-				var section = (Section) structure;
+				var section = (Region) structure;
 
-				foreach (Structure childStructure in section.Structures)
+				foreach (Matter childStructure in section.Structures)
 				{
 					// Pull out the structure info and use that to determine
 					// if the index is inside this child structure.
@@ -133,7 +134,7 @@ namespace AuthorIntrusionGtk.Editors
 		/// </summary>
 		/// <param name="structure">The structure.</param>
 		/// <returns></returns>
-		private StructureInfo GetStructureInfo(Structure structure)
+		private StructureInfo GetStructureInfo(Matter structure)
 		{
 			return (StructureInfo) structure.DataDictionary[this];
 		}
@@ -147,7 +148,7 @@ namespace AuthorIntrusionGtk.Editors
 		{
 			// Get the structure element and use that to determine how we
 			// retrieve the contents.
-			Structure structure = GetStructure(structureIndex);
+			Matter structure = GetStructure(structureIndex);
 
 			return GetStructureText(structure);
 		}
@@ -157,7 +158,7 @@ namespace AuthorIntrusionGtk.Editors
 		/// </summary>
 		/// <param name="structure">The structure.</param>
 		/// <returns></returns>
-		private static string GetStructureText(Structure structure)
+		private static string GetStructureText(Matter structure)
 		{
 			// For paragraphs, we get the the content string.
 			if (structure is Paragraph)
@@ -169,9 +170,9 @@ namespace AuthorIntrusionGtk.Editors
 			}
 
 			// For sections, we return the title of the section.
-			if (structure is Section)
+			if (structure is Region)
 			{
-				var section = (Section) structure;
+				var section = (Region) structure;
 
 				return section.Title ?? "<Untitled>";
 			}
@@ -253,13 +254,13 @@ namespace AuthorIntrusionGtk.Editors
 			LineContexts lineContexts)
 		{
 			// Get the structure and its text.
-			Structure structure = GetStructure(lineIndex);
+			Matter structure = GetStructure(lineIndex);
 			string text = GetStructureText(structure);
 
 			// The default style is the structure type. If the structure is
 			// blank, then we prepend "Blank " to the front to allow the user
 			// to style those paragraphs differently.
-			string styleName = structure.StructureType.ToString();
+			string styleName = structure.MatterType.ToString();
 
 			if (text.Length == 0)
 			{
@@ -282,7 +283,7 @@ namespace AuthorIntrusionGtk.Editors
 			LineContexts lineContexts)
 		{
 			// Get the text of the structure.
-			Structure structure = GetStructure(lineIndex);
+			Matter structure = GetStructure(lineIndex);
 			string text = GetStructureText(structure);
 
 			// TODO: Make the placeholder text user configurable.
@@ -290,7 +291,7 @@ namespace AuthorIntrusionGtk.Editors
 			// If the text is blank, change the text to a placeholder text.
 			if (text.Length == 0)
 			{
-				text = "<New " + structure.StructureType + ">";
+				text = "<New " + structure.MatterType + ">";
 			}
 
 			// Pull out the requested substring and return it.
@@ -318,7 +319,7 @@ namespace AuthorIntrusionGtk.Editors
 		{
 			// Get the structure and its text for a given line.
 			int structureIndex = operation.BufferPosition.LineIndex;
-			Structure structure = GetStructure(structureIndex);
+			Matter structure = GetStructure(structureIndex);
 			string text = GetStructureText(structure);
 
 			// Figure out what the line would look like with the text inserted.
@@ -351,7 +352,7 @@ namespace AuthorIntrusionGtk.Editors
 		{
 			// Get the structure and its text for a given line.
 			int structureIndex = operation.LineIndex;
-			Structure structure = GetStructure(structureIndex);
+			Matter structure = GetStructure(structureIndex);
 			string text = GetStructureText(structure);
 
 			// Figure out what the line would look like with the text inserted.
@@ -385,7 +386,7 @@ namespace AuthorIntrusionGtk.Editors
 		{
 			// Get the structure for a given line.
 			int structureIndex = operation.LineIndex;
-			Structure structure = GetStructure(structureIndex);
+			Matter structure = GetStructure(structureIndex);
 
 			// Set the text of the line.
 			structure.SetText(operation.Text);
@@ -419,7 +420,7 @@ namespace AuthorIntrusionGtk.Editors
 
 			// When we insert a line, we figure out what the element is at the
 			// point of inserting and create an identical element.
-			Structure structure = GetStructure(structureIndex);
+			Matter structure = GetStructure(structureIndex);
 
 			// Figure out the parent structure and the index of this structure
 			// inside that parent.
@@ -430,7 +431,7 @@ namespace AuthorIntrusionGtk.Editors
 			// line index.
 			for (int i = 0; i < operation.Count; i++)
 			{
-				Structure newStructure = structure.CreateEmptyClone();
+				Matter newStructure = structure.CreateEmptyClone();
 				parent.Structures.Insert(parentIndex, newStructure);
 			}
 
@@ -491,11 +492,11 @@ namespace AuthorIntrusionGtk.Editors
 
 			// If we are from the same parent, then we need to remove the items
 			// while adding the trailing items from the end index.
-			Structure start = GetStructure(startIndex);
+			Matter start = GetStructure(startIndex);
 			var startParent = start.ParentSection;
 
-			Structure end = GetStructure(endIndex);
-			var endSection = end as Section;
+			Matter end = GetStructure(endIndex);
+			var endSection = end as Region;
 			var endParent = end.ParentSection;
 
 			if (startParent == endParent)
@@ -513,7 +514,7 @@ namespace AuthorIntrusionGtk.Editors
 					// Because of integrity, we need to pull the trailing items
 					// out of the end before putting them into the startParent's
 					// structures.
-					var structures = new ArrayList<Structure>();
+					var structures = new ArrayList<Matter>();
 					structures.AddAll(endSection.Structures);
 
 					endSection.Structures.RemoveAll(structures);
@@ -541,26 +542,26 @@ namespace AuthorIntrusionGtk.Editors
 				InternalDeleteLines(startIndex + 1, endIndex);
 
 				// Get the new root which will always be the first child item.
-				Structure newRoot = GetStructure(1);
+				Matter newRoot = GetStructure(1);
 
 				// If the new root isn't a section, we need to create a new
 				// section and 
-				Section newSection;
+				Region newSection;
 
-				if (!(newRoot is Section))
+				if (!(newRoot is Region))
 				{
 					// Create a new section and set the section's title equal
 					// to the text of the section we're getting rid of.
-					newSection = new Section();
+					newSection = new Region();
 					newSection.SetText(newRoot.GetText());
 				}
 				else
 				{
-					newSection = (Section) newRoot;
+					newSection = (Region) newRoot;
 				}
 
 				// Transplant the contents of the old root into the new section.
-				var rootSection = (Section) document.Structure;
+				var rootSection = (Region) document.Structure;
 
 				newSection.Structures.AddAll(rootSection.Structures.Slide(2));
 
@@ -618,15 +619,15 @@ namespace AuthorIntrusionGtk.Editors
 		{
 			// Loop through the document from the start index to the end, making
 			// sure everything has at least the depth of the start item.
-			Structure start = GetStructure(startIndex);
+			Matter start = GetStructure(startIndex);
 			int startDepth = start.Depth;
 			int startParentIndex = start.ParentIndex;
-			Section startParent = start.ParentSection;
+			Region startParent = start.ParentSection;
 
 			for (int index = startIndex + 1; index <= endIndex; index++)
 			{
 				// Check the depth and see if we need to flattened this.
-				Structure structure = GetStructure(index);
+				Matter structure = GetStructure(index);
 
 				if (structure.Depth < startDepth)
 				{
@@ -658,8 +659,8 @@ namespace AuthorIntrusionGtk.Editors
 			int endIndex)
 		{
 			// Get the structures for the two points.
-			Structure start = GetStructure(startIndex);
-			Structure end = GetStructure(endIndex);
+			Matter start = GetStructure(startIndex);
+			Matter end = GetStructure(endIndex);
 
 			// If we are at the same level, we're done.
 			if (start.Parent == end.Parent)
@@ -669,14 +670,14 @@ namespace AuthorIntrusionGtk.Editors
 
 			// Since the end is lower than the start, we shift the end plus any
 			// items after it from its parent up a level.
-			Section endParent = end.ParentSection;
+			Region endParent = end.ParentSection;
 
-			System.Collections.Generic.IList<Structure> trailingStructures = endParent.Structures.View(end.ParentIndex, endParent.Structures.Count - end.ParentIndex);
+			System.Collections.Generic.IList<Matter> trailingStructures = endParent.Structures.View(end.ParentIndex, endParent.Structures.Count - end.ParentIndex);
 			endParent.Structures.RemoveInterval(
 				end.ParentIndex,
 				endParent.Structures.Count - end.ParentIndex);
 
-			Section superParent = endParent.ParentSection;
+			Region superParent = endParent.ParentSection;
 
 			superParent.Structures.InsertAll(
 				endParent.ParentIndex + 1,
@@ -701,7 +702,7 @@ namespace AuthorIntrusionGtk.Editors
 				this.buffer = buffer;
 			}
 
-			protected override bool OnBeginStructure(Structure structure)
+			protected override bool OnBeginStructure(Matter structure)
 			{
 				// Create a structure info and assign it to the structure. Every
 				// structure has at least one item, which will be the title for
@@ -716,12 +717,12 @@ namespace AuthorIntrusionGtk.Editors
 				return true;
 			}
 
-			protected override void OnEndSection(Section section)
+			protected override void OnEndSection(Region section)
 			{
 				// For sections, add to the structure info.
 				StructureInfo structureInfo = (StructureInfo) section.DataDictionary[buffer];
 
-				foreach (Structure structure in section.Structures)
+				foreach (Matter structure in section.Structures)
 				{
 					StructureInfo innerInfo = (StructureInfo) structure.DataDictionary[buffer];
 

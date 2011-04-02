@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.Languages;
+using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
 using MfGames.Reporting;
@@ -154,7 +155,7 @@ namespace AuthorIntrusion.Languages
 		/// Parses the contents of the given structure.
 		/// </summary>
 		/// <param name="structure">The structure.</param>
-		public void Parse(Structure structure)
+		public void Parse(Matter structure)
 		{
 			// Check the inputs.
 			if (structure == null)

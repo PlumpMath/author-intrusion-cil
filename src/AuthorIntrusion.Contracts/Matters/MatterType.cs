@@ -22,13 +22,22 @@
 
 #endregion
 
-namespace AuthorIntrusion.Contracts.Structures
+namespace AuthorIntrusion.Contracts.Matters
 {
 	/// <summary>
-	/// Helper class that works with <see cref="StructureType"/>, provides
-	/// extensions and also manages the parent/child relationships.
+	/// Defines the types of document matter types.
 	/// </summary>
-	public static class StructureTypeHelper
+	public enum MatterType
 	{
+		/// <summary>
+		/// Represents a block of text but no other matters.
+		/// </summary>
+		Paragraph,
+
+		/// <summary>
+		/// Represents a region of the document, which contains other regions,
+		/// paragraphs, and breaks.
+		/// </summary>
+		Region,
 	}
 }

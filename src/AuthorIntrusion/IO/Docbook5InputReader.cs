@@ -32,6 +32,7 @@ using System.Xml;
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Constants;
 using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
 #endregion
@@ -115,7 +116,7 @@ namespace AuthorIntrusion.IO
 			// all the elements outside of the scope of this application and 
 			// creates a simplified structure.
 			var context = new List<Element>();
-			Structure rootStructure = null;
+			Matter rootStructure = null;
 
 			while (reader.Read())
 			{
@@ -126,7 +127,7 @@ namespace AuthorIntrusion.IO
 
 						if (context.Count == 1)
 						{
-							rootStructure = context[0] as Structure;
+							rootStructure = context[0] as Matter;
 						}
 						break;
 
@@ -175,11 +176,11 @@ namespace AuthorIntrusion.IO
 			}
 
 			// Get the last item in the context.
-			Structure parent = null;
+			Matter parent = null;
 
 			if (context.Count > 0)
 			{
-				parent = context[context.Count - 1] as Structure;
+				parent = context[context.Count - 1] as Matter;
 			}
 
 			// Switch based on the local tag.
@@ -188,11 +189,11 @@ namespace AuthorIntrusion.IO
 			switch (reader.LocalName)
 			{
 				case "book":
-					element = new Section(StructureType.Book);
+					element = new Region(MatterType.Book);
 					break;
 
 				case "chapter":
-					var chapter = new Section(StructureType.Chapter);
+					var chapter = new Region(MatterType.Chapter);
 					element = chapter;
 
 					if (parent != null && parent is IStructureContainer)
@@ -202,25 +203,25 @@ namespace AuthorIntrusion.IO
 					break;
 
 				case "article":
-					element = new Section(StructureType.Article);
+					element = new Region(MatterType.Article);
 					break;
 
 				case "section":
 					// Increment the section counter and figure out the section.
-					Section section;
+					Region section;
 
 					sectionDepth++;
 
 					switch (sectionDepth)
 					{
 						case 1:
-							section = new Section(StructureType.Section);
+							section = new Region(MatterType.Section);
 							break;
 						case 2:
-							section = new Section(StructureType.SubSection);
+							section = new Region(MatterType.SubSection);
 							break;
 						case 3:
-							section = new Section(StructureType.SubSubSection);
+							section = new Region(MatterType.SubSubSection);
 							break;
 						default:
 							throw new Exception("Cannot handle a <sect> depths greater than 3.");
@@ -255,7 +256,7 @@ namespace AuthorIntrusion.IO
 					return;
 
 				case "title":
-					Section sectionInfo = parent as Section;
+					Region sectionInfo = parent as Region;
 
 					if (sectionInfo != null)
 					{

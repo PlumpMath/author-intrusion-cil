@@ -25,6 +25,7 @@
 #region Namespaces
 
 using AuthorIntrusion.Contracts;
+using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
 using AuthorIntrusionGtk.Editors;
@@ -53,18 +54,18 @@ namespace UnitTests
 		public void Setup()
 		{
 			// Set up the standard small document.
-			var article = new Section(StructureType.Article, "Article");
+			var article = new Region(MatterType.Article, "Article");
 			article.Structures.Add(new Paragraph("P01"));
 			article.Structures.Add(new Paragraph("P02"));
 			article.Structures.Add(new Paragraph("P03"));
 
-			var sect1 = new Section(StructureType.Section, "Section 1");
+			var sect1 = new Region(MatterType.Section, "Section 1");
 			sect1.Structures.Add(new Paragraph("P04"));
 			sect1.Structures.Add(new Paragraph("P05"));
 			sect1.Structures.Add(new Paragraph("P06"));
 			article.Structures.Add(sect1);
 
-			sect1 = new Section(StructureType.Section, "Section 2");
+			sect1 = new Region(MatterType.Section, "Section 2");
 			sect1.Structures.Add(new Paragraph("P07"));
 			sect1.Structures.Add(new Paragraph("P08"));
 			sect1.Structures.Add(new Paragraph("P09"));

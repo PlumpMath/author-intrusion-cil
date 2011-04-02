@@ -27,6 +27,7 @@
 using System.Text;
 
 using AuthorIntrusion.Contracts.Algorithms;
+using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 
@@ -90,23 +91,23 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// <returns>
 		/// True if the visitor should continue to recurse.
 		/// </returns>
-		protected override bool OnBeginSection(Section section)
+		protected override bool OnBeginRegion(Region section)
 		{
 			// Add an abbrevation of the type.
-			switch (section.StructureType)
+			switch (section.RegionType)
 			{
-				case StructureType.Section:
+				case RegionType.Section1:
 					thumbnail.Append('1');
 					break;
-				case StructureType.SubSection:
+				case RegionType.Section2:
 					thumbnail.Append('2');
 					break;
-				case StructureType.SubSubSection:
+				case RegionType.Section3:
 					thumbnail.Append('3');
 					break;
 				default:
 					// Just add the first letter of the structure.
-					thumbnail.Append(section.StructureType.ToString()[0]);
+					thumbnail.Append(section.MatterType.ToString()[0]);
 					break;
 			}
 

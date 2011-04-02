@@ -35,7 +35,7 @@ using AuthorIntrusion.Contracts.Constants;
 using AuthorIntrusion.Contracts.Contents;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.IO;
-using AuthorIntrusion.Contracts.Structures;
+using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 
@@ -89,7 +89,7 @@ namespace AuthorIntrusion.IO
 		/// <param name="depth">The depth.</param>
 		private static void Write(
 			XmlWriter writer,
-			Structure structure,
+			Matter structure,
 			int depth)
 		{
 			// Write out any content associated with the item.
@@ -107,7 +107,7 @@ namespace AuthorIntrusion.IO
 			{
 				var structureContainer = (IStructureContainer) structure;
 
-				foreach (Structure childStructure in structureContainer.Structures)
+				foreach (Matter childStructure in structureContainer.Structures)
 				{
 					Write(writer, childStructure, depth + 1);
 				}

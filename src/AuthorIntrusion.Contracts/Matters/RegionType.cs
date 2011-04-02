@@ -22,64 +22,41 @@
 
 #endregion
 
-#region Namespaces
-
-using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Structures;
-
-#endregion
-
-namespace AuthorIntrusion.Contracts
+namespace AuthorIntrusion.Contracts.Matters
 {
 	/// <summary>
-	/// Represents an entire Author Intrusion document, including the single
-	/// root node for the entire document.
+	/// Identifies the type of Region.
 	/// </summary>
-	public class Document
+	public enum RegionType
 	{
-		#region Fields
-
-		private readonly DocumentMatterList matters;
-
-		#endregion
-
-		#region Constructors
+		/// <summary>
+		/// An article or stand-alone piece outside of a book.
+		/// </summary>
+		Article,
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Document"/> class.
+		/// A section of text, typically in an article or chapter.
 		/// </summary>
-		public Document()
-		{
-			matters = new DocumentMatterList();
-		}
-
-		#endregion
-
-		#region Matters
+		Section1,
 
 		/// <summary>
-		/// Gets an ordered list of matters inside the document.
+		/// A sub-section inside a section.
 		/// </summary>
-		public DocumentMatterList Matters
-		{
-			get { return matters; }
-		}
+		Section2,
 
 		/// <summary>
-		/// Generates a thumbprint of the document. This is mainly for
-		/// unit-testing, but could be used to get an overall view of an entire
-		/// document.
+		/// A sub-section inside a sub-section.
 		/// </summary>
-		/// <returns></returns>
-		public string GetThumbprint()
-		{
-			var thumbnailer = new DocumentThumbnailer();
+		Section3,
 
-			thumbnailer.Visit(this);
+		/// <summary>
+		/// A chapter of a book.
+		/// </summary>
+		Chapter,
 
-			return thumbnailer.Thumbnail;
-		}
-
-		#endregion
+		/// <summary>
+		/// A collection of chapters.
+		/// </summary>
+		Book,
 	}
 }
