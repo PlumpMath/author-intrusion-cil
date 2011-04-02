@@ -197,6 +197,16 @@ namespace AuthorIntrusion.Contracts.Structures
 		#region Contents
 
 		/// <summary>
+		/// Retrieves the string for the structural context. This will be the
+		/// title for sections and content for paragraphs.
+		/// </summary>
+		/// <returns></returns>
+		public override string GetText()
+		{
+			return Title;
+		}
+
+		/// <summary>
 		/// Sets the text of the structure. For sections, this will be the title
 		/// and for paragraphs, it will be the unparsed contents.
 		/// </summary>

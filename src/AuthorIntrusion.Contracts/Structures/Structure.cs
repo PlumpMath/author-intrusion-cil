@@ -80,6 +80,18 @@ namespace AuthorIntrusion.Contracts.Structures
 		}
 
 		/// <summary>
+		/// Gets a count of content container content (i.e. paragraphs) in this
+		/// object or child objects.
+		/// </summary>
+		public abstract int ParagraphCount { get; }
+
+		/// <summary>
+		/// Gets a flattened list of all paragraphs inside the structure.
+		/// </summary>
+		/// <value>The paragraph list.</value>
+		public abstract IList<Paragraph> ParagraphList { get; }
+
+		/// <summary>
 		/// Gets the index of the structure inside parent section.
 		/// </summary>
 		/// <value>
@@ -101,18 +113,6 @@ namespace AuthorIntrusion.Contracts.Structures
 		}
 
 		/// <summary>
-		/// Gets a count of content container content (i.e. paragraphs) in this
-		/// object or child objects.
-		/// </summary>
-		public abstract int ParagraphCount { get; }
-
-		/// <summary>
-		/// Gets a flattened list of all paragraphs inside the structure.
-		/// </summary>
-		/// <value>The paragraph list.</value>
-		public abstract IList<Paragraph> ParagraphList { get; }
-
-		/// <summary>
 		/// Gets the parent section for this structure element.
 		/// </summary>
 		/// <value>The parent section.</value>
@@ -130,6 +130,13 @@ namespace AuthorIntrusion.Contracts.Structures
 		#endregion
 
 		#region Contents
+
+		/// <summary>
+		/// Retrieves the string for the structural context. This will be the
+		/// title for sections and content for paragraphs.
+		/// </summary>
+		/// <returns></returns>
+		public abstract string GetText();
 
 		/// <summary>
 		/// Sets the text of the structure. For sections, this will be the title

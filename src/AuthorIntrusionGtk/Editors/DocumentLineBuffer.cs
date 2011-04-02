@@ -25,11 +25,12 @@
 #region Namespaces
 
 using System;
-using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Algorithms;
 using AuthorIntrusion.Contracts.Structures;
+
+using C5;
 
 using MfGames.GtkExt.TextEditor.Models;
 using MfGames.GtkExt.TextEditor.Models.Buffers;
@@ -462,14 +463,19 @@ namespace AuthorIntrusionGtk.Editors
 			int endIndex = startIndex + operation.Count - 1;
 
 			// Delete the lines.
-			return InternalDeleteLines(startIndex, endIndex);
-		}
+			InternalDeleteLines(startIndex, endIndex);
 
-		private LineBufferOperationResults InternalDeleteLines(int startIndex, int endIndex)
-		{
+			// Return the results, which is the same for all deletes.
 			var bufferPosition = new BufferPosition(startIndex, 0);
 			var results = new LineBufferOperationResults(bufferPosition);
 
+			return results;
+		}
+
+		private void InternalDeleteLines(
+			int startIndex,
+			int endIndex)
+		{
 			// The delete operations are based on linear indexes, so we have to
 			// unwrap our document structure around the request. In addition,
 			// the delete process needs to maintain structure so a chapter
@@ -504,27 +510,65 @@ namespace AuthorIntrusionGtk.Editors
 				// all the items inside the container.
 				if (endSection != null)
 				{
-					startParent.Structures.InsertRange(
+					// Because of integrity, we need to pull the trailing items
+					// out of the end before putting them into the startParent's
+					// structures.
+					var structures = new ArrayList<Structure>();
+					structures.AddAll(endSection.Structures);
+
+					endSection.Structures.RemoveAll(structures);
+
+					startParent.Structures.InsertAll(
 						end.ParentIndex + 1,
-						endSection.Structures);
+						structures);
 				}
 
 				// Remove the item.
-				startParent.Structures.RemoveRange(
+				startParent.Structures.RemoveInterval(
 					start.ParentIndex,
 					end.ParentIndex - start.ParentIndex + 1);
 
 				// We finished with these cases, so return to stop processing.
 				RebuildIndexes();
-
-				return results;
 			}
 
 			// Check to see if the start is the first line.
 			if (startIndex == 0)
 			{
-				// First delete as if we were just moving down a line.
-				return InternalDeleteLines(startIndex + 1, endIndex);
+				// Because the first line is top-most structure, we have to do
+				// something special for this one. First, delete all the other
+				// lines so the second item will be the new document root.
+				InternalDeleteLines(startIndex + 1, endIndex);
+
+				// Get the new root which will always be the first child item.
+				Structure newRoot = GetStructure(1);
+
+				// If the new root isn't a section, we need to create a new
+				// section and 
+				Section newSection;
+
+				if (!(newRoot is Section))
+				{
+					// Create a new section and set the section's title equal
+					// to the text of the section we're getting rid of.
+					newSection = new Section();
+					newSection.SetText(newRoot.GetText());
+				}
+				else
+				{
+					newSection = (Section) newRoot;
+				}
+
+				// Transplant the contents of the old root into the new section.
+				var rootSection = (Section) document.Structure;
+
+				newSection.Structures.AddAll(rootSection.Structures.Slide(2));
+
+				document.Structure = newRoot;
+
+				// Rebuild the indexes with the new document.
+				RebuildIndexes();
+				return;
 			}
 
 			// Flatten out the structure between the start and end point.
@@ -544,21 +588,18 @@ namespace AuthorIntrusionGtk.Editors
 			// We need to see if the end point is a section.
 			if (endSection != null)
 			{
-				startParent.Structures.InsertRange(
-					end.ParentIndex + 1, 
+				startParent.Structures.InsertAll(
+					end.ParentIndex + 1,
 					endSection.Structures);
 			}
 
 			// Remove all the items between the start and end points.
-			startParent.Structures.RemoveRange(
-				start.ParentIndex, 
+			startParent.Structures.RemoveInterval(
+				start.ParentIndex,
 				end.ParentIndex - start.ParentIndex + 1);
 			RebuildIndexes();
 			Console.WriteLine("=== Removing items");
 			dumper.Dump();
-
-			// Return the results.
-			return results;
 		}
 
 		#endregion
@@ -630,17 +671,15 @@ namespace AuthorIntrusionGtk.Editors
 			// items after it from its parent up a level.
 			Section endParent = end.ParentSection;
 
-			List<Structure> trailingStructures = endParent.Structures.GetRange(
-				end.ParentIndex, 
-				endParent.Structures.Count - end.ParentIndex);
-			endParent.Structures.RemoveRange(
+			System.Collections.Generic.IList<Structure> trailingStructures = endParent.Structures.View(end.ParentIndex, endParent.Structures.Count - end.ParentIndex);
+			endParent.Structures.RemoveInterval(
 				end.ParentIndex,
 				endParent.Structures.Count - end.ParentIndex);
 
 			Section superParent = endParent.ParentSection;
 
-			superParent.Structures.InsertRange(
-				endParent.ParentIndex + 1, 
+			superParent.Structures.InsertAll(
+				endParent.ParentIndex + 1,
 				trailingStructures);
 
 			// Rebuild the indexes.

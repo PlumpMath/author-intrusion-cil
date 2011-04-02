@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,10 @@
 #region Namespaces
 
 using System;
-using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Structures;
+
+using C5;
 
 #endregion
 
@@ -36,7 +37,7 @@ namespace AuthorIntrusion.Contracts.Collections
 	/// <summary>
 	/// Implements a list that manages structure elements.
 	/// </summary>
-	public class StructureList : List<Structure>
+	public class StructureList : ArrayList<Structure>
 	{
 		#region Constructors
 
@@ -46,7 +47,17 @@ namespace AuthorIntrusion.Contracts.Collections
 		/// <param name="parent">The parent.</param>
 		public StructureList(Structure parent)
 		{
+			// Save the structure so we can maintain the relationships.
+			if (parent == null)
+			{
+				throw new ArgumentNullException("parent");
+			}
+
 			this.parent = parent;
+
+			// Attach to our internal events for collections.
+			ItemsAdded += OnItemsAdded;
+			ItemsRemoved += OnItemsRemoved;
 		}
 
 		#endregion
@@ -66,39 +77,45 @@ namespace AuthorIntrusion.Contracts.Collections
 
 		#endregion
 
-		#region List Operations
+		#region Events
 
 		/// <summary>
-		/// Adds the specified structure to the list.
+		/// Called for every item added to the collection.
 		/// </summary>
-		/// <param name="structure">The structure.</param>
-		public new void Add(Structure structure)
+		private void OnItemsAdded(
+			object sender,
+			ItemCountEventArgs<Structure> e)
 		{
-			if (structure == null)
+			// Make sure the item does not already have a parent. This is to
+			// maintain structure but also to ensure continuity of elements.
+			if (e.Item.Parent != null)
 			{
-				throw new ArgumentNullException("structure");
+				throw new InvalidOperationException(
+					"Cannot add multiple parents to " + e.Item +
+					". Remove it from the previous collection before adding it to this one.");
 			}
 
-			structure.Parent = parent;
-
-			base.Add(structure);
+			// Set the parent to this collection's parent.
+			e.Item.Parent = parent;
 		}
 
 		/// <summary>
-		/// Inserts a range of structures into the list.
+		/// Called for every item removed.
 		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <param name="list">The list.</param>
-		public new void InsertRange(int index, IEnumerable<Structure> list)
+		private void OnItemsRemoved(
+			object sender,
+			ItemCountEventArgs<Structure> e)
 		{
-			// Call the base to add the items.
-			base.InsertRange(index, list);
-
-			// Go through the list and reparent them.
-			foreach (Structure structure in list)
+			// Make sure the item's parent is our own.
+			if (e.Item.Parent != parent)
 			{
-				structure.Parent = parent;
+				throw new InvalidOperationException(
+					"Cannot clear a parent from item " + e.Item +
+					" because it does not match this collection.");
 			}
+
+			// Clear the parent from the item.
+			e.Item.Parent = null;
 		}
 
 		#endregion
