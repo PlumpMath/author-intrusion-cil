@@ -62,6 +62,7 @@
     <Compile Include="Contents\Unparsed.cs" />
     <Compile Include="Structures\ContainsStructureAttribute.cs" />
     <Compile Include="Structures\DocumentDumper.cs" />
+    <Compile Include="Structures\DocumentThumbnailer.cs" />
     <Compile Include="Structures\Paragraph.cs" />
     <Compile Include="Structures\Structure.cs" />
     <Compile Include="Structures\Section.cs" />

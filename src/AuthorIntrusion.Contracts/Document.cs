@@ -44,6 +44,21 @@ namespace AuthorIntrusion.Contracts
 		/// <value>The structure.</value>
 		public Structure Structure { get; set; }
 
+		/// <summary>
+		/// Generates a thumbprint of the document. This is mainly for
+		/// unit-testing, but could be used to get an overall view of an entire
+		/// document.
+		/// </summary>
+		/// <returns></returns>
+		public string GetThumbprint()
+		{
+			var thumbnailer = new DocumentThumbnailer();
+
+			thumbnailer.Visit(this);
+
+			return thumbnailer.Thumbnail;
+		}
+
 		#endregion
 	}
 }

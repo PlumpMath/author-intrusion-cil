@@ -142,7 +142,7 @@ namespace AuthorIntrusionGtk.Editors
 		/// </summary>
 		/// <param name="structureIndex">Index of the structure.</param>
 		/// <returns></returns>
-		private string GetStructureText(int structureIndex)
+		public string GetStructureText(int structureIndex)
 		{
 			// Get the structure element and use that to determine how we
 			// retrieve the contents.
@@ -456,93 +456,197 @@ namespace AuthorIntrusionGtk.Editors
 		protected override LineBufferOperationResults Do(
 			DeleteLinesOperation operation)
 		{
-			// All of these operations return the same results.
-			int initialStartIndex = operation.LineIndex;
-			var results =
-				new LineBufferOperationResults(new BufferPosition(initialStartIndex, 0));
+			// All of these operations return the same results, so create it
+			// once so we can easily return out of this method.
+			int startIndex = operation.LineIndex;
+			int endIndex = startIndex + operation.Count - 1;
 
-			// Get the structure at the beginning and ending of the operation.
-			Structure startStructure = GetStructure(initialStartIndex);
-			Section startParent = startStructure.ParentSection;
+			// Delete the lines.
+			return InternalDeleteLines(startIndex, endIndex);
+		}
 
-			int initialEndIndex = initialStartIndex + operation.Count - 1;
-			Structure endStructure = GetStructure(initialEndIndex);
-			Section endParent = endStructure.ParentSection;
+		private LineBufferOperationResults InternalDeleteLines(int startIndex, int endIndex)
+		{
+			var bufferPosition = new BufferPosition(startIndex, 0);
+			var results = new LineBufferOperationResults(bufferPosition);
 
-			// If we are the top-level, then handle that. This also ensures that
-			// the rest of the operations don't have to worry about nulls.
-			if (startParent == null || endParent == null)
-			{
-				// TODO Fix this.
-				throw new NotSupportedException("Can't delete first section.");
-			}
+			// The delete operations are based on linear indexes, so we have to
+			// unwrap our document structure around the request. In addition,
+			// the delete process needs to maintain structure so a chapter
+			// doesn't have a subsection below it.
 
+			// For debugging purposes, create a dumper and show the desired
+			// output and processing of the delete.
 			var dumper = new DocumentDumper(document, Console.Out);
 			dumper.StructurePrefixes.Clear();
-			dumper.StructurePrefixes[initialStartIndex] = '+';
-			dumper.StructurePrefixes[initialEndIndex] = '-';
+			dumper.StructurePrefixes[startIndex] = '+';
+			dumper.StructurePrefixes[endIndex] = '-';
 			dumper.Dump();
 
-			int startIndex = startParent.Structures.IndexOf(startStructure);
-			int startParentCount = startParent.Structures.Count;
-			int endIndex = endParent.Structures.IndexOf(endStructure);
-			int endParentCount = endParent.Structures.Count;
+			// If we are from the same parent, then we need to remove the items
+			// while adding the trailing items from the end index.
+			Structure start = GetStructure(startIndex);
+			var startParent = start.ParentSection;
 
-			// Get the depth of the items and figure out how to handle it based
-			// on the differences.
-			int startDepth = startStructure.Depth;
-			int endDepth = endStructure.Depth;
+			Structure end = GetStructure(endIndex);
+			var endSection = end as Section;
+			var endParent = end.ParentSection;
 
-			while (startDepth < endDepth)
-			{
-				// Get the trailing part of the parent's elements since we'll
-				// be moving those up a level.
-				List<Structure> trailing = endParent.Structures.GetRange(
-					endIndex + 1, endParentCount - endIndex - 1);
-
-				// Replace the end in the parent with the trailing items.
-				Section superParent = endParent.ParentSection;
-				int superIndex = superParent.Structures.IndexOf(endParent);
-
-				superParent.Structures.RemoveAt(superIndex);
-				superParent.Structures.InsertRange(superIndex, trailing);
-
-				// Recalculate the position.
-				endStructure = endParent;
-				endParent = superParent;
-				endIndex = superIndex;
-				endDepth = endStructure.Depth;
-
-				DocumentDumper.DumpDocument(document);
-			}
-
-			// If they have the same parent, then we can easily just remove the
-			// range of items and add the end structure's children to the current
-			// list.
 			if (startParent == endParent)
 			{
-				// Just delete the range of structures.
-				startParent.Structures.RemoveRange(startIndex, endIndex - startIndex + 1);
-
-				dumper.StructurePrefixes.Clear();
-				dumper.StructurePrefixes[startIndex] = '+';
-				dumper.Dump();
-
-				// Check for the end item being a section. If it is, then we
-				// add those children to the list.
-				if (endStructure is Section)
+				// If we are the top-level, we have a problem.
+				if (start.Depth == 0)
 				{
-					var endSection = (Section) endStructure;
-					startParent.Structures.InsertRange(startIndex, endSection.Structures);
+					throw new Exception("Cannot remove top-level item.");
 				}
 
-				dumper.StructurePrefixes.Clear();
-				dumper.StructurePrefixes[startIndex] = '+';
-				dumper.Dump();
+				// Single item removal. If this is a container, we need to add
+				// all the items inside the container.
+				if (endSection != null)
+				{
+					startParent.Structures.InsertRange(
+						end.ParentIndex + 1,
+						endSection.Structures);
+				}
+
+				// Remove the item.
+				startParent.Structures.RemoveRange(
+					start.ParentIndex,
+					end.ParentIndex - start.ParentIndex + 1);
+
+				// We finished with these cases, so return to stop processing.
+				RebuildIndexes();
+
+				return results;
 			}
+
+			// Check to see if the start is the first line.
+			if (startIndex == 0)
+			{
+				// First delete as if we were just moving down a line.
+				return InternalDeleteLines(startIndex + 1, endIndex);
+			}
+
+			// Flatten out the structure between the start and end point.
+			Console.WriteLine("=== flattened");
+			FlattenDocument(startIndex, endIndex);
+			dumper.Dump();
+
+			// At this point, the end structure will be a child of the start's
+			// parent. We want to pull everything up after the end point up
+			// until we are at the same level as the start.
+			PullEndToStartLevel(startIndex, endIndex);
+			Console.WriteLine("=== Pull end to start");
+			dumper.Dump();
+
+			// We have the start on the same level as the end, plus there are
+			// no elements between the two that have a lower depths than either.
+			// We need to see if the end point is a section.
+			if (endSection != null)
+			{
+				startParent.Structures.InsertRange(
+					end.ParentIndex + 1, 
+					endSection.Structures);
+			}
+
+			// Remove all the items between the start and end points.
+			startParent.Structures.RemoveRange(
+				start.ParentIndex, 
+				end.ParentIndex - start.ParentIndex + 1);
+			RebuildIndexes();
+			Console.WriteLine("=== Removing items");
+			dumper.Dump();
 
 			// Return the results.
 			return results;
+		}
+
+		#endregion
+
+		#region Structure Manipulations
+
+		/// <summary>
+		/// Flattened out the document between the start and end structure.
+		/// This pulls down the structure elements into a flattened layer.
+		/// </summary>
+		/// <param name="startIndex">The start index.</param>
+		/// <param name="endIndex">The end index.</param>
+		private void FlattenDocument(
+			int startIndex,
+			int endIndex)
+		{
+			// Loop through the document from the start index to the end, making
+			// sure everything has at least the depth of the start item.
+			Structure start = GetStructure(startIndex);
+			int startDepth = start.Depth;
+			int startParentIndex = start.ParentIndex;
+			Section startParent = start.ParentSection;
+
+			for (int index = startIndex + 1; index <= endIndex; index++)
+			{
+				// Check the depth and see if we need to flattened this.
+				Structure structure = GetStructure(index);
+
+				if (structure.Depth < startDepth)
+				{
+					// We need to move this down, even if it violates the normal
+					// section layouts. We'll fix those later.
+					structure.ParentSection.Structures.Remove(structure);
+					startParent.Structures.Add(structure);
+
+					// We have to rebalance everything.
+					RebuildIndexes();
+					var dumper = new DocumentDumper(document, Console.Out);
+					dumper.StructurePrefixes.Clear();
+					dumper.StructurePrefixes[startIndex] = '+';
+					dumper.StructurePrefixes[endIndex] = '-';
+					dumper.Dump();
+					FlattenDocument(startIndex, endIndex);
+					return;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Pulls the end structure up to the same level as the start index.
+		/// </summary>
+		/// <param name="startIndex"></param>
+		/// <param name="endIndex"></param>
+		private void PullEndToStartLevel(
+			int startIndex,
+			int endIndex)
+		{
+			// Get the structures for the two points.
+			Structure start = GetStructure(startIndex);
+			Structure end = GetStructure(endIndex);
+
+			// If we are at the same level, we're done.
+			if (start.Parent == end.Parent)
+			{
+				return;
+			}
+
+			// Since the end is lower than the start, we shift the end plus any
+			// items after it from its parent up a level.
+			Section endParent = end.ParentSection;
+
+			List<Structure> trailingStructures = endParent.Structures.GetRange(
+				end.ParentIndex, 
+				endParent.Structures.Count - end.ParentIndex);
+			endParent.Structures.RemoveRange(
+				end.ParentIndex,
+				endParent.Structures.Count - end.ParentIndex);
+
+			Section superParent = endParent.ParentSection;
+
+			superParent.Structures.InsertRange(
+				endParent.ParentIndex + 1, 
+				trailingStructures);
+
+			// Rebuild the indexes.
+			RebuildIndexes();
+
+			PullEndToStartLevel(startIndex, endIndex);
 		}
 
 		#endregion

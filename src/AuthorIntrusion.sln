@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{2CEE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{7E23E269-8B05-473D-A832-19C191456DD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGenerator", "TestGenerator\TestGenerator.csproj", "{862BF104-6B8E-4757-84DF-7D44E92736D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,16 @@ Global
 		{7E23E269-8B05-473D-A832-19C191456DD9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7E23E269-8B05-473D-A832-19C191456DD9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7E23E269-8B05-473D-A832-19C191456DD9}.Release|x86.ActiveCfg = Release|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{862BF104-6B8E-4757-84DF-7D44E92736D3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +188,7 @@ Global
 		{1F3AD3B8-7459-41EA-A730-334DF89EB6F0} = {58B79F60-7EB8-420C-A075-7C0AB8D3CED4}
 		{E0A0DD4B-5D5D-41BD-81C3-FFDB3981263A} = {58B79F60-7EB8-420C-A075-7C0AB8D3CED4}
 		{7E23E269-8B05-473D-A832-19C191456DD9} = {2CEE20B7-3C60-446E-A41D-A9C5E45288F8}
+		{862BF104-6B8E-4757-84DF-7D44E92736D3} = {2CEE20B7-3C60-446E-A41D-A9C5E45288F8}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MfGames.Author.Contract\MfGames.Author.Contract.csproj

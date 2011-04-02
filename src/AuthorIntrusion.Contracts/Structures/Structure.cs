@@ -80,6 +80,27 @@ namespace AuthorIntrusion.Contracts.Structures
 		}
 
 		/// <summary>
+		/// Gets the index of the structure inside parent section.
+		/// </summary>
+		/// <value>
+		/// The index of the parent.
+		/// </value>
+		public int ParentIndex
+		{
+			get
+			{
+				// If we don't have a section, return negative one.
+				if (ParentSection == null)
+				{
+					return -1;
+				}
+
+				// Get the index inside the parent.
+				return ParentSection.Structures.IndexOf(this);
+			}
+		}
+
+		/// <summary>
 		/// Gets a count of content container content (i.e. paragraphs) in this
 		/// object or child objects.
 		/// </summary>

@@ -137,6 +137,8 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// </summary>
 		public void Dump()
 		{
+			index = 0;
+
 			Visit(document);
 		}
 

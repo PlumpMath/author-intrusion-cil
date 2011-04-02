@@ -84,6 +84,23 @@ namespace AuthorIntrusion.Contracts.Collections
 			base.Add(structure);
 		}
 
+		/// <summary>
+		/// Inserts a range of structures into the list.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="list">The list.</param>
+		public new void InsertRange(int index, IEnumerable<Structure> list)
+		{
+			// Call the base to add the items.
+			base.InsertRange(index, list);
+
+			// Go through the list and reparent them.
+			foreach (Structure structure in list)
+			{
+				structure.Parent = parent;
+			}
+		}
+
 		#endregion
 	}
 }
