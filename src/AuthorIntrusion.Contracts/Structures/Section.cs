@@ -57,7 +57,20 @@ namespace AuthorIntrusion.Contracts.Structures
 		public Section(StructureType structureType)
 			: this()
 		{
-			StructureType = structureType;
+			SetStructureType(structureType);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Section"/> class.
+		/// </summary>
+		/// <param name="structureType">Type of the structure.</param>
+		/// <param name="title">The title.</param>
+		public Section(
+			StructureType structureType,
+			string title)
+			: this(structureType)
+		{
+			Title = title;
 		}
 
 		#endregion
@@ -75,13 +88,9 @@ namespace AuthorIntrusion.Contracts.Structures
 			get { return structureType; }
 			set
 			{
-				if (value == StructureType.Paragraph)
-				{
-					throw new ArgumentOutOfRangeException(
-						"value", "Cannot assign a Paragraph type to sections.");
-				}
-
-				structureType = value;
+				// We have a private function to avoid using a virtual property
+				// in a constructor.
+				SetStructureType(value);
 			}
 		}
 
@@ -90,6 +99,21 @@ namespace AuthorIntrusion.Contracts.Structures
 		/// </summary>
 		/// <value>The title.</value>
 		public string Title { get; set; }
+
+		/// <summary>
+		/// Sets the type of the structure.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		private void SetStructureType(StructureType value)
+		{
+			if (value == StructureType.Paragraph)
+			{
+				throw new ArgumentOutOfRangeException(
+					"value", "Cannot assign a Paragraph type to sections.");
+			}
+
+			structureType = value;
+		}
 
 		#endregion
 
@@ -180,6 +204,21 @@ namespace AuthorIntrusion.Contracts.Structures
 		public override void SetText(string text)
 		{
 			Title = text ?? String.Empty;
+		}
+
+		#endregion
+
+		#region Conversion
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return string.Format("{0}: {1}", structureType, Title);
 		}
 
 		#endregion

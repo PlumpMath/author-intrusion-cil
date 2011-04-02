@@ -49,6 +49,16 @@ namespace AuthorIntrusion.Contracts.Structures
 			contents = new ContentList();
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Paragraph"/> class.
+		/// </summary>
+		/// <param name="initialText">The initial text.</param>
+		public Paragraph(string initialText)
+			: this()
+		{
+			SetText(initialText);
+		}
+
 		#endregion
 
 		#region Properties
@@ -142,6 +152,29 @@ namespace AuthorIntrusion.Contracts.Structures
 			// Clear out the previous contents and set the new contents.
 			contents.Clear();
 			contents.Add(text);
+		}
+
+		#endregion
+
+		#region Conversion
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			// Get the content string and trim it to 50 characters.
+			string trimmedContents = ContentString;
+
+			if (trimmedContents.Length > 50)
+			{
+				trimmedContents = trimmedContents.Substring(0, 47) + "...";
+			}
+
+			return trimmedContents;
 		}
 
 		#endregion

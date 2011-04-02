@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 #region Namespaces
 
 using System;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Algorithms;
@@ -46,6 +46,10 @@ namespace AuthorIntrusionGtk.Editors
 	{
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DocumentLineBuffer"/> class.
+		/// </summary>
+		/// <param name="document">The document.</param>
 		public DocumentLineBuffer(Document document)
 		{
 			// Save the member variables.
@@ -67,13 +71,12 @@ namespace AuthorIntrusionGtk.Editors
 		private Document document;
 
 		/// <summary>
-		/// Goes through the entire document and rebuilds the internal indexes.
+		/// Gets the document associated with this buffer.
 		/// </summary>
-		private void RebuildIndexes()
+		/// <value>The document.</value>
+		public Document Document
 		{
-			var visitor = new LineBufferVisitor(this);
-
-			visitor.Visit(document);
+			get { return document; }
 		}
 
 		private Structure GetStructure(int structureIndex)
@@ -178,6 +181,16 @@ namespace AuthorIntrusionGtk.Editors
 				"Cannot find structure text of unknown type: " + structure.GetType());
 		}
 
+		/// <summary>
+		/// Goes through the entire document and rebuilds the internal indexes.
+		/// </summary>
+		private void RebuildIndexes()
+		{
+			var visitor = new LineBufferVisitor(this);
+
+			visitor.Visit(document);
+		}
+
 		#endregion
 
 		#region Buffer
@@ -210,7 +223,9 @@ namespace AuthorIntrusionGtk.Editors
 		/// <param name="lineIndex">The line index in the buffer.</param>
 		/// <param name="lineContexts">The line contexts.</param>
 		/// <returns>The length of the line.</returns>
-		public override int GetLineLength(int lineIndex, LineContexts lineContexts)
+		public override int GetLineLength(
+			int lineIndex,
+			LineContexts lineContexts)
 		{
 			return GetStructureText(lineIndex).Length;
 		}
@@ -232,7 +247,9 @@ namespace AuthorIntrusionGtk.Editors
 		/// <param name="lineIndex">The line index in the buffer or Int32.MaxValue for
 		/// the last line.</param>
 		/// <returns></returns>
-		public override string GetLineStyleName(int lineIndex, LineContexts lineContexts)
+		public override string GetLineStyleName(
+			int lineIndex,
+			LineContexts lineContexts)
 		{
 			// Get the structure and its text.
 			Structure structure = GetStructure(lineIndex);
@@ -258,7 +275,10 @@ namespace AuthorIntrusionGtk.Editors
 		/// <param name="characters">The character range to pull the text.</param>
 		/// <param name="lineContexts">The line contexts.</param>
 		/// <returns></returns>
-		public override string GetLineText(int lineIndex, CharacterRange characters, LineContexts lineContexts)
+		public override string GetLineText(
+			int lineIndex,
+			CharacterRange characters,
+			LineContexts lineContexts)
 		{
 			// Get the text of the structure.
 			Structure structure = GetStructure(lineIndex);
@@ -277,7 +297,8 @@ namespace AuthorIntrusionGtk.Editors
 
 			endIndex = Math.Min(endIndex, text.Length);
 
-			return text.Substring(characters.StartIndex, endIndex - characters.StartIndex);
+			return text.Substring(
+				characters.StartIndex, endIndex - characters.StartIndex);
 		}
 
 		#endregion
@@ -291,7 +312,8 @@ namespace AuthorIntrusionGtk.Editors
 		/// <returns>
 		/// The results to the changes to the buffer.
 		/// </returns>
-		protected override LineBufferOperationResults Do(InsertTextOperation operation)
+		protected override LineBufferOperationResults Do(
+			InsertTextOperation operation)
 		{
 			// Get the structure and its text for a given line.
 			int structureIndex = operation.BufferPosition.LineIndex;
@@ -323,7 +345,8 @@ namespace AuthorIntrusionGtk.Editors
 		/// <returns>
 		/// The results to the changes to the buffer.
 		/// </returns>
-		protected override LineBufferOperationResults Do(DeleteTextOperation operation)
+		protected override LineBufferOperationResults Do(
+			DeleteTextOperation operation)
 		{
 			// Get the structure and its text for a given line.
 			int structureIndex = operation.LineIndex;
@@ -382,7 +405,8 @@ namespace AuthorIntrusionGtk.Editors
 		/// <returns>
 		/// The results to the changes to the buffer.
 		/// </returns>
-		protected override LineBufferOperationResults Do(InsertLinesOperation operation)
+		protected override LineBufferOperationResults Do(
+			InsertLinesOperation operation)
 		{
 			// We don't allow duplication of the top-level element.
 			int structureIndex = operation.LineIndex;
@@ -429,9 +453,96 @@ namespace AuthorIntrusionGtk.Editors
 		/// <returns>
 		/// The results to the changes to the buffer.
 		/// </returns>
-		protected override LineBufferOperationResults Do(DeleteLinesOperation operation)
+		protected override LineBufferOperationResults Do(
+			DeleteLinesOperation operation)
 		{
-			throw new NotImplementedException();
+			// All of these operations return the same results.
+			int initialStartIndex = operation.LineIndex;
+			var results =
+				new LineBufferOperationResults(new BufferPosition(initialStartIndex, 0));
+
+			// Get the structure at the beginning and ending of the operation.
+			Structure startStructure = GetStructure(initialStartIndex);
+			Section startParent = startStructure.ParentSection;
+
+			int initialEndIndex = initialStartIndex + operation.Count - 1;
+			Structure endStructure = GetStructure(initialEndIndex);
+			Section endParent = endStructure.ParentSection;
+
+			// If we are the top-level, then handle that. This also ensures that
+			// the rest of the operations don't have to worry about nulls.
+			if (startParent == null || endParent == null)
+			{
+				// TODO Fix this.
+				throw new NotSupportedException("Can't delete first section.");
+			}
+
+			var dumper = new DocumentDumper(document, Console.Out);
+			dumper.StructurePrefixes.Clear();
+			dumper.StructurePrefixes[initialStartIndex] = '+';
+			dumper.StructurePrefixes[initialEndIndex] = '-';
+			dumper.Dump();
+
+			int startIndex = startParent.Structures.IndexOf(startStructure);
+			int startParentCount = startParent.Structures.Count;
+			int endIndex = endParent.Structures.IndexOf(endStructure);
+			int endParentCount = endParent.Structures.Count;
+
+			// Get the depth of the items and figure out how to handle it based
+			// on the differences.
+			int startDepth = startStructure.Depth;
+			int endDepth = endStructure.Depth;
+
+			while (startDepth < endDepth)
+			{
+				// Get the trailing part of the parent's elements since we'll
+				// be moving those up a level.
+				List<Structure> trailing = endParent.Structures.GetRange(
+					endIndex + 1, endParentCount - endIndex - 1);
+
+				// Replace the end in the parent with the trailing items.
+				Section superParent = endParent.ParentSection;
+				int superIndex = superParent.Structures.IndexOf(endParent);
+
+				superParent.Structures.RemoveAt(superIndex);
+				superParent.Structures.InsertRange(superIndex, trailing);
+
+				// Recalculate the position.
+				endStructure = endParent;
+				endParent = superParent;
+				endIndex = superIndex;
+				endDepth = endStructure.Depth;
+
+				DocumentDumper.DumpDocument(document);
+			}
+
+			// If they have the same parent, then we can easily just remove the
+			// range of items and add the end structure's children to the current
+			// list.
+			if (startParent == endParent)
+			{
+				// Just delete the range of structures.
+				startParent.Structures.RemoveRange(startIndex, endIndex - startIndex + 1);
+
+				dumper.StructurePrefixes.Clear();
+				dumper.StructurePrefixes[startIndex] = '+';
+				dumper.Dump();
+
+				// Check for the end item being a section. If it is, then we
+				// add those children to the list.
+				if (endStructure is Section)
+				{
+					var endSection = (Section) endStructure;
+					startParent.Structures.InsertRange(startIndex, endSection.Structures);
+				}
+
+				dumper.StructurePrefixes.Clear();
+				dumper.StructurePrefixes[startIndex] = '+';
+				dumper.Dump();
+			}
+
+			// Return the results.
+			return results;
 		}
 
 		#endregion

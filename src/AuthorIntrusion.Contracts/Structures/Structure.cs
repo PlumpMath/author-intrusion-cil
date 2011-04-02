@@ -71,6 +71,15 @@ namespace AuthorIntrusion.Contracts.Structures
 		#region Relationships
 
 		/// <summary>
+		/// Gets the depth of the structure in the document.
+		/// </summary>
+		/// <value>The depth.</value>
+		public int Depth
+		{
+			get { return ParentSection == null ? 0 : ParentSection.Depth + 1; }
+		}
+
+		/// <summary>
 		/// Gets a count of content container content (i.e. paragraphs) in this
 		/// object or child objects.
 		/// </summary>
