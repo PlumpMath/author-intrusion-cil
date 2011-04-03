@@ -26,11 +26,10 @@
 
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Interfaces;
-using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 
-namespace AuthorIntrusion.Contracts.Structures
+namespace AuthorIntrusion.Contracts.Matters
 {
 	/// <summary>
 	/// Represents a single paragraph within the document.

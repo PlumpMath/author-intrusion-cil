@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,6 @@
 using System;
 
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 
@@ -58,7 +57,10 @@ namespace AuthorIntrusion.Contracts.Algorithms
 			// Loop through the structure of the document.
 			if (shouldRecurse)
 			{
-				Visit(document.Matters);
+				foreach (Matter matter in document.Matters)
+				{
+					Visit(matter);
+				}
 			}
 
 			// Finish up with the end document.
@@ -66,27 +68,11 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		}
 
 		/// <summary>
-		/// Goes through the given list, processing the matter and contents
-		/// in a recursive manner.
-		/// </summary>
-		/// <param name="list">The list.</param>
-		private void Visit(DocumentMatterList list)
-		{
-			// Start at the top of the list and go through it. We don't provide
-			for (int index = 0; index < list.Count; index++)
-			{
-				// Visit each item in turn.
-				Visit(list[index], ref index);
-			}
-		}
-
-		/// <summary>
 		/// Visits a single matter item at the given index. The processing
 		/// of the matter may result in the index being incremented.
 		/// </summary>
 		/// <param name="matter">The matter.</param>
-		/// <param name="index">The index.</param>
-		private void Visit(Matter matter, ref int index)
+		private void Visit(Matter matter)
 		{
 			// Start with the begin which determines if we continue.
 			bool shouldRecurse = OnBeginMatter(matter);
@@ -97,11 +83,11 @@ namespace AuthorIntrusion.Contracts.Algorithms
 				switch (matter.MatterType)
 				{
 					case MatterType.Paragraph:
-						Visit((Paragraph) matter, ref index);
+						Visit((Paragraph) matter);
 						break;
 
 					case MatterType.Region:
-						Visit((Region) matter, ref index);
+						Visit((Region) matter);
 						break;
 
 					default:
@@ -117,11 +103,9 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		/// Visits the specified paragraph.
 		/// </summary>
 		/// <param name="paragraph">The paragraph.</param>
-		/// <param name="index">The index.</param>
-		private void Visit(Paragraph paragraph, ref int index)
+		private void Visit(Paragraph paragraph)
 		{
 			OnBeginParagraph(paragraph);
-			index++;
 			OnEndParagraph(paragraph);
 		}
 
@@ -129,12 +113,8 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		/// Visits the specified region and increments it by its length.
 		/// </summary>
 		/// <param name="region">The region.</param>
-		/// <param name="index">The index.</param>
-		private void Visit(Region region, ref int index)
+		private void Visit(Region region)
 		{
-			// Increment the index for the title of the region.
-			index++;
-
 			// Start processing the region and determine if we should recurse.
 			bool shouldRecurse = OnBeginRegion(region);
 
@@ -144,7 +124,7 @@ namespace AuthorIntrusion.Contracts.Algorithms
 				// be incremented for those items.
 				foreach (Matter matter in region.Matters)
 				{
-					Visit(matter, ref index);
+					Visit(matter);
 				}
 			}
 
@@ -162,6 +142,17 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		/// <param name="document">The document.</param>
 		/// <returns>True if the visitor should continue to recurse.</returns>
 		protected virtual bool OnBeginDocument(Document document)
+		{
+			return true;
+		}
+
+		/// <summary>
+		/// Called when the visitor enters a structure. This is always called
+		/// before <see cref="OnBeginRegion"/> and <see cref="OnBeginParagraph"/>.
+		/// </summary>
+		/// <param name="structure">The structure.</param>
+		/// <returns>True if the visitor should continue to recurse.</returns>
+		protected virtual bool OnBeginMatter(Matter structure)
 		{
 			return true;
 		}
@@ -187,21 +178,19 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		}
 
 		/// <summary>
-		/// Called when the visitor enters a structure. This is always called
-		/// before <see cref="OnBeginRegion"/> and <see cref="OnBeginParagraph"/>.
-		/// </summary>
-		/// <param name="structure">The structure.</param>
-		/// <returns>True if the visitor should continue to recurse.</returns>
-		protected virtual bool OnBeginMatter(Matter structure)
-		{
-			return true;
-		}
-
-		/// <summary>
 		/// Called when the visitor leaves a document.
 		/// </summary>
 		/// <param name="document">The document.</param>
 		protected virtual void OnEndDocument(Document document)
+		{
+		}
+
+		/// <summary>
+		/// Called when the visitor leaves a structure. This is called after
+		/// <see cref="OnEndRegion"/> and <see cref="OnEndParagraph"/>.
+		/// </summary>
+		/// <param name="structure">The structure.</param>
+		protected virtual void OnEndMatter(Matter structure)
 		{
 		}
 
@@ -220,15 +209,6 @@ namespace AuthorIntrusion.Contracts.Algorithms
 		/// </summary>
 		/// <param name="section">The section.</param>
 		protected virtual void OnEndRegion(Region section)
-		{
-		}
-
-		/// <summary>
-		/// Called when the visitor leaves a structure. This is called after
-		/// <see cref="OnEndRegion"/> and <see cref="OnEndParagraph"/>.
-		/// </summary>
-		/// <param name="structure">The structure.</param>
-		protected virtual void OnEndMatter(Matter structure)
 		{
 		}
 

@@ -26,7 +26,6 @@
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Structures;
 
 using AuthorIntrusionGtk.Editors;
 
@@ -54,25 +53,25 @@ namespace UnitTests
 		public void Setup()
 		{
 			// Set up the standard small document.
-			var article = new Region(MatterType.Article, "Article");
-			article.Structures.Add(new Paragraph("P01"));
-			article.Structures.Add(new Paragraph("P02"));
-			article.Structures.Add(new Paragraph("P03"));
-
-			var sect1 = new Region(MatterType.Section, "Section 1");
-			sect1.Structures.Add(new Paragraph("P04"));
-			sect1.Structures.Add(new Paragraph("P05"));
-			sect1.Structures.Add(new Paragraph("P06"));
-			article.Structures.Add(sect1);
-
-			sect1 = new Region(MatterType.Section, "Section 2");
-			sect1.Structures.Add(new Paragraph("P07"));
-			sect1.Structures.Add(new Paragraph("P08"));
-			sect1.Structures.Add(new Paragraph("P09"));
-			article.Structures.Add(sect1);
-
 			document = new Document();
-			document.Structure = article;
+
+			var article = new Region(RegionType.Article, "Article");
+			document.Matters.Add(article);
+			article.Matters.Add(new Paragraph("P01"));
+			article.Matters.Add(new Paragraph("P02"));
+			article.Matters.Add(new Paragraph("P03"));
+
+			var sect1 = new Region(RegionType.Section1, "Section 1");
+			article.Matters.Add(sect1);
+			sect1.Matters.Add(new Paragraph("P04"));
+			sect1.Matters.Add(new Paragraph("P05"));
+			sect1.Matters.Add(new Paragraph("P06"));
+
+			sect1 = new Region(RegionType.Section1, "Section 2");
+			article.Matters.Add(sect1);
+			sect1.Matters.Add(new Paragraph("P07"));
+			sect1.Matters.Add(new Paragraph("P08"));
+			sect1.Matters.Add(new Paragraph("P09"));
 
 			// Create the buffer from the document.
 			buffer = new DocumentLineBuffer(document);
@@ -80,7 +79,19 @@ namespace UnitTests
 
 		#endregion
 
-		#region Automatically generated code
+		#region Tests
+
+		/// <summary>
+		/// Ensures that the test setup works without errors.
+		/// </summary>
+		[Test]
+		public void TestSetup()
+		{
+		}
+
+		#endregion
+
+		#region Designer generated code
 
 		[Test]
 		public void DeleteLineRangeFrom00_00()
@@ -91,17 +102,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("P01", buffer.GetStructureText(0));
-			Assert.AreEqual("P02", buffer.GetStructureText(1));
-			Assert.AreEqual("P03", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(3));
-			Assert.AreEqual("P04", buffer.GetStructureText(4));
-			Assert.AreEqual("P05", buffer.GetStructureText(5));
-			Assert.AreEqual("P06", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("P01", document.Matters[0].GetContents());
+			Assert.AreEqual("P02", document.Matters[1].GetContents());
+			Assert.AreEqual("P03", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[3].GetContents());
+			Assert.AreEqual("P04", document.Matters[4].GetContents());
+			Assert.AreEqual("P05", document.Matters[5].GetContents());
+			Assert.AreEqual("P06", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_01()
@@ -112,16 +123,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("P02", buffer.GetStructureText(0));
-			Assert.AreEqual("P03", buffer.GetStructureText(1));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(2));
-			Assert.AreEqual("P04", buffer.GetStructureText(3));
-			Assert.AreEqual("P05", buffer.GetStructureText(4));
-			Assert.AreEqual("P06", buffer.GetStructureText(5));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("P02", document.Matters[0].GetContents());
+			Assert.AreEqual("P03", document.Matters[1].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[2].GetContents());
+			Assert.AreEqual("P04", document.Matters[3].GetContents());
+			Assert.AreEqual("P05", document.Matters[4].GetContents());
+			Assert.AreEqual("P06", document.Matters[5].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_02()
@@ -132,15 +143,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("A1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("P03", buffer.GetStructureText(0));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(1));
-			Assert.AreEqual("P04", buffer.GetStructureText(2));
-			Assert.AreEqual("P05", buffer.GetStructureText(3));
-			Assert.AreEqual("P06", buffer.GetStructureText(4));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(5));
-			Assert.AreEqual("P07", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("P03", document.Matters[0].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[1].GetContents());
+			Assert.AreEqual("P04", document.Matters[2].GetContents());
+			Assert.AreEqual("P05", document.Matters[3].GetContents());
+			Assert.AreEqual("P06", document.Matters[4].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[5].GetContents());
+			Assert.AreEqual("P07", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_03()
@@ -151,14 +162,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Section 1", buffer.GetStructureText(0));
-			Assert.AreEqual("P04", buffer.GetStructureText(1));
-			Assert.AreEqual("P05", buffer.GetStructureText(2));
-			Assert.AreEqual("P06", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(4));
-			Assert.AreEqual("P07", buffer.GetStructureText(5));
-			Assert.AreEqual("P08", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Section 1", document.Matters[0].GetContents());
+			Assert.AreEqual("P04", document.Matters[1].GetContents());
+			Assert.AreEqual("P05", document.Matters[2].GetContents());
+			Assert.AreEqual("P06", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[4].GetContents());
+			Assert.AreEqual("P07", document.Matters[5].GetContents());
+			Assert.AreEqual("P08", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_04()
@@ -169,13 +180,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("P04", buffer.GetStructureText(0));
-			Assert.AreEqual("P05", buffer.GetStructureText(1));
-			Assert.AreEqual("P06", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(3));
-			Assert.AreEqual("P07", buffer.GetStructureText(4));
-			Assert.AreEqual("P08", buffer.GetStructureText(5));
-			Assert.AreEqual("P09", buffer.GetStructureText(6));
+			Assert.AreEqual("P04", document.Matters[0].GetContents());
+			Assert.AreEqual("P05", document.Matters[1].GetContents());
+			Assert.AreEqual("P06", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[3].GetContents());
+			Assert.AreEqual("P07", document.Matters[4].GetContents());
+			Assert.AreEqual("P08", document.Matters[5].GetContents());
+			Assert.AreEqual("P09", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_05()
@@ -186,12 +197,12 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("P05", buffer.GetStructureText(0));
-			Assert.AreEqual("P06", buffer.GetStructureText(1));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(2));
-			Assert.AreEqual("P07", buffer.GetStructureText(3));
-			Assert.AreEqual("P08", buffer.GetStructureText(4));
-			Assert.AreEqual("P09", buffer.GetStructureText(5));
+			Assert.AreEqual("P05", document.Matters[0].GetContents());
+			Assert.AreEqual("P06", document.Matters[1].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[2].GetContents());
+			Assert.AreEqual("P07", document.Matters[3].GetContents());
+			Assert.AreEqual("P08", document.Matters[4].GetContents());
+			Assert.AreEqual("P09", document.Matters[5].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_06()
@@ -202,11 +213,11 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("A1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("P06", buffer.GetStructureText(0));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(1));
-			Assert.AreEqual("P07", buffer.GetStructureText(2));
-			Assert.AreEqual("P08", buffer.GetStructureText(3));
-			Assert.AreEqual("P09", buffer.GetStructureText(4));
+			Assert.AreEqual("P06", document.Matters[0].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[1].GetContents());
+			Assert.AreEqual("P07", document.Matters[2].GetContents());
+			Assert.AreEqual("P08", document.Matters[3].GetContents());
+			Assert.AreEqual("P09", document.Matters[4].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_07()
@@ -217,10 +228,10 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp", document.GetThumbprint());
 
-			Assert.AreEqual("Section 2", buffer.GetStructureText(0));
-			Assert.AreEqual("P07", buffer.GetStructureText(1));
-			Assert.AreEqual("P08", buffer.GetStructureText(2));
-			Assert.AreEqual("P09", buffer.GetStructureText(3));
+			Assert.AreEqual("Section 2", document.Matters[0].GetContents());
+			Assert.AreEqual("P07", document.Matters[1].GetContents());
+			Assert.AreEqual("P08", document.Matters[2].GetContents());
+			Assert.AreEqual("P09", document.Matters[3].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_08()
@@ -231,9 +242,9 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App", document.GetThumbprint());
 
-			Assert.AreEqual("P07", buffer.GetStructureText(0));
-			Assert.AreEqual("P08", buffer.GetStructureText(1));
-			Assert.AreEqual("P09", buffer.GetStructureText(2));
+			Assert.AreEqual("P07", document.Matters[0].GetContents());
+			Assert.AreEqual("P08", document.Matters[1].GetContents());
+			Assert.AreEqual("P09", document.Matters[2].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_09()
@@ -244,8 +255,8 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap", document.GetThumbprint());
 
-			Assert.AreEqual("P08", buffer.GetStructureText(0));
-			Assert.AreEqual("P09", buffer.GetStructureText(1));
+			Assert.AreEqual("P08", document.Matters[0].GetContents());
+			Assert.AreEqual("P09", document.Matters[1].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom00_10()
@@ -256,7 +267,7 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("A", document.GetThumbprint());
 
-			Assert.AreEqual("P09", buffer.GetStructureText(0));
+			Assert.AreEqual("P09", document.Matters[0].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_01()
@@ -267,17 +278,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P02", buffer.GetStructureText(1));
-			Assert.AreEqual("P03", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(3));
-			Assert.AreEqual("P04", buffer.GetStructureText(4));
-			Assert.AreEqual("P05", buffer.GetStructureText(5));
-			Assert.AreEqual("P06", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P02", document.Matters[1].GetContents());
+			Assert.AreEqual("P03", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[3].GetContents());
+			Assert.AreEqual("P04", document.Matters[4].GetContents());
+			Assert.AreEqual("P05", document.Matters[5].GetContents());
+			Assert.AreEqual("P06", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_02()
@@ -288,16 +299,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P03", buffer.GetStructureText(1));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(2));
-			Assert.AreEqual("P04", buffer.GetStructureText(3));
-			Assert.AreEqual("P05", buffer.GetStructureText(4));
-			Assert.AreEqual("P06", buffer.GetStructureText(5));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P03", document.Matters[1].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[2].GetContents());
+			Assert.AreEqual("P04", document.Matters[3].GetContents());
+			Assert.AreEqual("P05", document.Matters[4].GetContents());
+			Assert.AreEqual("P06", document.Matters[5].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_03()
@@ -308,15 +319,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("A1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(1));
-			Assert.AreEqual("P04", buffer.GetStructureText(2));
-			Assert.AreEqual("P05", buffer.GetStructureText(3));
-			Assert.AreEqual("P06", buffer.GetStructureText(4));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(5));
-			Assert.AreEqual("P07", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[1].GetContents());
+			Assert.AreEqual("P04", document.Matters[2].GetContents());
+			Assert.AreEqual("P05", document.Matters[3].GetContents());
+			Assert.AreEqual("P06", document.Matters[4].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[5].GetContents());
+			Assert.AreEqual("P07", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_04()
@@ -327,14 +338,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P04", buffer.GetStructureText(1));
-			Assert.AreEqual("P05", buffer.GetStructureText(2));
-			Assert.AreEqual("P06", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(4));
-			Assert.AreEqual("P07", buffer.GetStructureText(5));
-			Assert.AreEqual("P08", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P04", document.Matters[1].GetContents());
+			Assert.AreEqual("P05", document.Matters[2].GetContents());
+			Assert.AreEqual("P06", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[4].GetContents());
+			Assert.AreEqual("P07", document.Matters[5].GetContents());
+			Assert.AreEqual("P08", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_05()
@@ -345,13 +356,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P05", buffer.GetStructureText(1));
-			Assert.AreEqual("P06", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(3));
-			Assert.AreEqual("P07", buffer.GetStructureText(4));
-			Assert.AreEqual("P08", buffer.GetStructureText(5));
-			Assert.AreEqual("P09", buffer.GetStructureText(6));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P05", document.Matters[1].GetContents());
+			Assert.AreEqual("P06", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[3].GetContents());
+			Assert.AreEqual("P07", document.Matters[4].GetContents());
+			Assert.AreEqual("P08", document.Matters[5].GetContents());
+			Assert.AreEqual("P09", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_06()
@@ -362,12 +373,12 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P06", buffer.GetStructureText(1));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(2));
-			Assert.AreEqual("P07", buffer.GetStructureText(3));
-			Assert.AreEqual("P08", buffer.GetStructureText(4));
-			Assert.AreEqual("P09", buffer.GetStructureText(5));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P06", document.Matters[1].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[2].GetContents());
+			Assert.AreEqual("P07", document.Matters[3].GetContents());
+			Assert.AreEqual("P08", document.Matters[4].GetContents());
+			Assert.AreEqual("P09", document.Matters[5].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_07()
@@ -378,11 +389,11 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("A1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(1));
-			Assert.AreEqual("P07", buffer.GetStructureText(2));
-			Assert.AreEqual("P08", buffer.GetStructureText(3));
-			Assert.AreEqual("P09", buffer.GetStructureText(4));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[1].GetContents());
+			Assert.AreEqual("P07", document.Matters[2].GetContents());
+			Assert.AreEqual("P08", document.Matters[3].GetContents());
+			Assert.AreEqual("P09", document.Matters[4].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_08()
@@ -393,10 +404,10 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P07", buffer.GetStructureText(1));
-			Assert.AreEqual("P08", buffer.GetStructureText(2));
-			Assert.AreEqual("P09", buffer.GetStructureText(3));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P07", document.Matters[1].GetContents());
+			Assert.AreEqual("P08", document.Matters[2].GetContents());
+			Assert.AreEqual("P09", document.Matters[3].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_09()
@@ -407,9 +418,9 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P08", buffer.GetStructureText(1));
-			Assert.AreEqual("P09", buffer.GetStructureText(2));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P08", document.Matters[1].GetContents());
+			Assert.AreEqual("P09", document.Matters[2].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_10()
@@ -420,8 +431,8 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P09", buffer.GetStructureText(1));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P09", document.Matters[1].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom01_11()
@@ -432,7 +443,7 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("A", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_02()
@@ -443,17 +454,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P03", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(3));
-			Assert.AreEqual("P04", buffer.GetStructureText(4));
-			Assert.AreEqual("P05", buffer.GetStructureText(5));
-			Assert.AreEqual("P06", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P03", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[3].GetContents());
+			Assert.AreEqual("P04", document.Matters[4].GetContents());
+			Assert.AreEqual("P05", document.Matters[5].GetContents());
+			Assert.AreEqual("P06", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_03()
@@ -464,16 +475,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(2));
-			Assert.AreEqual("P04", buffer.GetStructureText(3));
-			Assert.AreEqual("P05", buffer.GetStructureText(4));
-			Assert.AreEqual("P06", buffer.GetStructureText(5));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[2].GetContents());
+			Assert.AreEqual("P04", document.Matters[3].GetContents());
+			Assert.AreEqual("P05", document.Matters[4].GetContents());
+			Assert.AreEqual("P06", document.Matters[5].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_04()
@@ -484,15 +495,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P04", buffer.GetStructureText(2));
-			Assert.AreEqual("P05", buffer.GetStructureText(3));
-			Assert.AreEqual("P06", buffer.GetStructureText(4));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(5));
-			Assert.AreEqual("P07", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P04", document.Matters[2].GetContents());
+			Assert.AreEqual("P05", document.Matters[3].GetContents());
+			Assert.AreEqual("P06", document.Matters[4].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[5].GetContents());
+			Assert.AreEqual("P07", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_05()
@@ -503,14 +514,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P05", buffer.GetStructureText(2));
-			Assert.AreEqual("P06", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(4));
-			Assert.AreEqual("P07", buffer.GetStructureText(5));
-			Assert.AreEqual("P08", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P05", document.Matters[2].GetContents());
+			Assert.AreEqual("P06", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[4].GetContents());
+			Assert.AreEqual("P07", document.Matters[5].GetContents());
+			Assert.AreEqual("P08", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_06()
@@ -521,13 +532,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P06", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(3));
-			Assert.AreEqual("P07", buffer.GetStructureText(4));
-			Assert.AreEqual("P08", buffer.GetStructureText(5));
-			Assert.AreEqual("P09", buffer.GetStructureText(6));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P06", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[3].GetContents());
+			Assert.AreEqual("P07", document.Matters[4].GetContents());
+			Assert.AreEqual("P08", document.Matters[5].GetContents());
+			Assert.AreEqual("P09", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_07()
@@ -538,12 +549,12 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(2));
-			Assert.AreEqual("P07", buffer.GetStructureText(3));
-			Assert.AreEqual("P08", buffer.GetStructureText(4));
-			Assert.AreEqual("P09", buffer.GetStructureText(5));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[2].GetContents());
+			Assert.AreEqual("P07", document.Matters[3].GetContents());
+			Assert.AreEqual("P08", document.Matters[4].GetContents());
+			Assert.AreEqual("P09", document.Matters[5].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_08()
@@ -554,11 +565,11 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P07", buffer.GetStructureText(2));
-			Assert.AreEqual("P08", buffer.GetStructureText(3));
-			Assert.AreEqual("P09", buffer.GetStructureText(4));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P07", document.Matters[2].GetContents());
+			Assert.AreEqual("P08", document.Matters[3].GetContents());
+			Assert.AreEqual("P09", document.Matters[4].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_09()
@@ -569,10 +580,10 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P08", buffer.GetStructureText(2));
-			Assert.AreEqual("P09", buffer.GetStructureText(3));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P08", document.Matters[2].GetContents());
+			Assert.AreEqual("P09", document.Matters[3].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_10()
@@ -583,9 +594,9 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P09", buffer.GetStructureText(2));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P09", document.Matters[2].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom02_11()
@@ -596,8 +607,8 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Ap", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_03()
@@ -608,17 +619,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(3));
-			Assert.AreEqual("P04", buffer.GetStructureText(4));
-			Assert.AreEqual("P05", buffer.GetStructureText(5));
-			Assert.AreEqual("P06", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[3].GetContents());
+			Assert.AreEqual("P04", document.Matters[4].GetContents());
+			Assert.AreEqual("P05", document.Matters[5].GetContents());
+			Assert.AreEqual("P06", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_04()
@@ -629,16 +640,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P04", buffer.GetStructureText(3));
-			Assert.AreEqual("P05", buffer.GetStructureText(4));
-			Assert.AreEqual("P06", buffer.GetStructureText(5));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P04", document.Matters[3].GetContents());
+			Assert.AreEqual("P05", document.Matters[4].GetContents());
+			Assert.AreEqual("P06", document.Matters[5].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_05()
@@ -649,15 +660,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P05", buffer.GetStructureText(3));
-			Assert.AreEqual("P06", buffer.GetStructureText(4));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(5));
-			Assert.AreEqual("P07", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P05", document.Matters[3].GetContents());
+			Assert.AreEqual("P06", document.Matters[4].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[5].GetContents());
+			Assert.AreEqual("P07", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_06()
@@ -668,14 +679,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P06", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(4));
-			Assert.AreEqual("P07", buffer.GetStructureText(5));
-			Assert.AreEqual("P08", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P06", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[4].GetContents());
+			Assert.AreEqual("P07", document.Matters[5].GetContents());
+			Assert.AreEqual("P08", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_07()
@@ -686,13 +697,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(3));
-			Assert.AreEqual("P07", buffer.GetStructureText(4));
-			Assert.AreEqual("P08", buffer.GetStructureText(5));
-			Assert.AreEqual("P09", buffer.GetStructureText(6));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[3].GetContents());
+			Assert.AreEqual("P07", document.Matters[4].GetContents());
+			Assert.AreEqual("P08", document.Matters[5].GetContents());
+			Assert.AreEqual("P09", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_08()
@@ -703,12 +714,12 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P07", buffer.GetStructureText(3));
-			Assert.AreEqual("P08", buffer.GetStructureText(4));
-			Assert.AreEqual("P09", buffer.GetStructureText(5));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P07", document.Matters[3].GetContents());
+			Assert.AreEqual("P08", document.Matters[4].GetContents());
+			Assert.AreEqual("P09", document.Matters[5].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_09()
@@ -719,11 +730,11 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P08", buffer.GetStructureText(3));
-			Assert.AreEqual("P09", buffer.GetStructureText(4));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P08", document.Matters[3].GetContents());
+			Assert.AreEqual("P09", document.Matters[4].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_10()
@@ -734,10 +745,10 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P09", buffer.GetStructureText(3));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P09", document.Matters[3].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom03_11()
@@ -748,9 +759,9 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("App", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_04()
@@ -761,17 +772,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("P04", buffer.GetStructureText(4));
-			Assert.AreEqual("P05", buffer.GetStructureText(5));
-			Assert.AreEqual("P06", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("P04", document.Matters[4].GetContents());
+			Assert.AreEqual("P05", document.Matters[5].GetContents());
+			Assert.AreEqual("P06", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_05()
@@ -782,16 +793,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("P05", buffer.GetStructureText(4));
-			Assert.AreEqual("P06", buffer.GetStructureText(5));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("P05", document.Matters[4].GetContents());
+			Assert.AreEqual("P06", document.Matters[5].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_06()
@@ -802,15 +813,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("P06", buffer.GetStructureText(4));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(5));
-			Assert.AreEqual("P07", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("P06", document.Matters[4].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[5].GetContents());
+			Assert.AreEqual("P07", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_07()
@@ -821,14 +832,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(4));
-			Assert.AreEqual("P07", buffer.GetStructureText(5));
-			Assert.AreEqual("P08", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[4].GetContents());
+			Assert.AreEqual("P07", document.Matters[5].GetContents());
+			Assert.AreEqual("P08", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_08()
@@ -839,13 +850,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("P07", buffer.GetStructureText(4));
-			Assert.AreEqual("P08", buffer.GetStructureText(5));
-			Assert.AreEqual("P09", buffer.GetStructureText(6));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("P07", document.Matters[4].GetContents());
+			Assert.AreEqual("P08", document.Matters[5].GetContents());
+			Assert.AreEqual("P09", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_09()
@@ -856,12 +867,12 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("P08", buffer.GetStructureText(4));
-			Assert.AreEqual("P09", buffer.GetStructureText(5));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("P08", document.Matters[4].GetContents());
+			Assert.AreEqual("P09", document.Matters[5].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_10()
@@ -872,11 +883,11 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Apppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("P09", buffer.GetStructureText(4));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("P09", document.Matters[4].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom04_11()
@@ -887,10 +898,10 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom05_05()
@@ -901,17 +912,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P05", buffer.GetStructureText(5));
-			Assert.AreEqual("P06", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P05", document.Matters[5].GetContents());
+			Assert.AreEqual("P06", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom05_06()
@@ -922,16 +933,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1p1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P06", buffer.GetStructureText(5));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P06", document.Matters[5].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom05_07()
@@ -942,15 +953,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp11ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(5));
-			Assert.AreEqual("P07", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[5].GetContents());
+			Assert.AreEqual("P07", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom05_08()
@@ -961,14 +972,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P07", buffer.GetStructureText(5));
-			Assert.AreEqual("P08", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P07", document.Matters[5].GetContents());
+			Assert.AreEqual("P08", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom05_09()
@@ -979,13 +990,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P08", buffer.GetStructureText(5));
-			Assert.AreEqual("P09", buffer.GetStructureText(6));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P08", document.Matters[5].GetContents());
+			Assert.AreEqual("P09", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom05_10()
@@ -996,12 +1007,12 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1p", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P09", buffer.GetStructureText(5));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P09", document.Matters[5].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom05_11()
@@ -1012,11 +1023,11 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom06_06()
@@ -1027,17 +1038,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P06", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P06", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom06_07()
@@ -1048,16 +1059,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1p1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom06_08()
@@ -1068,15 +1079,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P07", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P07", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom06_09()
@@ -1087,14 +1098,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P08", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P08", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom06_10()
@@ -1105,13 +1116,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P09", buffer.GetStructureText(6));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P09", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom06_11()
@@ -1122,12 +1133,12 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1p", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom07_07()
@@ -1138,17 +1149,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom07_08()
@@ -1159,16 +1170,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P07", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P07", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom07_09()
@@ -1179,15 +1190,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P08", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P08", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom07_10()
@@ -1198,14 +1209,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P09", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P09", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom07_11()
@@ -1216,13 +1227,13 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom08_08()
@@ -1233,17 +1244,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pppppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("P07", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("P07", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom08_09()
@@ -1254,16 +1265,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("P08", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("P08", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom08_10()
@@ -1274,15 +1285,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1pppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("P09", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("P09", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom08_11()
@@ -1293,14 +1304,14 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom09_09()
@@ -1311,17 +1322,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp1pp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(8));
-			Assert.AreEqual("P08", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[8].GetContents());
+			Assert.AreEqual("P08", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom09_10()
@@ -1332,16 +1343,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp1p", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(8));
-			Assert.AreEqual("P09", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[8].GetContents());
+			Assert.AreEqual("P09", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom09_11()
@@ -1352,15 +1363,15 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp1", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(8));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[8].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom10_10()
@@ -1371,17 +1382,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp1pp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(8));
-			Assert.AreEqual("P07", buffer.GetStructureText(9));
-			Assert.AreEqual("P09", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[8].GetContents());
+			Assert.AreEqual("P07", document.Matters[9].GetContents());
+			Assert.AreEqual("P09", document.Matters[10].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom10_11()
@@ -1392,16 +1403,16 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp1p", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(8));
-			Assert.AreEqual("P07", buffer.GetStructureText(9));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[8].GetContents());
+			Assert.AreEqual("P07", document.Matters[9].GetContents());
 		}
 		[Test]
 		public void DeleteLineRangeFrom11_11()
@@ -1412,17 +1423,17 @@ namespace UnitTests
 			// Verification
 			Assert.AreEqual("Appp1ppp1pp", document.GetThumbprint());
 
-			Assert.AreEqual("Article", buffer.GetStructureText(0));
-			Assert.AreEqual("P01", buffer.GetStructureText(1));
-			Assert.AreEqual("P02", buffer.GetStructureText(2));
-			Assert.AreEqual("P03", buffer.GetStructureText(3));
-			Assert.AreEqual("Section 1", buffer.GetStructureText(4));
-			Assert.AreEqual("P04", buffer.GetStructureText(5));
-			Assert.AreEqual("P05", buffer.GetStructureText(6));
-			Assert.AreEqual("P06", buffer.GetStructureText(7));
-			Assert.AreEqual("Section 2", buffer.GetStructureText(8));
-			Assert.AreEqual("P07", buffer.GetStructureText(9));
-			Assert.AreEqual("P08", buffer.GetStructureText(10));
+			Assert.AreEqual("Article", document.Matters[0].GetContents());
+			Assert.AreEqual("P01", document.Matters[1].GetContents());
+			Assert.AreEqual("P02", document.Matters[2].GetContents());
+			Assert.AreEqual("P03", document.Matters[3].GetContents());
+			Assert.AreEqual("Section 1", document.Matters[4].GetContents());
+			Assert.AreEqual("P04", document.Matters[5].GetContents());
+			Assert.AreEqual("P05", document.Matters[6].GetContents());
+			Assert.AreEqual("P06", document.Matters[7].GetContents());
+			Assert.AreEqual("Section 2", document.Matters[8].GetContents());
+			Assert.AreEqual("P07", document.Matters[9].GetContents());
+			Assert.AreEqual("P08", document.Matters[10].GetContents());
 		}
 
 		#endregion

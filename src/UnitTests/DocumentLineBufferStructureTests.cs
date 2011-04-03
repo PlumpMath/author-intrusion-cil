@@ -1,12 +1,37 @@
-using System.Text;
+#region Copyright and License
+
+// Copyright (c) 2011, Moonfire Games
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+#endregion
+
+#region Namespaces
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Structures;
 
 using AuthorIntrusionGtk.Editors;
 
 using NUnit.Framework;
+
+#endregion
 
 namespace UnitTests
 {
@@ -19,10 +44,8 @@ namespace UnitTests
 	{
 		#region Setup
 
-		private DocumentLineBuffer largeBuffer;
-		private Document largeDocument;
-		private Document smallDocument;
-		private DocumentLineBuffer smallBuffer;
+		private DocumentLineBuffer buffer;
+		private Document document;
 
 		/// <summary>
 		/// Sets up the test and creates the initial line buffer.
@@ -31,80 +54,58 @@ namespace UnitTests
 		public void Setup()
 		{
 			// Create a standard large document layout.
-			var article = new Region(MatterType.Article, "A1");
-			article.Structures.Add(new Paragraph("P01"));
-			article.Structures.Add(new Paragraph("P02"));
-			article.Structures.Add(new Paragraph("P03"));
+			document = new Document();
 
-			var sect1 = new Region(MatterType.Section, "1");
-			sect1.Structures.Add(new Paragraph("P04"));
-			sect1.Structures.Add(new Paragraph("P05"));
-			sect1.Structures.Add(new Paragraph("P06"));
-			article.Structures.Add(sect1);
+			var article = new Region(RegionType.Article, "A1");
+			document.Matters.Add(article);
+			article.Matters.Add(new Paragraph("P01"));
+			article.Matters.Add(new Paragraph("P02"));
+			article.Matters.Add(new Paragraph("P03"));
 
-			sect1 = new Region(MatterType.Section, "2");
-			sect1.Structures.Add(new Paragraph("P07"));
-			sect1.Structures.Add(new Paragraph("P08"));
-			sect1.Structures.Add(new Paragraph("P09"));
-			article.Structures.Add(sect1);
+			var sect1 = new Region(RegionType.Section1, "1");
+			article.Matters.Add(sect1);
+			sect1.Matters.Add(new Paragraph("P04"));
+			sect1.Matters.Add(new Paragraph("P05"));
+			sect1.Matters.Add(new Paragraph("P06"));
 
-			var sect2 = new Region(MatterType.SubSection, "2.1");
-			sect2.Structures.Add(new Paragraph("P10"));
-			sect2.Structures.Add(new Paragraph("P11"));
-			sect2.Structures.Add(new Paragraph("P12"));
-			sect1.Structures.Add(sect2);
+			sect1 = new Region(RegionType.Section1, "2");
+			article.Matters.Add(sect1);
+			sect1.Matters.Add(new Paragraph("P07"));
+			sect1.Matters.Add(new Paragraph("P08"));
+			sect1.Matters.Add(new Paragraph("P09"));
 
-			var sect3 = new Region(MatterType.SubSubSection, "2.1.1");
-			sect3.Structures.Add(new Paragraph("P13"));
-			sect3.Structures.Add(new Paragraph("P14"));
-			sect3.Structures.Add(new Paragraph("P15"));
-			sect2.Structures.Add(sect3);
+			var sect2 = new Region(RegionType.Section2, "2.1");
+			sect1.Matters.Add(sect2);
+			sect2.Matters.Add(new Paragraph("P10"));
+			sect2.Matters.Add(new Paragraph("P11"));
+			sect2.Matters.Add(new Paragraph("P12"));
 
-			sect2 = new Region(MatterType.SubSection, "2.2");
-			sect2.Structures.Add(new Paragraph("P16"));
-			sect2.Structures.Add(new Paragraph("P17"));
-			sect2.Structures.Add(new Paragraph("P18"));
-			sect1.Structures.Add(sect2);
+			var sect3 = new Region(RegionType.Section3, "2.1.1");
+			sect2.Matters.Add(sect3);
+			sect3.Matters.Add(new Paragraph("P13"));
+			sect3.Matters.Add(new Paragraph("P14"));
+			sect3.Matters.Add(new Paragraph("P15"));
 
-			sect3 = new Region(MatterType.SubSubSection, "2.2.1");
-			sect3.Structures.Add(new Paragraph("P19"));
-			sect3.Structures.Add(new Paragraph("P20"));
-			sect3.Structures.Add(new Paragraph("P21"));
-			sect2.Structures.Add(sect3);
+			sect2 = new Region(RegionType.Section2, "2.2");
+			sect1.Matters.Add(sect2);
+			sect2.Matters.Add(new Paragraph("P16"));
+			sect2.Matters.Add(new Paragraph("P17"));
+			sect2.Matters.Add(new Paragraph("P18"));
 
-			sect3 = new Region(MatterType.SubSubSection, "2.2.2");
-			sect3.Structures.Add(new Paragraph("P22"));
-			sect3.Structures.Add(new Paragraph("P23"));
-			sect3.Structures.Add(new Paragraph("P24"));
-			sect2.Structures.Add(sect3);
+			sect3 = new Region(RegionType.Section3, "2.2.1");
+			sect2.Matters.Add(sect3);
+			sect3.Matters.Add(new Paragraph("P19"));
+			sect3.Matters.Add(new Paragraph("P20"));
+			sect3.Matters.Add(new Paragraph("P21"));
 
-			largeDocument = new Document();
-			largeDocument.Structure = article;
-
-			// Set up the standard small document.
-			article = new Region(MatterType.Article, "A1");
-			article.Structures.Add(new Paragraph("P01"));
-			article.Structures.Add(new Paragraph("P02"));
-			article.Structures.Add(new Paragraph("P03"));
-
-			sect1 = new Region(MatterType.Section, "1");
-			sect1.Structures.Add(new Paragraph("P04"));
-			sect1.Structures.Add(new Paragraph("P05"));
-			sect1.Structures.Add(new Paragraph("P06"));
-			article.Structures.Add(sect1);
-
-			sect1 = new Region(MatterType.Section, "2");
-			sect1.Structures.Add(new Paragraph("P07"));
-			sect1.Structures.Add(new Paragraph("P08"));
-			sect1.Structures.Add(new Paragraph("P09"));
-			article.Structures.Add(sect1);
-
-			smallDocument = new Document();
-			smallDocument.Structure = article;
+			sect3 = new Region(RegionType.Section3, "2.2.2");
+			sect2.Matters.Add(sect3);
+			sect3.Matters.Add(new Paragraph("P22"));
+			sect3.Matters.Add(new Paragraph("P23"));
+			sect3.Matters.Add(new Paragraph("P24"));
 
 			// Create the buffer from the document.
-			largeBuffer = new DocumentLineBuffer(largeDocument);
-			smallBuffer = new DocumentLineBuffer(smallDocument);
+			buffer = new DocumentLineBuffer(document);
 		}
 
 		#endregion
@@ -120,7 +121,7 @@ namespace UnitTests
 		public void InitialDocumentStructure()
 		{
 			// Operation
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
 			// Verification
 			Assert.AreEqual("Appp1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
@@ -131,142 +132,136 @@ namespace UnitTests
 		#region Delete Lines
 
 		/// <summary>
-		/// Deletes the first paragraph in the article.
-		/// </summary>
-		[Test] public void DeleteFirstParagraph()
-		{
-			// Operation
-			largeBuffer.DeleteLines(1, 1);
-
-			// Verification
-			string thumbprint = GetLargeThumbprint();
-
-			Assert.AreEqual("App1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
-		}
-
-		/// <summary>
-		/// Deletes the second paragraph in the article.
-		/// </summary>
-		[Test] public void DeleteSecondParagraph()
-		{
-			// Operation
-			largeBuffer.DeleteLines(2, 1);
-
-			// Verification
-			string thumbprint = GetLargeThumbprint();
-
-			Assert.AreEqual("App1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
-		}
-
-		/// <summary>
-		/// Deletes the third paragraph in the article.
-		/// </summary>
-		[Test] public void DeleteThirdParagraph()
-		{
-			// Operation
-			largeBuffer.DeleteLines(3, 1);
-
-			// Verification
-			string thumbprint = GetLargeThumbprint();
-
-			Assert.AreEqual("App1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
-		}
-
-		/// <summary>
 		/// Deletes all three paragraphs in the article.
 		/// </summary>
-		[Test] public void DeleteArticleParagraphs()
+		[Test]
+		public void DeleteArticleParagraphs()
 		{
 			// Operation
-			largeBuffer.DeleteLines(1, 3);
+			buffer.DeleteLines(1, 3);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
 			Assert.AreEqual("A1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>
-		/// Deletes the first two article paragraphs.
+		/// Deletes the first paragraph in the article.
 		/// </summary>
-		[Test] public void DeleteFirstTwoArticleParagraphs()
+		[Test]
+		public void DeleteFirstParagraph()
 		{
 			// Operation
-			largeBuffer.DeleteLines(1, 2);
+			buffer.DeleteLines(1, 1);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
+
+			Assert.AreEqual("App1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
+		}
+
+		/// <summary>
+		/// Deletes the first two article paragraphs.
+		/// </summary>
+		[Test]
+		public void DeleteFirstTwoArticleParagraphs()
+		{
+			// Operation
+			buffer.DeleteLines(1, 2);
+
+			// Verification
+			string thumbprint = document.GetThumbprint();
 
 			Assert.AreEqual("Ap1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
+		}
+
+		/// <summary>
+		/// Deletes a paragraph, a child and the first of its paragraph.
+		/// </summary>
+		[Test]
+		public void DeleteLeadingParagraphOnChild()
+		{
+			// Operation
+			buffer.DeleteLines(23, 3);
+
+			// Verification
+			string thumbprint = document.GetThumbprint();
+
+			Assert.AreEqual("Appp1ppp1ppp2ppp3ppp2pppp3ppp", thumbprint);
+		}
+
+		/// <summary>
+		/// Deletes the second paragraph in the article.
+		/// </summary>
+		[Test]
+		public void DeleteSecondParagraph()
+		{
+			// Operation
+			buffer.DeleteLines(2, 1);
+
+			// Verification
+			string thumbprint = document.GetThumbprint();
+
+			Assert.AreEqual("App1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>
 		/// Deletes the second two article paragraphs.
 		/// </summary>
-		[Test] public void DeleteSecondTwoArticleParagraphs()
+		[Test]
+		public void DeleteSecondTwoArticleParagraphs()
 		{
 			// Operation
-			largeBuffer.DeleteLines(2, 2);
+			buffer.DeleteLines(2, 2);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
 			Assert.AreEqual("Ap1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>
-		/// Deletes a section and all its paragraphs.
-		/// </summary>
-		[Test] public void DeleteSectionAndParagraphs()
-		{
-			// Operation
-			largeBuffer.DeleteLines(4, 4);
-
-			// Verification
-			string thumbprint = GetLargeThumbprint();
-
-			Assert.AreEqual("Appp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
-		}
-
-		/// <summary>
 		/// Deletes the section and its first paragraph.
 		/// </summary>
-		[Test] public void DeleteSectionAndFirstParagraph()
+		[Test]
+		public void DeleteSectionAndFirstParagraph()
 		{
 			// Operation
-			largeBuffer.DeleteLines(4, 2);
+			buffer.DeleteLines(4, 2);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
 			Assert.AreEqual("Appppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>
-		/// Deletes a section and its paragraphs plus the next section, but
-		/// leaving the second section's paragraphs in place.
+		/// Deletes a section and all its paragraphs.
 		/// </summary>
-		[Test] public void DeleteTwoSectionsAndFirstParagraphs()
+		[Test]
+		public void DeleteSectionAndParagraphs()
 		{
 			// Operation
-			largeBuffer.DeleteLines(4, 5);
+			buffer.DeleteLines(4, 4);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
-			Assert.AreEqual("Apppppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
+			Assert.AreEqual("Appp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>
 		/// Deletes a subsection which should promote the third level inside it.
 		/// </summary>
-		[Test] public void DeleteSubSection()
+		[Test]
+		public void DeleteSubSection()
 		{
 			// Operation
-			largeBuffer.DeleteLines(12, 1);
+			buffer.DeleteLines(12, 1);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
 			Assert.AreEqual("Appp1ppp1pppppp2ppp2ppp3ppp3ppp", thumbprint);
 		}
@@ -275,13 +270,14 @@ namespace UnitTests
 		/// Deletes the sub section with children next to another section with
 		/// children, so the item should not be promoted.
 		/// </summary>
-		[Test] public void DeleteSubSectionWithChildren()
+		[Test]
+		public void DeleteSubSectionWithChildren()
 		{
 			// Operation
-			largeBuffer.DeleteLines(20, 1);
+			buffer.DeleteLines(20, 1);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
 			Assert.AreEqual("Appp1ppp1ppp2ppp3pppppp3ppp3ppp", thumbprint);
 		}
@@ -294,132 +290,46 @@ namespace UnitTests
 		public void DeleteSubSectionWithChildren2()
 		{
 			// Operation
-			largeBuffer.DeleteLines(20, 2);
+			buffer.DeleteLines(20, 2);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
 			Assert.AreEqual("Appp1ppp1ppp2ppp3ppppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>
-		/// Deletes the sub section with children next to another section with
-		/// children, so the item should not be promoted.
+		/// Deletes the third paragraph in the article.
 		/// </summary>
 		[Test]
-		public void DeleteSubSectionWithChildren2Small()
+		public void DeleteThirdParagraph()
 		{
 			// Operation
-			smallBuffer.DeleteLines(4, 2);
+			buffer.DeleteLines(3, 1);
 
 			// Verification
-			string thumbprint = GetSmallThumbprint();
+			string thumbprint = document.GetThumbprint();
 
-			Assert.AreEqual("Appp1ppp1ppp", thumbprint);
+			Assert.AreEqual("App1ppp1ppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>
-		/// Deletes a paragraph, a child and the first of its paragraph.
+		/// Deletes a section and its paragraphs plus the next section, but
+		/// leaving the second section's paragraphs in place.
 		/// </summary>
-		[Test] public void DeleteLeadingParagraphOnChild()
+		[Test]
+		public void DeleteTwoSectionsAndFirstParagraphs()
 		{
 			// Operation
-			largeBuffer.DeleteLines(23, 3);
+			buffer.DeleteLines(4, 5);
 
 			// Verification
-			string thumbprint = GetLargeThumbprint();
+			string thumbprint = document.GetThumbprint();
 
-			Assert.AreEqual("Appp1ppp1ppp2ppp3ppp2pppp3ppp", thumbprint);
+			Assert.AreEqual("Apppppp2ppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Utilities
-
-		/// <summary>
-		/// Creates a thumbprint of the buffer by creating a string that has
-		/// the first initial of most of the structure elements. This gives a
-		/// general layout of the entire document and will make it easier to
-		/// check for style movement with line operations. For example,
-		/// a document with a chapter and three paragraphs would be "Cppp".
-		/// 
-		/// Sections, SubSections, and SubSubSections are converted into 1, 2,
-		/// 3, respectively.
-		/// </summary>
-		/// <returns></returns>
-		private string GetLargeThumbprint()
-		{
-			var builder = new StringBuilder();
-
-			GetStructureThumbprint(builder, largeBuffer.Document.Structure);
-
-			return builder.ToString();
-		}
-
-		private string GetSmallThumbprint()
-		{
-			var builder = new StringBuilder();
-
-			GetStructureThumbprint(builder, smallBuffer.Document.Structure);
-
-			return builder.ToString();
-		}
-
-		/// <summary>
-		/// Gets the thumbprint of the structure then goes through the structure's
-		/// child structures.
-		/// </summary>
-		/// <param name="builder">The builder.</param>
-		/// <param name="structure">The structure.</param>
-		private static void GetStructureThumbprint(StringBuilder builder, Matter structure)
-		{
-			// If we are null, then just return.
-			if (structure == null)
-			{
-				return;
-			}
-
-			// Add the structure's thumbprint to the builder.
-			string thumbprint = structure.MatterType.ToString()[0].ToString();
-
-			switch (structure.MatterType)
-			{
-				case MatterType.Paragraph:
-					// We want paragraphs to be lowercase P.
-					thumbprint = "p";
-					break;
-
-				case MatterType.Section:
-					// We convert sections into numerical levels.
-					thumbprint = "1";
-					break;
-
-				case MatterType.SubSection:
-					// We convert sections into numerical levels.
-					thumbprint = "2";
-					break;
-
-				case MatterType.SubSubSection:
-					// We convert sections into numerical levels.
-					thumbprint = "3";
-					break;
-			}
-
-			builder.Append(thumbprint);
-
-			// If we are a section object, then recursively go into it.
-			if (structure is Region)
-			{
-				var section = (Region) structure;
-
-				foreach (Matter child in section.Structures)
-				{
-					GetStructureThumbprint(builder, child);
-				}
-			}
-		}
 
 		#endregion
 	}

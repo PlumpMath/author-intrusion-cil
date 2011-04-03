@@ -27,7 +27,6 @@
 using System;
 
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Structures;
 
 #endregion
 

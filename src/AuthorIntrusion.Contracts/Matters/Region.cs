@@ -25,8 +25,7 @@
 #region Namespaces
 
 using System;
-
-using C5;
+using System.Diagnostics;
 
 #endregion
 
@@ -46,7 +45,7 @@ namespace AuthorIntrusion.Contracts.Matters
 	{
 		#region Fields
 
-		private IList<Matter> matters;
+		private readonly MatterCollection matters;
 		private string title;
 
 		#endregion
@@ -58,6 +57,7 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// </summary>
 		public Region()
 		{
+			matters = new MatterCollection();
 		}
 
 		/// <summary>
@@ -116,40 +116,12 @@ namespace AuthorIntrusion.Contracts.Matters
 		#region Editing
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is connected to an
-		/// underlying list.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is connected; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsConnected
-		{
-			get { return matters != null; }
-		}
-
-		/// <summary>
 		/// Contains a list of matters associated with this region.
 		/// </summary>
-		public IList<Matter> Matters
+		public MatterCollection Matters
 		{
-			get
-			{
-				VerifyUnderlyingMatters();
-				return matters;
-			}
-		}
-
-		/// <summary>
-		/// Connects a list of matters to the region.
-		/// </summary>
-		public void ConnectToDocument(IList<Matter> newMatters)
-		{
-			if (newMatters == null)
-			{
-				throw new ArgumentNullException("newMatters");
-			}
-
-			matters = newMatters;
+			[DebuggerStepThrough]
+			get { return matters; }
 		}
 
 		/// <summary>
@@ -160,32 +132,6 @@ namespace AuthorIntrusion.Contracts.Matters
 		{
 			var section = new Region(RegionType);
 			return section;
-		}
-
-		/// <summary>
-		/// Disconnects the region's list from the underlying document list.
-		/// It also disposes of the list to ensure the view is properly removed.
-		/// </summary>
-		public void DisconnectFromDocument()
-		{
-			if (matters != null)
-			{
-				matters.Dispose();
-			}
-
-			matters = null;
-		}
-
-		/// <summary>
-		/// Verifies that the underlying matters exists in the region.
-		/// </summary>
-		private void VerifyUnderlyingMatters()
-		{
-			if (matters == null)
-			{
-				throw new InvalidOperationException(
-					"Cannot use a region's matters until it has been set.");
-			}
 		}
 
 		#endregion

@@ -1,3 +1,4 @@
+#if TODO
 #region Copyright and License
 
 // Copyright (c) 2005-2011, Moonfire Games
@@ -155,7 +156,7 @@ namespace AuthorIntrusion.IO
 			// There is nothing wrong with the parse, so return the root.
 			var document = new Document();
 
-			document.Structure = rootStructure;
+			document.Matters.Add(rootStructure);
 
 			return document;
 		}
@@ -357,3 +358,4 @@ namespace AuthorIntrusion.IO
 		#endregion
 	}
 }
+#endif

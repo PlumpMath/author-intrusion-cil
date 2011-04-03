@@ -1,3 +1,4 @@
+#if TODO
 #region Copyright and License
 
 // Copyright (c) 2005-2011, Moonfire Games
@@ -162,7 +163,7 @@ namespace AuthorIntrusion.IO
 
 				// Write out the body tag.
 				writer.WriteStartElement("body", Namespaces.Xhtml11);
-				Write(writer, document.Structure, 0);
+				// TODO Write(writer, document.Structure, 0);
 				writer.WriteEndElement();
 
 				// Finish up the XHTML.
@@ -232,3 +233,4 @@ namespace AuthorIntrusion.IO
 		#endregion
 	}
 }
+#endif

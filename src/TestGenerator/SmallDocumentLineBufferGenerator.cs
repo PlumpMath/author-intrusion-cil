@@ -112,7 +112,7 @@ namespace TestGenerator
 					for (int i = 0; i < results.Count; i++)
 					{
 						writer.WriteLine(
-							"\tAssert.AreEqual(\"{0}\", buffer.GetStructureText({1}));",
+							"\tAssert.AreEqual(\"{0}\", document.Matters[{1}].GetContents());",
 							results[i],
 							i);
 					}

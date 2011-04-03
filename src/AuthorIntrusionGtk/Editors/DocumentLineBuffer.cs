@@ -27,7 +27,6 @@
 using System;
 
 using AuthorIntrusion.Contracts;
-using AuthorIntrusion.Contracts.Algorithms;
 using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
@@ -61,9 +60,6 @@ namespace AuthorIntrusionGtk.Editors
 			}
 
 			this.document = document;
-
-			// Perform the initial counts on the document.
-			RebuildIndexes();
 		}
 
 		#endregion
@@ -81,118 +77,6 @@ namespace AuthorIntrusionGtk.Editors
 			get { return document; }
 		}
 
-		private Matter GetStructure(int structureIndex)
-		{
-			// Go through the structure tree until we find the correct one.
-			return GetStructure(document.Structure, structureIndex);
-		}
-
-		private Matter GetStructure(
-			Matter structure,
-			int structureIndex)
-		{
-			// If the index is zero, then we mean this structure.
-			if (structureIndex == 0)
-			{
-				return structure;
-			}
-
-			// Decrement the count and cycle through the children.
-			structureIndex--;
-
-			if (structure is Region)
-			{
-				var section = (Region) structure;
-
-				foreach (Matter childStructure in section.Structures)
-				{
-					// Pull out the structure info and use that to determine
-					// if the index is inside this child structure.
-					StructureInfo structureInfo =
-						GetStructureInfo(childStructure);
-
-					if (structureIndex < structureInfo.StructureCount)
-					{
-						// This is the child structure we need to recurse into.
-						return GetStructure(childStructure, structureIndex);
-					}
-
-					// This child isn't it, but we need to decrement the count
-					// from this child to keep the relative index.
-					structureIndex -= structureInfo.StructureCount;
-				}
-			}
-
-			// We can't find it, so throw an exception.
-			throw new ArgumentOutOfRangeException(
-				"structureIndex",
-				"Cannot find the structure from the given index.");
-		}
-
-		/// <summary>
-		/// Gets the structure info from a given structure.
-		/// </summary>
-		/// <param name="structure">The structure.</param>
-		/// <returns></returns>
-		private StructureInfo GetStructureInfo(Matter structure)
-		{
-			return (StructureInfo) structure.DataDictionary[this];
-		}
-
-		/// <summary>
-		/// Gets the text from a given structure index from the beginning.
-		/// </summary>
-		/// <param name="structureIndex">Index of the structure.</param>
-		/// <returns></returns>
-		public string GetStructureText(int structureIndex)
-		{
-			// Get the structure element and use that to determine how we
-			// retrieve the contents.
-			Matter structure = GetStructure(structureIndex);
-
-			return GetStructureText(structure);
-		}
-
-		/// <summary>
-		/// Gets the structure text from a given structure element.
-		/// </summary>
-		/// <param name="structure">The structure.</param>
-		/// <returns></returns>
-		private static string GetStructureText(Matter structure)
-		{
-			// For paragraphs, we get the the content string.
-			if (structure is Paragraph)
-			{
-				var paragraph = (Paragraph) structure;
-				string contents = paragraph.ContentString;
-
-				return contents;
-			}
-
-			// For sections, we return the title of the section.
-			if (structure is Region)
-			{
-				var section = (Region) structure;
-
-				return section.Title ?? "<Untitled>";
-			}
-
-			// This is an unknown structure, so throw an exception because we
-			// shouldn't be getting this.
-			throw new Exception(
-				"Cannot find structure text of unknown type: " + structure.GetType());
-		}
-
-		/// <summary>
-		/// Goes through the entire document and rebuilds the internal indexes.
-		/// </summary>
-		private void RebuildIndexes()
-		{
-			var visitor = new LineBufferVisitor(this);
-
-			visitor.Visit(document);
-		}
-
 		#endregion
 
 		#region Buffer
@@ -203,7 +87,7 @@ namespace AuthorIntrusionGtk.Editors
 		/// <value>The line count.</value>
 		public override int LineCount
 		{
-			get { return GetStructureInfo(document.Structure).StructureCount; }
+			get { return document.DocumentMatters.Count; }
 		}
 
 		/// <summary>
@@ -229,7 +113,7 @@ namespace AuthorIntrusionGtk.Editors
 			int lineIndex,
 			LineContexts lineContexts)
 		{
-			return GetStructureText(lineIndex).Length;
+			return document.DocumentMatters[lineIndex].GetContents().Length;
 		}
 
 		/// <summary>
@@ -248,14 +132,15 @@ namespace AuthorIntrusionGtk.Editors
 		/// </summary>
 		/// <param name="lineIndex">The line index in the buffer or Int32.MaxValue for
 		/// the last line.</param>
+		/// <param name="lineContexts">The line contexts.</param>
 		/// <returns></returns>
 		public override string GetLineStyleName(
 			int lineIndex,
 			LineContexts lineContexts)
 		{
 			// Get the structure and its text.
-			Matter structure = GetStructure(lineIndex);
-			string text = GetStructureText(structure);
+			Matter structure = document.DocumentMatters[lineIndex];
+			string text = structure.GetContents();
 
 			// The default style is the structure type. If the structure is
 			// blank, then we prepend "Blank " to the front to allow the user
@@ -283,15 +168,15 @@ namespace AuthorIntrusionGtk.Editors
 			LineContexts lineContexts)
 		{
 			// Get the text of the structure.
-			Matter structure = GetStructure(lineIndex);
-			string text = GetStructureText(structure);
+			Matter matter = document.DocumentMatters[lineIndex];
+			string text = matter.GetContents();
 
 			// TODO: Make the placeholder text user configurable.
 
 			// If the text is blank, change the text to a placeholder text.
 			if (text.Length == 0)
 			{
-				text = "<New " + structure.MatterType + ">";
+				text = "<New " + matter.MatterType + ">";
 			}
 
 			// Pull out the requested substring and return it.
@@ -318,9 +203,9 @@ namespace AuthorIntrusionGtk.Editors
 			InsertTextOperation operation)
 		{
 			// Get the structure and its text for a given line.
-			int structureIndex = operation.BufferPosition.LineIndex;
-			Matter structure = GetStructure(structureIndex);
-			string text = GetStructureText(structure);
+			int lineIndex = operation.BufferPosition.LineIndex;
+			Matter matter = document.DocumentMatters[lineIndex];
+			string text = matter.GetContents();
 
 			// Figure out what the line would look like with the text inserted.
 			int characterIndex = Math.Min(
@@ -329,15 +214,15 @@ namespace AuthorIntrusionGtk.Editors
 			string newText = text.Insert(characterIndex, operation.Text);
 
 			// Set the structure text which enables the internal parsing.
-			structure.SetText(newText);
+			matter.SetContents(newText);
 
 			// Fire a line changed operation.
-			RaiseLineChanged(new LineChangedArgs(structureIndex));
+			RaiseLineChanged(new LineChangedArgs(lineIndex));
 
 			// Return the appropriate results.
 			return
 				new LineBufferOperationResults(
-					new BufferPosition(structureIndex, characterIndex + operation.Text.Length));
+					new BufferPosition(lineIndex, characterIndex + operation.Text.Length));
 		}
 
 		/// <summary>
@@ -351,9 +236,9 @@ namespace AuthorIntrusionGtk.Editors
 			DeleteTextOperation operation)
 		{
 			// Get the structure and its text for a given line.
-			int structureIndex = operation.LineIndex;
-			Matter structure = GetStructure(structureIndex);
-			string text = GetStructureText(structure);
+			int lineIndex = operation.LineIndex;
+			Matter matter = document.DocumentMatters[lineIndex];
+			string text = matter.GetContents();
 
 			// Figure out what the line would look like with the text inserted.
 			int endCharacterIndex = Math.Min(
@@ -364,15 +249,15 @@ namespace AuthorIntrusionGtk.Editors
 				endCharacterIndex - operation.CharacterRange.StartIndex);
 
 			// Set the structure text which enables the internal parsing.
-			structure.SetText(newText);
+			matter.SetContents(newText);
 
 			// Fire a line changed operation.
-			RaiseLineChanged(new LineChangedArgs(structureIndex));
+			RaiseLineChanged(new LineChangedArgs(lineIndex));
 
 			// Return the appropriate results.
 			return
 				new LineBufferOperationResults(
-					new BufferPosition(structureIndex, operation.CharacterRange.StartIndex));
+					new BufferPosition(lineIndex, operation.CharacterRange.StartIndex));
 		}
 
 		/// <summary>
@@ -385,11 +270,11 @@ namespace AuthorIntrusionGtk.Editors
 		protected override LineBufferOperationResults Do(SetTextOperation operation)
 		{
 			// Get the structure for a given line.
-			int structureIndex = operation.LineIndex;
-			Matter structure = GetStructure(structureIndex);
+			int lineIndex = operation.LineIndex;
+			Matter matter = document.DocumentMatters[lineIndex];
 
 			// Set the text of the line.
-			structure.SetText(operation.Text);
+			matter.SetContents(operation.Text);
 
 			// Fire a line changed operation.
 			RaiseLineChanged(new LineChangedArgs(operation.LineIndex));
@@ -411,28 +296,28 @@ namespace AuthorIntrusionGtk.Editors
 			InsertLinesOperation operation)
 		{
 			// We don't allow duplication of the top-level element.
-			int structureIndex = operation.LineIndex;
+			int lineIndex = operation.LineIndex;
 
-			if (structureIndex == 0)
+			if (lineIndex == 0)
 			{
 				return new LineBufferOperationResults();
 			}
 
 			// When we insert a line, we figure out what the element is at the
 			// point of inserting and create an identical element.
-			Matter structure = GetStructure(structureIndex);
+			Matter matter = document.DocumentMatters[lineIndex];
 
 			// Figure out the parent structure and the index of this structure
 			// inside that parent.
-			var parent = structure.ParentSection;
-			int parentIndex = parent.IndexOf(structure);
+			var parent = matter.ParentSection;
+			int parentIndex = parent.IndexOf(matter);
 
 			// Now, insert an empty version of the structure after the
 			// line index.
 			for (int i = 0; i < operation.Count; i++)
 			{
-				Matter newStructure = structure.CreateEmptyClone();
-				parent.Structures.Insert(parentIndex, newStructure);
+				Matter newStructure = matter.CreateEmptyClone();
+				parent.Matters.Insert(parentIndex, newStructure);
 			}
 
 			// Once we are done, we have to rebuild the indexes.
@@ -492,10 +377,10 @@ namespace AuthorIntrusionGtk.Editors
 
 			// If we are from the same parent, then we need to remove the items
 			// while adding the trailing items from the end index.
-			Matter start = GetStructure(startIndex);
+			Matter start = document.DocumentMatters[startIndex];
 			var startParent = start.ParentSection;
 
-			Matter end = GetStructure(endIndex);
+			Matter end = document.DocumentMatters[endIndex];
 			var endSection = end as Region;
 			var endParent = end.ParentSection;
 
@@ -515,17 +400,18 @@ namespace AuthorIntrusionGtk.Editors
 					// out of the end before putting them into the startParent's
 					// structures.
 					var structures = new ArrayList<Matter>();
-					structures.AddAll(endSection.Structures);
+					structures.AddAll(
+						endSection.Matters.;
 
-					endSection.Structures.RemoveAll(structures);
+					endSection.Matters.RemoveAll(structures);
 
-					startParent.Structures.InsertAll(
+					startParent.Matters.InsertAll(
 						end.ParentIndex + 1,
 						structures);
 				}
 
 				// Remove the item.
-				startParent.Structures.RemoveInterval(
+				startParent.Matters.RemoveInterval(
 					start.ParentIndex,
 					end.ParentIndex - start.ParentIndex + 1);
 
@@ -563,12 +449,10 @@ namespace AuthorIntrusionGtk.Editors
 				// Transplant the contents of the old root into the new section.
 				var rootSection = (Region) document.Structure;
 
-				newSection.Structures.AddAll(rootSection.Structures.Slide(2));
+				newSection.Matters.AddAll(rootSection.Matters.Slide(2));
 
 				document.Structure = newRoot;
 
-				// Rebuild the indexes with the new document.
-				RebuildIndexes();
 				return;
 			}
 
@@ -589,16 +473,15 @@ namespace AuthorIntrusionGtk.Editors
 			// We need to see if the end point is a section.
 			if (endSection != null)
 			{
-				startParent.Structures.InsertAll(
+				startParent.Matters.InsertAll(
 					end.ParentIndex + 1,
-					endSection.Structures);
+					endSection.Matters.;
 			}
 
 			// Remove all the items between the start and end points.
-			startParent.Structures.RemoveInterval(
+			startParent.Matters.RemoveInterval(
 				start.ParentIndex,
 				end.ParentIndex - start.ParentIndex + 1);
-			RebuildIndexes();
 			Console.WriteLine("=== Removing items");
 			dumper.Dump();
 		}
@@ -619,7 +502,7 @@ namespace AuthorIntrusionGtk.Editors
 		{
 			// Loop through the document from the start index to the end, making
 			// sure everything has at least the depth of the start item.
-			Matter start = GetStructure(startIndex);
+			Matter start = document.DocumentMatters[startIndex];
 			int startDepth = start.Depth;
 			int startParentIndex = start.ParentIndex;
 			Region startParent = start.ParentSection;
@@ -627,17 +510,16 @@ namespace AuthorIntrusionGtk.Editors
 			for (int index = startIndex + 1; index <= endIndex; index++)
 			{
 				// Check the depth and see if we need to flattened this.
-				Matter structure = GetStructure(index);
+				Matter structure = document.DocumentMatters[index];
 
 				if (structure.Depth < startDepth)
 				{
 					// We need to move this down, even if it violates the normal
 					// section layouts. We'll fix those later.
-					structure.ParentSection.Structures.Remove(structure);
-					startParent.Structures.Add(structure);
+					structure.ParentSection.Matters.Remove(structure);
+					startParent.Matters.Add(structure);
 
 					// We have to rebalance everything.
-					RebuildIndexes();
 					var dumper = new DocumentDumper(document, Console.Out);
 					dumper.StructurePrefixes.Clear();
 					dumper.StructurePrefixes[startIndex] = '+';
@@ -659,8 +541,8 @@ namespace AuthorIntrusionGtk.Editors
 			int endIndex)
 		{
 			// Get the structures for the two points.
-			Matter start = GetStructure(startIndex);
-			Matter end = GetStructure(endIndex);
+			Matter start = document.DocumentMatters[startIndex];
+			Matter end = document.DocumentMatters[endIndex];
 
 			// If we are at the same level, we're done.
 			if (start.Parent == end.Parent)
@@ -672,76 +554,20 @@ namespace AuthorIntrusionGtk.Editors
 			// items after it from its parent up a level.
 			Region endParent = end.ParentSection;
 
-			System.Collections.Generic.IList<Matter> trailingStructures = endParent.Structures.View(end.ParentIndex, endParent.Structures.Count - end.ParentIndex);
-			endParent.Structures.RemoveInterval(
+			System.Collections.Generic.IList < Matter > trailin.Matters. =
+				endParent.Matters.View(
+					end.ParentIndex, endParent.Matters.Count - end.ParentIndex);
+			endParent.Matters.RemoveInterval(
 				end.ParentIndex,
-				endParent.Structures.Count - end.ParentIndex);
+				endParent.Matters.Count - end.ParentIndex);
 
 			Region superParent = endParent.ParentSection;
 
-			superParent.Structures.InsertAll(
+			superParent.Matters.InsertAll(
 				endParent.ParentIndex + 1,
-				trailingStructures);
-
-			// Rebuild the indexes.
-			RebuildIndexes();
+				trailin.Matters.;
 
 			PullEndToStartLevel(startIndex, endIndex);
-		}
-
-		#endregion
-
-		#region Nested type: LineBufferVisitor
-
-		private class LineBufferVisitor : DocumentVisitor
-		{
-			private DocumentLineBuffer buffer;
-
-			public LineBufferVisitor(DocumentLineBuffer buffer)
-			{
-				this.buffer = buffer;
-			}
-
-			protected override bool OnBeginStructure(Matter structure)
-			{
-				// Create a structure info and assign it to the structure. Every
-				// structure has at least one item, which will be the title for
-				// sections and the paragraph itself.
-				var structureInfo = new StructureInfo();
-
-				structureInfo.StructureCount = 1;
-
-				structure.DataDictionary[buffer] = structureInfo;
-
-				// Recurse into the inner structures.
-				return true;
-			}
-
-			protected override void OnEndSection(Region section)
-			{
-				// For sections, add to the structure info.
-				StructureInfo structureInfo = (StructureInfo) section.DataDictionary[buffer];
-
-				foreach (Matter structure in section.Structures)
-				{
-					StructureInfo innerInfo = (StructureInfo) structure.DataDictionary[buffer];
-
-					structureInfo.StructureCount += innerInfo.StructureCount;
-				}
-			}
-		}
-
-		#endregion
-
-		#region Nested type: StructureInfo
-
-		/// <summary>
-		/// Contains information about a structure that is used by the parent
-		/// class to provide LineBuffer implementation.
-		/// </summary>
-		private class StructureInfo
-		{
-			public int StructureCount { get; set; }
 		}
 
 		#endregion

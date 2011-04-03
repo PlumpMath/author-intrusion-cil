@@ -27,7 +27,7 @@
 using System.Collections.Generic;
 
 using AuthorIntrusion.Contracts.Enumerations;
-using AuthorIntrusion.Contracts.Structures;
+using AuthorIntrusion.Contracts.Matters;
 
 #endregion
 

@@ -39,7 +39,8 @@ namespace AuthorIntrusion.Contracts
 	{
 		#region Fields
 
-		private readonly DocumentMatterList matters;
+		private readonly DocumentMatterCollection documentMatters;
+		private readonly MatterCollection matters;
 
 		#endregion
 
@@ -50,7 +51,8 @@ namespace AuthorIntrusion.Contracts
 		/// </summary>
 		public Document()
 		{
-			matters = new DocumentMatterList();
+			matters = new MatterCollection();
+			documentMatters = new DocumentMatterCollection(matters);
 		}
 
 		#endregion
@@ -58,9 +60,17 @@ namespace AuthorIntrusion.Contracts
 		#region Matters
 
 		/// <summary>
+		/// Gets the flattened list of document matters.
+		/// </summary>
+		public DocumentMatterCollection DocumentMatters
+		{
+			get { return documentMatters; }
+		}
+
+		/// <summary>
 		/// Gets an ordered list of matters inside the document.
 		/// </summary>
-		public DocumentMatterList Matters
+		public MatterCollection Matters
 		{
 			get { return matters; }
 		}

@@ -107,7 +107,7 @@ namespace AuthorIntrusion.Contracts.Structures
 					break;
 				default:
 					// Just add the first letter of the structure.
-					thumbnail.Append(section.MatterType.ToString()[0]);
+					thumbnail.Append(section.RegionType.ToString()[0]);
 					break;
 			}
 

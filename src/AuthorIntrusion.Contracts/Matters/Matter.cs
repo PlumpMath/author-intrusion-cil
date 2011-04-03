@@ -67,6 +67,25 @@ namespace AuthorIntrusion.Contracts.Matters
 		}
 
 		/// <summary>
+		/// Gets or sets the document associated with this matter.
+		/// </summary>
+		/// <value>
+		/// The document.
+		/// </value>
+		public Document Document { get; set; }
+
+		/// <summary>
+		/// Gets the index of the matter in the document.
+		/// </summary>
+		/// <value>
+		/// The index of the matter.
+		/// </value>
+		public int DocumentIndex
+		{
+			get { return Document.Matters.IndexOf(this); }
+		}
+
+		/// <summary>
 		/// Gets the type of the structure.
 		/// </summary>
 		/// <value>The type of the structure.</value>

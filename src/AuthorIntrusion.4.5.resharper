@@ -975,6 +975,7 @@ II.2.12 <HandlesEvent />
       <Item>Designer generated code</Item>
       <Item>Web Form Designer generated code</Item>
       <Item>Automatically generated code</Item>
+      <Item>Generated Tests</Item>
     </GeneratedCodeRegions>
     <FileHeader Region="Copyright and License"><![CDATA[Copyright (c) 2011, Moonfire Games
 

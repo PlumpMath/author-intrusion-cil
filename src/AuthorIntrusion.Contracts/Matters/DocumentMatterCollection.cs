@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,61 @@
 
 #region Namespaces
 
-using AuthorIntrusion.Contracts.Matters;
+using System;
 
 #endregion
 
-namespace AuthorIntrusion.Contracts.Interfaces
+namespace AuthorIntrusion.Contracts.Matters
 {
 	/// <summary>
-	/// Describes a structure element that contain zero or more sections.
+	/// Provides a flattened list and access to the the document's matter
+	/// collection.
 	/// </summary>
-	public interface IStructureContainer
+	public class DocumentMatterCollection
 	{
+		#region Fields
+
+		private readonly MatterCollection matters;
+
+		#endregion
+
+		#region Constructors
+
 		/// <summary>
-		/// Contains a list of structures inside the container.
+		/// Initializes a new instance of the <see cref="DocumentMatterCollection"/> class.
 		/// </summary>
-		/// <value>The child structures or an empty list.</value>
-		DocumentMatterList Structures { get; }
+		/// <param name="matters">The matters.</param>
+		public DocumentMatterCollection(MatterCollection matters)
+		{
+			if (matters == null)
+			{
+				throw new ArgumentNullException("matters");
+			}
+
+			this.matters = matters;
+		}
+
+		#endregion
+
+		#region Access
+
+		/// <summary>
+		/// Gets the total number of Matter objects.
+		/// </summary>
+		public int Count
+		{
+			get { return matters.FlattenedCount; }
+		}
+
+		/// <summary>
+		/// Gets the <see cref="AuthorIntrusion.Contracts.Matters.Matter"/> at the
+		/// specified index.
+		/// </summary>
+		public Matter this[int index]
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		#endregion
 	}
 }

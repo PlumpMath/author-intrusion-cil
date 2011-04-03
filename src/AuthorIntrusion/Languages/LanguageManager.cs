@@ -31,7 +31,6 @@ using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Events;
 using AuthorIntrusion.Contracts.Languages;
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Structures;
 
 using MfGames.Reporting;
 
@@ -157,31 +156,32 @@ namespace AuthorIntrusion.Languages
 		/// <param name="structure">The structure.</param>
 		public void Parse(Matter structure)
 		{
-			// Check the inputs.
-			if (structure == null)
-			{
-				throw new ArgumentNullException("structure");
-			}
+			//// Check the inputs.
+			//if (structure == null)
+			//{
+			//    throw new ArgumentNullException("structure");
+			//}
 
-			// Get a list of all the paragraphs we'll be parsing. We'll use that
-			// to build up the worker threads for parsing.
-			IList<Paragraph> paragraphs = structure.ParagraphList;
-			int paragraphCount = paragraphs.Count;
-			int paragraphsProcessed = 0;
+			//// Get a list of all the paragraphs we'll be parsing. We'll use that
+			//// to build up the worker threads for parsing.
+			//IList<Paragraph> paragraphs = structure.ParagraphList;
+			//int paragraphCount = paragraphs.Count;
+			//int paragraphsProcessed = 0;
 
-			// Create a background worker thread to process each paragraph in
-			// turn. This allows for multi-core machines to process more efficiently
-			// and to get the results faster.
-			foreach (Paragraph paragraph in paragraphs)
-			{
-				//ThreadPool.QueueUserWorkItem(DoParseParagraph, paragraph);
-				DoParseParagraph(paragraph);
+			//// Create a background worker thread to process each paragraph in
+			//// turn. This allows for multi-core machines to process more efficiently
+			//// and to get the results faster.
+			//foreach (Paragraph paragraph in paragraphs)
+			//{
+			//    //ThreadPool.QueueUserWorkItem(DoParseParagraph, paragraph);
+			//    DoParseParagraph(paragraph);
 
-				// We are done processing this paragraph.
-				paragraphsProcessed++;
-				FireParseProgress(
-					new ParseProgressEventArgs(paragraphsProcessed, paragraphCount));
-			}
+			//    // We are done processing this paragraph.
+			//    paragraphsProcessed++;
+			//    FireParseProgress(
+			//        new ParseProgressEventArgs(paragraphsProcessed, paragraphCount));
+			//}
+			throw new NotImplementedException();
 		}
 
 		#endregion

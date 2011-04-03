@@ -58,36 +58,38 @@ namespace AuthorIntrusionCli
 			var inputManager = container.GetInstance<IInputManager>();
 			Document document = inputManager.Read(inputFile);
 
-			// Parse the contents of the root.
-			log.Info("Paragraphs {0:N0}", document.Structure.ParagraphCount);
+			//// Parse the contents of the root.
+			//log.Info("Paragraphs {0:N0}", document.Structure.ParagraphCount);
 
-			DateTime lastReport = DateTime.UtcNow;
-			var languageManager = container.GetInstance<ILanguageManager>();
+			//DateTime lastReport = DateTime.UtcNow;
+			//var languageManager = container.GetInstance<ILanguageManager>();
 
-			languageManager.ParseProgress += delegate(object sender,
-			                                          ParseProgressEventArgs progressArgs)
-			                                 {
-			                                 	if (
-			                                 		(DateTime.UtcNow - lastReport).
-			                                 			TotalMilliseconds > 1000)
-			                                 	{
-			                                 		lastReport = DateTime.UtcNow;
-			                                 		log.Info(
-			                                 			"Parsing paragraphs {0:N0}/{1:N0} {2:N2}%",
-			                                 			progressArgs.ParagraphsProcessed,
-			                                 			progressArgs.ParagraphCount,
-			                                 			100.0 * progressArgs.ParagraphsProcessed /
-			                                 			progressArgs.ParagraphCount);
-			                                 	}
-			                                 };
-			languageManager.Parse(document.Structure);
+			//languageManager.ParseProgress += delegate(object sender,
+			//                                          ParseProgressEventArgs progressArgs)
+			//                                 {
+			//                                    if (
+			//                                        (DateTime.UtcNow - lastReport).
+			//                                            TotalMilliseconds > 1000)
+			//                                    {
+			//                                        lastReport = DateTime.UtcNow;
+			//                                        log.Info(
+			//                                            "Parsing paragraphs {0:N0}/{1:N0} {2:N2}%",
+			//                                            progressArgs.ParagraphsProcessed,
+			//                                            progressArgs.ParagraphCount,
+			//                                            100.0 * progressArgs.ParagraphsProcessed /
+			//                                            progressArgs.ParagraphCount);
+			//                                    }
+			//                                 };
+			//languageManager.Parse(document.Structure);
 
-			// Write out the HTML
-			var outputFile = new FileInfo(args[1]);
-			log.Info("Writing {0} {1}", outputFile, outputFile.Exists);
+			//// Write out the HTML
+			//var outputFile = new FileInfo(args[1]);
+			//log.Info("Writing {0} {1}", outputFile, outputFile.Exists);
 
-			var outputManager = container.GetInstance<IOutputManager>();
-			outputManager.Write(outputFile, document);
+			//var outputManager = container.GetInstance<IOutputManager>();
+			//outputManager.Write(outputFile, document);
+
+			// TODO Fix
 
 			// Just set up the input.
 			log.Info("Press ENTER to exit");
