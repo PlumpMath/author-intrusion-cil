@@ -348,7 +348,11 @@ namespace AuthorIntrusionGtk.Editors
 			// Delete the lines.
 			InternalDeleteLines(startIndex, endIndex);
 
-			// Return the results, which is the same for all deletes.
+			// Fire an insert line change.
+			RaiseLinesDeleted(
+				new LineRangeEventArgs(operation.LineIndex, operation.Count));
+
+			// Return the results, which is the same for all line deletes.
 			var bufferPosition = new BufferPosition(startIndex, 0);
 			var results = new LineBufferOperationResults(bufferPosition);
 
@@ -399,10 +403,17 @@ namespace AuthorIntrusionGtk.Editors
 						structures);
 				}
 
-				// Remove the item.
-				startParent.Matters.RemoveInterval(
-					start.ParentIndex,
-					end.ParentIndex - start.ParentIndex + 1);
+				// Remove the item from the list. We pull it into a separate
+				// list because C5 does not call ItemsRemoved event for
+				// RemoveInterval, but it does for RemoveAll.
+				var itemsRemoved = new ArrayList<Matter>();
+				
+				itemsRemoved.AddAll(startParent.Matters.View(
+					 start.ParentIndex,
+					 end.ParentIndex - start.ParentIndex + 1));
+
+				startParent.Matters.RemoveAll(itemsRemoved);
+
 				return;
 			}
 

@@ -76,9 +76,10 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// </summary>
 		public Matter this[int index]
 		{
-			get {
+			get
+			{
 				// Go through the top-level collections.
-				return GetMatterAt(matters, index);
+				return GetMatterAt(matters, index, index);
 			}
 		}
 
@@ -86,9 +87,13 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// Gets the matter at a given index.
 		/// </summary>
 		/// <param name="currentMatters">The matters.</param>
+		/// <param name="originalIndex">Index of the original.</param>
 		/// <param name="relativeIndex">The index.</param>
 		/// <returns></returns>
-		private static Matter GetMatterAt(MatterCollection currentMatters, int relativeIndex)
+		private static Matter GetMatterAt(
+			MatterCollection currentMatters,
+			int originalIndex,
+			int relativeIndex)
 		{
 			// Go through the matters and see if one matches. We decrement
 			// the index as we go so we can always work with relative indexes.
@@ -111,7 +116,7 @@ namespace AuthorIntrusion.Contracts.Matters
 					// This is inside the container, so recurse into it.
 					if (relativeIndex < container.Matters.FlattenedCount)
 					{
-						return GetMatterAt(container.Matters, relativeIndex);
+						return GetMatterAt(container.Matters, originalIndex, relativeIndex);
 					}
 
 					// We weren't in the container, so skip over it.
@@ -120,7 +125,8 @@ namespace AuthorIntrusion.Contracts.Matters
 			}
 
 			// If we got this far, we can't find it.
-			return null;
+			throw new IndexOutOfRangeException(
+				"Cannot find Matter at index " + originalIndex + ".");
 		}
 
 		#endregion

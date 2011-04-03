@@ -1,4 +1,3 @@
-#if TODO
 #region Copyright and License
 
 // Copyright (c) 2005-2011, Moonfire Games
@@ -26,7 +25,6 @@
 #region Namespaces
 
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -34,7 +32,8 @@ using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Constants;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Structures;
+
+using C5;
 
 #endregion
 
@@ -102,7 +101,7 @@ namespace AuthorIntrusion.IO
 		/// <summary>
 		/// Contains the number of recursive &lt;sect&gt; elements we've parsed.
 		/// </summary>
-		private int sectionDepth = 0;
+		private int sectionDepth;
 
 		/// <summary>
 		/// Reads the specified input stream and returns a structure elements.
@@ -113,23 +112,25 @@ namespace AuthorIntrusion.IO
 		/// <returns></returns>
 		protected override Document Read(XmlReader reader)
 		{
+			// Create the document we'll be putting everything into.
+			var document = new Document();
+
+			// Keep track of the context of the parse so we can add the new
+			// items to the right place. As we parse a new element, we push it
+			// on the stack, then pop it off as we finish the XML element.
+			var context = new LinkedList<Element>();
+
+			context.Add(document);
+
 			// This implements a very simple Docbook 5 XML reader that ignores
 			// all the elements outside of the scope of this application and 
 			// creates a simplified structure.
-			var context = new List<Element>();
-			Matter rootStructure = null;
-
 			while (reader.Read())
 			{
 				switch (reader.NodeType)
 				{
 					case XmlNodeType.Element:
 						ReadElement(reader, context);
-
-						if (context.Count == 1)
-						{
-							rootStructure = context[0] as Matter;
-						}
 						break;
 
 					case XmlNodeType.EndElement:
@@ -142,22 +143,13 @@ namespace AuthorIntrusion.IO
 				}
 			}
 
-			// If we still have a null root structure, something is wrong.
-			if (rootStructure == null)
+			// Make sure we have something coming out of the parse.
+			if (document.Matters.Count == 0)
 			{
-				throw new Exception("Cannot identify the root level element");
+				throw new InvalidOperationException("Could not find the top-level DocBook element while parsing.");
 			}
 
-			if (rootStructure == null)
-			{
-				throw new Exception("Root element is not a structure");
-			}
-
-			// There is nothing wrong with the parse, so return the root.
-			var document = new Document();
-
-			document.Matters.Add(rootStructure);
-
+			// We are done processing the document.
 			return document;
 		}
 
@@ -168,7 +160,7 @@ namespace AuthorIntrusion.IO
 		/// <param name="context">The context.</param>
 		private void ReadElement(
 			XmlReader reader,
-			List<Element> context)
+			LinkedList<Element> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
 			if (reader.NamespaceURI != Namespaces.Docbook5)
@@ -178,10 +170,12 @@ namespace AuthorIntrusion.IO
 
 			// Get the last item in the context.
 			Matter parent = null;
+			IMattersContainer container = null;
 
 			if (context.Count > 0)
 			{
-				parent = context[context.Count - 1] as Matter;
+				parent = context.Last as Matter;
+				container = context.Last as IMattersContainer;
 			}
 
 			// Switch based on the local tag.
@@ -190,21 +184,36 @@ namespace AuthorIntrusion.IO
 			switch (reader.LocalName)
 			{
 				case "book":
-					element = new Region(MatterType.Book);
+					var book = new Region(RegionType.Book);
+					element = book;
+
+					if (container != null)
+					{
+						container.Matters.Add(book);
+					}
+					
 					break;
 
 				case "chapter":
-					var chapter = new Region(MatterType.Chapter);
+					var chapter = new Region(RegionType.Chapter);
 					element = chapter;
 
-					if (parent != null && parent is IStructureContainer)
+					if (container != null)
 					{
-						((IStructureContainer) parent).Structures.Add(chapter);
+						container.Matters.Add(chapter);
 					}
+					
 					break;
 
 				case "article":
-					element = new Region(MatterType.Article);
+					var article = new Region(RegionType.Article);
+					element = article;
+
+					if (container != null)
+					{
+						container.Matters.Add(article);
+					}
+					
 					break;
 
 				case "section":
@@ -216,13 +225,13 @@ namespace AuthorIntrusion.IO
 					switch (sectionDepth)
 					{
 						case 1:
-							section = new Region(MatterType.Section);
+							section = new Region(RegionType.Section1);
 							break;
 						case 2:
-							section = new Region(MatterType.SubSection);
+							section = new Region(RegionType.Section2);
 							break;
 						case 3:
-							section = new Region(MatterType.SubSubSection);
+							section = new Region(RegionType.Section3);
 							break;
 						default:
 							throw new Exception("Cannot handle a <sect> depths greater than 3.");
@@ -230,10 +239,11 @@ namespace AuthorIntrusion.IO
 
 					element = section;
 
-					if (parent != null && parent is IStructureContainer)
+					if (container != null)
 					{
-						((IStructureContainer) parent).Structures.Add(section);
+						container.Matters.Add(section);
 					}
+
 					break;
 
 				case "para":
@@ -241,9 +251,9 @@ namespace AuthorIntrusion.IO
 					var paragraph = new Paragraph();
 					element = paragraph;
 
-					if (parent != null && parent is IStructureContainer)
+					if (container != null)
 					{
-						((IStructureContainer) parent).Structures.Add(paragraph);
+						container.Matters.Add(paragraph);
 					}
 
 					break;
@@ -257,7 +267,7 @@ namespace AuthorIntrusion.IO
 					return;
 
 				case "title":
-					Region sectionInfo = parent as Region;
+					var sectionInfo = parent as Region;
 
 					if (sectionInfo != null)
 					{
@@ -282,7 +292,7 @@ namespace AuthorIntrusion.IO
 		/// <param name="context">The context.</param>
 		private void ReadEndElement(
 			XmlReader reader,
-			List<Element> context)
+			LinkedList<Element> context)
 		{
 			// If we aren't a DocBook element, just ignore it.
 			if (reader.NamespaceURI != Namespaces.Docbook5)
@@ -317,7 +327,7 @@ namespace AuthorIntrusion.IO
 				case "simpara":
 					// For paragraphs, also trim the contents.
 					var paragraph = (Paragraph) context[context.Count - 1];
-					paragraph.SetText(
+					paragraph.SetContents(
 						Regex.Replace(paragraph.ContentString.Trim(), @"\s+", " "));
 
 					// Remove the last item which should be this element.
@@ -333,7 +343,7 @@ namespace AuthorIntrusion.IO
 		/// <param name="context">The context.</param>
 		private static void ReadText(
 			XmlReader reader,
-			List<Element> context)
+			LinkedList<Element> context)
 		{
 			// Figure out where to put this text content.
 			if (context.Count == 0)
@@ -358,4 +368,3 @@ namespace AuthorIntrusion.IO
 		#endregion
 	}
 }
-#endif

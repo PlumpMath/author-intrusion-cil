@@ -1,4 +1,3 @@
-#if TODO
 #region Copyright and License
 
 // Copyright (c) 2005-2011, Moonfire Games
@@ -104,11 +103,13 @@ namespace AuthorIntrusion.IO
 			}
 
 			// Write out any child structures associated with the item.
-			if (structure is IStructureContainer)
+			if (structure is Region)
 			{
-				var structureContainer = (IStructureContainer) structure;
+				var region = (Region) structure;
 
-				foreach (Matter childStructure in structureContainer.Structures)
+				writer.WriteElementString("p", region.Title);
+
+				foreach (Matter childStructure in region.Matters)
 				{
 					Write(writer, childStructure, depth + 1);
 				}
@@ -127,7 +128,7 @@ namespace AuthorIntrusion.IO
 			// Verify our values.
 			if (outputStream == null)
 			{
-				throw new ArgumentNullException("writer");
+				throw new ArgumentNullException("outputStream");
 			}
 
 			if (document == null)
@@ -163,7 +164,12 @@ namespace AuthorIntrusion.IO
 
 				// Write out the body tag.
 				writer.WriteStartElement("body", Namespaces.Xhtml11);
-				// TODO Write(writer, document.Structure, 0);
+
+				foreach (Matter matter in document.Matters)
+				{
+					Write(writer, matter, 0);
+				}
+
 				writer.WriteEndElement();
 
 				// Finish up the XHTML.
@@ -233,4 +239,3 @@ namespace AuthorIntrusion.IO
 		#endregion
 	}
 }
-#endif
