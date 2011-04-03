@@ -25,6 +25,7 @@
 #region Namespaces
 
 using System.Collections.Generic;
+using System.Diagnostics;
 
 #endregion
 
@@ -67,6 +68,22 @@ namespace AuthorIntrusion.Contracts.Matters
 		}
 
 		/// <summary>
+		/// Gets the zero-based depth of the matter inside the document.
+		/// </summary>
+		public int Depth
+		{
+			get
+			{
+				if (ParentContainer == null)
+				{
+					return 0;
+				}
+
+				return ParentContainer.Depth + 1;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the document associated with this matter.
 		/// </summary>
 		/// <value>
@@ -90,6 +107,39 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// </summary>
 		/// <value>The type of the structure.</value>
 		public abstract MatterType MatterType { get; }
+
+		/// <summary>
+		/// Gets or sets the container that encapsulates this one.
+		/// </summary>
+		/// <value>
+		/// The matter container.
+		/// </value>
+		public IMattersContainer ParentContainer
+		{
+			[DebuggerStepThrough]
+			get { return Parent as IMattersContainer; }
+			[DebuggerStepThrough]
+			set { Parent = value as Element; }
+		}
+
+		/// <summary>
+		/// Gets the index of this instance in its parent container.
+		/// </summary>
+		/// <value>
+		/// The index of the item in the parent.
+		/// </value>
+		public int ParentIndex
+		{
+			get
+			{
+				if (ParentContainer == null)
+				{
+					return -1;
+				}
+
+				return ParentContainer.Matters.IndexOf(this);
+			}
+		}
 
 		#endregion
 

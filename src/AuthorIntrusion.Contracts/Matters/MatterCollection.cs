@@ -24,6 +24,8 @@
 
 #region Namespaces
 
+using System;
+
 using C5;
 
 #endregion
@@ -35,6 +37,8 @@ namespace AuthorIntrusion.Contracts.Matters
 	/// </summary>
 	public class MatterCollection : LinkedList<Matter>
 	{
+		private readonly IMattersContainer container;
+
 		#region Fields
 
 		private int flattenedCount;
@@ -46,8 +50,18 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MatterCollection"/> class.
 		/// </summary>
-		public MatterCollection()
+		/// <param name="container">The container.</param>
+		public MatterCollection(IMattersContainer container)
 		{
+			// Save the container so we can wire up parents.
+			if (container == null)
+			{
+				throw new ArgumentNullException("container");
+			}
+
+			this.container = container;
+
+			// Attach to events to observe collection changes.
 			ItemsAdded += OnItemsAdded;
 			ItemsRemoved += OnItemsRemoved;
 		}
@@ -69,6 +83,25 @@ namespace AuthorIntrusion.Contracts.Matters
 		#region Events
 
 		/// <summary>
+		/// Occurs when the flattened count is changed.
+		/// </summary>
+		public event EventHandler<FlattenedCountChangedEventArgs>
+			FlattenedCountChanged;
+
+		/// <summary>
+		/// Called when a child's flatted count is changed.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="AuthorIntrusion.Contracts.Matters.FlattenedCountChangedEventArgs"/> instance containing the event data.</param>
+		private void OnChildFlattedCountChanged(
+			object sender,
+			FlattenedCountChangedEventArgs e)
+		{
+			flattenedCount += e.Amount;
+			RaiseFlattenedCountChanged(e.Amount);
+		}
+
+		/// <summary>
 		/// Called for every item added into a region contains in this list.
 		/// </summary>
 		private void OnChildItemsAdded(
@@ -76,6 +109,7 @@ namespace AuthorIntrusion.Contracts.Matters
 			ItemCountEventArgs<Matter> eventargs)
 		{
 			flattenedCount++;
+			RaiseFlattenedCountChanged(1);
 		}
 
 		/// <summary>
@@ -86,6 +120,7 @@ namespace AuthorIntrusion.Contracts.Matters
 			ItemCountEventArgs<Matter> eventargs)
 		{
 			flattenedCount--;
+			RaiseFlattenedCountChanged(-1);
 		}
 
 		/// <summary>
@@ -95,15 +130,33 @@ namespace AuthorIntrusion.Contracts.Matters
 			object sender,
 			ItemCountEventArgs<Matter> e)
 		{
+			// All matters have a parent container. If this non-null, we throw
+			// an exception to help ensure integrity of the relationships 
+			// between all of the items.
+			if (e.Item.ParentContainer != null)
+			{
+				throw new InvalidOperationException(
+					"Cannot add the item (" + e.Item +
+					") to the collection because it already has a parent container. Remove it from the previous list before adding it to this one.");
+			}
+
+			e.Item.ParentContainer = container;
+
 			// If the item is a Region, then we subscribe to the region's
 			// matter list so we can keep our flattened counts updated.
 			if (e.Item.MatterType == MatterType.Region)
 			{
+				// Add up the events for listening to size changes. Also add
+				// the current flattened count to catch the current size of our
+				// new child.
 				var region = (Region) e.Item;
 
 				flattenedCount += region.Matters.FlattenedCount;
+				RaiseFlattenedCountChanged(region.Matters.FlattenedCount);
+
 				region.Matters.ItemsAdded += OnChildItemsAdded;
 				region.Matters.ItemsRemoved += OnChildItemsRemoved;
+				region.Matters.FlattenedCountChanged += OnChildFlattedCountChanged;
 			}
 		}
 
@@ -114,6 +167,9 @@ namespace AuthorIntrusion.Contracts.Matters
 			object sender,
 			ItemCountEventArgs<Matter> e)
 		{
+			// Clear the parent item out so we don't have to worry about integrity.
+			e.Item.ParentContainer = null;
+
 			// If the item is a Region, then we subscribe to the region's
 			// matter list so we can keep our flattened counts updated.
 			if (e.Item.MatterType == MatterType.Region)
@@ -121,8 +177,23 @@ namespace AuthorIntrusion.Contracts.Matters
 				var region = (Region) e.Item;
 
 				flattenedCount -= region.Matters.FlattenedCount;
+				RaiseFlattenedCountChanged(-region.Matters.FlattenedCount);
+
 				region.Matters.ItemsAdded -= OnChildItemsAdded;
 				region.Matters.ItemsRemoved -= OnChildItemsRemoved;
+				region.Matters.FlattenedCountChanged -= OnChildFlattedCountChanged;
+			}
+		}
+
+		/// <summary>
+		/// Raises the flattened count changed event.
+		/// </summary>
+		/// <param name="amount">The amount.</param>
+		protected void RaiseFlattenedCountChanged(int amount)
+		{
+			if (FlattenedCountChanged != null)
+			{
+				FlattenedCountChanged(this, new FlattenedCountChangedEventArgs(amount));
 			}
 		}
 

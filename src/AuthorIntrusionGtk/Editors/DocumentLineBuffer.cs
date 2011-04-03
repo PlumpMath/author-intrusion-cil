@@ -309,8 +309,8 @@ namespace AuthorIntrusionGtk.Editors
 
 			// Figure out the parent structure and the index of this structure
 			// inside that parent.
-			var parent = matter.ParentSection;
-			int parentIndex = parent.IndexOf(matter);
+			var parent = matter.ParentContainer;
+			int parentIndex = parent.Matters.IndexOf(matter);
 
 			// Now, insert an empty version of the structure after the
 			// line index.
@@ -319,9 +319,6 @@ namespace AuthorIntrusionGtk.Editors
 				Matter newStructure = matter.CreateEmptyClone();
 				parent.Matters.Insert(parentIndex, newStructure);
 			}
-
-			// Once we are done, we have to rebuild the indexes.
-			RebuildIndexes();
 
 			// Fire an insert line change.
 			RaiseLinesInserted(
@@ -367,22 +364,14 @@ namespace AuthorIntrusionGtk.Editors
 			// the delete process needs to maintain structure so a chapter
 			// doesn't have a subsection below it.
 
-			// For debugging purposes, create a dumper and show the desired
-			// output and processing of the delete.
-			var dumper = new DocumentDumper(document, Console.Out);
-			dumper.StructurePrefixes.Clear();
-			dumper.StructurePrefixes[startIndex] = '+';
-			dumper.StructurePrefixes[endIndex] = '-';
-			dumper.Dump();
-
 			// If we are from the same parent, then we need to remove the items
 			// while adding the trailing items from the end index.
 			Matter start = document.DocumentMatters[startIndex];
-			var startParent = start.ParentSection;
+			var startParent = start.ParentContainer;
 
 			Matter end = document.DocumentMatters[endIndex];
 			var endSection = end as Region;
-			var endParent = end.ParentSection;
+			var endParent = end.ParentContainer;
 
 			if (startParent == endParent)
 			{
@@ -401,7 +390,7 @@ namespace AuthorIntrusionGtk.Editors
 					// structures.
 					var structures = new ArrayList<Matter>();
 					structures.AddAll(
-						endSection.Matters.;
+						endSection.Matters);
 
 					endSection.Matters.RemoveAll(structures);
 
@@ -414,76 +403,37 @@ namespace AuthorIntrusionGtk.Editors
 				startParent.Matters.RemoveInterval(
 					start.ParentIndex,
 					end.ParentIndex - start.ParentIndex + 1);
-
-				// We finished with these cases, so return to stop processing.
-				RebuildIndexes();
-			}
-
-			// Check to see if the start is the first line.
-			if (startIndex == 0)
-			{
-				// Because the first line is top-most structure, we have to do
-				// something special for this one. First, delete all the other
-				// lines so the second item will be the new document root.
-				InternalDeleteLines(startIndex + 1, endIndex);
-
-				// Get the new root which will always be the first child item.
-				Matter newRoot = GetStructure(1);
-
-				// If the new root isn't a section, we need to create a new
-				// section and 
-				Region newSection;
-
-				if (!(newRoot is Region))
-				{
-					// Create a new section and set the section's title equal
-					// to the text of the section we're getting rid of.
-					newSection = new Region();
-					newSection.SetText(newRoot.GetText());
-				}
-				else
-				{
-					newSection = (Region) newRoot;
-				}
-
-				// Transplant the contents of the old root into the new section.
-				var rootSection = (Region) document.Structure;
-
-				newSection.Matters.AddAll(rootSection.Matters.Slide(2));
-
-				document.Structure = newRoot;
-
 				return;
 			}
 
 			// Flatten out the structure between the start and end point.
-			Console.WriteLine("=== flattened");
 			FlattenDocument(startIndex, endIndex);
-			dumper.Dump();
 
 			// At this point, the end structure will be a child of the start's
 			// parent. We want to pull everything up after the end point up
 			// until we are at the same level as the start.
 			PullEndToStartLevel(startIndex, endIndex);
-			Console.WriteLine("=== Pull end to start");
-			dumper.Dump();
 
 			// We have the start on the same level as the end, plus there are
 			// no elements between the two that have a lower depths than either.
 			// We need to see if the end point is a section.
 			if (endSection != null)
 			{
+				// We have to pull out the items we are removing because the
+				// MatterCollection enforces integrity.
+				var matters = new ArrayList<Matter>();
+				matters.AddAll(endSection.Matters);
+
+				endSection.Matters.RemoveAll(matters);
 				startParent.Matters.InsertAll(
 					end.ParentIndex + 1,
-					endSection.Matters.;
+					matters);
 			}
 
 			// Remove all the items between the start and end points.
 			startParent.Matters.RemoveInterval(
 				start.ParentIndex,
 				end.ParentIndex - start.ParentIndex + 1);
-			Console.WriteLine("=== Removing items");
-			dumper.Dump();
 		}
 
 		#endregion
@@ -505,7 +455,7 @@ namespace AuthorIntrusionGtk.Editors
 			Matter start = document.DocumentMatters[startIndex];
 			int startDepth = start.Depth;
 			int startParentIndex = start.ParentIndex;
-			Region startParent = start.ParentSection;
+			IMattersContainer startParent = start.ParentContainer;
 
 			for (int index = startIndex + 1; index <= endIndex; index++)
 			{
@@ -516,7 +466,7 @@ namespace AuthorIntrusionGtk.Editors
 				{
 					// We need to move this down, even if it violates the normal
 					// section layouts. We'll fix those later.
-					structure.ParentSection.Matters.Remove(structure);
+					structure.ParentContainer.Matters.Remove(structure);
 					startParent.Matters.Add(structure);
 
 					// We have to rebalance everything.
@@ -552,20 +502,20 @@ namespace AuthorIntrusionGtk.Editors
 
 			// Since the end is lower than the start, we shift the end plus any
 			// items after it from its parent up a level.
-			Region endParent = end.ParentSection;
+			IMattersContainer endParent = end.ParentContainer;
 
-			System.Collections.Generic.IList < Matter > trailin.Matters. =
+			var trailingMatters = new ArrayList<Matter>();
+			trailingMatters.AddAll(
 				endParent.Matters.View(
-					end.ParentIndex, endParent.Matters.Count - end.ParentIndex);
-			endParent.Matters.RemoveInterval(
-				end.ParentIndex,
-				endParent.Matters.Count - end.ParentIndex);
+					end.ParentIndex, 
+					endParent.Matters.Count - end.ParentIndex));
+			endParent.Matters.RemoveAll(trailingMatters);
 
-			Region superParent = endParent.ParentSection;
+			IMattersContainer superParent = endParent.ParentContainer;
 
 			superParent.Matters.InsertAll(
 				endParent.ParentIndex + 1,
-				trailin.Matters.;
+				trailingMatters);
 
 			PullEndToStartLevel(startIndex, endIndex);
 		}

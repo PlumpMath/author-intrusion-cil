@@ -24,6 +24,8 @@
 
 #region Namespaces
 
+using System.Diagnostics;
+
 using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Structures;
 
@@ -35,7 +37,7 @@ namespace AuthorIntrusion.Contracts
 	/// Represents an entire Author Intrusion document, including the single
 	/// root node for the entire document.
 	/// </summary>
-	public class Document
+	public class Document : Element, IMattersContainer
 	{
 		#region Fields
 
@@ -51,7 +53,7 @@ namespace AuthorIntrusion.Contracts
 		/// </summary>
 		public Document()
 		{
-			matters = new MatterCollection();
+			matters = new MatterCollection(this);
 			documentMatters = new DocumentMatterCollection(matters);
 		}
 
@@ -60,10 +62,20 @@ namespace AuthorIntrusion.Contracts
 		#region Matters
 
 		/// <summary>
+		/// Gets the zero-based depth of the object in the container.
+		/// </summary>
+		public int Depth
+		{
+			[DebuggerStepThrough]
+			get { return 0; }
+		}
+
+		/// <summary>
 		/// Gets the flattened list of document matters.
 		/// </summary>
 		public DocumentMatterCollection DocumentMatters
 		{
+			[DebuggerStepThrough]
 			get { return documentMatters; }
 		}
 
@@ -72,7 +84,29 @@ namespace AuthorIntrusion.Contracts
 		/// </summary>
 		public MatterCollection Matters
 		{
+			[DebuggerStepThrough]
 			get { return matters; }
+		}
+
+		/// <summary>
+		/// Gets the parent container object.
+		/// </summary>
+		public IMattersContainer ParentContainer
+		{
+			[DebuggerStepThrough]
+			get { return null; }
+		}
+
+		/// <summary>
+		/// Gets the index of this instance in its parent container.
+		/// </summary>
+		/// <value>
+		/// The index of the item in the parent.
+		/// </value>
+		public int ParentIndex
+		{
+			[DebuggerStepThrough]
+			get { return -1; }
 		}
 
 		/// <summary>

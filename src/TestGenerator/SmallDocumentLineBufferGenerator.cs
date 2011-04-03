@@ -112,7 +112,7 @@ namespace TestGenerator
 					for (int i = 0; i < results.Count; i++)
 					{
 						writer.WriteLine(
-							"\tAssert.AreEqual(\"{0}\", document.Matters[{1}].GetContents());",
+							"\tAssert.AreEqual(\"{0}\", document.DocumentMatters[{1}].GetContents());",
 							results[i],
 							i);
 					}
@@ -163,18 +163,8 @@ namespace TestGenerator
 			var thumbprint = new StringBuilder();
 
 			// Go through the mock document.
-			bool first = true;
-
 			foreach (string name in document)
 			{
-				// The first is always an article.
-				if (first)
-				{
-					thumbprint.Append("A");
-					first = false;
-					continue;
-				}
-
 				// Modify the thumbprint to match the one Document produces.
 				char prefix = name[0];
 

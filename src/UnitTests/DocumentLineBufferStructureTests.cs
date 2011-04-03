@@ -263,7 +263,7 @@ namespace UnitTests
 			// Verification
 			string thumbprint = document.GetThumbprint();
 
-			Assert.AreEqual("Appp1ppp1pppppp2ppp2ppp3ppp3ppp", thumbprint);
+			Assert.AreEqual("Appp1ppp1pppppp3ppp2ppp3ppp3ppp", thumbprint);
 		}
 
 		/// <summary>

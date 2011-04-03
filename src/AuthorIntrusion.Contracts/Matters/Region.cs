@@ -41,7 +41,7 @@ namespace AuthorIntrusion.Contracts.Matters
 	/// created without an underlying list, but will throw an exception for
 	/// many of the properties and methods.
 	/// </summary>
-	public class Region : Matter
+	public class Region : Matter, IMattersContainer
 	{
 		#region Fields
 
@@ -57,7 +57,7 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// </summary>
 		public Region()
 		{
-			matters = new MatterCollection();
+			matters = new MatterCollection(this);
 		}
 
 		/// <summary>

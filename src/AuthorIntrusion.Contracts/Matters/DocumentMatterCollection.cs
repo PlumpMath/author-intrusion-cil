@@ -76,7 +76,51 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// </summary>
 		public Matter this[int index]
 		{
-			get { throw new NotImplementedException(); }
+			get {
+				// Go through the top-level collections.
+				return GetMatterAt(matters, index);
+			}
+		}
+
+		/// <summary>
+		/// Gets the matter at a given index.
+		/// </summary>
+		/// <param name="currentMatters">The matters.</param>
+		/// <param name="relativeIndex">The index.</param>
+		/// <returns></returns>
+		private static Matter GetMatterAt(MatterCollection currentMatters, int relativeIndex)
+		{
+			// Go through the matters and see if one matches. We decrement
+			// the index as we go so we can always work with relative indexes.
+			foreach (Matter matter in currentMatters)
+			{
+				// If we are at index 0, then this is the matter.
+				if (relativeIndex == 0)
+				{
+					return matter;
+				}
+
+				// Decrement a relative index.
+				relativeIndex--;
+
+				// Check to see if this matter is a container.
+				var container = matter as IMattersContainer;
+
+				if (container != null)
+				{
+					// This is inside the container, so recurse into it.
+					if (relativeIndex < container.Matters.FlattenedCount)
+					{
+						return GetMatterAt(container.Matters, relativeIndex);
+					}
+
+					// We weren't in the container, so skip over it.
+					relativeIndex -= container.Matters.FlattenedCount;
+				}
+			}
+
+			// If we got this far, we can't find it.
+			return null;
 		}
 
 		#endregion

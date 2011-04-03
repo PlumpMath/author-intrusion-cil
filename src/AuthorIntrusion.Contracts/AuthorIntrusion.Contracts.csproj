@@ -62,6 +62,8 @@
     <Compile Include="Languages\ILanguageSpecific.cs" />
     <Compile Include="Languages\IContentParser.cs" />
     <Compile Include="Matters\DocumentMatterCollection.cs" />
+    <Compile Include="Matters\FlattenedCountChangedEventArgs.cs" />
+    <Compile Include="Matters\IMattersContainer.cs" />
     <Compile Include="Matters\MatterCollection.cs" />
     <Compile Include="Matters\RegionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
