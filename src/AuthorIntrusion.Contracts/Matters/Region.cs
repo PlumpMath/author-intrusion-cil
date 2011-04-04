@@ -58,6 +58,7 @@ namespace AuthorIntrusion.Contracts.Matters
 		public Region()
 		{
 			matters = new MatterCollection(this);
+			title = String.Empty;
 		}
 
 		/// <summary>

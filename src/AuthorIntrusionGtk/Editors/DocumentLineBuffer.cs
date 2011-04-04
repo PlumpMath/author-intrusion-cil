@@ -147,6 +147,12 @@ namespace AuthorIntrusionGtk.Editors
 			// to style those paragraphs differently.
 			string styleName = structure.MatterType.ToString();
 
+			if (structure.MatterType == MatterType.Region)
+			{
+				styleName = ((Region) structure).RegionType.ToString();
+			}
+
+			// Create the style for blank entries.
 			if (text.Length == 0)
 			{
 				styleName = "Blank " + styleName;
