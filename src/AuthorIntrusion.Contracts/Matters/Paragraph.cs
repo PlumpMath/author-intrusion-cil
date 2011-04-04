@@ -38,7 +38,7 @@ namespace AuthorIntrusion.Contracts.Matters
 	{
 		#region Fields
 
-		private readonly ContentList contents;
+		private ContentList contents;
 
 		#endregion
 
@@ -129,9 +129,15 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// <param name="text">The text.</param>
 		public override void SetContents(string text)
 		{
+			// Grab the old content list for the event.
+			ContentList oldContents = contents;
+
 			// Clear out the previous contents and set the new contents.
-			contents.Clear();
+			contents = new ContentList();
 			contents.Add(text);
+
+			// Raise an event with the change.
+			RaiseParagraphChanged(this, oldContents);
 		}
 
 		#endregion

@@ -25,10 +25,12 @@
 #region Namespaces
 
 using System;
+using System.Diagnostics;
 using System.IO;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
+using AuthorIntrusion.Contracts.Matters;
 
 using AuthorIntrusionGtk.Dialogs;
 using AuthorIntrusionGtk.Editors;
@@ -179,6 +181,14 @@ namespace AuthorIntrusionGtk
 		{
 			var lineBuffer = new DocumentLineBuffer(context.Document);
 			editorView.SetLineBuffer(lineBuffer);
+
+			context.Document.ParagraphChanged += OnParagraphChanged;
+		}
+
+		private void OnParagraphChanged(object sender,
+		                                ParagraphChangedEventArgs e)
+		{
+			Debug.WriteLine("Paragraph Changed: " + e.Paragraph.GetContents());
 		}
 
 		/// <summary>
@@ -190,6 +200,7 @@ namespace AuthorIntrusionGtk
 			object sender,
 			EventArgs args)
 		{
+			context.Document.ParagraphChanged -= OnParagraphChanged;
 			// Clear out the buffers on the displays.
 			editorView.ClearLineBuffer();
 		}

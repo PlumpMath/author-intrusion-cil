@@ -58,6 +58,7 @@ namespace AuthorIntrusion.Contracts.Matters
 		public Region()
 		{
 			matters = new MatterCollection(this);
+			matters.ParagraphChanged += OnParagraphChanged;
 			title = String.Empty;
 		}
 
@@ -133,6 +134,18 @@ namespace AuthorIntrusion.Contracts.Matters
 		{
 			var section = new Region(RegionType);
 			return section;
+		}
+
+		/// <summary>
+		/// Called when a contained paragraph changes.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="AuthorIntrusion.Contracts.Matters.ParagraphChangedEventArgs"/> instance containing the event data.</param>
+		private void OnParagraphChanged(
+			object sender,
+			ParagraphChangedEventArgs e)
+		{
+			RaiseParagraphChanged(e);
 		}
 
 		#endregion

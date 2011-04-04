@@ -93,7 +93,7 @@ namespace AuthorIntrusionGtk
 				// Check to see if we already have a document.
 				if (document != null)
 				{
-					FireUnloadedDocument();
+					RaiseUnloadedDocument();
 				}
 
 				// Set the new document.
@@ -102,7 +102,7 @@ namespace AuthorIntrusionGtk
 				// Raise the event that we have a new document.
 				if (document != null)
 				{
-					FireLoadedDocument();
+					RaiseLoadedDocument();
 				}
 			}
 		}
@@ -110,7 +110,7 @@ namespace AuthorIntrusionGtk
 		/// <summary>
 		/// Fires the loaded document event.
 		/// </summary>
-		private void FireLoadedDocument()
+		private void RaiseLoadedDocument()
 		{
 			var listeners = LoadedDocument;
 
@@ -123,7 +123,7 @@ namespace AuthorIntrusionGtk
 		/// <summary>
 		/// Fires the unloaded document event.
 		/// </summary>
-		private void FireUnloadedDocument()
+		private void RaiseUnloadedDocument()
 		{
 			var listeners = UnloadedDocument;
 

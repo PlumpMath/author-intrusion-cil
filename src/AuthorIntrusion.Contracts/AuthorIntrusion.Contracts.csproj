@@ -65,6 +65,7 @@
     <Compile Include="Matters\FlattenedCountChangedEventArgs.cs" />
     <Compile Include="Matters\IMattersContainer.cs" />
     <Compile Include="Matters\MatterCollection.cs" />
+    <Compile Include="Matters\ParagraphChangedEventArgs.cs" />
     <Compile Include="Matters\RegionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contents\Content.cs" />

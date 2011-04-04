@@ -24,6 +24,7 @@
 
 #region Namespaces
 
+using System;
 using System.Diagnostics;
 
 using AuthorIntrusion.Contracts.Matters;
@@ -54,6 +55,7 @@ namespace AuthorIntrusion.Contracts
 		public Document()
 		{
 			matters = new MatterCollection(this);
+			matters.ParagraphChanged += OnParagraphChanged;
 			documentMatters = new DocumentMatterCollection(matters);
 		}
 
@@ -122,6 +124,39 @@ namespace AuthorIntrusion.Contracts
 			thumbnailer.Visit(this);
 
 			return thumbnailer.Thumbnail;
+		}
+
+		#endregion
+
+		#region Editing
+
+		/// <summary>
+		/// Called when a contained paragraph changes.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="AuthorIntrusion.Contracts.Matters.ParagraphChangedEventArgs"/> instance containing the event data.</param>
+		private void OnParagraphChanged(
+			object sender,
+			ParagraphChangedEventArgs e)
+		{
+			RaiseParagraphChanged(e);
+		}
+
+		/// <summary>
+		/// Occurs when a contained paragraph changes.
+		/// </summary>
+		public event EventHandler<ParagraphChangedEventArgs> ParagraphChanged;
+
+		/// <summary>
+		/// Raises the paragraph changed event.
+		/// </summary>
+		/// <param name="e">The <see cref="AuthorIntrusion.Contracts.Matters.ParagraphChangedEventArgs"/> instance containing the event data.</param>
+		protected void RaiseParagraphChanged(ParagraphChangedEventArgs e)
+		{
+			if (ParagraphChanged != null)
+			{
+				ParagraphChanged(this, e);
+			}
 		}
 
 		#endregion

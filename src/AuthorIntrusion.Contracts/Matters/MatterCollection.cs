@@ -37,10 +37,9 @@ namespace AuthorIntrusion.Contracts.Matters
 	/// </summary>
 	public class MatterCollection : LinkedList<Matter>
 	{
-		private readonly IMattersContainer container;
-
 		#region Fields
 
+		private readonly IMattersContainer container;
 		private int flattenedCount;
 
 		#endregion
@@ -133,23 +132,26 @@ namespace AuthorIntrusion.Contracts.Matters
 			// All matters have a parent container. If this non-null, we throw
 			// an exception to help ensure integrity of the relationships 
 			// between all of the items.
-			if (e.Item.ParentContainer != null)
+			Matter matter = e.Item;
+
+			if (matter.ParentContainer != null)
 			{
 				throw new InvalidOperationException(
-					"Cannot add the item (" + e.Item +
+					"Cannot add the item (" + matter +
 					") to the collection because it already has a parent container. Remove it from the previous list before adding it to this one.");
 			}
 
-			e.Item.ParentContainer = container;
+			matter.ParentContainer = container;
+			matter.ParagraphChanged += OnParagraphChanged;
 
 			// If the item is a Region, then we subscribe to the region's
 			// matter list so we can keep our flattened counts updated.
-			if (e.Item.MatterType == MatterType.Region)
+			if (matter.MatterType == MatterType.Region)
 			{
 				// Add up the events for listening to size changes. Also add
 				// the current flattened count to catch the current size of our
 				// new child.
-				var region = (Region) e.Item;
+				var region = (Region) matter;
 
 				flattenedCount += region.Matters.FlattenedCount;
 				RaiseFlattenedCountChanged(region.Matters.FlattenedCount);
@@ -168,13 +170,16 @@ namespace AuthorIntrusion.Contracts.Matters
 			ItemCountEventArgs<Matter> e)
 		{
 			// Clear the parent item out so we don't have to worry about integrity.
-			e.Item.ParentContainer = null;
+			Matter matter = e.Item;
+
+			matter.ParentContainer = null;
+			matter.ParagraphChanged -= OnParagraphChanged;
 
 			// If the item is a Region, then we subscribe to the region's
 			// matter list so we can keep our flattened counts updated.
-			if (e.Item.MatterType == MatterType.Region)
+			if (matter.MatterType == MatterType.Region)
 			{
-				var region = (Region) e.Item;
+				var region = (Region) matter;
 
 				flattenedCount -= region.Matters.FlattenedCount;
 				RaiseFlattenedCountChanged(-region.Matters.FlattenedCount);
@@ -186,6 +191,23 @@ namespace AuthorIntrusion.Contracts.Matters
 		}
 
 		/// <summary>
+		/// Called when a contained paragraph changes.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="AuthorIntrusion.Contracts.Matters.ParagraphChangedEventArgs"/> instance containing the event data.</param>
+		private void OnParagraphChanged(
+			object sender,
+			ParagraphChangedEventArgs e)
+		{
+			RaiseParagraphChanged(e);
+		}
+
+		/// <summary>
+		/// Occurs when a contained paragraph changes.
+		/// </summary>
+		public event EventHandler<ParagraphChangedEventArgs> ParagraphChanged;
+
+		/// <summary>
 		/// Raises the flattened count changed event.
 		/// </summary>
 		/// <param name="amount">The amount.</param>
@@ -194,6 +216,18 @@ namespace AuthorIntrusion.Contracts.Matters
 			if (FlattenedCountChanged != null)
 			{
 				FlattenedCountChanged(this, new FlattenedCountChangedEventArgs(amount));
+			}
+		}
+
+		/// <summary>
+		/// Raises the paragraph changed event.
+		/// </summary>
+		/// <param name="e">The <see cref="AuthorIntrusion.Contracts.Matters.ParagraphChangedEventArgs"/> instance containing the event data.</param>
+		protected void RaiseParagraphChanged(ParagraphChangedEventArgs e)
+		{
+			if (ParagraphChanged != null)
+			{
+				ParagraphChanged(this, e);
 			}
 		}
 

@@ -24,8 +24,11 @@
 
 #region Namespaces
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
+using AuthorIntrusion.Contracts.Collections;
 
 #endregion
 
@@ -146,11 +149,38 @@ namespace AuthorIntrusion.Contracts.Matters
 		#region Document Editing
 
 		/// <summary>
+		/// Occurs when a paragraph contents have been changed.
+		/// </summary>
+		public event EventHandler<ParagraphChangedEventArgs> ParagraphChanged;
+
+		/// <summary>
 		/// Creates an version of itself, but with no text or contents. This is
 		/// used to duplicate lines in the text editor.
 		/// </summary>
 		/// <returns></returns>
 		public abstract Matter CreateEmptyClone();
+
+		/// <summary>
+		/// Raises the paragraph changed event.
+		/// </summary>
+		/// <param name="paragraph">The paragraph.</param>
+		/// <param name="oldContents">The old contents.</param>
+		protected void RaiseParagraphChanged(Paragraph paragraph, ContentList oldContents)
+		{
+			RaiseParagraphChanged(new ParagraphChangedEventArgs(paragraph, oldContents));
+		}
+
+		/// <summary>
+		/// Raises the paragraph changed event.
+		/// </summary>
+		/// <param name="e">The <see cref="AuthorIntrusion.Contracts.Matters.ParagraphChangedEventArgs"/> instance containing the event data.</param>
+		protected void RaiseParagraphChanged(ParagraphChangedEventArgs e)
+		{
+			if (ParagraphChanged != null)
+			{
+				ParagraphChanged(this, e);
+			}
+		}
 
 		#endregion
 
