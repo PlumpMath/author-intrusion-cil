@@ -24,8 +24,11 @@
 
 #region Namespaces
 
+using System.Threading;
+
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Interfaces;
+using AuthorIntrusion.Contracts.Processes;
 
 #endregion
 
@@ -38,7 +41,9 @@ namespace AuthorIntrusion.Contracts.Matters
 	{
 		#region Fields
 
+		private static int idGenerator;
 		private ContentList contents;
+		private int paragraphProcessKey;
 
 		#endregion
 
@@ -73,6 +78,27 @@ namespace AuthorIntrusion.Contracts.Matters
 		public override MatterType MatterType
 		{
 			get { return MatterType.Paragraph; }
+		}
+
+		/// <summary>
+		/// Gets the ID for the paragraph for purposes of processing.
+		/// </summary>
+		/// <value>The id.</value>
+		/// <remarks>
+		/// This is not intended to be serialized and is created on-demand
+		/// for the processing of the paragraph.
+		/// </remarks>
+		public int ParagraphProcessKey
+		{
+			get
+			{
+				if (paragraphProcessKey == 0)
+				{
+					paragraphProcessKey = Interlocked.Increment(ref idGenerator);
+				}
+
+				return paragraphProcessKey;
+			}
 		}
 
 		#endregion
@@ -111,6 +137,12 @@ namespace AuthorIntrusion.Contracts.Matters
 		{
 			get { return contents.ContentString; }
 		}
+
+		/// <summary>
+		/// Gets or sets the pending processes that this paragraph needs.
+		/// </summary>
+		/// <value>The pending processes.</value>
+		public ProcessTypes PendingProcesses { get; set; }
 
 		/// <summary>
 		/// Retrieves the string for the structural context. This will be the

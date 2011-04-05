@@ -24,8 +24,6 @@
 
 #region Namespaces
 
-using System;
-
 using AuthorIntrusion.Contracts.Collections;
 
 #endregion
@@ -35,7 +33,7 @@ namespace AuthorIntrusion.Contracts.Matters
 	/// <summary>
 	/// An event argument class that contains a paragraph that changed.
 	/// </summary>
-	public class ParagraphChangedEventArgs : EventArgs
+	public class ParagraphChangedEventArgs : ParagraphEventArgs
 	{
 		#region Constructors
 
@@ -47,8 +45,8 @@ namespace AuthorIntrusion.Contracts.Matters
 		public ParagraphChangedEventArgs(
 			Paragraph paragraph,
 			ContentList oldContents)
+			: base(paragraph)
 		{
-			Paragraph = paragraph;
 			OldContents = oldContents;
 		}
 
@@ -60,11 +58,6 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// Contains the old contents of the paragraph.
 		/// </summary>
 		public ContentList OldContents { get; private set; }
-
-		/// <summary>
-		/// Contains the paragraph of the event.
-		/// </summary>
-		public Paragraph Paragraph { get; private set; }
 
 		#endregion
 	}

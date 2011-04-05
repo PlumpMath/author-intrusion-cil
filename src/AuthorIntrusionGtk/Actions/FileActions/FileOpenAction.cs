@@ -69,7 +69,7 @@ namespace AuthorIntrusionGtk.Actions.FileActions
 
 			try
 			{
-				// If the user cancelled, then just break out.
+				// If the user canceled, then just break out.
 				if (dialog.Run() != (int) ResponseType.Accept)
 				{
 					return;

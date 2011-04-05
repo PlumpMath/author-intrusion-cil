@@ -24,18 +24,47 @@
 
 #region Namespaces
 
-using StructureMap;
+using System;
 
 #endregion
 
-namespace AuthorIntrusion.Contents
+namespace AuthorIntrusion.Contracts.Processes
 {
 	/// <summary>
-	/// This class is responsible for managing the parsing process for paragraphs
-	/// and running each paragraph through the extensions.
+	/// Defines the various types of paragraph processes. Each one impacts the
+	/// paragraph in different manners. This enumeration is used to limit
+	/// processes to maintain speed when only updating the visual data of
+	/// the paragraph is needed. 
 	/// </summary>
-	[PluginFamily(IsSingleton = true)]
-	public class ParagraphProcessingManager
+	[Flags]
+	public enum ProcessTypes
 	{
+		/// <summary>
+		/// No processing is needed or required.
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// Processes that impact the structure of the ContentList, such as ones
+		/// that create phrases or re-arrange the contents.
+		/// </summary>
+		Parse = 1,
+
+		/// <summary>
+		/// Processes that do not impact the structure, but analyze and add
+		/// information about the various elements in the content list.
+		/// </summary>
+		Analyze = 2,
+
+		/// <summary>
+		/// Processes that only change the severity or display information about
+		/// the paragraph.
+		/// </summary>
+		Report = 4,
+
+		/// <summary>
+		/// Represents all types of processes.
+		/// </summary>
+		All = Parse | Analyze | Report,
 	}
 }

@@ -24,64 +24,41 @@
 
 #region Namespaces
 
-using System.IO;
-
-using AuthorIntrusion.Contracts.IO;
-
-using AuthorIntrusionGtk.Dialogs;
-
-using Gtk;
+using System;
 
 #endregion
 
-namespace AuthorIntrusionGtk.Actions.FileActions
+namespace AuthorIntrusion.Contracts.Matters
 {
 	/// <summary>
-	/// Handles the Save As... option in the file menu.
+	/// An event argument that only contains the paragraph.
 	/// </summary>
-	public class FileSaveAsAction : ContextualAction
+	public class ParagraphEventArgs : EventArgs
 	{
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FileOpenAction"/> class.
+		/// Initializes a new instance of the <see cref="ParagraphEventArgs"/> class.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		public FileSaveAsAction(Context context)
-			: base(context, "FileSaveAs", "Save _As...", null, Stock.SaveAs)
+		/// <param name="paragraph">The paragraph.</param>
+		public ParagraphEventArgs(Paragraph paragraph)
 		{
+			if (paragraph == null)
+			{
+				throw new ArgumentNullException("paragraph");
+			}
+
+			Paragraph = paragraph;
 		}
 
 		#endregion
 
-		#region Actions
+		#region Properties
 
 		/// <summary>
-		/// Called when the action is activated.
+		/// Contains the paragraph of the event.
 		/// </summary>
-		protected override void OnActivated()
-		{
-			var dialog = Container.GetInstance<SaveDocumentAsDialog>();
-
-			try
-			{
-				// If the user canceled, then just break out.
-				if (dialog.Run() != (int) ResponseType.Accept)
-				{
-					return;
-				}
-
-				// The user accepted it, so attempt to parse the document.
-				var outputManager = Container.GetInstance<IOutputManager>();
-				var file = new FileInfo(dialog.Filename);
-
-				outputManager.Write(file, Context.Document);
-			}
-			finally
-			{
-				dialog.Destroy();
-			}
-		}
+		public Paragraph Paragraph { get; private set; }
 
 		#endregion
 	}
