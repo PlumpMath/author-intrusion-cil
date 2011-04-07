@@ -219,6 +219,11 @@ namespace AuthorIntrusion.Processes
 
 					oldProcess.Cancel();
 					paragraphProcesses.Remove(paragraphProcessKey);
+
+					// Merge the old processe's operations into the one we'll be
+					// adding. We do this so if the prior job was a Parse and the
+					// second was a Report, we'll won't lose the Parse request.
+					processTypes |= oldProcess.ProcessTypes;
 				}
 
 				// Create a new process.
