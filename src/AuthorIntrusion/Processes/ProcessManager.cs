@@ -128,7 +128,18 @@ namespace AuthorIntrusion.Processes
 		/// <param name="process">The process.</param>
 		internal void Canceled(ParagraphProcess process)
 		{
-			Debug.WriteLine("Canceled " + process);
+			// Remove the process from the list.
+			using (new WriteLock(queueLock))
+			{
+				int paragraphProcessKey = process.Paragraph.ParagraphProcessKey;
+
+				if (paragraphProcesses[paragraphProcessKey] == process)
+				{
+					paragraphProcesses.Remove(paragraphProcessKey);
+				}
+			}
+
+			// Raise the canceled paragraph event.
 			RaiseParagraphCanceled(process.Paragraph);
 		}
 
@@ -138,7 +149,19 @@ namespace AuthorIntrusion.Processes
 		/// <param name="process">The process.</param>
 		internal void Finished(ParagraphProcess process)
 		{
-			Debug.WriteLine("Finishing " + process);
+			// Remove the process from the list.
+			using (new WriteLock(queueLock))
+			{
+				int paragraphProcessKey = process.Paragraph.ParagraphProcessKey;
+
+				if (paragraphProcesses[paragraphProcessKey] == process)
+				{
+					paragraphProcesses.Remove(paragraphProcessKey);
+				}
+			}
+
+			// Raise the event so other listeners can update their state.
+			Debug.WriteLine("Finished " + process + " " + ProcessCount + " remaining");
 			RaiseParagraphFinished(process.Paragraph);
 		}
 
