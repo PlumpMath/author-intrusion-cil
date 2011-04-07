@@ -45,7 +45,7 @@ namespace AuthorIntrusion.Contracts
 
 		private readonly DocumentMatterCollection documentMatters;
 		private readonly MatterCollection matters;
-		private readonly ProcessorManager processors;
+		private readonly DocumentProcessorManager processors;
 
 		#endregion
 
@@ -60,8 +60,23 @@ namespace AuthorIntrusion.Contracts
 			matters.ParagraphChanged += OnParagraphChanged;
 	
 			documentMatters = new DocumentMatterCollection(matters);
+		}
 
-			processors = new ProcessorManager(this);
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Document"/> class.
+		/// </summary>
+		/// <param name="processors">The processors.</param>
+		public Document(DocumentProcessorManager processors)
+			: this()
+		{
+			// Establish a link between this document and the processors manager.
+			if (processors == null)
+			{
+				throw new ArgumentNullException("processors");
+			}
+
+			this.processors = processors;
+			processors.SetDocument(this);
 		}
 
 		#endregion
@@ -131,6 +146,20 @@ namespace AuthorIntrusion.Contracts
 			return thumbnailer.Thumbnail;
 		}
 
+		/// <summary>
+		/// Gets or sets the document associated with this matter.
+		/// </summary>
+		/// <value>
+		/// The document.
+		/// </value>
+		public Document ParentDocument
+		{
+			get
+			{
+				return this;
+			}
+		}
+
 		#endregion
 
 		#region Editing
@@ -171,7 +200,7 @@ namespace AuthorIntrusion.Contracts
 		/// <summary>
 		/// Gets the processors associated with the document.
 		/// </summary>
-		public ProcessorManager Processors
+		public DocumentProcessorManager Processors
 		{
 			get { return processors; }
 		}

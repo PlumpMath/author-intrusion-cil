@@ -35,6 +35,8 @@ using AuthorIntrusion.Contracts.Matters;
 
 using C5;
 
+using StructureMap;
+
 #endregion
 
 namespace AuthorIntrusion.IO
@@ -46,6 +48,20 @@ namespace AuthorIntrusion.IO
 	/// </summary>
 	public class Docbook5InputReader : XmlInputReaderBase
 	{
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Docbook5InputReader"/> class.
+		/// </summary>
+		/// <param name="container">The container.</param>
+		public Docbook5InputReader(IContainer container)
+			: base(container)
+		{
+
+		}
+
+		#endregion
+
 		#region Identification
 
 		/// <summary>
@@ -113,7 +129,7 @@ namespace AuthorIntrusion.IO
 		protected override Document Read(XmlReader reader)
 		{
 			// Create the document we'll be putting everything into.
-			var document = new Document();
+			var document = Container.GetInstance<Document>();
 
 			// Keep track of the context of the parse so we can add the new
 			// items to the right place. As we parse a new element, we push it

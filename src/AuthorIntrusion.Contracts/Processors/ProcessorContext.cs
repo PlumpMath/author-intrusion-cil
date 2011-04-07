@@ -63,13 +63,19 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// Gets or sets the process manager associated with this process.
 		/// </summary>
 		/// <value>The process manager.</value>
-		public ProcessorManager Processors { get; set; }
+		public DocumentProcessorManager Processors { get; set; }
 
 		/// <summary>
 		/// Gets or sets the types of processes needed to be run.
 		/// </summary>
 		/// <value>The process types.</value>
 		public ProcessTypes ProcessTypes { get; set; }
+
+		/// <summary>
+		/// Gets the document associated with this process.
+		/// </summary>
+		/// <value>The document.</value>
+		public Document Document { get { return Paragraph.ParentDocument; } }
 
 		#endregion
 
@@ -95,18 +101,18 @@ namespace AuthorIntrusion.Contracts.Processors
 			// Mark that we started our process.
 			Processors.Started(this);
 
-			// Do something takes a lot of work.
-			for (int i = 0; i < 50; i++)
+			// Go through the processes in the document.
+			foreach (IProcessor processor in Document.Processors)
 			{
-				// Sleep for a short period of time.
-				Thread.Sleep(100);
-
 				// Check to see if we are canceled.
 				if (isCanceled)
 				{
 					Processors.Canceled(this);
 					return;
 				}
+
+				// Process the individual item.
+				processor.Process(this);
 			}
 
 			// If we got this far, we finished.

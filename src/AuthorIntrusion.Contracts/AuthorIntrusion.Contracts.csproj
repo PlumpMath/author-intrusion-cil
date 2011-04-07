@@ -68,7 +68,7 @@
     <Compile Include="Matters\ParagraphChangedEventArgs.cs" />
     <Compile Include="Matters\ParagraphEventArgs.cs" />
     <Compile Include="Matters\RegionType.cs" />
-    <Compile Include="Processors\ProcessorManager.cs" />
+    <Compile Include="Processors\DocumentProcessorManager.cs" />
     <Compile Include="Processors\ProcessorContext.cs" />
     <Compile Include="Processors\ProcessTypes.cs" />
     <Compile Include="Processors\IProcessor.cs" />

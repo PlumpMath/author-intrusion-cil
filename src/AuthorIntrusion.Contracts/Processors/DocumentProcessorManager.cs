@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
@@ -14,36 +16,80 @@ namespace AuthorIntrusion.Contracts.Processors
 	/// <summary>
 	/// A heavy-weight management of Processor instances.
 	/// </summary>
-	public class ProcessorManager
+	public class DocumentProcessorManager: IEnumerable<IProcessor>
 	{
 		#region Fields
 
-		private readonly Document document;
+		private Document document;
+		private readonly IProcessor[] processors;
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ProcessorManager"/> class.
+		/// Initializes a new instance of the <see cref="DocumentProcessorManager"/> class.
 		/// </summary>
-		/// <param name="document">The document.</param>
-		public ProcessorManager(Document document)
+		public DocumentProcessorManager(IProcessor[] processors)
 		{
-			// Assign the document to the member fields.
-			if (document == null)
-			{
-				throw new ArgumentNullException("document");
-			}
-
-			this.document = document;
-
-			// Attach to the events from the document.
-			this.document.ParagraphChanged += OnParagraphChanged;
+			// Save the processors so we can create a graph later.
+			this.processors = processors;
 
 			// Set up the rest of the collections.
 			queueLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 			paragraphProcesses = new HashDictionary<int, ProcessorContext>();
+		}
+
+		#endregion
+
+		#region Documents
+
+		/// <summary>
+		/// Sets the document and connects the events.
+		/// </summary>
+		/// <param name="item">The item.</param>
+		public void SetDocument(Document item)
+		{
+			// Assign the document to the member fields.
+			if (item == null)
+			{
+				throw new ArgumentNullException("item");
+			}
+
+			document = item;
+
+			// Attach to the events from the document.
+			document.ParagraphChanged += OnParagraphChanged;
+		}
+
+		#endregion
+
+		#region Processors
+
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+		/// </returns>
+		/// <filterpriority>1</filterpriority>
+		public IEnumerator<IProcessor> GetEnumerator()
+		{
+			var list = new ArrayList<IProcessor>();
+			list.AddAll(processors);
+			return list.GetEnumerator();
 		}
 
 		#endregion

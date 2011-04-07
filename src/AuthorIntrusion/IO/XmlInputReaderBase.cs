@@ -24,11 +24,14 @@
 
 #region Namespaces
 
+using System;
 using System.IO;
 using System.Xml;
 
 using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
+
+using StructureMap;
 
 #endregion
 
@@ -39,6 +42,43 @@ namespace AuthorIntrusion.IO
 	/// </summary>
 	public abstract class XmlInputReaderBase : IInputReader
 	{
+		#region Fields
+
+		private IContainer container;
+
+		#endregion
+
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlInputReaderBase"/> class.
+		/// </summary>
+		/// <param name="container">The container.</param>
+		protected XmlInputReaderBase(IContainer container)
+		{
+			if (container == null)
+			{
+				throw new ArgumentNullException("container");
+			}
+
+			this.container = container;
+		}
+
+		#endregion
+
+		#region Properties
+
+		/// <summary>
+		/// Gets the inversion-of-control container.
+		/// </summary>
+		/// <value>The container.</value>
+		protected IContainer Container
+		{
+			get { return container; }
+		}
+
+		#endregion
+
 		#region Identification
 
 		/// <summary>
@@ -106,8 +146,6 @@ namespace AuthorIntrusion.IO
 
 		#region Reading
 
-		#region Implementation of IInputReader
-
 		/// <summary>
 		/// Reads the specified input stream and returns a structure elements.
 		/// If there is any problems with reading the input, this should throw
@@ -135,8 +173,6 @@ namespace AuthorIntrusion.IO
 		/// An StructureBase containing the top-level element.
 		/// </returns>
 		protected abstract Document Read(XmlReader reader);
-
-		#endregion
 
 		#endregion
 	}

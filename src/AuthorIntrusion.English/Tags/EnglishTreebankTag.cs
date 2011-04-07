@@ -49,9 +49,9 @@ namespace AuthorIntrusion.English.Tags
 		/// <param name="contentProvider">The content provider.</param>
 		public EnglishTreebankTag(
 			string treebankCode,
-			IContentParser contentProvider)
+			string provider)
 		{
-			if (contentProvider == null)
+			if (provider == null)
 			{
 				throw new ArgumentNullException("contentProvider");
 			}
@@ -62,7 +62,7 @@ namespace AuthorIntrusion.English.Tags
 			}
 
 			this.treebankCode = treebankCode;
-			provider = contentProvider.GetType().ToString();
+			this.provider = provider;
 		}
 
 		#endregion

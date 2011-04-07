@@ -87,6 +87,20 @@ namespace AuthorIntrusion.Contracts.Matters
 		#region Properties
 
 		/// <summary>
+		/// Gets or sets the document associated with this matter.
+		/// </summary>
+		/// <value>
+		/// The document.
+		/// </value>
+		public override Document ParentDocument
+		{
+			get
+			{
+				return ParentContainer == null ? null : ParentContainer.ParentDocument;
+			}
+		}
+
+		/// <summary>
 		/// Gets the type of the structure.
 		/// </summary>
 		/// <value>The type of the structure.</value>

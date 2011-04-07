@@ -46,6 +46,12 @@ namespace AuthorIntrusion.Contracts.Matters
 		IMattersContainer ParentContainer { get; }
 
 		/// <summary>
+		/// Gets the document associated with this container.
+		/// </summary>
+		/// <value>The document.</value>
+		Document ParentDocument { get; }
+
+		/// <summary>
 		/// Gets the index of this instance in its parent container.
 		/// </summary>
 		/// <value>

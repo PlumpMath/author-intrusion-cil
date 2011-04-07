@@ -24,8 +24,10 @@
 
 #region Namespaces
 
+using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.IO;
 using AuthorIntrusion.Contracts.Languages;
+using AuthorIntrusion.Contracts.Processors;
 
 using StructureMap;
 
@@ -60,7 +62,10 @@ namespace AuthorIntrusion
 
 				     		scanner.AddAllTypesOf<ILanguageManager>();
 
-				     		scanner.AddAllTypesOf<IContentParser>();
+							scanner.AddAllTypesOf<IContentParser>();
+							scanner.AddAllTypesOf<IProcessor>();
+
+				     		scanner.AddAllTypesOf<Document>();
 				     	}));
 
 			return container;

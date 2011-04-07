@@ -33,6 +33,8 @@ using AuthorIntrusion.Contracts.Contents;
 using AuthorIntrusion.Contracts.Enumerations;
 using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Languages;
+using AuthorIntrusion.Contracts.Matters;
+using AuthorIntrusion.Contracts.Processors;
 using AuthorIntrusion.English;
 using AuthorIntrusion.English.Enumerations;
 using AuthorIntrusion.English.Tags;
@@ -52,7 +54,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 	/// Defines a content parser that used SharpNlp to break apart the
 	/// sentence and create the parsing tree for the contents.
 	/// </summary>
-	public class EnglishSharpNlpParser : EnglishSpecificBase, IContentParser
+	public class EnglishSharpNlpParser : EnglishSpecificBase, IProcessor
 	{
 		#region Constructors
 
@@ -116,6 +118,32 @@ namespace AuthorIntrusion.EnglishSharpNlp
 
 		#endregion
 
+		#region Processing
+
+		/// <summary>
+		/// Gets a value indicating whether this processor is a singleton, which
+		/// means there is only one instance for a given processor or if the user
+		/// can create multiple instances and customize each one.
+		/// </summary>
+		public bool IsSingleton
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Creates a new processor info associated with this processor. For
+		/// singleton processes, this should require the same information object
+		/// for every call, but for non-singleton, this will create a new
+		/// object so allow the user to create multiple instances.
+		/// </summary>
+		/// <returns></returns>
+		public ProcessorInfo CreateProcessorInfo()
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
+
 		#region Parsing
 
 		/// <summary>
@@ -136,7 +164,7 @@ namespace AuthorIntrusion.EnglishSharpNlp
 				string token = child.Text.Substring(span.Start, (span.End) - (span.Start));
 
 				// Figure out the type of speech this is.
-				var treebankTag = new EnglishTreebankTag(child.Type, this);
+				var treebankTag = new EnglishTreebankTag(child.Type, GetType().ToString());
 				EnglishTreebankClassification classification =
 					EnglishTreebankUtility.GetClassification(child.Type);
 				Content content;
@@ -175,17 +203,17 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		}
 
 		/// <summary>
-		/// Parses the content of the content container and replaces the contents
-		/// with parsed data.
+		/// Processes through a single paragraph and breaks it into the 
+		/// various English phrases.
 		/// </summary>
-		/// <param name="contents">The content container.</param>
-		/// <returns>The status result from the parse.</returns>
-		public ProcessStatus Parse(ContentList contents)
+		/// <param name="context">The context.</param>
+		public void Process(ProcessorContext context)
 		{
 			// The SharpNlp works off a string, so we just getting the content
 			// string from the contents and we'll parse that. Once we're done,
 			// we'll merge the results back in to retain the additional encoding.
-			string contentString = contents.ContentString;
+			Paragraph paragraph = context.Paragraph;
+			string contentString = paragraph.ContentString;
 			string[] sentenceStrings = SentenceDetector.SentenceDetect(contentString);
 
 			// Loop through and create a sentence object for each one.
@@ -225,15 +253,12 @@ namespace AuthorIntrusion.EnglishSharpNlp
 
 			// Merge/replace the contents of the content list with the new
 			// contents.
-			contents.Clear();
+			paragraph.Contents.Clear();
 
 			foreach (Sentence sentence in sentences)
 			{
-				contents.Add(sentence);
+				paragraph.Contents.Add(sentence);
 			}
-
-			// Return a successful parse.
-			return ProcessStatus.Succeeded;
 		}
 
 		#endregion

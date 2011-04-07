@@ -1,3 +1,5 @@
+using System;
+
 namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
@@ -24,6 +26,18 @@ namespace AuthorIntrusion.Contracts.Processors
 		{
 			return this;
 		}
+
+		#endregion
+
+		#region Processing
+
+		/// <summary>
+		/// Performs the manipulation or reporting on a single paragraph. This
+		/// will be called off the main GUI thread but only one processor will
+		/// be in operation on a single paragraph at a time.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public abstract void Process(ProcessorContext context);
 
 		#endregion
 	}

@@ -92,7 +92,7 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// <value>
 		/// The document.
 		/// </value>
-		public Document Document { get; set; }
+		public abstract Document ParentDocument { get; }
 
 		/// <summary>
 		/// Gets the index of the matter in the document.
@@ -102,7 +102,7 @@ namespace AuthorIntrusion.Contracts.Matters
 		/// </value>
 		public int DocumentIndex
 		{
-			get { return Document.Matters.IndexOf(this); }
+			get { return ParentDocument.Matters.IndexOf(this); }
 		}
 
 		/// <summary>
