@@ -28,6 +28,7 @@ using System;
 using System.Diagnostics;
 
 using AuthorIntrusion.Contracts.Matters;
+using AuthorIntrusion.Contracts.Processors;
 using AuthorIntrusion.Contracts.Structures;
 
 #endregion
@@ -44,6 +45,7 @@ namespace AuthorIntrusion.Contracts
 
 		private readonly DocumentMatterCollection documentMatters;
 		private readonly MatterCollection matters;
+		private readonly ProcessorManager processors;
 
 		#endregion
 
@@ -56,7 +58,10 @@ namespace AuthorIntrusion.Contracts
 		{
 			matters = new MatterCollection(this);
 			matters.ParagraphChanged += OnParagraphChanged;
+	
 			documentMatters = new DocumentMatterCollection(matters);
+
+			processors = new ProcessorManager(this);
 		}
 
 		#endregion
@@ -157,6 +162,18 @@ namespace AuthorIntrusion.Contracts
 			{
 				ParagraphChanged(this, e);
 			}
+		}
+
+		#endregion
+
+		#region Processors
+
+		/// <summary>
+		/// Gets the processors associated with the document.
+		/// </summary>
+		public ProcessorManager Processors
+		{
+			get { return processors; }
 		}
 
 		#endregion

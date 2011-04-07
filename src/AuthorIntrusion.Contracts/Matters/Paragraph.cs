@@ -28,7 +28,7 @@ using System.Threading;
 
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Interfaces;
-using AuthorIntrusion.Contracts.Processes;
+using AuthorIntrusion.Contracts.Processors;
 
 #endregion
 

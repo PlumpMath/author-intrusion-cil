@@ -22,49 +22,34 @@
 
 #endregion
 
-#region Namespaces
-
-using System;
-
-#endregion
-
-namespace AuthorIntrusion.Contracts.Processes
+namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
-	/// Defines the various types of paragraph processes. Each one impacts the
-	/// paragraph in different manners. This enumeration is used to limit
-	/// processes to maintain speed when only updating the visual data of
-	/// the paragraph is needed. 
+	/// Represents a class that processes paragraph data and does one or more
+	/// of the following: build up phrases and organize the paragraph (Parse),
+	/// annotate the components of the paragraph (Analyze), or update the
+	/// severities of various annotations (Report).
 	/// </summary>
-	[Flags]
-	public enum ProcessTypes
+	public interface IProcessor
 	{
-		/// <summary>
-		/// No processing is needed or required.
-		/// </summary>
-		None,
+		#region Information
 
 		/// <summary>
-		/// Processes that impact the structure of the ContentList, such as ones
-		/// that create phrases or re-arrange the contents.
+		/// Gets a value indicating whether this processor is a singleton, which
+		/// means there is only one instance for a given processor or if the user
+		/// can create multiple instances and customize each one.
 		/// </summary>
-		Parse = 1,
+		bool IsSingleton { get; }
 
 		/// <summary>
-		/// Processes that do not impact the structure, but analyze and add
-		/// information about the various elements in the content list.
+		/// Creates a new processor info associated with this processor. For
+		/// singleton processes, this should require the same information object
+		/// for every call, but for non-singleton, this will create a new
+		/// object so allow the user to create multiple instances.
 		/// </summary>
-		Analyze = 2,
+		/// <returns></returns>
+		ProcessorInfo CreateProcessorInfo();
 
-		/// <summary>
-		/// Processes that only change the severity or display information about
-		/// the paragraph.
-		/// </summary>
-		Report = 4,
-
-		/// <summary>
-		/// Represents all types of processes.
-		/// </summary>
-		All = Parse | Analyze | Report,
+		#endregion
 	}
 }

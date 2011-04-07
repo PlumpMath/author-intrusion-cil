@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,46 +24,47 @@
 
 #region Namespaces
 
-using AuthorIntrusion.Contracts.IO;
-using AuthorIntrusion.Contracts.Languages;
-
-using StructureMap;
+using System;
 
 #endregion
 
-namespace AuthorIntrusion
+namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
-	/// Manages the entire author process, including extensions.
+	/// Defines the various types of paragraph processes. Each one impacts the
+	/// paragraph in different manners. This enumeration is used to limit
+	/// processes to maintain speed when only updating the visual data of
+	/// the paragraph is needed. 
 	/// </summary>
-	public static class Manager
+	[Flags]
+	public enum ProcessTypes
 	{
 		/// <summary>
-		/// Sets up the IoC library and extensions.
+		/// No processing is needed or required.
 		/// </summary>
-		public static Container Setup()
-		{
-			var container = new Container(
-				x => x.Scan(
-				     	scanner =>
-				     	{
-				     		// List the places we are searching for assemblies.
-				     		scanner.AssembliesFromApplicationBaseDirectory();
-				     		scanner.AssembliesFromPath("Extensions");
+		None,
 
-				     		// List the common types we need to load.
-				     		scanner.AddAllTypesOf<IInputManager>();
-				     		scanner.AddAllTypesOf<IInputReader>();
+		/// <summary>
+		/// Processes that impact the structure of the ContentList, such as ones
+		/// that create phrases or re-arrange the contents.
+		/// </summary>
+		Parse = 1,
 
-				     		scanner.AddAllTypesOf<IOutputManager>();
-				     		scanner.AddAllTypesOf<IOutputWriter>();
+		/// <summary>
+		/// Processes that do not impact the structure, but analyze and add
+		/// information about the various elements in the content list.
+		/// </summary>
+		Analyze = 2,
 
-				     		scanner.AddAllTypesOf<ILanguageManager>();
+		/// <summary>
+		/// Processes that only change the severity or display information about
+		/// the paragraph.
+		/// </summary>
+		Report = 4,
 
-				     		scanner.AddAllTypesOf<IContentParser>();
-				     	}));
-
-			return container;
-		}
+		/// <summary>
+		/// Represents all types of processes.
+		/// </summary>
+		All = Parse | Analyze | Report,
 	}
 }

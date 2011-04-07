@@ -1,70 +1,54 @@
-#region Copyright and License
-
-// Copyright (c) 2011, Moonfire Games
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-#endregion
-
-#region Namespaces
-
 using System;
 using System.Diagnostics;
 using System.Threading;
 
-using AuthorIntrusion.Contracts;
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Processes;
 
 using C5;
 
 using MfGames.Locking;
 
-using StructureMap;
-
-#endregion
-
-namespace AuthorIntrusion.Processes
+namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
-	/// This class is responsible for managing the parsing process for paragraphs
-	/// and running each paragraph through the extensions.
+	/// A heavy-weight management of Processor instances.
 	/// </summary>
-	[PluginFamily(IsSingleton = true)]
-	public class ProcessManager
+	public class ProcessorManager
 	{
+		#region Fields
+
+		private readonly Document document;
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ProcessManager"/> class.
+		/// Initializes a new instance of the <see cref="ProcessorManager"/> class.
 		/// </summary>
-		public ProcessManager()
+		/// <param name="document">The document.</param>
+		public ProcessorManager(Document document)
 		{
-			queueLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+			// Assign the document to the member fields.
+			if (document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
 
-			paragraphProcesses = new HashDictionary<int, ParagraphProcess>();
+			this.document = document;
+
+			// Attach to the events from the document.
+			this.document.ParagraphChanged += OnParagraphChanged;
+
+			// Set up the rest of the collections.
+			queueLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+			paragraphProcesses = new HashDictionary<int, ProcessorContext>();
 		}
 
 		#endregion
 
-		#region Document Management
+		#region Editing
 
 		/// <summary>
 		/// Called when a registered document's paragraph changes.
@@ -78,33 +62,11 @@ namespace AuthorIntrusion.Processes
 			QueueProcess(e.Paragraph, e.OldContents, ProcessTypes.All);
 		}
 
-		/// <summary>
-		/// Registers the document with the process manager which causes this to
-		/// listen to the changed events and automatically process the paragraphs.
-		/// </summary>
-		/// <param name="document">The document.</param>
-		public void RegisterDocument(Document document)
-		{
-			// Connect to the events.
-			document.ParagraphChanged += OnParagraphChanged;
-		}
-
-		/// <summary>
-		/// Unregisters the document and no longer listens to the changes made
-		/// to that item.
-		/// </summary>
-		/// <param name="document">The document.</param>
-		public void UnregisterDocument(Document document)
-		{
-			// Disconnect to the events.
-			document.ParagraphChanged -= OnParagraphChanged;
-		}
-
 		#endregion
 
-		#region Process Management
+		#region Processing
 
-		private readonly HashDictionary<int, ParagraphProcess> paragraphProcesses;
+		private readonly HashDictionary<int, ProcessorContext> paragraphProcesses;
 		private readonly ReaderWriterLockSlim queueLock;
 
 		/// <summary>
@@ -126,7 +88,7 @@ namespace AuthorIntrusion.Processes
 		/// Called when a process handles the cancel request.
 		/// </summary>
 		/// <param name="process">The process.</param>
-		internal void Canceled(ParagraphProcess process)
+		internal void Canceled(ProcessorContext process)
 		{
 			// Remove the process from the list.
 			using (new WriteLock(queueLock))
@@ -147,7 +109,7 @@ namespace AuthorIntrusion.Processes
 		/// Called when a process finishes.
 		/// </summary>
 		/// <param name="process">The process.</param>
-		internal void Finished(ParagraphProcess process)
+		internal void Finished(ProcessorContext process)
 		{
 			// Remove the process from the list.
 			using (new WriteLock(queueLock))
@@ -215,7 +177,7 @@ namespace AuthorIntrusion.Processes
 					// the process out of our hash, then setting the canceled
 					// flag. The process itself will check the flag to determine
 					// if it should be canceled.
-					ParagraphProcess oldProcess = paragraphProcesses[paragraphProcessKey];
+					ProcessorContext oldProcess = paragraphProcesses[paragraphProcessKey];
 
 					oldProcess.Cancel();
 					paragraphProcesses.Remove(paragraphProcessKey);
@@ -227,11 +189,11 @@ namespace AuthorIntrusion.Processes
 				}
 
 				// Create a new process.
-				var process = new ParagraphProcess();
+				var process = new ProcessorContext();
 				process.Paragraph = paragraph;
 				process.OldContents = oldContents;
 				process.ProcessTypes = processTypes;
-				process.ProcessManager = this;
+				process.Processors = this;
 
 				// Register the process in our working list.
 				paragraphProcesses[paragraphProcessKey] = process;
@@ -304,7 +266,7 @@ namespace AuthorIntrusion.Processes
 		/// Called when a process starts on a paragraph.
 		/// </summary>
 		/// <param name="process">The process.</param>
-		internal void Started(ParagraphProcess process)
+		internal void Started(ProcessorContext process)
 		{
 			Debug.WriteLine("Starting " + process);
 			RaiseParagraphStarted(process.Paragraph);

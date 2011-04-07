@@ -49,8 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Processes\ParagraphProcess.cs" />
-    <Compile Include="Processes\ProcessManager.cs" />
     <Compile Include="IO\TextOutputWriter.cs" />
     <Compile Include="IO\Docbook5InputReader.cs" />
     <Compile Include="IO\InputManager.cs" />

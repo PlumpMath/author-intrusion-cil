@@ -28,16 +28,16 @@ using System.Threading;
 
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Matters;
-using AuthorIntrusion.Contracts.Processes;
 
 #endregion
 
-namespace AuthorIntrusion.Processes
+namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
-	/// Represents the information about a single paragraph process.
+	/// Contains the information used to run a series of processors against
+	/// a paragraph.
 	/// </summary>
-	internal class ParagraphProcess
+	public class ProcessorContext
 	{
 		#region Fields
 
@@ -63,7 +63,7 @@ namespace AuthorIntrusion.Processes
 		/// Gets or sets the process manager associated with this process.
 		/// </summary>
 		/// <value>The process manager.</value>
-		public ProcessManager ProcessManager { get; set; }
+		public ProcessorManager Processors { get; set; }
 
 		/// <summary>
 		/// Gets or sets the types of processes needed to be run.
@@ -93,7 +93,7 @@ namespace AuthorIntrusion.Processes
 		public void Process(object state)
 		{
 			// Mark that we started our process.
-			ProcessManager.Started(this);
+			Processors.Started(this);
 
 			// Do something takes a lot of work.
 			for (int i = 0; i < 50; i++)
@@ -104,13 +104,13 @@ namespace AuthorIntrusion.Processes
 				// Check to see if we are canceled.
 				if (isCanceled)
 				{
-					ProcessManager.Canceled(this);
+					Processors.Canceled(this);
 					return;
 				}
 			}
 
 			// If we got this far, we finished.
-			ProcessManager.Finished(this);
+			Processors.Finished(this);
 		}
 
 		#endregion

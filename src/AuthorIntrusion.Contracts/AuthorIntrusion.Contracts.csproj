@@ -68,7 +68,12 @@
     <Compile Include="Matters\ParagraphChangedEventArgs.cs" />
     <Compile Include="Matters\ParagraphEventArgs.cs" />
     <Compile Include="Matters\RegionType.cs" />
-    <Compile Include="Processes\ProcessTypes.cs" />
+    <Compile Include="Processors\ProcessorManager.cs" />
+    <Compile Include="Processors\ProcessorContext.cs" />
+    <Compile Include="Processors\ProcessTypes.cs" />
+    <Compile Include="Processors\IProcessor.cs" />
+    <Compile Include="Processors\ProcessorInfo.cs" />
+    <Compile Include="Processors\SingletonProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contents\Content.cs" />
     <Compile Include="Contents\Unparsed.cs" />

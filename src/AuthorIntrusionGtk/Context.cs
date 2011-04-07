@@ -28,8 +28,6 @@ using System;
 using System.Diagnostics;
 
 using AuthorIntrusion.Contracts;
-using AuthorIntrusion.Processes;
-
 using AuthorIntrusionGtk.Actions;
 
 using StructureMap;
@@ -50,11 +48,9 @@ namespace AuthorIntrusionGtk
 		/// Initializes a new instance of the <see cref="Context"/> class.
 		/// </summary>
 		/// <param name="container">The container.</param>
-		/// <param name="processManager">The process manager.</param>
-		public Context(IContainer container, ProcessManager processManager)
+		public Context(IContainer container)
 		{
 			Container = container;
-			ProcessManager = processManager;
 		}
 
 		#endregion
@@ -70,12 +66,6 @@ namespace AuthorIntrusionGtk
 			get;
 			private set;
 		}
-
-		/// <summary>
-		/// Gets or sets the process manager associated with this instance.
-		/// </summary>
-		/// <value>The process manager.</value>
-		public ProcessManager ProcessManager { get; set; }
 
 		/// <summary>
 		/// Gets the action manager.
@@ -102,7 +92,6 @@ namespace AuthorIntrusionGtk
 				// Check to see if we already have a document.
 				if (document != null)
 				{
-					ProcessManager.UnregisterDocument(document);
 					RaiseUnloadedDocument();
 				}
 
@@ -113,7 +102,6 @@ namespace AuthorIntrusionGtk
 				if (document != null)
 				{
 					RaiseLoadedDocument();
-					ProcessManager.RegisterDocument(document);
 				}
 			}
 		}
