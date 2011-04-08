@@ -75,6 +75,7 @@
     <Compile Include="Processors\DocumentProcessorManager.cs" />
     <Compile Include="Processors\ProcessorContext.cs" />
     <Compile Include="Processors\ProcessorEntry.cs" />
+    <Compile Include="Processors\ProcessorEntryType.cs" />
     <Compile Include="Processors\ProcessTypes.cs" />
     <Compile Include="Processors\IProcessorEngine.cs" />
     <Compile Include="Processors\Processor.cs" />

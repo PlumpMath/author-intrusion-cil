@@ -117,6 +117,13 @@ namespace AuthorIntrusion.Contracts.Processors
 				// Create the processor from the engine.
 				Processor processor = engine.CreateProcessor();
 
+				if (processor == null)
+				{
+					throw new InvalidOperationException(
+						"IProcessorEngine(" + engine +
+						") cannot return null from CreateProcessor().");
+				}
+
 				AddToGraph(processor);
 			}
 
@@ -133,6 +140,18 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// <param name="processor"></param>
 		private void AddToGraph(Processor processor)
 		{
+			// Check to see if we have the processor already.
+			var entry = new ProcessorEntry(processor);
+
+			if (processorGraph.ContainsVertex(entry))
+			{
+				throw new InvalidOperationException(
+					"Cannot add the processor (" + processor + ") twice.");
+			}
+
+			// Add the processor to the graph.
+			processorGraph.AddVertex(entry);
+
 			// Get the requirements for the processor.
 			ICollection<string> requires = processor.Requires;
 

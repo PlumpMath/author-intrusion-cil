@@ -22,56 +22,21 @@
 
 #endregion
 
-#region Namespaces
-
-using System;
-
-using C5;
-
-#endregion
-
 namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
-	/// Contains the project-specific settings for a process, including the
-	/// enabled state. This is serialized as part of the project.
+	/// Describes the types of processor entries that can be put in the graph.
 	/// </summary>
-	public abstract class Processor
+	public enum ProcessorEntryType
 	{
-		#region Information
+		/// <summary>
+		/// Indicates that the type is invalid.
+		/// </summary>
+		Invalid,
 
 		/// <summary>
-		/// Processors are identified by a UUID. For singleton processors, this
-		/// MUST return the same <see cref="Guid"/> every time since it is used
-		/// to recover settings for the project.
+		/// Determines that a processor entry represents a processor object.
 		/// </summary>
-		/// <value>The processor key.</value>
-		public abstract Guid ProcessorKey { get; }
-
-		/// <summary>
-		/// Contains a list of services or processors that this item provides.
-		/// This are analogous to the Requires to build up a dependency graph
-		/// between the various providers.
-		/// </summary>
-		public abstract ICollection<string> Provides { get; }
-
-		/// <summary>
-		/// Contains a list of processors required to use this processor. These
-		/// are string values as returned by the Provides of another processor.
-		/// Circular references are not allow and will be disabled.
-		/// </summary>
-		public abstract ICollection<string> Requires { get; }
-
-		#endregion
-
-		#region Processing
-
-		/// <summary>
-		/// Processes information using the given context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public abstract void Process(ProcessorContext context);
-
-		#endregion
+		Processor,
 	}
 }

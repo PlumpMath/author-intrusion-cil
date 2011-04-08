@@ -67,6 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnglishFiltersProcessor.cs" />
+    <Compile Include="EnglishFiltersProcessorEngine.cs" />
     <Compile Include="SharpNlpProcessor.cs" />
     <Compile Include="SharpNlpProcessorEngine.cs" />
     <Compile Include="EnglishSpecificBase.cs" />

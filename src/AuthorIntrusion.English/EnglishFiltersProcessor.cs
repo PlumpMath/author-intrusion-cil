@@ -25,7 +25,6 @@
 #region Namespaces
 
 using System;
-using System.Diagnostics;
 
 using AuthorIntrusion.Contracts.Processors;
 
@@ -36,26 +35,10 @@ using C5;
 namespace AuthorIntrusion.English
 {
 	/// <summary>
-	/// Settings and controller object for the
-	/// <see cref="SharpNlpProcessorEngine"/>.
+	/// Represents the settings for an English filter settings.
 	/// </summary>
-	public class SharpNlpProcessor : Processor
+	public class EnglishFiltersProcessor : Processor
 	{
-		#region Fields
-
-		private readonly SharpNlpProcessorEngine engine;
-
-		#endregion
-
-		#region Constructors
-
-		public SharpNlpProcessor(SharpNlpProcessorEngine engine)
-		{
-			this.engine = engine;
-		}
-
-		#endregion
-
 		#region Information
 
 		/// <summary>
@@ -66,7 +49,7 @@ namespace AuthorIntrusion.English
 		/// <value>The processor key.</value>
 		public override Guid ProcessorKey
 		{
-			get { return new Guid("7D6F69D6-DEC1-4634-83A6-7CA40BE038DB"); }
+			get { return new Guid("229793C8-9EF8-4F5C-A6BF-A727BE022E3A"); }
 		}
 
 		/// <summary>
@@ -79,7 +62,7 @@ namespace AuthorIntrusion.English
 			get
 			{
 				var list = new ArrayList<string>();
-				list.Add("English Structure Tagging");
+				list.Add("English Structure Filters");
 				return list;
 			}
 		}
@@ -94,6 +77,7 @@ namespace AuthorIntrusion.English
 			get
 			{
 				var list = new ArrayList<string>();
+				list.Add("English Structure Tagging");
 				return list;
 			}
 		}
@@ -108,7 +92,6 @@ namespace AuthorIntrusion.English
 		/// <param name="context">The context.</param>
 		public override void Process(ProcessorContext context)
 		{
-			engine.Process(context);
 		}
 
 		#endregion
