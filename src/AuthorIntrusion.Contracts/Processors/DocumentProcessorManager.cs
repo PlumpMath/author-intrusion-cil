@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
@@ -11,17 +10,24 @@ using C5;
 
 using MfGames.Locking;
 
+using QuickGraph;
+
+using ProcessorEnumerator = System.Collections.Generic.IEnumerator<AuthorIntrusion.Contracts.Processors.Processor>;
+using ProcessorEnumerable = System.Collections.Generic.IEnumerable<AuthorIntrusion.Contracts.Processors.Processor>;
+
 namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
 	/// A heavy-weight management of Processor instances.
 	/// </summary>
-	public class DocumentProcessorManager: IEnumerable<IProcessor>
+	public class DocumentProcessorManager : ProcessorEnumerable
 	{
 		#region Fields
 
 		private Document document;
-		private readonly IProcessor[] processors;
+		private readonly IProcessorEngine[] processorEngines;
+		private readonly ArrayList<Processor> processors;
+		private readonly BidirectionalGraph<ProcessorEntry,SEdge<ProcessorEntry>> processorGraph;
 
 		#endregion
 
@@ -30,14 +36,19 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DocumentProcessorManager"/> class.
 		/// </summary>
-		public DocumentProcessorManager(IProcessor[] processors)
+		public DocumentProcessorManager(IProcessorEngine[] processorEngines)
 		{
 			// Save the processors so we can create a graph later.
-			this.processors = processors;
-
+			this.processorEngines = processorEngines;
+			
 			// Set up the rest of the collections.
 			queueLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 			paragraphProcesses = new HashDictionary<int, ProcessorContext>();
+			processors = new ArrayList<Processor>();
+			processorGraph = new BidirectionalGraph<ProcessorEntry, SEdge<ProcessorEntry>>();
+
+			// Create the processors from the engines.
+			MergeEngines();
 		}
 
 		#endregion
@@ -85,11 +96,50 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
 		/// </returns>
 		/// <filterpriority>1</filterpriority>
-		public IEnumerator<IProcessor> GetEnumerator()
+		public ProcessorEnumerator GetEnumerator()
 		{
-			var list = new ArrayList<IProcessor>();
+			var list = new ArrayList<Processor>();
 			list.AddAll(processors);
 			return list.GetEnumerator();
+		}
+
+		/// <summary>
+		/// Goes through the processor engines and creates the various
+		/// processor from them.
+		/// </summary>
+		private void MergeEngines()
+		{
+			// Go through the processor engines and create processor objects
+			// from them. For each of the processors, we add it into the 
+			// directed graph to figure out the order to process events.
+			foreach (IProcessorEngine engine in processorEngines)
+			{
+				// Create the processor from the engine.
+				Processor processor = engine.CreateProcessor();
+
+				AddToGraph(processor);
+			}
+
+			// Go through the graph using a mark and sweep to determine the
+			// root distance from the root.
+
+			// Create the processor graph using the root distance.
+		}
+
+		/// <summary>
+		/// Adds a processor to the graph, creating entries as required and
+		/// marking conflicted nodes as needed.
+		/// </summary>
+		/// <param name="processor"></param>
+		private void AddToGraph(Processor processor)
+		{
+			// Get the requirements for the processor.
+			ICollection<string> requires = processor.Requires;
+
+			if (requires.Count == 0)
+			{
+				requires.Add("<Root>");
+			}
 		}
 
 		#endregion
@@ -249,8 +299,39 @@ namespace AuthorIntrusion.Contracts.Processors
 				RaiseParagraphQueued(paragraph);
 
 				// Queue up the process on a worker thread.
-				ThreadPool.QueueUserWorkItem(process.Process, process);
+				ThreadPool.QueueUserWorkItem(ProcessParagraph, process);
 			}
+		}
+
+		/// <summary>
+		/// Processes the given paragraph.
+		/// </summary>
+		public void ProcessParagraph(object state)
+		{
+			// Pull out the context.
+			var context = (ProcessorContext) state;
+
+			// Mark that we started our process.
+			Started(context);
+
+			// Go through the processes in the document.
+			foreach (Processor processor in context.Document.Processors)
+			{
+				Debug.WriteLine("Processing " + processor);
+
+				// Check to see if we are canceled.
+				if (context.IsCanceled)
+				{
+					Canceled(context);
+					return;
+				}
+
+				// Process the individual item.
+				processor.Process(context);
+			}
+
+			// If we got this far, we finished.
+			Finished(context);
 		}
 
 		/// <summary>

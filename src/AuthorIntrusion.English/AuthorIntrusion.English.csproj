@@ -36,6 +36,11 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="C5, Version=1.1.1.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ext\mfgames-gtkext-cil\lib\C5.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="OpenNLP, Version=1.0.3981.26021, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\OpenNLP.dll</HintPath>
@@ -62,7 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnglishSharpNlpParser.cs" />
+    <Compile Include="SharpNlpProcessor.cs" />
+    <Compile Include="SharpNlpProcessorEngine.cs" />
     <Compile Include="EnglishSpecificBase.cs" />
     <Compile Include="EnglishTreebankUtility.cs" />
     <Compile Include="Enumerations\EnglishTreebankClassification.cs" />

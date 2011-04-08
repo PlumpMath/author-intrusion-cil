@@ -24,18 +24,37 @@
 
 #region Namespaces
 
+using System.Diagnostics;
+
+using AuthorIntrusion.Contracts.Processors;
+
 using C5;
 
 #endregion
 
-namespace AuthorIntrusion.Contracts.Processors
+namespace AuthorIntrusion.English
 {
 	/// <summary>
-	/// Contains the project-specific settings for a process, including the
-	/// enabled state. This is serialized as part of the project.
+	/// Settings and controller object for the
+	/// <see cref="SharpNlpProcessorEngine"/>.
 	/// </summary>
-	public abstract class ProcessorInfo
+	public class SharpNlpProcessor : Processor
 	{
+		#region Fields
+
+		private readonly SharpNlpProcessorEngine engine;
+
+		#endregion
+
+		#region Constructors
+
+		public SharpNlpProcessor(SharpNlpProcessorEngine engine)
+		{
+			this.engine = engine;
+		}
+
+		#endregion
+
 		#region Processor Dependencies
 
 		/// <summary>
@@ -43,14 +62,42 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// This are analogous to the Requires to build up a dependency graph
 		/// between the various providers.
 		/// </summary>
-		public abstract ICollection<string> Provides { get; }
+		public override ICollection<string> Provides
+		{
+			get
+			{
+				var list = new ArrayList<string>();
+				list.Add("English Structure Tagging");
+				return list;
+			}
+		}
 
 		/// <summary>
 		/// Contains a list of processors required to use this processor. These
 		/// are string values as returned by the Provides of another processor.
 		/// Circular references are not allow and will be disabled.
 		/// </summary>
-		public abstract ICollection<string> Requires { get; }
+		public override ICollection<string> Requires
+		{
+			get
+			{
+				var list = new ArrayList<string>();
+				return list;
+			}
+		}
+
+		#endregion
+
+		#region Processing
+
+		/// <summary>
+		/// Processes information using the given context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public override void Process(ProcessorContext context)
+		{
+			engine.Process(context);
+		}
 
 		#endregion
 	}

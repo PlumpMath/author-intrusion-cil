@@ -1,6 +1,6 @@
 #region Copyright and License
 
-// Copyright (c) 2005-2011, Moonfire Games
+// Copyright (c) 2011, Moonfire Games
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,51 +24,44 @@
 
 #region Namespaces
 
-using AuthorIntrusion.Contracts;
-using AuthorIntrusion.Contracts.IO;
-using AuthorIntrusion.Contracts.Languages;
-using AuthorIntrusion.Contracts.Processors;
-
-using StructureMap;
+using C5;
 
 #endregion
 
-namespace AuthorIntrusion
+namespace AuthorIntrusion.Contracts.Processors
 {
 	/// <summary>
-	/// Manages the entire author process, including extensions.
+	/// Contains the project-specific settings for a process, including the
+	/// enabled state. This is serialized as part of the project.
 	/// </summary>
-	public static class Manager
+	public abstract class Processor
 	{
+		#region Processor Dependencies
+
 		/// <summary>
-		/// Sets up the IoC library and extensions.
+		/// Contains a list of services or processors that this item provides.
+		/// This are analogous to the Requires to build up a dependency graph
+		/// between the various providers.
 		/// </summary>
-		public static Container Setup()
-		{
-			var container = new Container(
-				x => x.Scan(
-				     	scanner =>
-				     	{
-				     		// List the places we are searching for assemblies.
-				     		scanner.AssembliesFromApplicationBaseDirectory();
-				     		scanner.AssembliesFromPath("Extensions");
+		public abstract ICollection<string> Provides { get; }
 
-				     		// List the common types we need to load.
-				     		scanner.AddAllTypesOf<IInputManager>();
-				     		scanner.AddAllTypesOf<IInputReader>();
+		/// <summary>
+		/// Contains a list of processors required to use this processor. These
+		/// are string values as returned by the Provides of another processor.
+		/// Circular references are not allow and will be disabled.
+		/// </summary>
+		public abstract ICollection<string> Requires { get; }
 
-				     		scanner.AddAllTypesOf<IOutputManager>();
-				     		scanner.AddAllTypesOf<IOutputWriter>();
+		#endregion
 
-				     		scanner.AddAllTypesOf<ILanguageManager>();
+		#region Processing
 
-							scanner.AddAllTypesOf<IContentParser>();
-							scanner.AddAllTypesOf<IProcessorEngine>();
+		/// <summary>
+		/// Processes information using the given context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public abstract void Process(ProcessorContext context);
 
-				     		scanner.AddAllTypesOf<Document>();
-				     	}));
-
-			return container;
-		}
+		#endregion
 	}
 }

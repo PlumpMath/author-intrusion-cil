@@ -36,7 +36,6 @@ using AuthorIntrusion.Contracts.Interfaces;
 using AuthorIntrusion.Contracts.Languages;
 using AuthorIntrusion.Contracts.Matters;
 using AuthorIntrusion.Contracts.Processors;
-using AuthorIntrusion.English;
 using AuthorIntrusion.English.Enumerations;
 using AuthorIntrusion.English.Tags;
 
@@ -50,13 +49,13 @@ using OpenNLP.Tools.Util;
 
 #endregion
 
-namespace AuthorIntrusion.EnglishSharpNlp
+namespace AuthorIntrusion.English
 {
 	/// <summary>
 	/// Defines a content parser that used SharpNlp to break apart the
 	/// sentence and create the parsing tree for the contents.
 	/// </summary>
-	public class EnglishSharpNlpParser : EnglishSpecificBase, IProcessor
+	public class SharpNlpProcessorEngine : EnglishSpecificBase, IProcessorEngine
 	{
 		#region Fields
 
@@ -64,16 +63,16 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		private readonly DirectoryInfo modelDirectory;
 		private EnglishTreebankParser englishTreebankParser;
 		private ISentenceDetector sentenceDetector;
-		private ReaderWriterLockSlim processLock;
+		private readonly ReaderWriterLockSlim processLock;
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="EnglishSharpNlpParser"/> class.
+		/// Initializes a new instance of the <see cref="SharpNlpProcessorEngine"/> class.
 		/// </summary>
-		public EnglishSharpNlpParser()
+		public SharpNlpProcessorEngine()
 		{
 			modelDirectory = new DirectoryInfo("models");
 			log = new Logger(this);
@@ -144,9 +143,9 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		/// object so allow the user to create multiple instances.
 		/// </summary>
 		/// <returns></returns>
-		public ProcessorInfo CreateProcessorInfo()
+		public Processor CreateProcessor()
 		{
-			throw new NotImplementedException();
+			return new SharpNlpProcessor(this);
 		}
 
 		#endregion

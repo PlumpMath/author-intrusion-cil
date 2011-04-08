@@ -102,36 +102,6 @@ namespace AuthorIntrusion.Contracts.Processors
 
 		#endregion
 
-		#region Processing
-
-		/// <summary>
-		/// Processes the given paragraph.
-		/// </summary>
-		public void Process(object state)
-		{
-			// Mark that we started our process.
-			Processors.Started(this);
-
-			// Go through the processes in the document.
-			foreach (IProcessor processor in Document.Processors)
-			{
-				// Check to see if we are canceled.
-				if (isCanceled)
-				{
-					Processors.Canceled(this);
-					return;
-				}
-
-				// Process the individual item.
-				processor.Process(this);
-			}
-
-			// If we got this far, we finished.
-			Processors.Finished(this);
-		}
-
-		#endregion
-
 		#region Conversion
 
 		/// <summary>

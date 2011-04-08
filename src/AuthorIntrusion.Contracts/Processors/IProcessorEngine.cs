@@ -30,7 +30,7 @@ namespace AuthorIntrusion.Contracts.Processors
 	/// annotate the components of the paragraph (Analyze), or update the
 	/// severities of various annotations (Report).
 	/// </summary>
-	public interface IProcessor
+	public interface IProcessorEngine
 	{
 		#region Information
 
@@ -48,19 +48,7 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// object so allow the user to create multiple instances.
 		/// </summary>
 		/// <returns></returns>
-		ProcessorInfo CreateProcessorInfo();
-
-		#endregion
-
-		#region Processing
-
-		/// <summary>
-		/// Performs the manipulation or reporting on a single paragraph. This
-		/// will be called off the main GUI thread but only one processor will
-		/// be in operation on a single paragraph at a time.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Process(ProcessorContext context);
+		Processor CreateProcessor();
 
 		#endregion
 	}

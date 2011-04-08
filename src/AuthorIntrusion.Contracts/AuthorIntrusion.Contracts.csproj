@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ext\mfgames-gtkext-cil\lib\C5.dll</HintPath>
     </Reference>
+    <Reference Include="QuickGraph, Version=3.3.50603.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\QuickGraph.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -70,9 +74,10 @@
     <Compile Include="Matters\RegionType.cs" />
     <Compile Include="Processors\DocumentProcessorManager.cs" />
     <Compile Include="Processors\ProcessorContext.cs" />
+    <Compile Include="Processors\ProcessorEntry.cs" />
     <Compile Include="Processors\ProcessTypes.cs" />
-    <Compile Include="Processors\IProcessor.cs" />
-    <Compile Include="Processors\ProcessorInfo.cs" />
+    <Compile Include="Processors\IProcessorEngine.cs" />
+    <Compile Include="Processors\Processor.cs" />
     <Compile Include="Processors\SingletonProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contents\Content.cs" />
