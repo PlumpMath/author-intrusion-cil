@@ -36,6 +36,18 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenNLP, Version=1.0.3981.26021, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\OpenNLP.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpEntropy, Version=1.0.3981.26021, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\SharpEntropy.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpWordNet, Version=1.0.3981.26021, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\SharpWordNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -50,12 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnglishSharpNlpParser.cs" />
     <Compile Include="EnglishSpecificBase.cs" />
     <Compile Include="EnglishTreebankUtility.cs" />
-    <Compile Include="EnglishUnparsedSplitter.cs" />
     <Compile Include="Enumerations\EnglishTreebankClassification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EnglishSentenceSplitter.cs" />
     <Compile Include="Tags\EnglishTreebankTag.cs" />
   </ItemGroup>
   <ItemGroup>
