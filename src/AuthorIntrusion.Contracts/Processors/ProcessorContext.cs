@@ -82,6 +82,17 @@ namespace AuthorIntrusion.Contracts.Processors
 		#region Process Management
 
 		/// <summary>
+		/// Gets a value indicating whether this process is canceled.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is canceled; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsCanceled
+		{
+			get { return isCanceled; }
+		}
+
+		/// <summary>
 		/// Tells the process to cancel itself.
 		/// </summary>
 		public void Cancel()

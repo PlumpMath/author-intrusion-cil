@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 using AuthorIntrusion.Contracts.Collections;
 using AuthorIntrusion.Contracts.Contents;
@@ -40,6 +41,7 @@ using AuthorIntrusion.English.Enumerations;
 using AuthorIntrusion.English.Tags;
 
 using MfGames.Extensions.System.IO;
+using MfGames.Locking;
 using MfGames.Reporting;
 
 using OpenNLP.Tools.Parser;
@@ -56,26 +58,31 @@ namespace AuthorIntrusion.EnglishSharpNlp
 	/// </summary>
 	public class EnglishSharpNlpParser : EnglishSpecificBase, IProcessor
 	{
-		#region Constructors
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="EnglishSharpNlpParser"/> class.
-		/// </summary>
-		/// <param name="logger">The logger.</param>
-		public EnglishSharpNlpParser()
-		{
-			modelDirectory = new DirectoryInfo("models");
-			log = new Logger(this);
-		}
-
-		#endregion
-
-		#region SharpNLP
+		#region Fields
 
 		private readonly Logger log;
 		private readonly DirectoryInfo modelDirectory;
 		private EnglishTreebankParser englishTreebankParser;
 		private ISentenceDetector sentenceDetector;
+		private ReaderWriterLockSlim processLock;
+
+		#endregion
+
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EnglishSharpNlpParser"/> class.
+		/// </summary>
+		public EnglishSharpNlpParser()
+		{
+			modelDirectory = new DirectoryInfo("models");
+			log = new Logger(this);
+			processLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		}
+
+		#endregion
+
+		#region SharpNLP
 
 		/// <summary>
 		/// Lazy loads the English treebank parser.
@@ -209,46 +216,68 @@ namespace AuthorIntrusion.EnglishSharpNlp
 		/// <param name="context">The context.</param>
 		public void Process(ProcessorContext context)
 		{
-			// The SharpNlp works off a string, so we just getting the content
-			// string from the contents and we'll parse that. Once we're done,
-			// we'll merge the results back in to retain the additional encoding.
+			// At the moment, SharpNlp is not thread-safe.
 			Paragraph paragraph = context.Paragraph;
-			string contentString = paragraph.ContentString;
-			string[] sentenceStrings = SentenceDetector.SentenceDetect(contentString);
-
-			// Loop through and create a sentence object for each one.
 			var sentences = new List<Sentence>();
 
-			foreach (string sentenceString in sentenceStrings)
+			using (new WriteLock(processLock))
 			{
-				// Create the sentence for this object.
-				var sentence = new Sentence();
-				sentences.Add(sentence);
+				// The SharpNlp works off a string, so we just getting the content
+				// string from the contents and we'll parse that. Once we're done,
+				// we'll merge the results back in to retain the additional encoding.
+				string contentString = paragraph.ContentString;
+				string[] sentenceStrings = SentenceDetector.SentenceDetect(contentString);
 
-				// Parse the sentence using the English treebank parser.
-				Parse parse;
-
-				try
+				// Loop through and create a sentence object for each one.
+				foreach (string sentenceString in sentenceStrings)
 				{
-					parse = EnglishTreebankParser.DoParse(sentenceString);
-				}
-				catch (Exception exception)
-				{
-					// Can't parse this line, so report it and skip it.
-					log.Error("Cannot parse: {0}: {1}", sentenceString, exception);
-					continue;
-				}
+					// Check to see if we are canceled.
+					if (context.IsCanceled)
+					{
+						return;
+					}
 
-				// Move into the top node.
-				if (parse.Type == MaximumEntropyParser.TopNode)
-				{
-					// There is only one child in the top node.
-					parse = parse.GetChildren()[0];
-				}
+					// Create the sentence for this object.
+					var sentence = new Sentence();
+					sentences.Add(sentence);
 
-				// Recursively add the various phrases into the sentence while
-				// tagging them with the English parts of speech and phrase types.
-				CreateContents(sentence, parse);
+					// Parse the sentence using the English treebank parser.
+					Parse parse;
+
+					try
+					{
+						parse = EnglishTreebankParser.DoParse(sentenceString);
+					}
+					catch (Exception exception)
+					{
+						// Can't parse this line, so report it and skip it.
+						log.Error("Cannot parse: {0}: {1}", sentenceString, exception);
+						continue;
+					}
+
+					// Check to see if we are canceled.
+					if (context.IsCanceled)
+					{
+						return;
+					}
+
+					// Move into the top node.
+					if (parse.Type == MaximumEntropyParser.TopNode)
+					{
+						// There is only one child in the top node.
+						parse = parse.GetChildren()[0];
+					}
+
+					// Recursively add the various phrases into the sentence while
+					// tagging them with the English parts of speech and phrase types.
+					CreateContents(sentence, parse);
+				}
+			}
+
+			// Check to see if we are canceled.
+			if (context.IsCanceled)
+			{
+				return;
 			}
 
 			// Merge/replace the contents of the content list with the new

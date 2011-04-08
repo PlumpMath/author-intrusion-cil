@@ -162,7 +162,8 @@ namespace AuthorIntrusion.Contracts.Processors
 			{
 				int paragraphProcessKey = process.Paragraph.ParagraphProcessKey;
 
-				if (paragraphProcesses[paragraphProcessKey] == process)
+				if (paragraphProcesses.Contains(paragraphProcessKey) &&
+					paragraphProcesses[paragraphProcessKey] == process)
 				{
 					paragraphProcesses.Remove(paragraphProcessKey);
 				}
