@@ -33,22 +33,52 @@ namespace AuthorIntrusion.Contracts.Processors
 	/// <summary>
 	/// Represents information about a processor.
 	/// </summary>
-	public class ProcessorEntry : IEquatable<ProcessorEntry>
+	public class ProcessorGraphEntry : IEquatable<ProcessorGraphEntry>, IComparable<ProcessorGraphEntry>
 	{
+		private readonly string feature;
+
 		#region Fields
 
 		private readonly Processor processor;
-		private ProcessorEntryType processorEntryType;
+		private readonly ProcessorGraphEntryType processorEntryType;
+		private int depth;
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
+		/// Creates a new root entry.
+		/// </summary>
+		public ProcessorGraphEntry()
+		{
+			processorEntryType = ProcessorGraphEntryType.Root;
+			depth = -1;
+		}
+
+		/// <summary>
+		/// Creates a graph entry that represents a feature or requirement.
+		/// </summary>
+		/// <param name="feature">The requirement.</param>
+		public ProcessorGraphEntry(string feature)
+		{
+			// Save the properties.
+			if (feature == null)
+			{
+				throw new ArgumentNullException("feature");
+			}
+
+			this.feature = feature;
+
+			// Set the type to a feature.
+			processorEntryType = ProcessorGraphEntryType.Feature;
+		}
+
+		/// <summary>
 		/// Creates an entry that represents a processor.
 		/// </summary>
 		/// <param name="processor">The processor.</param>
-		public ProcessorEntry(Processor processor)
+		public ProcessorGraphEntry(Processor processor)
 		{
 			// Save the properties.
 			if (processor == null)
@@ -59,12 +89,23 @@ namespace AuthorIntrusion.Contracts.Processors
 			this.processor = processor;
 
 			// Set the type of node we are creating.
-			processorEntryType = ProcessorEntryType.Processor;
+			processorEntryType = ProcessorGraphEntryType.Processor;
 		}
 
 		#endregion
 
 		#region Properties
+
+		/// <summary>
+		/// Gets or sets the depth of the entry from the root or -1 if this
+		/// entry does not connect to the root.
+		/// </summary>
+		/// <value>The depth.</value>
+		public int Depth
+		{
+			get { return depth; }
+			set { depth = value; }
+		}
 
 		/// <summary>
 		/// Gets the processor if this is a processor node.
@@ -79,14 +120,79 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// Gets the type of the entry.
 		/// </summary>
 		/// <value>The type of the processor entry.</value>
-		public ProcessorEntryType ProcessorEntryType
+		public ProcessorGraphEntryType ProcessorEntryType
 		{
 			get { return processorEntryType; }
+		}
+
+		/// <summary>
+		/// Resets this instance.
+		/// </summary>
+		public void Reset()
+		{
+			depth = -1;
+		}
+
+		#endregion
+
+		#region Comparison
+
+		/// <summary>
+		/// Compares the current object with another object of the same type.
+		/// </summary>
+		/// <returns>
+		/// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>. 
+		/// </returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public int CompareTo(ProcessorGraphEntry other)
+		{
+			// Lowest depth always comes first.
+			if (depth != other.depth)
+			{
+				return depth.CompareTo(other.depth);
+			}
+
+			// Roots have very simple rules for comparison.
+			if (processorEntryType == ProcessorGraphEntryType.Root)
+			{
+				return -1;
+			}
+
+			if (other.processorEntryType == ProcessorGraphEntryType.Root)
+			{
+				return 1;
+			}
+
+			// Otherwise, sort on the key value.
+			return processor.ProcessorKey.CompareTo(other.processor.ProcessorKey);
 		}
 
 		#endregion
 
 		#region Operators
+
+		/// <summary>
+		/// Gets the key object used for comparisons.
+		/// </summary>
+		/// <value>The key object.</value>
+		private object KeyObject
+		{
+			get
+			{
+				switch (processorEntryType)
+				{
+					case ProcessorGraphEntryType.Feature:
+						return feature;
+					case ProcessorGraphEntryType.Processor:
+						return processor.ProcessorKey;
+					case ProcessorGraphEntryType.Root:
+						return null;
+					default:
+						throw new InvalidOperationException(
+							"Cannot identify type: " + processorEntryType);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Indicates whether the current object is equal to another object of the same type.
@@ -95,7 +201,7 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
 		/// </returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(ProcessorEntry other)
+		public bool Equals(ProcessorGraphEntry other)
 		{
 			if (ReferenceEquals(null, other))
 			{
@@ -106,7 +212,7 @@ namespace AuthorIntrusion.Contracts.Processors
 				return true;
 			}
 
-			return Equals(other.processor, processor) &&
+			return Equals(other.KeyObject, KeyObject) &&
 			       Equals(other.processorEntryType, processorEntryType);
 		}
 
@@ -129,12 +235,12 @@ namespace AuthorIntrusion.Contracts.Processors
 				return true;
 			}
 
-			if (obj.GetType() != typeof(ProcessorEntry))
+			if (obj.GetType() != typeof(ProcessorGraphEntry))
 			{
 				return false;
 			}
 
-			return Equals((ProcessorEntry) obj);
+			return Equals((ProcessorGraphEntry) obj);
 		}
 
 		/// <summary>
@@ -148,7 +254,7 @@ namespace AuthorIntrusion.Contracts.Processors
 		{
 			unchecked
 			{
-				return ((processor != null ? processor.GetHashCode() : 0) * 397) ^
+				return ((KeyObject != null ? KeyObject.GetHashCode() : 0) * 397) ^
 				       processorEntryType.GetHashCode();
 			}
 		}
@@ -159,8 +265,8 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// <param name="left">The left.</param>
 		/// <param name="right">The right.</param>
 		/// <returns>The result of the operator.</returns>
-		public static bool operator ==(ProcessorEntry left,
-		                               ProcessorEntry right)
+		public static bool operator ==(ProcessorGraphEntry left,
+		                               ProcessorGraphEntry right)
 		{
 			return Equals(left, right);
 		}
@@ -171,8 +277,8 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// <param name="left">The left.</param>
 		/// <param name="right">The right.</param>
 		/// <returns>The result of the operator.</returns>
-		public static bool operator !=(ProcessorEntry left,
-		                               ProcessorEntry right)
+		public static bool operator !=(ProcessorGraphEntry left,
+		                               ProcessorGraphEntry right)
 		{
 			return !Equals(left, right);
 		}
@@ -189,7 +295,9 @@ namespace AuthorIntrusion.Contracts.Processors
 		/// </returns>
 		public override string ToString()
 		{
-			return ProcessorEntryType + " " + processor;
+			object key = KeyObject;
+
+			return ProcessorEntryType + " " + depth + (key == null ? String.Empty : ": " + key);
 		}
 
 		#endregion

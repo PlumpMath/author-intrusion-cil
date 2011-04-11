@@ -27,16 +27,23 @@ namespace AuthorIntrusion.Contracts.Processors
 	/// <summary>
 	/// Describes the types of processor entries that can be put in the graph.
 	/// </summary>
-	public enum ProcessorEntryType
+	public enum ProcessorGraphEntryType
 	{
 		/// <summary>
-		/// Indicates that the type is invalid.
+		/// Indicates the root entry type which there is exactly one in a given
+		/// graph.
 		/// </summary>
-		Invalid,
+		Root,
 
 		/// <summary>
 		/// Determines that a processor entry represents a processor object.
 		/// </summary>
 		Processor,
+
+		/// <summary>
+		/// Indicates that the entry represents a feature which is provided by
+		/// a processor and required by other processors.
+		/// </summary>
+		Feature,
 	}
 }

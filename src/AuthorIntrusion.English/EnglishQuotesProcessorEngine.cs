@@ -31,10 +31,10 @@ using AuthorIntrusion.Contracts.Processors;
 namespace AuthorIntrusion.English
 {
 	/// <summary>
-	/// Implements an engine that provides additional search terms for
-	/// highlighting using treebank-tagged elements.
+	/// Contains the functional logic for marking English sentences with
+	/// quote and content annotations.
 	/// </summary>
-	public class EnglishFiltersProcessorEngine : IProcessorEngine
+	public class EnglishQuotesProcessorEngine : IProcessorEngine
 	{
 		/// <summary>
 		/// Gets a value indicating whether this processor is a singleton, which
@@ -55,7 +55,7 @@ namespace AuthorIntrusion.English
 		/// <returns></returns>
 		public Processor CreateProcessor()
 		{
-			return new EnglishFiltersProcessor();
+			return new EnglishQuotesProcessor();
 		}
 	}
 }

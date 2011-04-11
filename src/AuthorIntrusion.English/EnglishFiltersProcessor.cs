@@ -22,78 +22,12 @@
 
 #endregion
 
-#region Namespaces
-
-using System;
-
-using AuthorIntrusion.Contracts.Processors;
-
-using C5;
-
-#endregion
-
 namespace AuthorIntrusion.English
 {
 	/// <summary>
 	/// Represents the settings for an English filter settings.
 	/// </summary>
-	public class EnglishFiltersProcessor : Processor
+	public class EnglishFiltersProcessor
 	{
-		#region Information
-
-		/// <summary>
-		/// Processors are identified by a UUID. For singleton processors, this
-		/// MUST return the same <see cref="Guid"/> every time since it is used
-		/// to recover settings for the project.
-		/// </summary>
-		/// <value>The processor key.</value>
-		public override Guid ProcessorKey
-		{
-			get { return new Guid("229793C8-9EF8-4F5C-A6BF-A727BE022E3A"); }
-		}
-
-		/// <summary>
-		/// Contains a list of services or processors that this item provides.
-		/// This are analogous to the Requires to build up a dependency graph
-		/// between the various providers.
-		/// </summary>
-		public override ICollection<string> Provides
-		{
-			get
-			{
-				var list = new ArrayList<string>();
-				list.Add("English Structure Filters");
-				return list;
-			}
-		}
-
-		/// <summary>
-		/// Contains a list of processors required to use this processor. These
-		/// are string values as returned by the Provides of another processor.
-		/// Circular references are not allow and will be disabled.
-		/// </summary>
-		public override ICollection<string> Requires
-		{
-			get
-			{
-				var list = new ArrayList<string>();
-				list.Add("English Structure Tagging");
-				return list;
-			}
-		}
-
-		#endregion
-
-		#region Processing
-
-		/// <summary>
-		/// Processes information using the given context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public override void Process(ProcessorContext context)
-		{
-		}
-
-		#endregion
 	}
 }

@@ -26,8 +26,8 @@ namespace AuthorIntrusion.Contracts.Processors
 
 		private Document document;
 		private readonly IProcessorEngine[] processorEngines;
-		private readonly ArrayList<Processor> processors;
-		private readonly BidirectionalGraph<ProcessorEntry,SEdge<ProcessorEntry>> processorGraph;
+		private IList<Processor> processors;
+		private readonly ProcessorGraph processorGraph;
 
 		#endregion
 
@@ -45,7 +45,7 @@ namespace AuthorIntrusion.Contracts.Processors
 			queueLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 			paragraphProcesses = new HashDictionary<int, ProcessorContext>();
 			processors = new ArrayList<Processor>();
-			processorGraph = new BidirectionalGraph<ProcessorEntry, SEdge<ProcessorEntry>>();
+			processorGraph = new ProcessorGraph();
 
 			// Create the processors from the engines.
 			MergeEngines();
@@ -129,8 +129,10 @@ namespace AuthorIntrusion.Contracts.Processors
 
 			// Go through the graph using a mark and sweep to determine the
 			// root distance from the root.
+			processorGraph.CalculateDepth();
 
-			// Create the processor graph using the root distance.
+			// Sort the processors based on information from the graph.
+			processors = processorGraph.CreateSortedProcessors();
 		}
 
 		/// <summary>
@@ -141,7 +143,7 @@ namespace AuthorIntrusion.Contracts.Processors
 		private void AddToGraph(Processor processor)
 		{
 			// Check to see if we have the processor already.
-			var entry = new ProcessorEntry(processor);
+			var entry = new ProcessorGraphEntry(processor);
 
 			if (processorGraph.ContainsVertex(entry))
 			{
@@ -149,15 +151,31 @@ namespace AuthorIntrusion.Contracts.Processors
 					"Cannot add the processor (" + processor + ") twice.");
 			}
 
-			// Add the processor to the graph.
-			processorGraph.AddVertex(entry);
-
 			// Get the requirements for the processor.
 			ICollection<string> requires = processor.Requires;
 
 			if (requires.Count == 0)
 			{
-				requires.Add("<Root>");
+				// Link this processor to the root.
+				processorGraph.LinkRoot(processor);
+			}
+			else
+			{
+				// This processor has at least one requirement, so create an
+				// entry for each one and link it.
+				foreach (string require in requires)
+				{
+					// Link requirement to processor.
+					processorGraph.LinkRequirement(require, processor);
+				}
+			}
+
+			// Link all the provisions over.
+			ICollection<string> provides = processor.Provides;
+
+			foreach (string provide in provides)
+			{
+				processorGraph.LinkProvider(processor, provide);
 			}
 		}
 
