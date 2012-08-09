@@ -55,10 +55,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5, Version=1.1.1.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ext\mfgames-gtkext-cil\lib\C5.dll</HintPath>
-    </Reference>
     <Reference Include="QuickGraph, Version=3.3.50603.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\QuickGraph.dll</HintPath>
@@ -69,64 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants\Namespaces.cs" />
-    <Compile Include="Contents\Phrase.cs" />
-    <Compile Include="Contents\Sentence.cs" />
-    <Compile Include="Contents\Word.cs" />
-    <Compile Include="Delegates\ContentFilter.cs" />
-    <Compile Include="Document.cs" />
-    <Compile Include="Element.cs" />
-    <Compile Include="Enumerations\ProcessStatus.cs" />
-    <Compile Include="Languages\IContentAnalyzer.cs" />
-    <Compile Include="Interfaces\IElementTag.cs" />
-    <Compile Include="IO\IInputManager.cs" />
-    <Compile Include="IO\IInputReader.cs" />
-    <Compile Include="IO\IOutputManager.cs" />
-    <Compile Include="IO\IOutputWriter.cs" />
-    <Compile Include="Languages\ILanguageManager.cs" />
-    <Compile Include="Languages\ILanguageSpecific.cs" />
-    <Compile Include="Languages\IContentParser.cs" />
-    <Compile Include="Matters\DocumentMatterCollection.cs" />
-    <Compile Include="Matters\FlattenedCountChangedEventArgs.cs" />
-    <Compile Include="Matters\IMattersContainer.cs" />
-    <Compile Include="Matters\MatterCollection.cs" />
-    <Compile Include="Matters\ParagraphChangedEventArgs.cs" />
-    <Compile Include="Matters\ParagraphEventArgs.cs" />
-    <Compile Include="Matters\RegionType.cs" />
-    <Compile Include="Processors\DocumentProcessorManager.cs" />
-    <Compile Include="Processors\ProcessorContext.cs" />
-    <Compile Include="Processors\ProcessorGraphEntry.cs" />
-    <Compile Include="Processors\ProcessorGraphEntryType.cs" />
-    <Compile Include="Processors\ProcessorGraph.cs" />
-    <Compile Include="Processors\ProcessTypes.cs" />
-    <Compile Include="Processors\IProcessorEngine.cs" />
-    <Compile Include="Processors\Processor.cs" />
-    <Compile Include="Processors\SingletonProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Contents\Content.cs" />
-    <Compile Include="Contents\Unparsed.cs" />
-    <Compile Include="Matters\ContainsStructureAttribute.cs" />
-    <Compile Include="Matters\DocumentDumper.cs" />
-    <Compile Include="Matters\DocumentThumbnailer.cs" />
-    <Compile Include="Matters\Paragraph.cs" />
-    <Compile Include="Matters\Matter.cs" />
-    <Compile Include="Matters\Region.cs" />
-    <Compile Include="Interfaces\IContentContainer.cs" />
-    <Compile Include="Collections\ContentList.cs" />
-    <Compile Include="Enumerations\ContentType.cs" />
-    <Compile Include="Contents\ContentContainerContent.cs" />
-    <Compile Include="Contents\Punctuation.cs" />
-    <Compile Include="Events\ParseProgressEventArgs.cs" />
-    <Compile Include="Algorithms\DocumentVisitor.cs" />
-    <Compile Include="Algorithms\DocumentActionVisitor.cs" />
-    <Compile Include="Matters\MatterType.cs" />
-    <Compile Include="Matters\StructureTypeHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ext\mfgames-cil\src\MfGames\MfGames.csproj">
-      <Project>{3BABBE73-CD1D-494E-A81F-E4EA40107FA9}</Project>
-      <Name>MfGames</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
