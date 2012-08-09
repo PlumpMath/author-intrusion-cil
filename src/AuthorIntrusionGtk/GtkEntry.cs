@@ -27,11 +27,7 @@
 using System.Diagnostics;
 using System.IO;
 
-using AuthorIntrusion;
-using AuthorIntrusion.Contracts;
-using AuthorIntrusion.Contracts.IO;
-
-using AuthorIntrusionGtk.Actions;
+using Awesomium.Mono;
 
 using Gtk;
 
@@ -57,7 +53,7 @@ namespace AuthorIntrusionGtk
 			// Initialize the Author Intrusion manager. We have to use Configure
 			// because StructureMap does not automatically find some of our
 			// leaf objects (e.g., Actions).
-			Container container = Manager.Setup();
+			Container container = new Container();
 
 			container.Configure(
 				x => x.Scan(
@@ -72,12 +68,24 @@ namespace AuthorIntrusionGtk
 				     	}));
 
 			// Get the context and populate it.
-			var context = container.GetInstance<Context>();
-			context.ActionManager = container.GetInstance<GlobalActionManager>();
+			//var context = container.GetInstance<Context>();
+			//context.ActionManager = container.GetInstance<GlobalActionManager>();
 
 			// Create the window and show it.
+			var webCoreConfig = new WebCoreConfig() { CustomCSS = "::-webkit-scrollbar { color: red; }", AutoUpdatePeriod = 10 };
+			WebCore.Initialize(webCoreConfig);
+
 			var mainWindow = container.GetInstance<MainWindow>();
 			mainWindow.ShowAll();
+
+			mainWindow.WebControl.LoadURL("file:///C:/Users/dmoonfire/Documents/MfGames/author-intrusion/src/test.html");
+
+			while (mainWindow.WebControl.IsLoadingPage)
+			{
+				System.Threading.Thread.Sleep(10);
+			}
+
+			WebCore.Update();
 
 			// If we have a command-line option that is a file, open it.
 			if (args.Length > 0)
@@ -87,9 +95,9 @@ namespace AuthorIntrusionGtk
 
 				if (file.Exists)
 				{
-					var inputManager = container.GetInstance<IInputManager>();
-					Document document = inputManager.Read(file);
-					context.Document = document;
+					//var inputManager = container.GetInstance<IInputManager>();
+					//Document document = inputManager.Read(file);
+					//context.Document = document;
 				}
 			}
 
