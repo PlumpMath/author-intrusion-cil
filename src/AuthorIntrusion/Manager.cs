@@ -24,13 +24,6 @@
 
 #region Namespaces
 
-using AuthorIntrusion.Contracts;
-using AuthorIntrusion.Contracts.IO;
-using AuthorIntrusion.Contracts.Languages;
-using AuthorIntrusion.Contracts.Processors;
-
-using StructureMap;
-
 #endregion
 
 namespace AuthorIntrusion
@@ -40,35 +33,5 @@ namespace AuthorIntrusion
 	/// </summary>
 	public static class Manager
 	{
-		/// <summary>
-		/// Sets up the IoC library and extensions.
-		/// </summary>
-		public static Container Setup()
-		{
-			var container = new Container(
-				x => x.Scan(
-				     	scanner =>
-				     	{
-				     		// List the places we are searching for assemblies.
-				     		scanner.AssembliesFromApplicationBaseDirectory();
-				     		scanner.AssembliesFromPath("Extensions");
-
-				     		// List the common types we need to load.
-				     		scanner.AddAllTypesOf<IInputManager>();
-				     		scanner.AddAllTypesOf<IInputReader>();
-
-				     		scanner.AddAllTypesOf<IOutputManager>();
-				     		scanner.AddAllTypesOf<IOutputWriter>();
-
-				     		scanner.AddAllTypesOf<ILanguageManager>();
-
-							scanner.AddAllTypesOf<IContentParser>();
-							scanner.AddAllTypesOf<IProcessorEngine>();
-
-				     		scanner.AddAllTypesOf<Document>();
-				     	}));
-
-			return container;
-		}
 	}
 }
