@@ -142,8 +142,7 @@ namespace AuthorIntrustionSwf
 
 			string javascript = string.Format("(function(){{setEditorParagraph(\"{0}\", \"{1}\");}})();", para.Id, para.Html);
 			Debug.WriteLine("Execute: {0}", javascript);
-			webControl.ExecuteJavascript(
-				javascript);
+			webControl.ExecuteJavascript(javascript);
 		}
 
 		private void OnLoad(object sender, EventArgs e)
