@@ -45,8 +45,7 @@ namespace AuthorIntrustionSwf
 			//                             args) => Debug.WriteLine("CursorChanged: " + args);
 			//webControl.DomReady += (sender,
 			//                        args) => Debug.WriteLine("DomReady: " + args);
-			webControl.LoadCompleted += (sender,
-										 args) => Debug.WriteLine("LoadCompleted: " + args);
+			webControl.LoadCompleted += OnWebControlLoaded;
 			//webControl.CausesValidationChanged += (sender,
 			//                                       args) => Debug.WriteLine("CausesValidations: " + args);
 			//webControl.IsDirtyChanged += (sender,
@@ -57,15 +56,50 @@ namespace AuthorIntrustionSwf
 											args) => Debug.WriteLine("OpenExternalLink: " + args.Url);
 			//webControl.KeyPress += (sender,
 			//                        args) => Debug.WriteLine("KeyPress: " + args.KeyChar);
+		}
 
-			timer.Interval = 100;
+		private void OnWebControlLoaded(object sender,
+		                                EventArgs e)
+		{
+			webControl.CreateObject("AuthorIntrusionGuiCallback");
+			webControl.SetObjectCallback("AuthorIntrusionGuiCallback", "TriggerChange", OnChangesCallback);
+
+			timer.Interval = PollMilliseconds;
 			timer.Tick += OnPollWebControl;
 			timer.Start();
+		}
+
+		private const int PollMilliseconds = 100;
+		private const int IdleThreshold = 1000;
+		private int idleCountdown;
+
+		private void OnChangesCallback(object sender,
+		                      JSCallbackEventArgs jsCallbackEventArgs)
+		{
+			idleCountdown = IdleThreshold;
 		}
 
 		private void OnPollWebControl(object sender,
 		                              EventArgs e)
 		{
+			// If we don't have an idle threshold, then we have no changes to
+			// wait for.
+			if (idleCountdown <= 0)
+			{
+				//Debug.WriteLine("Skipping, no pooling: " + idleCountdown);
+				return;
+			}
+
+			// Decrement the countdown and see if we are still waiting.
+			idleCountdown -= PollMilliseconds;
+
+			if (idleCountdown > 0)
+			{
+				return;
+			}
+
+			Debug.WriteLine("Polling for changes");
+
 			// Query the web control for the results of a function call. This
 			// will contain all the changed and deleted paragraphs.
 			JSValue results = webControl.ExecuteJavascriptWithResult(

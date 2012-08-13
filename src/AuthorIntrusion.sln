@@ -5,8 +5,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{2CEE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion", "AuthorIntrusion\AuthorIntrusion.csproj", "{957BD171-18E1-4EA0-8CBE-D6096BCD3654}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Contracts", "AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj", "{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrustionSwf", "AuthorIntrustionSwf\AuthorIntrustionSwf.csproj", "{50FA9D25-16D0-446E-92D9-732D1935B459}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D77EFCFB-BF08-437C-AABD-5CE832D10A53}"
@@ -36,16 +34,6 @@ Global
 		{957BD171-18E1-4EA0-8CBE-D6096BCD3654}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{957BD171-18E1-4EA0-8CBE-D6096BCD3654}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{957BD171-18E1-4EA0-8CBE-D6096BCD3654}.Release|x86.ActiveCfg = Release|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{0B56279F-0EDB-424E-9D9E-8E4C061BEB52}.Release|x86.ActiveCfg = Release|Any CPU
 		{50FA9D25-16D0-446E-92D9-732D1935B459}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{50FA9D25-16D0-446E-92D9-732D1935B459}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{50FA9D25-16D0-446E-92D9-732D1935B459}.Debug|Mixed Platforms.Build.0 = Debug|x86
