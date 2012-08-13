@@ -8,3 +8,6 @@ bin
 obj
 test-results
 data/models
+
+packages
+_ReSharper*

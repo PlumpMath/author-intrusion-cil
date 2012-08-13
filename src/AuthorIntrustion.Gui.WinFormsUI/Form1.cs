@@ -21,10 +21,16 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace AuthorIntrustionSwf
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class Form1 : Form
 	{
 		Timer timer = new Timer();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Form1"/> class.
+		/// </summary>
 		public Form1()
 		{
 			// Create the window and show it.
@@ -200,7 +206,19 @@ namespace AuthorIntrustionSwf
 
 		private class EditorParagraphChanges
 		{
+			public EditorParagraphChanges()
+			{
+				Changes = new Dictionary<string, EditorParagraphChange>();
+				Deleted = new string[]{};
+			}
+
+			/// <summary>
+			/// 
+			/// </summary>
 			public Dictionary<string, EditorParagraphChange> Changes;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string[] Deleted;
 		}
 	}
