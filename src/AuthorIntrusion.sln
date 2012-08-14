@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GUI", "GUI", "{E04BD1EA-4D9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrustion.Gui.WinFormsUI", "AuthorIntrustion.Gui.WinFormsUI\AuthorIntrustion.Gui.WinFormsUI.csproj", "{50FA9D25-16D0-446E-92D9-732D1935B459}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusionGui", "AuthorIntrusionGui\AuthorIntrusionGui.csproj", "{5318B806-A27B-48DC-A589-C0FE673423B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,16 @@ Global
 		{50FA9D25-16D0-446E-92D9-732D1935B459}.Release|Mixed Platforms.Build.0 = Release|x86
 		{50FA9D25-16D0-446E-92D9-732D1935B459}.Release|x86.ActiveCfg = Release|x86
 		{50FA9D25-16D0-446E-92D9-732D1935B459}.Release|x86.Build.0 = Release|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Debug|x86.ActiveCfg = Debug|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Debug|x86.Build.0 = Debug|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Release|Any CPU.ActiveCfg = Release|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Release|Mixed Platforms.Build.0 = Release|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Release|x86.ActiveCfg = Release|x86
+		{5318B806-A27B-48DC-A589-C0FE673423B9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
