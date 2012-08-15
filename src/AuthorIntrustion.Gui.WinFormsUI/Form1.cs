@@ -62,6 +62,9 @@ namespace AuthorIntrustionSwf
 											args) => Debug.WriteLine("OpenExternalLink: " + args.Url);
 			//webControl.KeyPress += (sender,
 			//                        args) => Debug.WriteLine("KeyPress: " + args.KeyChar);
+
+			webControl.JSConsoleMessageAdded += (sender,
+			                                     args) => Debug.WriteLine(args.Source + ": " + args.LineNumber + ": " + args.Message);
 		}
 
 		private void OnWebControlLoaded(object sender,
@@ -180,8 +183,9 @@ namespace AuthorIntrustionSwf
 				return;
 			}
 
-			string javascript = string.Format("(function(){{setEditorParagraph(\"{0}\", \"{1}\");}})();", para.Id, para.Html);
-			Debug.WriteLine("Execute: {0}", javascript);
+			string contents = para.Html.Replace("\"", "\\\"");
+			string javascript = string.Format("(function(){{setEditorParagraph(\"{0}\", \"{1}\");}})();", para.Id, contents);
+			Debug.WriteLine("Execute: " + javascript);
 			webControl.ExecuteJavascript(javascript);
 		}
 

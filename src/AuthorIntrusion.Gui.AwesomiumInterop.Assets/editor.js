@@ -2,6 +2,59 @@ paragraphHtml = {};
 paragraphId = 1;
 hasParagraphChanges = false;
 
+function test()
+{
+	var previous = 'This is <span style="color: blue;">paragraph</span> 2<span id="selectionBoundary_234_234324" style="line-height: 0; display: none;" class="rangySelectionBoundary"></span>';
+
+	var input = 'This is <span style="color: blue;">paragraph</span> 2';
+	
+	// Figure out where the selection starts as characters. The changed paragraphs will never add characters if
+	// we are updating the current selection.
+	var characters = 0, start = -1, stop = -1, last = -1, inTag = false;
+	
+	for (var i = 0; i < previous.length; i++)
+	{
+		c = previous[i];
+		
+		if (c === '<')
+		{
+			// Mark that we are inside a tag.
+			inTag = true;
+			last = i;
+			
+			if (start < 0) start = i;
+		}
+		else if (!inTag)
+		{
+			characters++;
+		}
+		else if (inTag && c === '>')
+		{
+			// Mark that we are no longer in a tag.
+			inTag = false;
+			
+			// See if we have the selection we are looking for.
+			if (stop < 0)
+			{
+				var tag = previous.substring(start, i + 1);
+			
+				if (tag.indexOf("selectionBoundary") >= 0)
+				{
+					stop = i + 1;
+					alert(previous.substring(start, stop));
+				}
+				else
+				{
+					// Reset the stop since this isn't the tag.
+					start = -1;
+				}
+			}
+		}
+	}
+	
+	alert(previous + "\n\n" + "ch: " + characters + ", start=" + start + ", stop=" + stop + "\n\n" + input);
+}
+
 function resetEditorParagraphs()
 {
 	// Empty out the contents so we can detect new changes.
@@ -60,12 +113,23 @@ function reindexEditorParagraphs()
 
 function setEditorParagraph(id, html)
 {
+	// Update the cached HTML version so we can detect changes.
 	paragraphHtml[id] = html;
+	
+	// Save the selection so we can restore it.
+	var selection = rangy.saveSelection();
+	
+	alert($("[contenteditable] p#" + id).html() + "\n\n" + html);
+	
+	// Update the HTML inside the DOM itself.
 	$("[contenteditable] p#" + id)
 		.html(html)
 		.removeClass("dirty")
 		.removeClass("pending")
 		.addClass("normal");
+		
+	// Restore the selection.
+	rangy.restoreSelection(selection);
 }
 
 function setEditorParagraphIndex(id)
@@ -184,6 +248,8 @@ function loadEditor()
 	// Hook up the buttons.
 	$('button#getEditorParagraphChanges')
 		.on('click', displayEditorParagraphChanges);
+	$('button#bob')
+		.on('click', test);
 
 	// Hook up events on the contenteditable section.
 	$('[contenteditable]').live('focus', function() {
