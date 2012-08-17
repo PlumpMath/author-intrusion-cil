@@ -21,7 +21,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug\Extensions\</OutputPath>
+    <OutputPath>..\..\..\..\bin\Debug\Plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,7 +32,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Release\Extensions\</OutputPath>
+    <OutputPath>..\..\..\..\bin\Release\Plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -95,7 +95,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
+    <ProjectReference Include="..\..\..\AuthorIntrusion\AuthorIntrusion.csproj">
       <Project>{957BD171-18E1-4EA0-8CBE-D6096BCD3654}</Project>
       <Name>AuthorIntrusion</Name>
     </ProjectReference>
