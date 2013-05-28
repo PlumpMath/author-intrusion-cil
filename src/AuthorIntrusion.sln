@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Common", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Cli", "AuthorIntrusion.Cli\AuthorIntrusion.Cli.csproj", "{052F9132-87EC-40DA-8AD9-25B05FBB98F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Common.Tests", "AuthorIntrusion.Common.Tests\AuthorIntrusion.Common.Tests.csproj", "{F88381C5-D664-43FF-B1FE-290A22B1B558}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{052F9132-87EC-40DA-8AD9-25B05FBB98F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{052F9132-87EC-40DA-8AD9-25B05FBB98F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{052F9132-87EC-40DA-8AD9-25B05FBB98F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F88381C5-D664-43FF-B1FE-290A22B1B558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F88381C5-D664-43FF-B1FE-290A22B1B558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F88381C5-D664-43FF-B1FE-290A22B1B558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F88381C5-D664-43FF-B1FE-290A22B1B558}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
