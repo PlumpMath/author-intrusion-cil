@@ -22,76 +22,60 @@
 
 #endregion
 
-#region Namespaces
-
 using System;
-using System.Windows.Forms;
+using System.Diagnostics;
+using System.IO;
 
-using AuthorIntrustionSwf;
+using Antlr4.StringTemplate;
 
-#endregion
-
-namespace AuthorIntrusion.Gui.WinFormsUI
+namespace AuthorIntrusion.Gui.AwesomiumInterop
 {
 	/// <summary>
-	/// The GUI factory class for creating a standard WinForms-based application.
+	/// Manages web views and handles the internals for rendering styles and components
+	/// for the views.
 	/// </summary>
-	public class WinFormsGuiFactory : IGuiFactory
+	public class WebViewManager
 	{
-		private readonly Form1 form1;
-
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="WinFormsGuiFactory"/> class.
+		/// Initializes a new instance of the <see cref="WebViewManager"/> class.
 		/// </summary>
-		/// <param name="form1">The form1.</param>
-		public WinFormsGuiFactory(Form1 form1)
+		/// <param name="webViews">The web views.</param>
+		public WebViewManager(IWebView[] webViews)
 		{
-			this.form1 = form1;
+			Debug.WriteLine("WebViewManager: " + webViews);
+
+			// Load in the string templates for the known functions and default theme.
+			//TemplateGroup functinonsGroup = new TemplateGroupFile();
 		}
 
 		#endregion
 
-		/// <summary>
-		/// Gets a value indicating whether WinForms can be used in this
-		/// environment.
-		/// </summary>
-		public bool IsValid
-		{
-			get { return true; }
-		}
+		#region Environment
 
 		/// <summary>
-		/// Gets the priority of the Winforms GUI factory. This will be 1000
-		/// on Windows platforms, otherwise 10.
+		/// Gets the location that this plugin resides in.
 		/// </summary>
-		public int Priority
+		public static string PluginDirectory
 		{
-			get
-			{
-				switch (Environment.OSVersion.Platform)
-				{
-					case PlatformID.Unix:
-					case PlatformID.MacOSX:
-						return 10;
-					default:
-						return 1000;
-				}
+			get {
+				// Get the location of the WebViewManager (which is going to be in the plugins
+				// directory).
+				string location = typeof(WebViewManager).Assembly.Location;
+
+				if (location == null)
+					throw new ApplicationException("Cannot support the WebViewManager assembly being loaded dynamically.");
+
+				// Get the directory for the assembly.
+				DirectoryInfo directory = Directory.GetParent(location);
+
+				return directory.FullName;
 			}
 		}
 
-		/// <summary>
-		/// Starts the WinForms GUI interface and manages its lifecycle.
-		/// </summary>
-		public void Start()
-		{
-			// Set up the windowing elements used all WinForms.
-			Application.EnableVisualStyles();
-			// HACK Application.SetCompatibleTextRenderingDefault(false);
 
-			// Create the form and display it.
-			Application.Run(form1);
-		}
+		#endregion
+
 	}
 }

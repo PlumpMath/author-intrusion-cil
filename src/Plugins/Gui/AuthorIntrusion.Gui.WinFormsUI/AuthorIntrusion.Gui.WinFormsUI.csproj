@@ -99,6 +99,10 @@
       <Project>{957BD171-18E1-4EA0-8CBE-D6096BCD3654}</Project>
       <Name>AuthorIntrusion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Gui.AwesomiumInterop\AuthorIntrusion.Gui.AwesomiumInterop.csproj">
+      <Project>{0F3772A8-58A4-4610-B912-4E0746694CA5}</Project>
+      <Name>AuthorIntrusion.Gui.AwesomiumInterop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

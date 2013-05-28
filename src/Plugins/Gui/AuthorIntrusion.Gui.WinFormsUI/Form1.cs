@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using AuthorIntrusion.Gui.AwesomiumInterop;
+
 using Awesomium.Core;
 
 using Newtonsoft.Json;
@@ -31,7 +33,7 @@ namespace AuthorIntrustionSwf
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Form1"/> class.
 		/// </summary>
-		public Form1()
+		public Form1(WebViewManager webViewManager)
 		{
 			// Create the window and show it.
 			var webCoreConfig = new WebCoreConfig()
@@ -191,11 +193,13 @@ namespace AuthorIntrustionSwf
 
 		private void OnLoad(object sender, EventArgs e)
 		{
-			webControl.LoadURL("file:///C:/Users/dmoonfire/Documents/MfGames/author-intrusion/src/test.html");
+			// Create the editor web view.
+			EditorWebView editorWebView = new EditorWebView();
+			webControl.LoadHTML(editorWebView.RenderHtml());
 
 			while (webControl.IsLoadingPage)
 			{
-				System.Threading.Thread.Sleep(10);
+				Thread.Sleep(10);
 			}
 
 			WebCore.Update();

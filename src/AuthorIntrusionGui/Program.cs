@@ -55,9 +55,11 @@ namespace AuthorIntrusionGui
 				x => x
 				     	.FromAssembliesInPath(".")
 				     	.SelectAllClasses()
-				     	.Join.FromAssembliesInPath("Extensions")
+				     	.Join
+						.FromAssembliesInPath("Plugins")
 				     	.SelectAllClasses()
-				     	.BindAllInterfaces());
+				     	.BindAllInterfaces()
+						.Configure(b => b.InSingletonScope()));
 
 			// Get the GUI factory which handles creating the windows and
 			// starting up the application. This allows for multiple GUI
