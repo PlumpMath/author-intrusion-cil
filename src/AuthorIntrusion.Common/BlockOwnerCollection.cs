@@ -2,6 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Threading;
+
 namespace AuthorIntrusion.Common
 {
 	/// <summary>
@@ -17,6 +19,8 @@ namespace AuthorIntrusion.Common
 		/// Gets the project associated with this collection.
 		/// </summary>
 		public Project Project { get; private set; }
+
+		public ReaderWriterLockSlim Lock { get; private set; }
 
 		#endregion
 
@@ -40,9 +44,7 @@ namespace AuthorIntrusion.Common
 			Block item,
 			out Block removeditem)
 		{
-			bool results = base.Remove(
-				item,
-				out removeditem);
+			bool results = base.Remove(item, out removeditem);
 			EnsureMinimumBlocks();
 			return results;
 		}
@@ -75,6 +77,7 @@ namespace AuthorIntrusion.Common
 		{
 			// Assign the project so we have an association with the block.
 			Project = project;
+			Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
 			// Create the initial block item.
 			EnsureMinimumBlocks();

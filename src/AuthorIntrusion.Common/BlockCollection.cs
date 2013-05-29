@@ -11,5 +11,24 @@ namespace AuthorIntrusion.Common
 	/// </summary>
 	public class BlockCollection: LinkedList<Block>
 	{
+		#region Properties
+
+		public Block this[BlockKey blockKey]
+		{
+			get
+			{
+				foreach (Block block in this)
+				{
+					if (block.BlockKey == blockKey)
+					{
+						return block;
+					}
+				}
+
+				throw new NoSuchItemException("Cannot find block " + blockKey);
+			}
+		}
+
+		#endregion
 	}
 }

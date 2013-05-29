@@ -2,12 +2,14 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
+
 namespace AuthorIntrusion.Common
 {
 	/// <summary>
 	/// Defines the unique key to identify a block.
 	/// </summary>
-	public struct BlockKey
+	public struct BlockKey: IEquatable<BlockKey>
 	{
 		#region Properties
 
@@ -22,6 +24,26 @@ namespace AuthorIntrusion.Common
 		#endregion
 
 		#region Methods
+
+		public bool Equals(BlockKey other)
+		{
+			return id == other.id;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+			{
+				return false;
+			}
+
+			return obj is BlockKey && Equals((BlockKey) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return (int) id;
+		}
 
 		/// <summary>
 		/// Gets the next BlockKey. This is a universal ID across the system, but the
@@ -46,6 +68,22 @@ namespace AuthorIntrusion.Common
 		public override string ToString()
 		{
 			return id.ToString("X8");
+		}
+
+		#endregion
+
+		#region Operators
+
+		public static bool operator ==(BlockKey left,
+			BlockKey right)
+		{
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(BlockKey left,
+			BlockKey right)
+		{
+			return !left.Equals(right);
 		}
 
 		#endregion

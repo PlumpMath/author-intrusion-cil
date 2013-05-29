@@ -15,6 +15,8 @@ namespace AuthorIntrusion.Common
 	{
 		#region Properties
 
+		public BlockKey BlockKey { get; private set; }
+
 		/// <summary>
 		/// Gets or sets the type of the block.
 		/// </summary>
@@ -45,6 +47,15 @@ namespace AuthorIntrusion.Common
 
 		#endregion
 
+		#region Methods
+
+		public void SetText(string text)
+		{
+			Text = text;
+		}
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>
@@ -53,6 +64,7 @@ namespace AuthorIntrusion.Common
 		/// <param name="ownerCollection">The ownerCollection.</param>
 		public Block(BlockOwnerCollection ownerCollection)
 		{
+			BlockKey = BlockKey.GetNext();
 			OwnerCollection = ownerCollection;
 			text = string.Empty;
 		}
