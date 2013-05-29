@@ -23,7 +23,7 @@ namespace AuthorIntrusion.Common.Tests
 			Block block = blocks[0];
 
 			Assert.AreEqual(
-				"",
+				string.Empty,
 				block.Text);
 		}
 	}
