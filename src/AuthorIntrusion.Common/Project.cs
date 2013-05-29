@@ -13,9 +13,14 @@ namespace AuthorIntrusion.Common
 		#region Properties
 
 		/// <summary>
-		/// Gets the block type manager associated with this project.
+		/// Gets the block type Supervisor associated with this project.
 		/// </summary>
-		protected BlockTypeManager BlockTypeManager { get; private set; }
+		public BlockTypeSupervisor BlockTypeSupervisor { get; private set; }
+
+		/// <summary>
+		/// Contains all the ordered blocks inside the project.
+		/// </summary>
+		public BlockOwnerCollection Blocks { get; private set; }
 
 		#endregion
 
@@ -26,7 +31,8 @@ namespace AuthorIntrusion.Common
 		/// </summary>
 		public Project()
 		{
-			BlockTypeManager = new BlockTypeManager(this);
+			BlockTypeSupervisor = new BlockTypeSupervisor(this);
+			Blocks = new BlockOwnerCollection(this);
 		}
 
 		#endregion

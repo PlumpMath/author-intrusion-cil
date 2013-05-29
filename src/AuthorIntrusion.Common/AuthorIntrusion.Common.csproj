@@ -43,8 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Block.cs" />
+    <Compile Include="BlockCollection.cs" />
+    <Compile Include="BlockKey.cs" />
+    <Compile Include="BlockOwnerCollection.cs" />
     <Compile Include="BlockType.cs" />
-    <Compile Include="BlockTypeManager.cs" />
+    <Compile Include="BlockTypeSupervisor.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonServiceAttribute.cs" />

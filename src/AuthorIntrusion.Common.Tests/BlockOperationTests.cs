@@ -7,21 +7,24 @@ using NUnit.Framework;
 namespace AuthorIntrusion.Common.Tests
 {
 	[TestFixture]
-	public class BlockTypeManagerTests
+	public class BlockOperationTests
 	{
 		[Test]
-		public void CreateEmptyBlockTypeManager()
+		public void TestInitialState()
 		{
-			// Arrange
+			// Act
 			var project = new Project();
 
-			// Act
-			var manager = new BlockTypeSupervisor(project);
-
 			// Assert
+			BlockOwnerCollection blocks = project.Blocks;
+
+			Assert.AreEqual(1, blocks.Count);
+
+			Block block = blocks[0];
+
 			Assert.AreEqual(
-				project,
-				manager.Project);
+				"",
+				block.Text);
 		}
 	}
 }

@@ -23,9 +23,9 @@ namespace AuthorIntrusion.Common
 		public bool IsSystem { get; set; }
 
 		/// <summary>
-		/// Gets the manager that handles the block types.
+		/// Gets the Supervisor that handles the block types.
 		/// </summary>
-		public BlockTypeManager Manager { get; private set; }
+		public BlockTypeSupervisor Supervisor { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the unique name for the block.
@@ -39,10 +39,10 @@ namespace AuthorIntrusion.Common
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BlockType"/> class.
 		/// </summary>
-		/// <param name="manager">The manager.</param>
-		public BlockType(BlockTypeManager manager)
+		/// <param name="supervisor">The Supervisor.</param>
+		public BlockType(BlockTypeSupervisor supervisor)
 		{
-			Manager = manager;
+			Supervisor = supervisor;
 		}
 
 		#endregion
