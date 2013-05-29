@@ -6,7 +6,7 @@ using AuthorIntrusion.Common.Blocks;
 
 namespace AuthorIntrusion.Common.Commands
 {
-	public class DeleteBlockCommand: SingleBlockCommand
+	public class DeleteBlockCommand: BlockKeyCommand
 	{
 		#region Properties
 

@@ -10,7 +10,7 @@ namespace AuthorIntrusion.Common.Commands
 	/// <summary>
 	/// A common baes for commands that function on a single block.
 	/// </summary>
-	public abstract class SingleBlockCommand: IBlockCommand
+	public abstract class BlockKeyCommand: IBlockCommand
 	{
 		#region Properties
 
@@ -77,7 +77,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Constructors
 
-		protected SingleBlockCommand(BlockKey key)
+		protected BlockKeyCommand(BlockKey key)
 		{
 			BlockKey = key;
 		}

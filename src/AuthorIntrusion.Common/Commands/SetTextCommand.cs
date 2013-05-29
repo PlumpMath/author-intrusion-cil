@@ -10,7 +10,7 @@ namespace AuthorIntrusion.Common.Commands
 	/// An operation that sets the text for the entire block with no respect to
 	/// position or current state.
 	/// </summary>
-	public class SetTextCommand: SingleBlockCommand
+	public class SetTextCommand: BlockKeyCommand
 	{
 		#region Properties
 

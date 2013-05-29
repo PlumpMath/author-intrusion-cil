@@ -9,7 +9,7 @@ namespace AuthorIntrusion.Common.Commands
 	/// <summary>
 	/// Operation to insert text into a single block at a given position.
 	/// </summary>
-	public class InsertTextCommand: SingleBlockCommand
+	public class InsertTextCommand: BlockPositionCommand
 	{
 		#region Properties
 
@@ -19,7 +19,6 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		protected string Text { get; private set; }
-		protected int TextIndex { get; private set; }
 
 		#endregion
 
@@ -47,8 +46,7 @@ namespace AuthorIntrusion.Common.Commands
 			Block block)
 		{
 			// Use a delete text operation that is the inverse of the insert.
-			var command = new DeleteTextCommand(
-				new BlockPosition(BlockKey, TextIndex), Text.Length);
+			var command = new DeleteTextCommand(BlockPosition, Text.Length);
 			return command;
 		}
 
@@ -59,9 +57,8 @@ namespace AuthorIntrusion.Common.Commands
 		public InsertTextCommand(
 			BlockPosition position,
 			string text)
-			: base(position.BlockKey)
+			: base(position)
 		{
-			TextIndex = position.TextIndex;
 			Text = text;
 		}
 

@@ -11,7 +11,7 @@ namespace AuthorIntrusion.Common.Commands
 	/// A command to insert one or more blocks after a given block. The text value
 	/// of the new blocks will be a blank string.
 	/// </summary>
-	public class InsertAfterBlockCommand: SingleBlockCommand
+	public class InsertAfterBlockCommand: BlockKeyCommand
 	{
 		#region Properties
 

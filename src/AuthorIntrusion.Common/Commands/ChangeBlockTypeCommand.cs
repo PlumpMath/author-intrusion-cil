@@ -9,7 +9,7 @@ namespace AuthorIntrusion.Common.Commands
 	/// <summary>
 	/// A command to change the type of block to a given type.
 	/// </summary>
-	public class ChangeBlockTypeCommand: SingleBlockCommand
+	public class ChangeBlockTypeCommand: BlockKeyCommand
 	{
 		#region Properties
 
