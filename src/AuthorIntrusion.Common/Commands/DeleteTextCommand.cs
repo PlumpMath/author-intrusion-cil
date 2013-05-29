@@ -7,9 +7,9 @@ using AuthorIntrusion.Common.Blocks;
 namespace AuthorIntrusion.Common.Commands
 {
 	/// <summary>
-	/// Operation to insert text into a single block at a given position.
+	/// A command to delete text from a single block.
 	/// </summary>
-	public class InsertTextCommand: SingleBlockCommand
+	public class DeleteTextCommand: SingleBlockCommand
 	{
 		#region Properties
 
@@ -18,24 +18,20 @@ namespace AuthorIntrusion.Common.Commands
 			get { return true; }
 		}
 
-		protected string Text { get; private set; }
+		public int Length { get; private set; }
+
 		protected int TextIndex { get; private set; }
 
 		#endregion
 
 		#region Methods
 
-		/// <summary>
-		/// Performs the command on the given block.
-		/// </summary>
-		/// <param name="project">The project that contains the current state.</param>
-		/// <param name="block">The block to perform the action on.</param>
 		protected override void Do(
 			Project project,
 			Block block)
 		{
 			// Figure out what the new text string would be.
-			string newText = block.Text.Insert(TextIndex, Text);
+			string newText = block.Text.Remove(TextIndex, Length);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
@@ -46,9 +42,10 @@ namespace AuthorIntrusion.Common.Commands
 			Project project,
 			Block block)
 		{
-			// Use a delete text operation that is the inverse of the insert.
-			var command = new DeleteTextCommand(
-				new BlockPosition(BlockKey, TextIndex), Text.Length);
+			// Create an insert text operation that is the inverse of the delete.
+			string deletedText = block.Text.Substring(TextIndex, Length);
+			var command = new InsertTextCommand(
+				new BlockPosition(BlockKey, TextIndex), deletedText);
 			return command;
 		}
 
@@ -56,13 +53,13 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Constructors
 
-		public InsertTextCommand(
+		public DeleteTextCommand(
 			BlockPosition position,
-			string text)
+			int length)
 			: base(position.BlockKey)
 		{
+			Length = length;
 			TextIndex = position.TextIndex;
-			Text = text;
 		}
 
 		#endregion

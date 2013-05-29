@@ -56,6 +56,7 @@
     <Compile Include="Commands\ChangeBlockTypeCommand.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
     <Compile Include="Commands\DeleteBlockCommand.cs" />
+    <Compile Include="Commands\DeleteTextCommand.cs" />
     <Compile Include="Commands\IBlockCommand.cs" />
     <Compile Include="Commands\InsertAfterBlockCommand.cs" />
     <Compile Include="Commands\InsertIndexedBlockCommand.cs" />
