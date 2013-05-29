@@ -2,6 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using AuthorIntrusion.Common.Commands;
+
 namespace AuthorIntrusion.Common
 {
 	/// <summary>
@@ -22,6 +24,11 @@ namespace AuthorIntrusion.Common
 		/// </summary>
 		public BlockOwnerCollection Blocks { get; private set; }
 
+		/// <summary>
+		/// Gets the commands supervisor for handling commands, undo, and redo.
+		/// </summary>
+		public BlockCommandSupervisor Commands { get; private set; }
+
 		#endregion
 
 		#region Constructors
@@ -33,6 +40,7 @@ namespace AuthorIntrusion.Common
 		{
 			BlockTypeSupervisor = new BlockTypeSupervisor(this);
 			Blocks = new BlockOwnerCollection(this);
+			Commands = new BlockCommandSupervisor(this);
 		}
 
 		#endregion

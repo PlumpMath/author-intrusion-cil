@@ -42,7 +42,16 @@ namespace AuthorIntrusion.Common
 		public string Text
 		{
 			get { return text; }
-			set { text = value ?? string.Empty; }
+			set
+			{
+				text = value ?? string.Empty;
+				version++;
+			}
+		}
+
+		public int Version
+		{
+			get { return version; }
 		}
 
 		#endregion
@@ -75,6 +84,7 @@ namespace AuthorIntrusion.Common
 
 		private BlockType blockType;
 		private string text;
+		private volatile int version;
 
 		#endregion
 	}

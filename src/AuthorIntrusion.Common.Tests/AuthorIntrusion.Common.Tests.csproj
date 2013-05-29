@@ -49,7 +49,9 @@
     <Compile Include="BlockOperationReporter.cs" />
     <Compile Include="BlockOperationTests.cs" />
     <Compile Include="BlockTypeManagerTests.cs" />
+    <Compile Include="InsertTextBlockCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetTextBlockCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AuthorIntrusion.Common\AuthorIntrusion.Common.csproj">
