@@ -53,6 +53,7 @@
     <Compile Include="Blocks\BlockType.cs" />
     <Compile Include="Blocks\BlockTypeSupervisor.cs" />
     <Compile Include="Commands\BlockCommandSupervisor.cs" />
+    <Compile Include="Commands\ChangeBlockTypeCommand.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
     <Compile Include="Commands\DeleteBlockCommand.cs" />
     <Compile Include="Commands\IBlockCommand.cs" />
