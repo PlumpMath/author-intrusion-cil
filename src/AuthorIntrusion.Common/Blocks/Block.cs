@@ -58,9 +58,20 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#region Methods
 
-		public void SetText(string text)
+		public void SetText(string newText)
 		{
-			Text = text;
+			Text = newText;
+		}
+
+		public override string ToString()
+		{
+			// Figure out a trimmed version of the text.
+			string trimmedText = text.Length > 20
+				? text.Substring(0, 17) + "..."
+				: text;
+
+			// Return a formatted version of the block.
+			return string.Format("{0} {1}: {2}", BlockKey, BlockType, trimmedText);
 		}
 
 		#endregion

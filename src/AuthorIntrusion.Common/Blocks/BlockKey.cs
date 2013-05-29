@@ -67,7 +67,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </returns>
 		public override string ToString()
 		{
-			return id.ToString("X8");
+			return string.Format("BlockKey({0})", id.ToString("X8"));
 		}
 
 		#endregion

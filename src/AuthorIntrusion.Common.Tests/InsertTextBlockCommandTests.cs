@@ -14,7 +14,7 @@ namespace AuthorIntrusion.Common.Tests
 		#region Methods
 
 		[Test]
-		public void TestInitialInsertText()
+		public void TestCommand()
 		{
 			// Arrange
 			var project = new Project();
@@ -35,7 +35,30 @@ namespace AuthorIntrusion.Common.Tests
 		}
 
 		[Test]
-		public void TestRedoInsertText()
+		public void TestUndoCommand()
+		{
+			// Arrange
+			var project = new Project();
+			BlockOwnerCollection blocks = project.Blocks;
+			Block block = blocks[0];
+			block.Text = "abcd";
+			int blockVersion = block.Version;
+			BlockKey blockKey = block.BlockKey;
+
+			var command = new InsertTextCommand(new BlockPosition(blockKey, 2), "YES");
+			project.Commands.Do(command);
+
+			// Act
+			project.Commands.Undo();
+
+			// Assert
+			Assert.AreEqual(1, blocks.Count);
+			Assert.AreEqual("abcd", block.Text);
+			Assert.AreEqual(blockVersion + 2, block.Version);
+		}
+
+		[Test]
+		public void TestUndoRedoCommand()
 		{
 			// Arrange
 			var project = new Project();
@@ -56,29 +79,6 @@ namespace AuthorIntrusion.Common.Tests
 			Assert.AreEqual(1, blocks.Count);
 			Assert.AreEqual("abYEScd", block.Text);
 			Assert.AreEqual(blockVersion + 3, block.Version);
-		}
-
-		[Test]
-		public void TestUndoInsertText()
-		{
-			// Arrange
-			var project = new Project();
-			BlockOwnerCollection blocks = project.Blocks;
-			Block block = blocks[0];
-			block.Text = "abcd";
-			int blockVersion = block.Version;
-			BlockKey blockKey = block.BlockKey;
-
-			var command = new InsertTextCommand(new BlockPosition(blockKey, 2), "YES");
-			project.Commands.Do(command);
-
-			// Act
-			project.Commands.Undo();
-
-			// Assert
-			Assert.AreEqual(1, blocks.Count);
-			Assert.AreEqual("abcd", block.Text);
-			Assert.AreEqual(blockVersion + 2, block.Version);
 		}
 
 		#endregion

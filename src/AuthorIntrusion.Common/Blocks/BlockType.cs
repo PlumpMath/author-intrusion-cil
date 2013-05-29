@@ -34,6 +34,15 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#endregion
 
+		#region Methods
+
+		public override string ToString()
+		{
+			return string.Format("BlockType({0})", Name);
+		}
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>

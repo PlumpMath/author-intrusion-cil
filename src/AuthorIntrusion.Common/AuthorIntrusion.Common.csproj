@@ -53,7 +53,11 @@
     <Compile Include="Blocks\BlockType.cs" />
     <Compile Include="Blocks\BlockTypeSupervisor.cs" />
     <Compile Include="Commands\BlockCommandSupervisor.cs" />
+    <Compile Include="Commands\CompositeCommand.cs" />
+    <Compile Include="Commands\DeleteBlockCommand.cs" />
     <Compile Include="Commands\IBlockCommand.cs" />
+    <Compile Include="Commands\InsertAfterBlockCommand.cs" />
+    <Compile Include="Commands\InsertIndexedBlockCommand.cs" />
     <Compile Include="Commands\InsertTextCommand.cs" />
     <Compile Include="Commands\SetTextCommand.cs" />
     <Compile Include="Commands\SingleBlockCommand.cs" />
