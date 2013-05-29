@@ -49,6 +49,7 @@
     <Compile Include="BlockOperationReporter.cs" />
     <Compile Include="BlockOperationTests.cs" />
     <Compile Include="BlockTypeManagerTests.cs" />
+    <Compile Include="CommonMultilineTests.cs" />
     <Compile Include="DeleteBlockCommandTests.cs" />
     <Compile Include="InsertAfterBlockCommandTests.cs" />
     <Compile Include="InsertTextBlockCommandTests.cs" />

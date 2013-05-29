@@ -18,7 +18,7 @@ namespace AuthorIntrusion.Common
 		/// <summary>
 		/// Gets the block type Supervisor associated with this project.
 		/// </summary>
-		public BlockTypeSupervisor BlockTypeSupervisor { get; private set; }
+		public BlockTypeSupervisor BlockTypes { get; private set; }
 
 		/// <summary>
 		/// Contains all the ordered blocks inside the project.
@@ -39,7 +39,7 @@ namespace AuthorIntrusion.Common
 		/// </summary>
 		public Project()
 		{
-			BlockTypeSupervisor = new BlockTypeSupervisor(this);
+			BlockTypes = new BlockTypeSupervisor(this);
 			Blocks = new BlockOwnerCollection(this);
 			Commands = new BlockCommandSupervisor(this);
 		}

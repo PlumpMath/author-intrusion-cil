@@ -26,29 +26,6 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#region Methods
 
-		public override Block Remove()
-		{
-			Block block = base.Remove();
-			EnsureMinimumBlocks();
-			return block;
-		}
-
-		public override bool Remove(Block item)
-		{
-			bool results = base.Remove(item);
-			EnsureMinimumBlocks();
-			return results;
-		}
-
-		public override bool Remove(
-			Block item,
-			out Block removeditem)
-		{
-			bool results = base.Remove(item, out removeditem);
-			EnsureMinimumBlocks();
-			return results;
-		}
-
 		/// <summary>
 		/// Ensures the minimum blocks inside the collection.
 		/// </summary>
@@ -58,7 +35,7 @@ namespace AuthorIntrusion.Common.Blocks
 			{
 				var initialBlock = new Block(this)
 				{
-					BlockType = Project.BlockTypeSupervisor.Paragraph
+					BlockType = Project.BlockTypes.Paragraph
 				};
 
 				Add(initialBlock);

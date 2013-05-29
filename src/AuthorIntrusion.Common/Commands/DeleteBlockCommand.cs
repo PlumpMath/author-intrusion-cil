@@ -10,6 +10,16 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the operation should ensure
+		/// there is always one line in the block buffer. In most cases, this should
+		/// remain false except for undo operations.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if no minimum line processing should be done; otherwise, <c>false</c>.
+		/// </value>
+		public bool IgnoreMinimumLines { get; set; }
+
 		public override bool IsUndoable
 		{
 			get { return true; }
@@ -34,6 +44,30 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Delete the block from the list.
 			project.Blocks.Remove(block);
+
+			// If we have no more blocks, then we need to ensure we have a minimum
+			// number of blocks.
+			if (!IgnoreMinimumLines
+				&& project.Blocks.Count == 0)
+			{
+				// Create a new placeholder block, which is blank.
+				var blankBlock = new Block(project.Blocks)
+				{
+					Text = "",
+					BlockType = project.BlockTypes.Paragraph,
+				};
+
+				project.Blocks.Add(blankBlock);
+
+				// Because we added a block, we also have to add in the delete
+				// for the reverse operation.
+				var deleteBlankCommand = new DeleteBlockCommand(blankBlock.BlockKey)
+				{
+					IgnoreMinimumLines = true,
+				};
+
+				inverseCommand.Commands.InsertFirst(deleteBlankCommand);
+			}
 		}
 
 		protected override IBlockCommand GetInverseCommand(
