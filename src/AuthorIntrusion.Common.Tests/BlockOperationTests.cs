@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using AuthorIntrusion.Common.Blocks;
 using NUnit.Framework;
 
 namespace AuthorIntrusion.Common.Tests
@@ -9,6 +10,8 @@ namespace AuthorIntrusion.Common.Tests
 	[TestFixture]
 	public class BlockOperationTests
 	{
+		#region Methods
+
 		[Test]
 		public void TestInitialState()
 		{
@@ -22,9 +25,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			Block block = blocks[0];
 
-			Assert.AreEqual(
-				string.Empty,
-				block.Text);
+			Assert.AreEqual(string.Empty, block.Text);
 		}
+
+		#endregion
 	}
 }

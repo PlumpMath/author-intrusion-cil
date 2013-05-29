@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
 using System.Diagnostics.Contracts;
 using C5;
 
@@ -37,6 +36,8 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			get { return !undoCommands.IsEmpty; }
 		}
+
+		private Project Project { get; set; }
 
 		#endregion
 
@@ -159,8 +160,6 @@ namespace AuthorIntrusion.Common.Commands
 			undoCommands = new LinkedList<UndoRedoCommand>();
 			redoCommands = new LinkedList<UndoRedoCommand>();
 		}
-
-		private Project Project { get; set; }
 
 		#endregion
 

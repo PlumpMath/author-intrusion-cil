@@ -4,7 +4,7 @@
 
 using System.Threading;
 
-namespace AuthorIntrusion.Common
+namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// A block collection that manages ownership of blocks along with processing
@@ -15,12 +15,12 @@ namespace AuthorIntrusion.Common
 	{
 		#region Properties
 
+		public ReaderWriterLockSlim Lock { get; private set; }
+
 		/// <summary>
 		/// Gets the project associated with this collection.
 		/// </summary>
 		public Project Project { get; private set; }
-
-		public ReaderWriterLockSlim Lock { get; private set; }
 
 		#endregion
 

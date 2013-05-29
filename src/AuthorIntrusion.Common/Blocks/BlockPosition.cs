@@ -2,7 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-namespace AuthorIntrusion.Common
+namespace AuthorIntrusion.Common.Blocks
 {
 	public struct BlockPosition
 	{

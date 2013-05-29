@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright 2012-2013 Moonfire Games
+// Released under the MIT license
+// http://mfgames.com/author-intrusion/license
+
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AuthorIntrusion.Common;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Ninject.Extensions.Conventions.Syntax;
 
 namespace AuthorIntrusion
 {
@@ -17,8 +16,10 @@ namespace AuthorIntrusion
 	/// used in a single entry application and then referenced again throughout the
 	/// system.
 	/// </summary>
-    public class Resolver
-    {
+	public class Resolver
+	{
+		#region Constructors
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Resolver"/> class.
 		/// </summary>
@@ -26,9 +27,7 @@ namespace AuthorIntrusion
 		{
 			// Figure out the standard and plugins path.
 			string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
-			string pluginsPath = Path.Combine(
-				applicationPath,
-				"Plugins");
+			string pluginsPath = Path.Combine(applicationPath, "Plugins");
 
 			// Set up Ninject with the standard configuration from the current assembly.
 			IKernel kernel = new StandardKernel();
@@ -65,5 +64,7 @@ namespace AuthorIntrusion
 						 .BindAllInterfaces());
 			}
 		}
-    }
+
+		#endregion
+	}
 }

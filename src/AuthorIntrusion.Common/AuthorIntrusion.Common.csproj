@@ -45,17 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Block.cs" />
-    <Compile Include="BlockCollection.cs" />
-    <Compile Include="BlockKey.cs" />
-    <Compile Include="BlockOwnerCollection.cs" />
-    <Compile Include="BlockPosition.cs" />
-    <Compile Include="BlockType.cs" />
-    <Compile Include="BlockTypeSupervisor.cs" />
+    <Compile Include="Blocks\Block.cs" />
+    <Compile Include="Blocks\BlockCollection.cs" />
+    <Compile Include="Blocks\BlockKey.cs" />
+    <Compile Include="Blocks\BlockOwnerCollection.cs" />
+    <Compile Include="Blocks\BlockPosition.cs" />
+    <Compile Include="Blocks\BlockType.cs" />
+    <Compile Include="Blocks\BlockTypeSupervisor.cs" />
     <Compile Include="Commands\BlockCommandSupervisor.cs" />
     <Compile Include="Commands\IBlockCommand.cs" />
-    <Compile Include="Commands\InsertTextBlockCommand.cs" />
-    <Compile Include="Commands\SetTextBlockCommand.cs" />
+    <Compile Include="Commands\InsertTextCommand.cs" />
+    <Compile Include="Commands\SetTextCommand.cs" />
     <Compile Include="Commands\SingleBlockCommand.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

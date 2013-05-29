@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using AuthorIntrusion.Common.Blocks;
 using NUnit.Framework;
 
 namespace AuthorIntrusion.Common.Tests
@@ -9,6 +10,8 @@ namespace AuthorIntrusion.Common.Tests
 	[TestFixture]
 	public class BlockTypeManagerTests
 	{
+		#region Methods
+
 		[Test]
 		public void CreateEmptyBlockTypeManager()
 		{
@@ -19,9 +22,9 @@ namespace AuthorIntrusion.Common.Tests
 			var manager = new BlockTypeSupervisor(project);
 
 			// Assert
-			Assert.AreEqual(
-				project,
-				manager.Project);
+			Assert.AreEqual(project, manager.Project);
 		}
+
+		#endregion
 	}
 }

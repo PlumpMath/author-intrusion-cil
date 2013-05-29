@@ -2,7 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-namespace AuthorIntrusion.Common
+namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// BlockType uniquely identifies the various types of blocks inside a project.
@@ -23,14 +23,14 @@ namespace AuthorIntrusion.Common
 		public bool IsSystem { get; set; }
 
 		/// <summary>
-		/// Gets the Supervisor that handles the block types.
-		/// </summary>
-		public BlockTypeSupervisor Supervisor { get; private set; }
-
-		/// <summary>
 		/// Gets or sets the unique name for the block.
 		/// </summary>
 		public string Name { get; set; }
+
+		/// <summary>
+		/// Gets the Supervisor that handles the block types.
+		/// </summary>
+		public BlockTypeSupervisor Supervisor { get; private set; }
 
 		#endregion
 

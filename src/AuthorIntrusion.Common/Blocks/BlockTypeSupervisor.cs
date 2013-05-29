@@ -4,7 +4,7 @@
 
 using C5;
 
-namespace AuthorIntrusion.Common
+namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// A supervisor class that manages block types for a given project.

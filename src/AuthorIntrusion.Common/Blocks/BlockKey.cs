@@ -4,7 +4,7 @@
 
 using System;
 
-namespace AuthorIntrusion.Common
+namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// Defines the unique key to identify a block.

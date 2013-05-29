@@ -4,7 +4,7 @@
 
 using System.Diagnostics.Contracts;
 
-namespace AuthorIntrusion.Common
+namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// A block is the primary structural element inside a ownerCollection. It

@@ -2,36 +2,28 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using AuthorIntrusion.Common.Blocks;
+
 namespace AuthorIntrusion.Common.Commands
 {
 	/// <summary>
 	/// An operation that sets the text for the entire block with no respect to
 	/// position or current state.
 	/// </summary>
-	public class SetTextBlockCommand: SingleBlockCommand
+	public class SetTextCommand: SingleBlockCommand
 	{
 		#region Properties
-
-		public string Text { get; private set; }
-
-		#endregion
-
-		#region Constructors
-
-		public SetTextBlockCommand(
-			BlockKey blockKey,
-			string text)
-			: base(blockKey)
-		{
-			Text = text;
-		}
-
-		#endregion
 
 		public override bool IsUndoable
 		{
 			get { return true; }
 		}
+
+		public string Text { get; private set; }
+
+		#endregion
+
+		#region Methods
 
 		protected override void Do(
 			Project project,
@@ -44,8 +36,22 @@ namespace AuthorIntrusion.Common.Commands
 			Project project,
 			Block block)
 		{
-			var command = new SetTextBlockCommand(BlockKey,block.Text);
+			var command = new SetTextCommand(BlockKey, block.Text);
 			return command;
 		}
+
+		#endregion
+
+		#region Constructors
+
+		public SetTextCommand(
+			BlockKey blockKey,
+			string text)
+			: base(blockKey)
+		{
+			Text = text;
+		}
+
+		#endregion
 	}
 }

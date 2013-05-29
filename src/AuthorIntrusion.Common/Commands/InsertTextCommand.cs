@@ -1,27 +1,29 @@
 ﻿// Copyright 2012-2013 Moonfire Games
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
+
+using AuthorIntrusion.Common.Blocks;
+
 namespace AuthorIntrusion.Common.Commands
 {
 	/// <summary>
 	/// Operation to insert text into a single block at a given position.
 	/// </summary>
-	public class InsertTextBlockCommand : SingleBlockCommand
+	public class InsertTextCommand: SingleBlockCommand
 	{
-		public InsertTextBlockCommand(
-			BlockPosition position,
-			string text)
-			: base(position.BlockKey)
+		#region Properties
+
+		public override bool IsUndoable
 		{
-			TextIndex = position.TextIndex;
-			Text = text;
+			get { return true; }
 		}
 
+		protected string Text { get; private set; }
 		protected int TextIndex { get; private set; }
 
-		protected string Text { get; private set; }
+		#endregion
 
-		public override bool IsUndoable { get { return true; } }
+		#region Methods
 
 		/// <summary>
 		/// Performs the command on the given block.
@@ -46,8 +48,23 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			// We use the full set operation instead of being more graceful with the
 			// DeleteTextBlockCommand.
-			var command = new SetTextBlockCommand(BlockKey, block.Text);
+			var command = new SetTextCommand(BlockKey, block.Text);
 			return command;
 		}
+
+		#endregion
+
+		#region Constructors
+
+		public InsertTextCommand(
+			BlockPosition position,
+			string text)
+			: base(position.BlockKey)
+		{
+			TextIndex = position.TextIndex;
+			Text = text;
+		}
+
+		#endregion
 	}
 }

@@ -4,7 +4,7 @@
 
 using C5;
 
-namespace AuthorIntrusion.Common
+namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// A specialized collection to manage Block objects in memory.

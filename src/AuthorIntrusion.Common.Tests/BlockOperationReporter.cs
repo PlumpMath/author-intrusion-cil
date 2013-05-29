@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using AuthorIntrusion.Common.Blocks;
 using C5;
 
 namespace AuthorIntrusion.Common.Tests
@@ -38,9 +39,7 @@ namespace AuthorIntrusion.Common.Tests
 			ItemAtEventArgs<Block> eventargs)
 		{
 			Console.WriteLine(
-				"Blocks.ItemInserted: {0} @{1}",
-				eventargs.Index,
-				eventargs.Item);
+				"Blocks.ItemInserted: {0} @{1}", eventargs.Index, eventargs.Item);
 		}
 
 		private void OnItemRemovedAt(
@@ -48,9 +47,7 @@ namespace AuthorIntrusion.Common.Tests
 			ItemAtEventArgs<Block> eventargs)
 		{
 			Console.WriteLine(
-				"Blocks.ItemRemoved: {0} @ {1}",
-				eventargs.Index,
-				eventargs.Item);
+				"Blocks.ItemRemoved: {0} @ {1}", eventargs.Index, eventargs.Item);
 		}
 
 		private void OnItemsAdded(
@@ -64,9 +61,7 @@ namespace AuthorIntrusion.Common.Tests
 			object sender,
 			ItemCountEventArgs<Block> eventargs)
 		{
-			Console.WriteLine(
-				"Blocks.ItemsRemoved: {0}",
-				eventargs.Count);
+			Console.WriteLine("Blocks.ItemsRemoved: {0}", eventargs.Count);
 		}
 
 		#endregion

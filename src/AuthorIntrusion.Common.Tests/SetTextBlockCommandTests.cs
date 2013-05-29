@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using NUnit.Framework;
 
@@ -23,7 +24,7 @@ namespace AuthorIntrusion.Common.Tests
 			BlockKey blockKey = block.BlockKey;
 
 			// Act
-			var command = new SetTextBlockCommand(blockKey, "Testing 123");
+			var command = new SetTextCommand(blockKey, "Testing 123");
 			project.Commands.Do(command);
 
 			// Assert
@@ -42,7 +43,7 @@ namespace AuthorIntrusion.Common.Tests
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
-			var command = new SetTextBlockCommand(blockKey, "Testing 123");
+			var command = new SetTextCommand(blockKey, "Testing 123");
 			project.Commands.Do(command);
 
 			project.Commands.Undo();
@@ -66,7 +67,7 @@ namespace AuthorIntrusion.Common.Tests
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
-			var command = new SetTextBlockCommand(blockKey, "Testing 123");
+			var command = new SetTextCommand(blockKey, "Testing 123");
 			project.Commands.Do(command);
 
 			// Act
