@@ -4,7 +4,6 @@
 
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -15,12 +14,13 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
+		public BlockPosition BlockPosition { get; set; }
+
 		public bool IsUndoable
 		{
 			get { return true; }
 		}
 
-		public BlockPosition BlockPosition { get; set; }
 		public string Text { get; private set; }
 
 		protected CompositeCommand InverseCommand { get; private set; }

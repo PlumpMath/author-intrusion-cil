@@ -27,6 +27,18 @@ namespace AuthorIntrusion.Common.Blocks
 		#region Methods
 
 		/// <summary>
+		/// Finds the index of a given block key.
+		/// </summary>
+		/// <param name="blockKey">The block key to look it up.</param>
+		/// <returns>The index of the position.</returns>
+		public int IndexOf(BlockKey blockKey)
+		{
+			Block block = this[blockKey];
+			int index = IndexOf(block);
+			return index;
+		}
+
+		/// <summary>
 		/// Ensures the minimum blocks inside the collection.
 		/// </summary>
 		private void EnsureMinimumBlocks()

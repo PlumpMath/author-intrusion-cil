@@ -25,14 +25,34 @@ namespace AuthorIntrusion.Common.Tests
 			// Act
 			var command =
 				new InsertMultilineTextCommand(
-					new BlockPosition(blocks[3].BlockKey, 5), "AAA\nBBB\nCCC");
+					new BlockPosition(blocks[3].BlockKey, 6), "AAA\nBBB\nCCC");
 			commands.Do(command);
 
 			// Assert
-			Assert.AreEqual(5, blocks.Count);
+			Assert.AreEqual(6, blocks.Count);
 
-			const int index = 0;
-			Assert.AreEqual("", blocks[index].Text);
+			int index = 0;
+			Assert.AreEqual("Line 1", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 2", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 3", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 4AAA", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("BBB", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("CCC", blocks[index].Text);
 			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 		}
 
@@ -56,9 +76,21 @@ namespace AuthorIntrusion.Common.Tests
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
 
-			const int index = 0;
+			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
 			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 2", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 3", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 4", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
 		}
 
 		[Test]
@@ -72,7 +104,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			var command =
 				new InsertMultilineTextCommand(
-					new BlockPosition(blocks[3].BlockKey, 5), "AAA\nBBB\nCCC");
+					new BlockPosition(blocks[3].BlockKey, 6), "AAA\nBBB\nCCC");
 			commands.Do(command);
 			commands.Undo();
 
@@ -80,10 +112,30 @@ namespace AuthorIntrusion.Common.Tests
 			commands.Redo();
 
 			// Assert
-			Assert.AreEqual(5, blocks.Count);
+			Assert.AreEqual(6, blocks.Count);
 
-			const int index = 0;
-			Assert.AreEqual("", blocks[index].Text);
+			int index = 0;
+			Assert.AreEqual("Line 1", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 2", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 3", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 4AAA", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("BBB", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("CCC", blocks[index].Text);
 			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 		}
 
@@ -109,9 +161,21 @@ namespace AuthorIntrusion.Common.Tests
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
 
-			const int index = 0;
+			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
 			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 2", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 3", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("Line 4", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
 		}
 
 		[Test]
@@ -130,7 +194,7 @@ namespace AuthorIntrusion.Common.Tests
 			commands.Do(command);
 
 			// Assert
-			Assert.AreEqual(5, blocks.Count);
+			Assert.AreEqual(6, blocks.Count);
 
 			int index = 0;
 			Assert.AreEqual("Line AAA", blocks[index].Text);
@@ -138,11 +202,11 @@ namespace AuthorIntrusion.Common.Tests
 
 			index++;
 			Assert.AreEqual("BBB", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("CCC1", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("Line 2", blocks[index].Text);
@@ -213,9 +277,21 @@ namespace AuthorIntrusion.Common.Tests
 			commands.Redo();
 
 			// Assert
-			Assert.AreEqual(5, blocks.Count);
+			Assert.AreEqual(6, blocks.Count);
 
 			int index = 0;
+			Assert.AreEqual("Line AAA", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("BBB", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+
+			index++;
+			Assert.AreEqual("CCC1", blocks[index].Text);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+
+			index++;
 			Assert.AreEqual("Line 2", blocks[index].Text);
 			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
 
