@@ -31,12 +31,7 @@ namespace AuthorIntrusion.Common.Commands
 			// block subsystem.
 			using (new WriteLock(project.Blocks.Lock))
 			{
-				// Retrieve the block that is referenced by the key so we can keep
-				// the extending classes relatively small.
-				Block block = project.Blocks[BlockKey];
-
-				// Perform the action on the block.
-				Do(project, block);
+				UnlockedDo(project);
 			}
 		}
 
@@ -53,6 +48,20 @@ namespace AuthorIntrusion.Common.Commands
 				// Perform the action on the block.
 				return GetInverseCommand(project, block);
 			}
+		}
+
+		/// <summary>
+		/// Performs the Do() method without locking.
+		/// </summary>
+		/// <param name="project">The project.</param>
+		public void UnlockedDo(Project project)
+		{
+			// Retrieve the block that is referenced by the key so we can keep
+			// the extending classes relatively small.
+			Block block = project.Blocks[BlockKey];
+
+			// Perform the action on the block.
+			Do(project, block);
 		}
 
 		/// <summary>

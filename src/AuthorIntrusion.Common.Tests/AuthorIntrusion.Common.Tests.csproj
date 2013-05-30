@@ -54,8 +54,10 @@
     <Compile Include="DeleteBlockCommandTests.cs" />
     <Compile Include="DeleteTextCommandTests.cs" />
     <Compile Include="InsertAfterBlockCommandTests.cs" />
+    <Compile Include="InsertMultilineTextCommandTests.cs" />
     <Compile Include="InsertTextBlockCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReplaceTextCommandTests.cs" />
     <Compile Include="SetTextBlockCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>

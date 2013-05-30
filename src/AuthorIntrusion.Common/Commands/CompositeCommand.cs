@@ -14,6 +14,12 @@ namespace AuthorIntrusion.Common.Commands
 		#region Properties
 
 		public IList<IBlockCommand> Commands { get; private set; }
+
+		public IList<IBlockCommand> InverseCommands
+		{
+			get { return inverseComposite.Commands; }
+		}
+
 		public bool IsUndoable { get; private set; }
 
 		#endregion
@@ -55,7 +61,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Constructors
 
-		public CompositeCommand(bool isUndoable)
+		public CompositeCommand(bool isUndoable = true)
 		{
 			IsUndoable = isUndoable;
 			Commands = new ArrayList<IBlockCommand>();
