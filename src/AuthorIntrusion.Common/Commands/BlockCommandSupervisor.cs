@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System.Diagnostics.Contracts;
+using AuthorIntrusion.Common.Blocks;
 using C5;
 
 namespace AuthorIntrusion.Common.Commands
@@ -82,6 +83,20 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		/// <summary>
+		/// Helper method to create and perform the InsertText command.
+		/// </summary>
+		/// <param name="block">The block to insert text.</param>
+		/// <param name="textIndex">Index to start the insert.</param>
+		/// <param name="text">The text to insert.</param>
+		public void InsertText(
+			Block block,
+			int textIndex,
+			string text)
+		{
+			InsertText(new BlockPosition(block.BlockKey, textIndex), text);
+		}
+
+		/// <summary>
 		/// Redoes the last command that was undone.
 		/// </summary>
 		public void Redo()
@@ -142,6 +157,19 @@ namespace AuthorIntrusion.Common.Commands
 					undoCommands.Push(command);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Helper method to create and perform the InsertText command.
+		/// </summary>
+		/// <param name="position">The position to insert the text.</param>
+		/// <param name="text">The text to insert.</param>
+		private void InsertText(
+			BlockPosition position,
+			string text)
+		{
+			var command = new InsertTextCommand(position, text);
+			Do(command);
 		}
 
 		#endregion

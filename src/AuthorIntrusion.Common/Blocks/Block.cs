@@ -36,6 +36,11 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		public BlockOwnerCollection OwnerCollection { get; private set; }
 
+		public Project Project
+		{
+			get { return OwnerCollection.Project; }
+		}
+
 		/// <summary>
 		/// Gets or sets the text associated with the block.
 		/// </summary>

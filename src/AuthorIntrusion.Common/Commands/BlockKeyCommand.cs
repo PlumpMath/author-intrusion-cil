@@ -29,7 +29,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			// Because this is a block command, we need to get a writer lock on the
 			// block subsystem.
-			using (new WriteLock(project.Blocks.Lock))
+			using (new NestableWriteLock(project.Blocks.Lock))
 			{
 				UnlockedDo(project);
 			}
@@ -39,7 +39,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			// Since this command is a non-manipulating, we only need a read lock on
 			// the system to get the current state.
-			using (new ReadLock(project.Blocks.Lock))
+			using (new NestableReadLock(project.Blocks.Lock))
 			{
 				// Retrieve the block that is referenced by the key so we can keep
 				// the extending classes relatively small.

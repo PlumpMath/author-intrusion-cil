@@ -39,6 +39,10 @@ namespace AuthorIntrusion.Common.Commands
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
 			block.SetText(newText);
+
+			// After we insert text, we need to give the immediate editor plugins a
+			// chance to made any alterations to the output.
+			project.Plugins.CheckForImmediateEdits(block, TextIndex + Text.Length);
 		}
 
 		protected override IBlockCommand GetInverseCommand(

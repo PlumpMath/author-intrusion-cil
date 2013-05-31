@@ -9,6 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Cli", "Auth
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Common.Tests", "AuthorIntrusion.Common.Tests\AuthorIntrusion.Common.Tests.csproj", "{F88381C5-D664-43FF-B1FE-290A22B1B558}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{9EE6D6B3-47C7-454A-832A-57A82FA1F803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.ImmediateCorrection", "AuthorIntrusion.Plugins.ImmediateCorrection\AuthorIntrusion.Plugins.ImmediateCorrection.csproj", "{20F7DC72-BFD0-4568-9C4B-BC26F312990B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DC6D3FC5-E957-42FF-B571-D73D04F64457}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.ImmediateCorrection.Tests", "AuthorIntrusion.Plugins.ImmediateCorrection.Tests\AuthorIntrusion.Plugins.ImmediateCorrection.Tests.csproj", "{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,8 +39,21 @@ Global
 		{F88381C5-D664-43FF-B1FE-290A22B1B558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F88381C5-D664-43FF-B1FE-290A22B1B558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F88381C5-D664-43FF-B1FE-290A22B1B558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20F7DC72-BFD0-4568-9C4B-BC26F312990B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20F7DC72-BFD0-4568-9C4B-BC26F312990B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20F7DC72-BFD0-4568-9C4B-BC26F312990B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20F7DC72-BFD0-4568-9C4B-BC26F312990B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{20F7DC72-BFD0-4568-9C4B-BC26F312990B} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
+		{F88381C5-D664-43FF-B1FE-290A22B1B558} = {DC6D3FC5-E957-42FF-B571-D73D04F64457}
+		{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159} = {DC6D3FC5-E957-42FF-B571-D73D04F64457}
 	EndGlobalSection
 EndGlobal

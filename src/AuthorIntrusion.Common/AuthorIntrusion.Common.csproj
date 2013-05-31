@@ -69,6 +69,12 @@
     <Compile Include="Commands\SetTextCommand.cs" />
     <Compile Include="Commands\BlockKeyCommand.cs" />
     <Compile Include="Commands\SplitBlockCommand.cs" />
+    <Compile Include="Plugins\IImmediateBlockEditor.cs" />
+    <Compile Include="Plugins\IProjectPlugin.cs" />
+    <Compile Include="Plugins\IProjectPluginController.cs" />
+    <Compile Include="Plugins\ProjectPluginController.cs" />
+    <Compile Include="Plugins\PluginManager.cs" />
+    <Compile Include="Plugins\PluginSupervisor.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonServiceAttribute.cs" />

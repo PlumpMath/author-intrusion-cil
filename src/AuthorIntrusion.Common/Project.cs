@@ -4,6 +4,7 @@
 
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
+using AuthorIntrusion.Common.Plugins;
 
 namespace AuthorIntrusion.Common
 {
@@ -30,6 +31,11 @@ namespace AuthorIntrusion.Common
 		/// </summary>
 		public BlockCommandSupervisor Commands { get; private set; }
 
+		/// <summary>
+		/// Gets the plugin supervisor associated with the project.
+		/// </summary>
+		public PluginSupervisor Plugins { get; private set; }
+
 		#endregion
 
 		#region Constructors
@@ -42,6 +48,7 @@ namespace AuthorIntrusion.Common
 			BlockTypes = new BlockTypeSupervisor(this);
 			Blocks = new BlockOwnerCollection(this);
 			Commands = new BlockCommandSupervisor(this);
+			Plugins = new PluginSupervisor(this);
 		}
 
 		#endregion

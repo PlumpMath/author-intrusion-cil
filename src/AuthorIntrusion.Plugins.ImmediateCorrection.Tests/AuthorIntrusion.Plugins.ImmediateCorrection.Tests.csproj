@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D6565C98-F476-4538-B8E0-D0F1234C8D14}</ProjectGuid>
+    <ProjectGuid>{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AuthorIntrusion</RootNamespace>
-    <AssemblyName>AuthorIntrusion</AssemblyName>
+    <RootNamespace>AuthorIntrusion.Plugins.ImmediateCorrection.Tests</RootNamespace>
+    <AssemblyName>AuthorIntrusion.Plugins.ImmediateCorrection.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,11 +34,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\C5.2.2.4881.16939\lib\portable-win+net40+sl40+wp+Xbox40\C5.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\packages\ninject.extensions.conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnvironmentResolver.cs" />
+    <Compile Include="ImmedicateCorrectionEditorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +56,16 @@
     <ProjectReference Include="..\AuthorIntrusion.Common\AuthorIntrusion.Common.csproj">
       <Project>{00ebf5ab-efba-49dd-9b50-c588ced63a89}</Project>
       <Name>AuthorIntrusion.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.ImmediateCorrection\AuthorIntrusion.Plugins.ImmediateCorrection.csproj">
+      <Project>{20f7dc72-bfd0-4568-9c4b-bc26f312990b}</Project>
+      <Name>AuthorIntrusion.Plugins.ImmediateCorrection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
+      <Project>{d6565c98-f476-4538-b8e0-d0f1234c8d14}</Project>
+      <Name>AuthorIntrusion</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

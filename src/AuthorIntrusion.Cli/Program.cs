@@ -19,7 +19,7 @@ namespace AuthorIntrusion.Cli
 		private static void Main(string[] args)
 		{
 			// Create the IoC/DI resolver.
-			var resolver = new Resolver();
+			var resolver = new EnvironmentResolver();
 		}
 
 		#endregion
