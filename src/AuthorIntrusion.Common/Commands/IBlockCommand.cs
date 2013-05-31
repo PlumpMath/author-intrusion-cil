@@ -16,13 +16,6 @@ namespace AuthorIntrusion.Common.Commands
 		#region Properties
 
 		/// <summary>
-		/// Gets the final position in a block after the command has completed. This
-		/// is where the cursor will be placed when undoing or redoing, or if an 
-		/// immediate edit makes changes to the line.
-		/// </summary>
-		BlockPosition LastPosition { get; }
-
-		/// <summary>
 		/// Gets a value indicating whether this command can be undone. If it cannot,
 		/// then any operation before it cannot also be undone since this command would
 		/// put it into an unknown state.
@@ -31,6 +24,13 @@ namespace AuthorIntrusion.Common.Commands
 		/// <c>true</c> if this instance is undoable; otherwise, <c>false</c>.
 		/// </value>
 		bool IsUndoable { get; }
+
+		/// <summary>
+		/// Gets the final position in a block after the command has completed. This
+		/// is where the cursor will be placed when undoing or redoing, or if an 
+		/// immediate edit makes changes to the line.
+		/// </summary>
+		BlockPosition LastPosition { get; }
 
 		#endregion
 

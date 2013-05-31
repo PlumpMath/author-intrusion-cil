@@ -38,17 +38,22 @@ namespace AuthorIntrusion.Common.Commands
 			get { return !undoCommands.IsEmpty; }
 		}
 
-		private Project Project { get; set; }
-
 		/// <summary>
 		/// Gets the LastPosition of the last command run, if it has a non-empty
 		/// position. Empty positions are ignored.
 		/// </summary>
 		public BlockPosition LastPosition { get; private set; }
 
+		private Project Project { get; set; }
+
 		#endregion
 
 		#region Methods
+
+		public void DeferredDo(IBlockCommand command)
+		{
+			deferredCommands.Add(command);
+		}
 
 		/// <summary>
 		/// Performs the given block command on the project. This also manages the
@@ -223,9 +228,10 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Fields
 
+		private readonly LinkedList<IBlockCommand> deferredCommands;
+
 		private readonly LinkedList<UndoRedoCommand> redoCommands;
 		private readonly LinkedList<UndoRedoCommand> undoCommands;
-		private readonly LinkedList<IBlockCommand> deferredCommands;
 
 		#endregion
 
@@ -242,10 +248,5 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		#endregion
-
-		public void DeferredDo(IBlockCommand command)
-		{
-			deferredCommands.Add(command);
-		}
 	}
 }

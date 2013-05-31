@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright 2012-2013 Moonfire Games
+// Released under the MIT license
+// http://mfgames.com/author-intrusion/license
+
+using System;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
@@ -8,8 +12,10 @@ using NUnit.Framework;
 namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 {
 	[TestFixture]
-    public class ImmedicateCorrectionEditorTests
-    {
+	public class ImmedicateCorrectionEditorTests
+	{
+		#region Methods
+
 		[Test]
 		public void ActivatePlugin()
 		{
@@ -26,42 +32,43 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		}
 
 		[Test]
-		public void SimpleWordSubstitution()
-		{
-			// Arrange
-			BlockOwnerCollection blocks;
-			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks,out commands,out controller);
-
-			// Act
-			controller.AddSubstitution("teh","the",SubstitutionOptions.WholeWord);
-
-			commands.InsertText(blocks[0], 0, "teh ");
-
-			// Assert
-			Assert.AreEqual("the ", blocks[0].Text);
-			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
-		}
-
-		[Test]
 		public void SimpleLargerWordSubstitution()
 		{
 			// Arrange
 			BlockOwnerCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks,out commands,out controller);
+			SetupCorrectionPlugin(out blocks, out commands, out controller);
 
 			// Act
-			controller.AddSubstitution("abbr","abbreviation",SubstitutionOptions.WholeWord);
+			controller.AddSubstitution(
+				"abbr", "abbreviation", SubstitutionOptions.WholeWord);
 
-			commands.InsertText(blocks[0],0,"abbr ");
+			commands.InsertText(blocks[0], 0, "abbr ");
 
 			// Assert
-			Assert.AreEqual("abbreviation ",blocks[0].Text);
+			Assert.AreEqual("abbreviation ", blocks[0].Text);
 			Assert.AreEqual(
 				new BlockPosition(blocks[0], "abbreviation ".Length), commands.LastPosition);
+		}
+
+		[Test]
+		public void SimpleWordSubstitution()
+		{
+			// Arrange
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionController controller;
+			SetupCorrectionPlugin(out blocks, out commands, out controller);
+
+			// Act
+			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			commands.InsertText(blocks[0], 0, "teh ");
+
+			// Assert
+			Assert.AreEqual("the ", blocks[0].Text);
+			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
 		}
 
 		/// <summary>
@@ -97,5 +104,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectPluginController pluginController = project.Plugins.Controllers[0];
 			controller = (ImmediateCorrectionController) pluginController.Controller;
 		}
-    }
+
+		#endregion
+	}
 }

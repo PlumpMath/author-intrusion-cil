@@ -19,9 +19,8 @@ namespace AuthorIntrusion.Common.Commands
 		/// </summary>
 		public BlockKey BlockKey { get; private set; }
 
-		public BlockPosition LastPosition { get; protected set; }
-
 		public abstract bool IsUndoable { get; }
+		public BlockPosition LastPosition { get; protected set; }
 
 		#endregion
 

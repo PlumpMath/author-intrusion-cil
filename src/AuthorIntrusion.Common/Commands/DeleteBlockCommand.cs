@@ -39,7 +39,7 @@ namespace AuthorIntrusion.Common.Commands
 			IBlockCommand insertCommand = new InsertIndexedBlockCommand(
 				blockIndex, block);
 
-			inverseCommand.LastPosition = new BlockPosition(block,block.Text.Length);
+			inverseCommand.LastPosition = new BlockPosition(block, block.Text.Length);
 			inverseCommand.Commands.Clear();
 			inverseCommand.Commands.Add(insertCommand);
 

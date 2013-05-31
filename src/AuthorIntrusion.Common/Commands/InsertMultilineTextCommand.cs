@@ -15,12 +15,13 @@ namespace AuthorIntrusion.Common.Commands
 		#region Properties
 
 		public BlockPosition BlockPosition { get; set; }
-		public BlockPosition LastPosition { get; private set; }
 
 		public bool IsUndoable
 		{
 			get { return true; }
 		}
+
+		public BlockPosition LastPosition { get; private set; }
 
 		public string Text { get; private set; }
 

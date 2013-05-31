@@ -14,13 +14,28 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 	/// </summary>
 	public class ImmediateCorrectionPlugin: IProjectPlugin
 	{
-		public bool AllowMultiple { get { return false; } }
-		public string Name { get { return "Immediate Correction"; } }
+		#region Properties
+
+		public bool AllowMultiple
+		{
+			get { return false; }
+		}
+
+		public string Name
+		{
+			get { return "Immediate Correction"; }
+		}
+
+		#endregion
+
+		#region Methods
 
 		public IProjectPluginController GetController(Project project)
 		{
 			var controller = new ImmediateCorrectionController(this, project);
 			return controller;
 		}
+
+		#endregion
 	}
 }

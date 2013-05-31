@@ -59,7 +59,9 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 				{
 					// Check to see if we have a valid search term.
 					if (!isWordBreak)
+					{
 						continue;
+					}
 
 					if (startSearchIndex > 0
 						&& char.IsPunctuation(editText[startSearchIndex - 1]))

@@ -3,8 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
-using System.IO;
-using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Plugins;
 using Ninject;
 using Ninject.Extensions.Conventions;

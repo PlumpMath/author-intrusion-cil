@@ -10,10 +10,9 @@ namespace AuthorIntrusion.Common.Plugins
 	/// </summary>
 	public class ProjectPluginController
 	{
-		public PluginSupervisor Supervisor { get; set; }
-		public IProjectPlugin Plugin { get; set; }
+		#region Properties
+
 		public IProjectPluginController Controller { get; set; }
-		public string Name { get { return Plugin.Name; } }
 
 		public bool IsImmediateEditor
 		{
@@ -24,12 +23,27 @@ namespace AuthorIntrusion.Common.Plugins
 			}
 		}
 
-		public ProjectPluginController(PluginSupervisor supervisor,
+		public string Name
+		{
+			get { return Plugin.Name; }
+		}
+
+		public IProjectPlugin Plugin { get; set; }
+		public PluginSupervisor Supervisor { get; set; }
+
+		#endregion
+
+		#region Constructors
+
+		public ProjectPluginController(
+			PluginSupervisor supervisor,
 			IProjectPlugin plugin)
 		{
 			Supervisor = supervisor;
 			Plugin = plugin;
 			Controller = plugin.GetController(supervisor.Project);
 		}
+
+		#endregion
 	}
 }

@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
 using AuthorIntrusion.Common.Blocks;
 
 namespace AuthorIntrusion.Common.Commands

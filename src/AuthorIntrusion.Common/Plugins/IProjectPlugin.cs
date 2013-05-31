@@ -12,6 +12,8 @@ namespace AuthorIntrusion.Common.Plugins
 	/// </summary>
 	public interface IProjectPlugin
 	{
+		#region Properties
+
 		/// <summary>
 		/// Gets a value indicating whether there can be multiple controllers
 		/// for this plugin inside a given project. This would be false for plugins
@@ -29,11 +31,17 @@ namespace AuthorIntrusion.Common.Plugins
 		/// </summary>
 		string Name { get; }
 
+		#endregion
+
+		#region Methods
+
 		/// <summary>
 		/// Gets a project-specific controller for the plugin.
 		/// </summary>
 		/// <param name="project">The project.</param>
 		/// <returns>A controller for the project.</returns>
 		IProjectPluginController GetController(Project project);
+
+		#endregion
 	}
 }

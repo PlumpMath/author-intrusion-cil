@@ -15,13 +15,14 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
-		public Func<BlockPosition> InverseLastPositionFunc { get; set; } 
 		public IList<IBlockCommand> Commands { get; private set; }
 
 		public IList<IBlockCommand> InverseCommands
 		{
 			get { return inverseComposite.Commands; }
 		}
+
+		public Func<BlockPosition> InverseLastPositionFunc { get; set; }
 
 		public bool IsUndoable { get; private set; }
 
