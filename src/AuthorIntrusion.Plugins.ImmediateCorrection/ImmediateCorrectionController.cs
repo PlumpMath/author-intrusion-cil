@@ -67,12 +67,22 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 						continue;
 					}
 
+					// Make sure the string we're looking at actually is the same.
+					string editSubstring = editText.Substring(
+						startSearchIndex - 1, substitution.Search.Length);
+
+					if (editSubstring != substitution.Search)
+					{
+						// The words don't match.
+						continue;
+					}
+
 					// Perform the substitution with a replace operation.
 					command =
 						new ReplaceTextCommand(
 							new BlockPosition(block.BlockKey, startSearchIndex - 1),
-							searchLength,
-							substitution.Replacement);
+							searchLength + 1,
+							substitution.Replacement + finalCharacter);
 				}
 				else
 				{
@@ -90,8 +100,9 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 							substitution.Replacement);
 				}
 
-				// Perform the command.
-				block.Project.Commands.Do(command);
+				// Add the command to the deferred execution so the command could
+				// be properly handled via the undo/redo management.
+				block.Project.Commands.DeferredDo(command);
 			}
 		}
 

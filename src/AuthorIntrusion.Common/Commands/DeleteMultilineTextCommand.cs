@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
 
 namespace AuthorIntrusion.Common.Commands
@@ -10,17 +9,19 @@ namespace AuthorIntrusion.Common.Commands
 	/// <summary>
 	/// Command to delete multiple lines of text from the blocks.
 	/// </summary>
-	public class DeleteMultilineTextCommand:IBlockCommand
+	public class DeleteMultilineTextCommand: IBlockCommand
 	{
 		#region Properties
 
-		public BlockPosition StartBlockPosition { get; set; }
-		public BlockPosition StopBlockPosition { get; set; }
+		public BlockPosition LastPosition { get; private set; }
 
 		public bool IsUndoable
 		{
 			get { return true; }
 		}
+
+		public BlockPosition StartBlockPosition { get; set; }
+		public BlockPosition StopBlockPosition { get; set; }
 
 		protected CompositeCommand InverseCommand { get; private set; }
 
@@ -33,6 +34,10 @@ namespace AuthorIntrusion.Common.Commands
 			// We have to clear the undo buffer every time because we'll be creating
 			// new blocks.
 			InverseCommand.Commands.Clear();
+			InverseCommand.LastPosition = StopBlockPosition;
+
+			// Set up our own position.
+			LastPosition = StartBlockPosition;
 
 			// Figure out line ranges we'll be deleting text from.
 			Block startBlock = project.Blocks[StartBlockPosition.BlockKey];
@@ -47,7 +52,7 @@ namespace AuthorIntrusion.Common.Commands
 
 			var startReplace = new ReplaceTextCommand(
 				StartBlockPosition, startLength, stopText);
-			var startInverse = startReplace.GetInverseCommand(project);
+			IBlockCommand startInverse = startReplace.GetInverseCommand(project);
 
 			InverseCommand.Commands.Add(startInverse);
 			startReplace.Do(project);
@@ -57,8 +62,9 @@ namespace AuthorIntrusion.Common.Commands
 				i <= stopIndex;
 				i++)
 			{
-				var middleDelete = new DeleteBlockCommand(project.Blocks[startIndex + 1].BlockKey);
-				var middleInverse = middleDelete.GetInverseCommand(project);
+				var middleDelete =
+					new DeleteBlockCommand(project.Blocks[startIndex + 1].BlockKey);
+				IBlockCommand middleInverse = middleDelete.GetInverseCommand(project);
 
 				InverseCommand.Commands.Insert(1, middleInverse);
 				middleDelete.Do(project);

@@ -64,6 +64,8 @@ namespace AuthorIntrusion.Common.Commands
 			: base(position)
 		{
 			Text = text;
+			LastPosition = new BlockPosition(
+				BlockPosition.BlockKey, BlockPosition.TextIndex + Text.Length);
 		}
 
 		#endregion

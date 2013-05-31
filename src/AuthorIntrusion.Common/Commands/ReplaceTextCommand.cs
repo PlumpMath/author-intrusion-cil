@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
 using AuthorIntrusion.Common.Blocks;
 
 namespace AuthorIntrusion.Common.Commands
@@ -33,6 +34,13 @@ namespace AuthorIntrusion.Common.Commands
 
 			Commands.Add(deleteCommand);
 			Commands.Add(insertCommand);
+
+			// Set up the last position equal to the insert.
+			LastPositionFunc = () => insertCommand.LastPosition;
+
+			// Calculate the inverse of these operations.
+			InverseLastPositionFunc =
+				() => new BlockPosition(position.BlockKey, position.TextIndex + length);
 		}
 
 		#endregion

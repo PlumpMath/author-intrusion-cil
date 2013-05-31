@@ -50,6 +50,7 @@ namespace AuthorIntrusion.Common.Commands
 			: base(blockKey)
 		{
 			Text = text;
+			LastPosition = new BlockPosition(blockKey, text.Length);
 		}
 
 		#endregion

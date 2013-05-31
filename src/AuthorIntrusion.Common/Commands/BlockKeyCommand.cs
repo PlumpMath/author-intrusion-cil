@@ -19,6 +19,8 @@ namespace AuthorIntrusion.Common.Commands
 		/// </summary>
 		public BlockKey BlockKey { get; private set; }
 
+		public BlockPosition LastPosition { get; protected set; }
+
 		public abstract bool IsUndoable { get; }
 
 		#endregion
@@ -86,9 +88,9 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Constructors
 
-		protected BlockKeyCommand(BlockKey key)
+		protected BlockKeyCommand(BlockKey blockKey)
 		{
-			BlockKey = key;
+			BlockKey = blockKey;
 		}
 
 		#endregion

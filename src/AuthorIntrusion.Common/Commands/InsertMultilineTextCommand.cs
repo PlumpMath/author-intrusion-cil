@@ -15,6 +15,7 @@ namespace AuthorIntrusion.Common.Commands
 		#region Properties
 
 		public BlockPosition BlockPosition { get; set; }
+		public BlockPosition LastPosition { get; private set; }
 
 		public bool IsUndoable
 		{
@@ -58,9 +59,12 @@ namespace AuthorIntrusion.Common.Commands
 			insertFirstCommand.UnlockedDo(project);
 
 			// Update the final lines text with the remains of the first line.
+			int lastLineLength = lines[lines.Length - 1].Length;
 			lines[lines.Length - 1] += remainingText;
 
 			// For the remaining lines, we need to insert each one in turn.
+			LastPosition = BlockPosition.Empty;
+
 			if (lines.Length > 1)
 			{
 				// Go through all the lines in reverse order to insert them.
@@ -78,6 +82,12 @@ namespace AuthorIntrusion.Common.Commands
 					};
 
 					project.Blocks.Insert(firstBlockIndex + 1, newBlock);
+
+					// Update the last position as we go.
+					if (LastPosition == BlockPosition.Empty)
+					{
+						LastPosition = new BlockPosition(newBlock.BlockKey, lastLineLength);
+					}
 
 					// Insert in the reverse operation.
 					var deleteCommand = new DeleteBlockCommand(newBlock.BlockKey);
@@ -106,7 +116,10 @@ namespace AuthorIntrusion.Common.Commands
 			// Save the text for the changes.
 			BlockPosition = position;
 			Text = text;
-			InverseCommand = new CompositeCommand();
+			InverseCommand = new CompositeCommand
+			{
+				LastPosition = position
+			};
 		}
 
 		#endregion

@@ -39,6 +39,7 @@ namespace AuthorIntrusion.Common.Commands
 			IBlockCommand insertCommand = new InsertIndexedBlockCommand(
 				blockIndex, block);
 
+			inverseCommand.LastPosition = new BlockPosition(block,block.Text.Length);
 			inverseCommand.Commands.Clear();
 			inverseCommand.Commands.Add(insertCommand);
 
@@ -59,6 +60,9 @@ namespace AuthorIntrusion.Common.Commands
 
 				project.Blocks.Add(blankBlock);
 
+				// Set the last position to this newly created block.
+				LastPosition = new BlockPosition(blankBlock, 0);
+
 				// Because we added a block, we also have to add in the delete
 				// for the reverse operation.
 				var deleteBlankCommand = new DeleteBlockCommand(blankBlock.BlockKey)
@@ -67,6 +71,17 @@ namespace AuthorIntrusion.Common.Commands
 				};
 
 				inverseCommand.Commands.InsertFirst(deleteBlankCommand);
+			}
+			else if (!IgnoreMinimumLines)
+			{
+				// We have to figure out where the cursor would be after this operation.
+				// Ideally, this would be the block in the current position, but if this
+				// is the last line, then use that.
+				LastPosition = new BlockPosition(
+					blockIndex < project.Blocks.Count
+						? project.Blocks[blockIndex].BlockKey
+						: project.Blocks[blockIndex - 1].BlockKey,
+					0);
 			}
 		}
 
@@ -81,8 +96,8 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Constructors
 
-		public DeleteBlockCommand(BlockKey key)
-			: base(key)
+		public DeleteBlockCommand(BlockKey blockKey)
+			: base(blockKey)
 		{
 			inverseCommand = new CompositeCommand(true);
 		}

@@ -2,6 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
+using AuthorIntrusion.Common.Blocks;
 using C5;
 
 namespace AuthorIntrusion.Common.Commands
@@ -13,6 +15,7 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
+		public Func<BlockPosition> InverseLastPositionFunc { get; set; } 
 		public IList<IBlockCommand> Commands { get; private set; }
 
 		public IList<IBlockCommand> InverseCommands
@@ -21,6 +24,27 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		public bool IsUndoable { get; private set; }
+
+		public BlockPosition LastPosition
+		{
+			get
+			{
+				if (LastPositionFunc == null)
+				{
+					return BlockPosition.Empty;
+				}
+
+				BlockPosition dyanmicLastPosition = LastPositionFunc();
+				return dyanmicLastPosition;
+			}
+			set { LastPositionFunc = () => value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the last position dynamic function. If this is null, then
+		/// the LastPosition will return BlockPosition.Empty.
+		/// </summary>
+		public Func<BlockPosition> LastPositionFunc { get; set; }
 
 		#endregion
 
@@ -32,6 +56,12 @@ namespace AuthorIntrusion.Common.Commands
 			foreach (IBlockCommand command in Commands)
 			{
 				command.Do(project);
+			}
+
+			// If we have an inverse position, use that instead.
+			if (LastPositionFunc != null)
+			{
+				LastPosition = LastPositionFunc();
 			}
 		}
 
@@ -50,6 +80,14 @@ namespace AuthorIntrusion.Common.Commands
 					IBlockCommand inverseCommand = command.GetInverseCommand(project);
 
 					inverseComposite.Commands.InsertFirst(inverseCommand);
+
+					inverseComposite.LastPositionFunc = () => inverseCommand.LastPosition;
+				}
+
+				// If we have a last position function for the inverse, set it.
+				if (InverseLastPositionFunc != null)
+				{
+					inverseComposite.LastPositionFunc = InverseLastPositionFunc;
 				}
 			}
 

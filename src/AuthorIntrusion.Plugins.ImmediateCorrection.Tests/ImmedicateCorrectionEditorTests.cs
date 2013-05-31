@@ -26,7 +26,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		}
 
 		[Test]
-		public void SimpleQuoteSubstitution()
+		public void SimpleWordSubstitution()
 		{
 			// Arrange
 			BlockOwnerCollection blocks;
@@ -35,12 +35,33 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			SetupCorrectionPlugin(out blocks,out commands,out controller);
 
 			// Act
-			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+			controller.AddSubstitution("teh","the",SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 
 			// Assert
 			Assert.AreEqual("the ", blocks[0].Text);
+			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
+		}
+
+		[Test]
+		public void SimpleLargerWordSubstitution()
+		{
+			// Arrange
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionController controller;
+			SetupCorrectionPlugin(out blocks,out commands,out controller);
+
+			// Act
+			controller.AddSubstitution("abbr","abbreviation",SubstitutionOptions.WholeWord);
+
+			commands.InsertText(blocks[0],0,"abbr ");
+
+			// Assert
+			Assert.AreEqual("abbreviation ",blocks[0].Text);
+			Assert.AreEqual(
+				new BlockPosition(blocks[0], "abbreviation ".Length), commands.LastPosition);
 		}
 
 		/// <summary>

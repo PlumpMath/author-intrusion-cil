@@ -31,8 +31,12 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
-			Assert.AreEqual("abYESd", block.Text);
-			Assert.AreEqual(blockVersion + 2, block.Version);
+			Assert.AreEqual(
+				new BlockPosition(blocks[0], 5), project.Commands.LastPosition);
+
+			const int index = 0;
+			Assert.AreEqual("abYESd", blocks[index].Text);
+			Assert.AreEqual(blockVersion + 2, blocks[index].Version);
 		}
 
 		[Test]
@@ -55,8 +59,12 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
-			Assert.AreEqual("abcd", block.Text);
-			Assert.AreEqual(blockVersion + 4, block.Version);
+			Assert.AreEqual(
+				new BlockPosition(blocks[0],3),project.Commands.LastPosition);
+
+			const int index = 0;
+			Assert.AreEqual("abcd",blocks[index].Text);
+			Assert.AreEqual(blockVersion + 4, blocks[index].Version);
 		}
 
 		[Test]
@@ -80,8 +88,12 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
-			Assert.AreEqual("abYESd", block.Text);
-			Assert.AreEqual(blockVersion + 6, block.Version);
+			Assert.AreEqual(
+				new BlockPosition(blocks[0],5),project.Commands.LastPosition);
+
+			const int index = 0;
+			Assert.AreEqual("abYESd",blocks[index].Text);
+			Assert.AreEqual(blockVersion + 6, blocks[index].Version);
 		}
 
 		#endregion

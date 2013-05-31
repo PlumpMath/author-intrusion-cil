@@ -30,6 +30,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
+			Assert.AreEqual(
+				new BlockPosition(blocks[5], 3),
+				commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
@@ -75,6 +78,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
+			Assert.AreEqual(
+				new BlockPosition(blocks[3],5),
+				commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
@@ -113,6 +119,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
+			Assert.AreEqual(
+				new BlockPosition(blocks[5],3),
+				commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
@@ -160,6 +169,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
+			Assert.AreEqual(
+				new BlockPosition(blocks[3],5),
+				commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
@@ -195,6 +207,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
+			Assert.AreEqual(
+	new BlockPosition(blocks[2],3),
+	commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line AAA", blocks[index].Text);
@@ -240,6 +255,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
+			Assert.AreEqual(
+	new BlockPosition(blocks[0],5),
+	commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
@@ -278,6 +296,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
+			Assert.AreEqual(
+new BlockPosition(blocks[2],3),
+commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line AAA", blocks[index].Text);
@@ -325,6 +346,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
+			Assert.AreEqual(
+	new BlockPosition(blocks[0],5),
+	commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);

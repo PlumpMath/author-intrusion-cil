@@ -2,6 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using AuthorIntrusion.Common.Blocks;
+
 namespace AuthorIntrusion.Common.Commands
 {
 	/// <summary>
@@ -12,6 +14,13 @@ namespace AuthorIntrusion.Common.Commands
 	public interface IBlockCommand
 	{
 		#region Properties
+
+		/// <summary>
+		/// Gets the final position in a block after the command has completed. This
+		/// is where the cursor will be placed when undoing or redoing, or if an 
+		/// immediate edit makes changes to the line.
+		/// </summary>
+		BlockPosition LastPosition { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether this command can be undone. If it cannot,

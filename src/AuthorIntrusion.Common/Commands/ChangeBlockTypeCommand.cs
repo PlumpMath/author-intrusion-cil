@@ -44,11 +44,12 @@ namespace AuthorIntrusion.Common.Commands
 		#region Constructors
 
 		public ChangeBlockTypeCommand(
-			BlockKey key,
+			BlockKey blockKey,
 			BlockType blockType)
-			: base(key)
+			: base(blockKey)
 		{
 			BlockType = blockType;
+			LastPosition = new BlockPosition(blockKey, 0);
 		}
 
 		#endregion

@@ -37,6 +37,8 @@ namespace AuthorIntrusion.Common.Commands
 			// Because of how block keys work, the ID is unique very time so we have
 			// to update our inverse operation.
 			inverseComposite.Commands.Clear();
+			inverseComposite.LastPosition = new BlockPosition(
+				block.BlockKey, block.Text.Length);
 
 			// Go through and create each block at a time, adding it to the inverse
 			// command as we create them.
@@ -51,6 +53,9 @@ namespace AuthorIntrusion.Common.Commands
 				// Add the corresponding delete block to the inverse command.
 				var deleteCommand = new DeleteBlockCommand(newBlock.BlockKey);
 				inverseComposite.Commands.Add(deleteCommand);
+
+				// Set up the last position for this block.
+				LastPosition = new BlockPosition(newBlock.BlockKey, 0);
 			}
 		}
 
@@ -78,7 +83,7 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Create the initial inverse command. This is a composite because we
 			// have to rebuild it every time we perform a do or redo operation.
-			inverseComposite = new CompositeCommand(true);
+			inverseComposite = new CompositeCommand();
 		}
 
 		#endregion

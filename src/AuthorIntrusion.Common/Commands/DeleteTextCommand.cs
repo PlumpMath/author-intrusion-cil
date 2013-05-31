@@ -56,6 +56,7 @@ namespace AuthorIntrusion.Common.Commands
 			: base(position)
 		{
 			Length = length;
+			LastPosition = position;
 		}
 
 		#endregion

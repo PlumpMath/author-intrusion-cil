@@ -40,6 +40,12 @@ namespace AuthorIntrusion.Common.Commands
 
 		private Project Project { get; set; }
 
+		/// <summary>
+		/// Gets the LastPosition of the last command run, if it has a non-empty
+		/// position. Empty positions are ignored.
+		/// </summary>
+		public BlockPosition LastPosition { get; private set; }
+
 		#endregion
 
 		#region Methods
@@ -142,6 +148,12 @@ namespace AuthorIntrusion.Common.Commands
 			// Perform the action on the system.
 			blockCommand.Do(Project);
 
+			// Figure out if we have to update the last position.
+			if (blockCommand.LastPosition != BlockPosition.Empty)
+			{
+				LastPosition = blockCommand.LastPosition;
+			}
+
 			// Add the action to the appropriate buffer. This assumes that the undo
 			// and redo operations have been properly managed before this method is
 			// called. This does not manage the buffers since the undo/redo allows
@@ -155,6 +167,23 @@ namespace AuthorIntrusion.Common.Commands
 				else
 				{
 					undoCommands.Push(command);
+				}
+			}
+
+			// If we have any deferred commands, we need to handle them now.
+			if (!deferredCommands.IsEmpty)
+			{
+				// Copy the list and clear it out in case any of these actions
+				// add any more deferred commands.
+				var commands = new ArrayList<IBlockCommand>();
+
+				commands.AddAll(deferredCommands);
+				deferredCommands.Clear();
+
+				// Go through the commands and process each one.
+				foreach (IBlockCommand deferredCommand in commands)
+				{
+					Do(deferredCommand);
 				}
 			}
 		}
@@ -187,6 +216,7 @@ namespace AuthorIntrusion.Common.Commands
 			// Initialize our internal lists.
 			undoCommands = new LinkedList<UndoRedoCommand>();
 			redoCommands = new LinkedList<UndoRedoCommand>();
+			deferredCommands = new LinkedList<IBlockCommand>();
 		}
 
 		#endregion
@@ -195,6 +225,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		private readonly LinkedList<UndoRedoCommand> redoCommands;
 		private readonly LinkedList<UndoRedoCommand> undoCommands;
+		private readonly LinkedList<IBlockCommand> deferredCommands;
 
 		#endregion
 
@@ -211,5 +242,10 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		#endregion
+
+		public void DeferredDo(IBlockCommand command)
+		{
+			deferredCommands.Add(command);
+		}
 	}
 }

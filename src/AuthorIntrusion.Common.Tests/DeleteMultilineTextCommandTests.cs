@@ -31,6 +31,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
+			Assert.AreEqual(
+	new BlockPosition(blocks[0],5),
+	commands.LastPosition);
 
 			const int index = 0;
 			Assert.AreEqual("Line 4", blocks[index].Text);
@@ -57,6 +60,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
+			Assert.AreEqual(
+	new BlockPosition(blocks[3],5),
+	commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
@@ -96,6 +102,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
+			Assert.AreEqual(
+new BlockPosition(blocks[0],5),
+commands.LastPosition);
 
 			const int index = 0;
 			Assert.AreEqual("Line 4", blocks[index].Text);
@@ -124,6 +133,9 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
+			Assert.AreEqual(
+	new BlockPosition(blocks[3],5),
+	commands.LastPosition);
 
 			int index = 0;
 			Assert.AreEqual("Line 1", blocks[index].Text);
