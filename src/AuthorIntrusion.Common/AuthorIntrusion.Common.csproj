@@ -69,6 +69,7 @@
     <Compile Include="Commands\SetTextCommand.cs" />
     <Compile Include="Commands\BlockKeyCommand.cs" />
     <Compile Include="Commands\SplitBlockCommand.cs" />
+    <Compile Include="Commands\UndoRedoCommand.cs" />
     <Compile Include="Plugins\IImmediateBlockEditor.cs" />
     <Compile Include="Plugins\IProjectPlugin.cs" />
     <Compile Include="Plugins\IProjectPluginController.cs" />

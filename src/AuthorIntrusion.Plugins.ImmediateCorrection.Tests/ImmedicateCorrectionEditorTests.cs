@@ -68,6 +68,130 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 
 			// Assert
 			Assert.AreEqual("the ", blocks[0].Text);
+			Assert.IsFalse(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
+		}
+
+		[Test]
+		public void SimpleWordSubstitutionUndo()
+		{
+			// Arrange
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionController controller;
+			SetupCorrectionPlugin(out blocks, out commands, out controller);
+
+			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			commands.InsertText(blocks[0], 0, "teh ");
+
+			// Act
+			commands.Undo();
+
+			// Assert
+			Assert.AreEqual("teh ", blocks[0].Text);
+			Assert.IsTrue(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
+		}
+
+		[Test]
+		public void SimpleWordSubstitutionUndoRedo()
+		{
+			// Arrange
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionController controller;
+			SetupCorrectionPlugin(out blocks, out commands, out controller);
+
+			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			commands.InsertText(blocks[0], 0, "teh ");
+			commands.Undo();
+
+			// Act
+			commands.Redo();
+
+			// Assert
+			Assert.AreEqual("the ", blocks[0].Text);
+			Assert.IsFalse(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
+		}
+
+		[Test]
+		public void SimpleWordSubstitutionUndoUndo()
+		{
+			// Arrange
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionController controller;
+			SetupCorrectionPlugin(out blocks, out commands, out controller);
+
+			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			commands.InsertText(blocks[0], 0, "teh ");
+			commands.Undo();
+
+			// Act
+			commands.Undo();
+
+			// Assert
+			Assert.AreEqual("", blocks[0].Text);
+			Assert.IsTrue(commands.CanRedo);
+			Assert.IsFalse(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 0), commands.LastPosition);
+		}
+
+		[Test]
+		public void SimpleWordSubstitutionUndoUndoRedo()
+		{
+			// Arrange
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionController controller;
+			SetupCorrectionPlugin(out blocks, out commands, out controller);
+
+			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			commands.InsertText(blocks[0], 0, "teh ");
+			commands.Undo();
+			commands.Undo();
+
+			// Act
+			commands.Redo();
+
+			// Assert
+			Assert.AreEqual("teh ", blocks[0].Text);
+			Assert.IsTrue(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
+		}
+
+		[Test]
+		public void SimpleWordSubstitutionUndoUndoRedoRedo()
+		{
+			// Arrange
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionController controller;
+			SetupCorrectionPlugin(out blocks, out commands, out controller);
+
+			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			commands.InsertText(blocks[0], 0, "teh ");
+			commands.Undo();
+			commands.Undo();
+			commands.Redo();
+
+			// Act
+			commands.Redo();
+
+			// Assert
+			Assert.AreEqual("the ", blocks[0].Text);
+			Assert.IsFalse(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
 			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
 		}
 

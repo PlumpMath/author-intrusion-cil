@@ -90,7 +90,7 @@ namespace AuthorIntrusion.Common.Commands
 			redoCommands.Clear();
 
 			// Perform the operation.
-			Do(command, false);
+			Do(command, false, false);
 		}
 
 		/// <summary>
@@ -116,8 +116,8 @@ namespace AuthorIntrusion.Common.Commands
 			Contract.Assert(CanRedo);
 
 			// Pull off the first command from the redo buffer and perform it.
-			UndoRedoCommand command = redoCommands.RemoveFirst();
-			Do(command, false);
+			UndoRedoCommand command = redoCommands.Pop();
+			Do(command, false, true);
 		}
 
 		/// <summary>
@@ -130,8 +130,8 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Pull off the first undo command, get its inverse operation, and
 			// perform it.
-			UndoRedoCommand command = undoCommands.RemoveFirst();
-			Do(command, true);
+			UndoRedoCommand command = undoCommands.Pop();
+			Do(command, true, true);
 		}
 
 		/// <summary>
@@ -141,9 +141,11 @@ namespace AuthorIntrusion.Common.Commands
 		/// </summary>
 		/// <param name="command">The command.</param>
 		/// <param name="useInverse">if set to <c>true</c> [use inverse].</param>
+		/// <param name="ignoreDeferredCommands">if set to <c>true</c> [ignore deferred commands].</param>
 		private void Do(
 			UndoRedoCommand command,
-			bool useInverse)
+			bool useInverse,
+			bool ignoreDeferredCommands)
 		{
 			// Figure out which block command we'll be using.
 			IBlockCommand blockCommand = useInverse
@@ -176,6 +178,11 @@ namespace AuthorIntrusion.Common.Commands
 			}
 
 			// If we have any deferred commands, we need to handle them now.
+			if (ignoreDeferredCommands)
+			{
+				deferredCommands.Clear();
+			}
+
 			if (!deferredCommands.IsEmpty)
 			{
 				// Copy the list and clear it out in case any of these actions
@@ -232,20 +239,6 @@ namespace AuthorIntrusion.Common.Commands
 
 		private readonly LinkedList<UndoRedoCommand> redoCommands;
 		private readonly LinkedList<UndoRedoCommand> undoCommands;
-
-		#endregion
-
-		#region Nested Type: UndoRedoCommand
-
-		private class UndoRedoCommand
-		{
-			#region Properties
-
-			public IBlockCommand Command { get; set; }
-			public IBlockCommand InverseCommand { get; set; }
-
-			#endregion
-		}
 
 		#endregion
 	}
