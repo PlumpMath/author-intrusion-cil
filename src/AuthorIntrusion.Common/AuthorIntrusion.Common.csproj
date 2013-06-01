@@ -50,10 +50,13 @@
     <Compile Include="Blocks\BlockKey.cs" />
     <Compile Include="Blocks\BlockOwnerCollection.cs" />
     <Compile Include="Blocks\BlockPosition.cs" />
+    <Compile Include="Blocks\BlockStructureSupervisor.cs" />
     <Compile Include="Blocks\BlockType.cs" />
     <Compile Include="Blocks\BlockTypeSupervisor.cs" />
+    <Compile Include="Blocks\BlockStructure.cs" />
     <Compile Include="Commands\BlockCommandSupervisor.cs" />
     <Compile Include="Commands\ChangeBlockTypeCommand.cs" />
+    <Compile Include="Commands\ChangeMultipleBlockTypesCommand.cs" />
     <Compile Include="Commands\CompositeBlockPositionCommand.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
     <Compile Include="Commands\DeleteBlockCommand.cs" />

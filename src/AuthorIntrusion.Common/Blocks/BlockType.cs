@@ -17,6 +17,16 @@ namespace AuthorIntrusion.Common.Blocks
 		#region Properties
 
 		/// <summary>
+		/// Gets or sets a value indicating whether this block type can contain
+		/// other blocks inside it. Examples would be scenes and chapters where as
+		/// paragraphs would not be structural.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is structural; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsStructural { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether this instance is a system block
 		/// type.
 		/// </summary>

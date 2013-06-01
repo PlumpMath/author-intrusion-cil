@@ -32,7 +32,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			const int index = 0;
 			Assert.AreEqual("", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			const int index = 0;
 			Assert.AreEqual("", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
 		}
 
 		[Test]
@@ -131,7 +131,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			int index = 0;
 			Assert.AreEqual("Line 2", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("Line 3", blocks[index].Text);
@@ -201,7 +201,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			int index = 0;
 			Assert.AreEqual("Line 2", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("Line 3", blocks[index].Text);

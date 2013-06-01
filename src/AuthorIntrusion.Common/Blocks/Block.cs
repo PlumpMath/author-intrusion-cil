@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System.Diagnostics.Contracts;
+using C5;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -15,6 +16,20 @@ namespace AuthorIntrusion.Common.Blocks
 	{
 		#region Properties
 
+		/// <summary>
+		/// Gets or sets the block that is the organizational parent for this block.
+		/// </summary>
+		/// <remarks>
+		/// This is typically managed by the BlockStructureSupervisor.
+		/// </remarks>
+		public Block ParentBlock { get; set; }
+		/// <summary>
+		/// Gets or sets the block structure associated with this block.
+		/// </summary>
+		/// <remarks>
+		/// This is typically managed by the BlockStructureSupervisor.
+		/// </remarks>
+		public BlockStructure BlockStructure { get; set; }
 		public BlockKey BlockKey { get; private set; }
 
 		/// <summary>

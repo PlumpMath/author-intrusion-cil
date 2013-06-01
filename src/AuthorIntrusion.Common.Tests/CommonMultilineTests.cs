@@ -35,9 +35,23 @@ namespace AuthorIntrusion.Common.Tests
 			commands = project.Commands;
 			blockTypes = project.BlockTypes;
 
+			// Set up the block structure.
+			var chapterStructure = new BlockStructure
+			{
+				BlockType = blockTypes.Chapter
+			};
+
+			var sceneStructure = new BlockStructure()
+			{
+				BlockType = blockTypes.Scene,
+				MinimumOccurances = 1,
+			};
+
+			chapterStructure.ChildStructures.Add(sceneStructure);
+			project.BlockStructures.RootBlockStructure = chapterStructure;
+
 			// Modify the first line, which is always there.
 			blocks[0].Text = "Line 1";
-			blocks[0].BlockType = project.BlockTypes.Chapter;
 
 			// Add in the additional lines after the first one.
 			for (int i = 1;

@@ -68,34 +68,71 @@ namespace AuthorIntrusion.Common.Blocks
 			var paragraph = new BlockType(this)
 			{
 				Name = ParagraphName,
-				IsSystem = true
+				IsSystem = true,
+				IsStructural = false,
+			};
+
+			var story = new BlockType(this)
+			{
+				Name = StoryName,
+				IsSystem = true,
+				IsStructural = true,
+			};
+			var book = new BlockType(this)
+			{
+				Name = BookName,
+				IsSystem = true,
+				IsStructural = true,
 			};
 			var chapter = new BlockType(this)
 			{
 				Name = ChapterName,
-				IsSystem = true
+				IsSystem = true,
+				IsStructural = true,
 			};
+
 			var scene = new BlockType(this)
 			{
 				Name = SceneName,
-				IsSystem = true
+				IsSystem = true,
+				IsStructural = true,
+			};
+
+			var epigraph = new BlockType(this)
+			{
+				Name = EpigraphName,
+				IsSystem = true,
+				IsStructural = true,
+			};
+			var attribution = new BlockType(this)
+			{
+				Name = AttributionName,
+				IsSystem = true,
+				IsStructural = true,
 			};
 
 			// Initialize the collection of block types.
 			BlockTypes = new HashDictionary<string, BlockType>();
 			BlockTypes[ParagraphName] = paragraph;
-			BlockTypes[SceneName] = scene;
+			BlockTypes[StoryName] = story;
+			BlockTypes[BookName] = book;
 			BlockTypes[ChapterName] = chapter;
+			BlockTypes[SceneName] = scene;
+			BlockTypes[EpigraphName] = epigraph;
+			BlockTypes[AttributionName] = attribution;
 		}
 
 		#endregion
 
 		#region Fields
 
+		public const string AttributionName = "Attribution";
+		public const string BookName = "Book";
 		public const string ChapterName = "Chapter";
-
+		public const string EpigraphName = "Epigraph";
 		public const string ParagraphName = "Paragraph";
 		public const string SceneName = "Scene";
+		public const string StoryName = "Story";
 
 		#endregion
 	}
