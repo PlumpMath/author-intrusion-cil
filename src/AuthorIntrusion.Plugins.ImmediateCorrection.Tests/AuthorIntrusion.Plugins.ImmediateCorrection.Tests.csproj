@@ -62,11 +62,6 @@
       <Project>{20f7dc72-bfd0-4568-9c4b-bc26f312990b}</Project>
       <Name>AuthorIntrusion.Plugins.ImmediateCorrection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
-      <Project>{d6565c98-f476-4538-b8e0-d0f1234c8d14}</Project>
-      <Name>AuthorIntrusion</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

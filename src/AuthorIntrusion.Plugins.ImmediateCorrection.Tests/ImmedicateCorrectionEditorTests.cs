@@ -80,10 +80,11 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			out BlockCommandSupervisor commands,
 			out ImmediateCorrectionController controller)
 		{
-			// Start by making sure the plugin manager is configured.
-			var resolver = new EnvironmentResolver();
+			// Start getting us a simple plugin manager.
+			var plugin = new ImmediateCorrectionPlugin();
+			var pluginManager = new PluginManager(plugin);
 
-			resolver.LoadPluginManager();
+			PluginManager.Instance = pluginManager;
 
 			// Create a project and pull out the useful properties we'll use to
 			// make changes.

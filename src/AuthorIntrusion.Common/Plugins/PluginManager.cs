@@ -50,7 +50,7 @@ namespace AuthorIntrusion.Common.Plugins
 
 		#region Constructors
 
-		public PluginManager(IProjectPlugin[] projectPlugins)
+		public PluginManager(params IProjectPlugin[] projectPlugins)
 		{
 			// Save all the block analzyers into a private array.
 			ProjectPlugins = projectPlugins;
