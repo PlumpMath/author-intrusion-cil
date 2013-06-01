@@ -77,6 +77,7 @@
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Plugins\PluginSupervisor.cs" />
     <Compile Include="Project.cs" />
+    <Compile Include="Projects\ProjectSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonServiceAttribute.cs" />
   </ItemGroup>

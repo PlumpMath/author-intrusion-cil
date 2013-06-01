@@ -7,6 +7,7 @@ using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
 using C5;
+using MfGames.Settings;
 
 namespace AuthorIntrusion.Plugins.ImmediateCorrection
 {
@@ -16,8 +17,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 
 		public ImmediateCorrectionPlugin Plugin { get; set; }
 		public Project Project { get; set; }
-
-		private ArrayList<Substitution> Substitutions { get; set; }
+		public ArrayList<RegisteredSubstitution> Substitutions { get; private set; }
 
 		#endregion
 
@@ -28,16 +28,41 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			string replacement,
 			SubstitutionOptions options)
 		{
-			var substitution = new Substitution(search, replacement, options);
+			AddSubstitution(Project.Settings, search, replacement, options);
+		}
 
-			Substitutions.Add(substitution);
-			Substitutions.Sort();
+		public void AddSubstitution(
+			SettingsManager settingsManager,
+			string search,
+			string replacement,
+			SubstitutionOptions options)
+		{
+			// Create the substitution we'll be registering.
+			var substitution = new RegisteredSubstitution(search, replacement, options);
+
+			// Grab the configuration object for this settings manager or create one if
+			// it doesn't already exist.
+			var settings =
+				settingsManager.Get<ImmediateCorrectionSettings>(
+					ImmediateCorrectionSettings.SettingsPath);
+
+			settings.Substitutions.Add(substitution);
+
+			// Mark that our substituions are out of date.
+			optimizedSubstitions = false;
 		}
 
 		public void CheckForImmediateEdits(
 			Block block,
 			int textIndex)
 		{
+			// If we aren't optimized, we have to pull the settings back in from the
+			// project settings and optimize them.
+			if (!optimizedSubstitions)
+			{
+				RetrieveSettingSubstitutions();
+			}
+
 			// Pull out the edit text and add a leading space to simplify the
 			// "whole word" substitutions.
 			string editText = block.Text.Substring(0, textIndex);
@@ -46,7 +71,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 				|| char.IsWhiteSpace(finalCharacter);
 
 			// Go through the substitution elements and look for each one.
-			foreach (Substitution substitution in Substitutions)
+			foreach (RegisteredSubstitution substitution in Substitutions)
 			{
 				// If we are doing whole word searches, then we don't bother if
 				// the final character isn't a word break or if it isn't a word
@@ -108,6 +133,36 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			}
 		}
 
+		/// <summary>
+		/// Retrieves the setting substitutions and rebuilds the internal list.
+		/// </summary>
+		private void RetrieveSettingSubstitutions()
+		{
+			// Clear out the existing settings.
+			Substitutions.Clear();
+
+			// Go through all of the settings in the various projects.
+			System.Collections.Generic.IList<ImmediateCorrectionSettings> settingsList =
+				Project.Settings.GetAll<ImmediateCorrectionSettings>(
+					ImmediateCorrectionSettings.SettingsPath);
+
+			foreach (ImmediateCorrectionSettings settings in settingsList)
+			{
+				// Go through the substitions inside the settings.
+				foreach (RegisteredSubstitution substitution in settings.Substitutions)
+				{
+					// Check to see if we already have it in the collection.
+					if (!Substitutions.Contains(substitution))
+					{
+						Substitutions.Add(substitution);
+					}
+				}
+			}
+
+			// Clear out the optimization list so we rebuild it on the first request.
+			optimizedSubstitions = true;
+		}
+
 		#endregion
 
 		#region Constructors
@@ -116,51 +171,20 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			ImmediateCorrectionPlugin plugin,
 			Project project)
 		{
+			// Save the various properties we need for the controller.
 			Plugin = plugin;
 			Project = project;
-			Substitutions = new ArrayList<Substitution>();
+
+			// Set up the substitions from the configuration settings.
+			Substitutions = new ArrayList<RegisteredSubstitution>();
+			RetrieveSettingSubstitutions();
 		}
 
 		#endregion
 
-		#region Nested Type: Substitution
+		#region Fields
 
-		private class Substitution
-		{
-			#region Properties
-
-			public bool IsWholeWord
-			{
-				get { return (Options & SubstitutionOptions.WholeWord) != 0; }
-			}
-
-			private string OriginalSearch { get; set; }
-
-			#endregion
-
-			#region Constructors
-
-			public Substitution(
-				string search,
-				string replacement,
-				SubstitutionOptions options)
-			{
-				// Save the fields for the substitution.
-				Search = search;
-				Replacement = replacement;
-				Options = options;
-			}
-
-			#endregion
-
-			#region Fields
-
-			public readonly SubstitutionOptions Options;
-			public readonly string Replacement;
-			public readonly string Search;
-
-			#endregion
-		}
+		private bool optimizedSubstitions;
 
 		#endregion
 	}
