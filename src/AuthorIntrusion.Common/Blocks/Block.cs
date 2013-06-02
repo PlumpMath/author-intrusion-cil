@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System.Diagnostics.Contracts;
-using C5;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -16,21 +15,12 @@ namespace AuthorIntrusion.Common.Blocks
 	{
 		#region Properties
 
-		/// <summary>
-		/// Gets or sets the block that is the organizational parent for this block.
-		/// </summary>
-		/// <remarks>
-		/// This is typically managed by the BlockStructureSupervisor.
-		/// </remarks>
-		public Block ParentBlock { get; set; }
-		/// <summary>
-		/// Gets or sets the block structure associated with this block.
-		/// </summary>
-		/// <remarks>
-		/// This is typically managed by the BlockStructureSupervisor.
-		/// </remarks>
-		public BlockStructure BlockStructure { get; set; }
 		public BlockKey BlockKey { get; private set; }
+
+		/// <summary>
+		/// Gets the block structure associated with this block.
+		/// </summary>
+		public BlockStructure BlockStructure { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the type of the block.
@@ -50,6 +40,11 @@ namespace AuthorIntrusion.Common.Blocks
 		/// Gets the owner collection associated with this block.
 		/// </summary>
 		public BlockOwnerCollection OwnerCollection { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the block that is the organizational parent for this block.
+		/// </summary>
+		public Block ParentBlock { get; private set; }
 
 		public Project Project
 		{
@@ -77,6 +72,43 @@ namespace AuthorIntrusion.Common.Blocks
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Sets the block structure and fire the appropriate events to listeners.
+		/// If the block structure has not changed, then no events will be fired.
+		/// </summary>
+		/// <param name="blockStructure">The block structure.</param>
+		/// <remarks>
+		/// This is typically managed by the BlockStructureSupervisor.
+		/// </remarks>
+		public void SetBlockStructure(BlockStructure blockStructure)
+
+		{
+			bool changed = BlockStructure != blockStructure;
+
+			if (changed)
+			{
+				BlockStructure = blockStructure;
+			}
+		}
+
+		/// <summary>
+		/// Sets the parent block and fire the appropriate events to indicate the change.
+		/// If the block is identical, then no events will be fired.
+		/// </summary>
+		/// <param name="parentBlock">The parent block.</param>
+		/// <remarks>
+		/// This is typically managed by the BlockStructureSupervisor.
+		/// </remarks>
+		public void SetParentBlock(Block parentBlock)
+		{
+			bool changed = ParentBlock != parentBlock;
+
+			if (changed)
+			{
+				ParentBlock = parentBlock;
+			}
+		}
 
 		public void SetText(string newText)
 		{
@@ -106,6 +138,7 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			BlockKey = BlockKey.GetNext();
 			OwnerCollection = ownerCollection;
+			BlockType = ownerCollection.Project.BlockTypes.Paragraph;
 			text = string.Empty;
 		}
 

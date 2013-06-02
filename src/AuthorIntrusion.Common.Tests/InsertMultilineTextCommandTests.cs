@@ -207,11 +207,11 @@ namespace AuthorIntrusion.Common.Tests
 
 			index++;
 			Assert.AreEqual("BBB", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("CCC1", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("Line 2", blocks[index].Text);
@@ -292,11 +292,11 @@ namespace AuthorIntrusion.Common.Tests
 
 			index++;
 			Assert.AreEqual("BBB", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("CCC1", blocks[index].Text);
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 
 			index++;
 			Assert.AreEqual("Line 2", blocks[index].Text);

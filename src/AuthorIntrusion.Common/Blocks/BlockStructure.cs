@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using C5;
 
 namespace AuthorIntrusion.Common.Blocks
@@ -44,6 +45,37 @@ namespace AuthorIntrusion.Common.Blocks
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Determines whether this instance contains a child structure of the given block type.
+		/// </summary>
+		/// <param name="blockType">Type of the block.</param>
+		/// <returns>
+		///   <c>true</c> if [contains child structure] [the specified block type]; otherwise, <c>false</c>.
+		/// </returns>
+		public bool ContainsChildStructure(BlockType blockType)
+		{
+			return
+				ChildStructures.Any(childStructure => childStructure.BlockType == blockType);
+		}
+
+		/// <summary>
+		/// Gets the child structure associated with a given block type.
+		/// </summary>
+		/// <param name="blockType">Type of the block.</param>
+		/// <returns>A child structure of the given type.</returns>
+		/// <exception cref="System.IndexOutOfRangeException">Cannot find child block type:  + blockType</exception>
+		public BlockStructure GetChildStructure(BlockType blockType)
+		{
+			foreach (BlockStructure childStructure in
+				ChildStructures.Where(
+					childStructure => childStructure.BlockType == blockType))
+			{
+				return childStructure;
+			}
+			throw new IndexOutOfRangeException(
+				"Cannot find child block type: " + blockType);
+		}
 
 		private void OnChildInserted(
 			object sender,

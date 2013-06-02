@@ -31,6 +31,22 @@ namespace AuthorIntrusion.Common.Blocks
 			get { return this[ChapterName]; }
 		}
 
+		/// <summary>
+		/// Gets the standard block type associated with epigraphs.
+		/// </summary>
+		public BlockType Epigraph
+		{
+			get { return this[EpigraphName]; }
+		}
+
+		/// <summary>
+		/// Gets the standard block type for attributions.
+		/// </summary>
+		public BlockType EpigraphAttribution
+		{
+			get { return this[EpigraphAttributionName]; }
+		}
+
 		public BlockType Paragraph
 		{
 			get { return this[ParagraphName]; }
@@ -106,7 +122,7 @@ namespace AuthorIntrusion.Common.Blocks
 			};
 			var attribution = new BlockType(this)
 			{
-				Name = AttributionName,
+				Name = EpigraphAttributionName,
 				IsSystem = true,
 				IsStructural = true,
 			};
@@ -119,16 +135,16 @@ namespace AuthorIntrusion.Common.Blocks
 			BlockTypes[ChapterName] = chapter;
 			BlockTypes[SceneName] = scene;
 			BlockTypes[EpigraphName] = epigraph;
-			BlockTypes[AttributionName] = attribution;
+			BlockTypes[EpigraphAttributionName] = attribution;
 		}
 
 		#endregion
 
 		#region Fields
 
-		public const string AttributionName = "Attribution";
 		public const string BookName = "Book";
 		public const string ChapterName = "Chapter";
+		public const string EpigraphAttributionName = "EpigraphAttribution";
 		public const string EpigraphName = "Epigraph";
 		public const string ParagraphName = "Paragraph";
 		public const string SceneName = "Scene";
