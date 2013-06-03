@@ -50,6 +50,7 @@
     <Compile Include="Blocks\BlockKey.cs" />
     <Compile Include="Blocks\BlockOwnerCollection.cs" />
     <Compile Include="Blocks\BlockPosition.cs" />
+    <Compile Include="Blocks\BlockPropertyDictionary.cs" />
     <Compile Include="Blocks\BlockStructureSupervisor.cs" />
     <Compile Include="Blocks\BlockType.cs" />
     <Compile Include="Blocks\BlockTypeSupervisor.cs" />
@@ -73,6 +74,10 @@
     <Compile Include="Commands\BlockKeyCommand.cs" />
     <Compile Include="Commands\SplitBlockCommand.cs" />
     <Compile Include="Commands\UndoRedoCommand.cs" />
+    <Compile Include="Plugins\BlockAnalyzer.cs" />
+    <Compile Include="Plugins\IBlockAnalyzerController.cs" />
+    <Compile Include="Plugins\IBlockRelationshipController.cs" />
+    <Compile Include="Plugins\IBlockTypeController.cs" />
     <Compile Include="Plugins\IImmediateBlockEditor.cs" />
     <Compile Include="Plugins\IProjectPlugin.cs" />
     <Compile Include="Plugins\IProjectPluginController.cs" />

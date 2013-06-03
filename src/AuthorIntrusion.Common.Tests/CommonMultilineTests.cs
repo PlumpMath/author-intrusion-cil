@@ -15,19 +15,12 @@ namespace AuthorIntrusion.Common.Tests
 		#region Methods
 
 		protected void SetupComplexMultilineTest(
-			out BlockOwnerCollection blocks,
-			out BlockTypeSupervisor blockTypes,
-			out BlockCommandSupervisor commands,
-			int lineCount = 10)
+			Project project,
+			int lineCount)
 		{
-			// Everything is based on the project.
-			var project = new Project();
-
-			blocks = project.Blocks;
-			commands = project.Commands;
-			blockTypes = project.BlockTypes;
-
 			// Set up the block structure.
+			BlockTypeSupervisor blockTypes = project.BlockTypes;
+
 			var chapterStructure = new BlockStructure
 			{
 				BlockType = blockTypes.Chapter
@@ -71,6 +64,8 @@ namespace AuthorIntrusion.Common.Tests
 			// Change the block types for the project. This basically builds up a
 			// structure of one chapter with any number of scenes that have one
 			// epigraph, one epigraph attribution, and two paragraphs.
+			BlockOwnerCollection blocks = project.Blocks;
+
 			blocks[0].SetBlockType(blockTypes.Chapter);
 
 			for (int blockIndex = 1;
@@ -96,6 +91,23 @@ namespace AuthorIntrusion.Common.Tests
 					block.SetBlockType(blockTypes.Paragraph);
 				}
 			}
+		}
+
+		protected void SetupComplexMultilineTest(
+			out BlockOwnerCollection blocks,
+			out BlockTypeSupervisor blockTypes,
+			out BlockCommandSupervisor commands,
+			int lineCount = 10)
+		{
+			// Everything is based on the project.
+			var project = new Project();
+
+			blocks = project.Blocks;
+			commands = project.Commands;
+			blockTypes = project.BlockTypes;
+
+			// Set up the structure and insert the lines.
+			SetupComplexMultilineTest(project, lineCount);
 		}
 
 		/// <summary>
@@ -161,18 +173,16 @@ namespace AuthorIntrusion.Common.Tests
 			BlockOwnerCollection blocks = project.Blocks;
 
 			// Modify the first line, which is always there.
-			blocks[0].Text = "Line 1";
+			blocks[0].SetText("Line 1");
 
 			// Add in the additional lines after the first one.
 			for (int i = 1;
 				i < lineCount;
 				i++)
 			{
-				blocks.Add(
-					new Block(blocks)
-					{
-						Text = "Line " + (i + 1)
-					});
+				var block = new Block(blocks);
+				block.SetText("Line " + (i + 1));
+				blocks.Add(block);
 			}
 		}
 

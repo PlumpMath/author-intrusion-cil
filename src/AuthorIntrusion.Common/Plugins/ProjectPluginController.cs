@@ -14,6 +14,15 @@ namespace AuthorIntrusion.Common.Plugins
 
 		public IProjectPluginController Controller { get; set; }
 
+		public bool IsBlockAnalyzer
+		{
+			get
+			{
+				bool isImmediateEditor = Controller is IBlockAnalyzerController;
+				return isImmediateEditor;
+			}
+		}
+
 		public bool IsImmediateEditor
 		{
 			get

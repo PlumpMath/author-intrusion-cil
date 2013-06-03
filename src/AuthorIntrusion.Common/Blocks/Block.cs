@@ -3,6 +3,8 @@
 // http://mfgames.com/author-intrusion/license
 
 using System.Diagnostics.Contracts;
+using C5;
+using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -31,6 +33,14 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
+		/// Gets the blocks collection for this block.
+		/// </summary>
+		public BlockOwnerCollection Blocks
+		{
+			get { return Project.Blocks; }
+		}
+
+		/// <summary>
 		/// Gets the owner collection associated with this block.
 		/// </summary>
 		public BlockOwnerCollection OwnerCollection { get; private set; }
@@ -44,6 +54,11 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			get { return OwnerCollection.Project; }
 		}
+
+		/// <summary>
+		/// Gets the properties associated with the block.
+		/// </summary>
+		public BlockPropertyDictionary Properties { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the text associated with the block.
@@ -66,6 +81,37 @@ namespace AuthorIntrusion.Common.Blocks
 		#endregion
 
 		#region Methods
+
+		public IList<Block> GetBlockAndParents()
+		{
+			var blocks = new ArrayList<Block>();
+			Block block = this;
+
+			while (block != null)
+			{
+				blocks.Add(block);
+				block = block.ParentBlock;
+			}
+
+			return blocks;
+		}
+
+		/// <summary>
+		/// Determines whether the specified block version is stale (the version had
+		/// changed compared to the supplied version).
+		/// </summary>
+		/// <param name="blockVersion">The block version.</param>
+		/// <returns>
+		///   <c>true</c> if the specified block version is stale; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsStale(int blockVersion)
+		{
+			// We need a read lock on this to prevent changes.
+			using (new NestableReadLock(Blocks.Lock))
+			{
+				return version != blockVersion;
+			}
+		}
 
 		/// <summary>
 		/// Sets the block structure and fire the appropriate events to listeners.
@@ -103,10 +149,13 @@ namespace AuthorIntrusion.Common.Blocks
 			if (changed)
 			{
 				// Assign the new block type.
+				BlockType oldBlockType = blockType;
+
 				blockType = newBlockType;
 
 				// Fire the events in the block structure supervisor.
 				Project.BlockStructures.Update();
+				Project.Plugins.ChangeBlockType(this, oldBlockType);
 			}
 		}
 
@@ -124,13 +173,34 @@ namespace AuthorIntrusion.Common.Blocks
 
 			if (changed)
 			{
+				// Keep track of the old block for later and then change the block's
+				// parent.
+				Block oldParentBlock = ParentBlock;
 				ParentBlock = parentBlock;
+
+				// Allow the plugin manager to handle any alterations for block
+				// parents.
+				Project.Plugins.ChangeBlockParent(this, oldParentBlock);
 			}
 		}
 
 		public void SetText(string newText)
 		{
-			Text = newText;
+			// Check to see if the text changed.
+			using (new NestableUpgradableReadLock(Project.Blocks.Lock))
+			{
+				// If nothing changed, then we don't have to do anything.
+				if (newText == Text)
+				{
+					return;
+				}
+
+				// Update the text, which bumps up the version.
+				Text = newText;
+
+				// Trigger the events for any listening plugins.
+				Project.Plugins.ProcessBlockAnalysis(this);
+			}
 		}
 
 		public override string ToString()
@@ -158,9 +228,10 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Block"/> class.
+		/// Initializes a new instance of the <see cref="Block" /> class.
 		/// </summary>
 		/// <param name="ownerCollection">The ownerCollection.</param>
+		/// <param name="initialBlockType">Initial type of the block.</param>
 		public Block(
 			BlockOwnerCollection ownerCollection,
 			BlockType initialBlockType)
@@ -169,6 +240,7 @@ namespace AuthorIntrusion.Common.Blocks
 			OwnerCollection = ownerCollection;
 			blockType = initialBlockType;
 			text = string.Empty;
+			Properties = new BlockPropertyDictionary();
 		}
 
 		#endregion

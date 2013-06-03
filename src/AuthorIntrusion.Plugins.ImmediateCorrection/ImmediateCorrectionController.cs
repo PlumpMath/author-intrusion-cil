@@ -52,7 +52,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			optimizedSubstitions = false;
 		}
 
-		public void CheckForImmediateEdits(
+		public void ProcessImmediateEdits(
 			Block block,
 			int textIndex)
 		{

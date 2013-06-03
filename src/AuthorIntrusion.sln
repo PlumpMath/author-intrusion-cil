@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.Imm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.BlockSupervisorEnforcement", "AuthorIntrusion.Plugins.BlockSupervisorEnforcement\AuthorIntrusion.Plugins.BlockSupervisorEnforcement.csproj", "{2E24D103-EA00-4D9B-A58E-1D2AC667B164}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.Counter", "AuthorIntrusion.Plugins.Counter\AuthorIntrusion.Plugins.Counter.csproj", "{2833F47A-335C-468B-89DF-13EAAB33DED6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.Counter.Tests", "AuthorIntrusion.Plugins.Counter.Tests\AuthorIntrusion.Plugins.Counter.Tests.csproj", "{20CF5A1C-B30A-4FD0-ADB5-14D81F386D0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,14 @@ Global
 		{2E24D103-EA00-4D9B-A58E-1D2AC667B164}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E24D103-EA00-4D9B-A58E-1D2AC667B164}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E24D103-EA00-4D9B-A58E-1D2AC667B164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2833F47A-335C-468B-89DF-13EAAB33DED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2833F47A-335C-468B-89DF-13EAAB33DED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2833F47A-335C-468B-89DF-13EAAB33DED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2833F47A-335C-468B-89DF-13EAAB33DED6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20CF5A1C-B30A-4FD0-ADB5-14D81F386D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20CF5A1C-B30A-4FD0-ADB5-14D81F386D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20CF5A1C-B30A-4FD0-ADB5-14D81F386D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20CF5A1C-B30A-4FD0-ADB5-14D81F386D0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,7 +72,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F88381C5-D664-43FF-B1FE-290A22B1B558} = {DC6D3FC5-E957-42FF-B571-D73D04F64457}
 		{BB5540A1-FB37-4642-AA1E-EA5BFA5CA159} = {DC6D3FC5-E957-42FF-B571-D73D04F64457}
+		{20CF5A1C-B30A-4FD0-ADB5-14D81F386D0B} = {DC6D3FC5-E957-42FF-B571-D73D04F64457}
 		{20F7DC72-BFD0-4568-9C4B-BC26F312990B} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
 		{2E24D103-EA00-4D9B-A58E-1D2AC667B164} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
+		{2833F47A-335C-468B-89DF-13EAAB33DED6} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
 	EndGlobalSection
 EndGlobal

@@ -42,7 +42,7 @@ namespace AuthorIntrusion.Common.Commands
 
 			// After we insert text, we need to give the immediate editor plugins a
 			// chance to made any alterations to the output.
-			project.Plugins.CheckForImmediateEdits(block, TextIndex + Text.Length);
+			project.Plugins.ProcessImmediateEdits(block, TextIndex + Text.Length);
 		}
 
 		protected override IBlockCommand GetInverseCommand(
