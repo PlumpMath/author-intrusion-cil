@@ -72,7 +72,7 @@ namespace AuthorIntrusion.Common.Blocks
 					Block newParentBlock = null;
 
 					for (int searchIndex = blockIndex - 1;
-						searchIndex > 0;
+						searchIndex >= 0;
 						searchIndex--)
 					{
 						// Grab this block and structure.
@@ -122,6 +122,9 @@ namespace AuthorIntrusion.Common.Blocks
 
 			// Save the members we need for later referencing.
 			Project = project;
+
+			// Hook up to events we need to ensure the structure of the document.
+			project.Blocks.CollectionChanged += sender => Update();
 
 			// Set up the default structure which is just one or more paragraphs
 			// and no structural elements.

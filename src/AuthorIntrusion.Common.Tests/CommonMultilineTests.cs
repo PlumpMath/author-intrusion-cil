@@ -67,6 +67,35 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Insert the bulk of the lines.
 			InsertLines(project, lineCount);
+
+			// Change the block types for the project. This basically builds up a
+			// structure of one chapter with any number of scenes that have one
+			// epigraph, one epigraph attribution, and two paragraphs.
+			blocks[0].SetBlockType(blockTypes.Chapter);
+
+			for (int blockIndex = 1;
+				blockIndex < blocks.Count;
+				blockIndex++)
+			{
+				Block block = blocks[blockIndex];
+
+				if ((blockIndex - 1) % 5 == 0)
+				{
+					block.SetBlockType(blockTypes.Scene);
+				}
+				else if ((blockIndex - 2) % 5 == 0)
+				{
+					block.SetBlockType(blockTypes.Epigraph);
+				}
+				else if ((blockIndex - 3) % 5 == 0)
+				{
+					block.SetBlockType(blockTypes.EpigraphAttribution);
+				}
+				else
+				{
+					block.SetBlockType(blockTypes.Paragraph);
+				}
+			}
 		}
 
 		/// <summary>
@@ -109,13 +138,13 @@ namespace AuthorIntrusion.Common.Tests
 			InsertLines(project, lineCount);
 
 			// Go through and set up the block types for these elements.
-			project.Blocks[0].BlockType = blockTypes.Chapter;
+			project.Blocks[0].SetBlockType(blockTypes.Chapter);
 
 			for (int index = 1;
 				index < project.Blocks.Count;
 				index++)
 			{
-				project.Blocks[index].BlockType = blockTypes.Scene;
+				project.Blocks[index].SetBlockType(blockTypes.Scene);
 			}
 		}
 

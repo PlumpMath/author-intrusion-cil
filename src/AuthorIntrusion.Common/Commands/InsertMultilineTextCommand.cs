@@ -79,7 +79,6 @@ namespace AuthorIntrusion.Common.Commands
 					var newBlock = new Block(project.Blocks)
 					{
 						Text = lines[i],
-						BlockType = project.BlockTypes.Paragraph,
 					};
 
 					project.Blocks.Insert(firstBlockIndex + 1, newBlock);

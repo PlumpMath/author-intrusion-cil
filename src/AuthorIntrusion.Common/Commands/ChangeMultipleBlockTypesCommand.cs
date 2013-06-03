@@ -55,7 +55,7 @@ namespace AuthorIntrusion.Common.Commands
 						BlockType existingType = block.BlockType;
 
 						InverseCommand.Changes[block.BlockKey] = existingType;
-						block.BlockType = blockType;
+						block.SetBlockType(blockType);
 					}
 				}
 			}

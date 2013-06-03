@@ -28,7 +28,7 @@ namespace AuthorIntrusion.Common.Commands
 			Project project,
 			Block block)
 		{
-			block.BlockType = BlockType;
+			block.SetBlockType(BlockType);
 		}
 
 		protected override IBlockCommand GetInverseCommand(

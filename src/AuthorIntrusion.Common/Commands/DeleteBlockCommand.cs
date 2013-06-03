@@ -55,7 +55,6 @@ namespace AuthorIntrusion.Common.Commands
 				var blankBlock = new Block(project.Blocks)
 				{
 					Text = "",
-					BlockType = project.BlockTypes.Paragraph,
 				};
 
 				project.Blocks.Add(blankBlock);

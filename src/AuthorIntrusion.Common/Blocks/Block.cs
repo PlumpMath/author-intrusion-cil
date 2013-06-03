@@ -28,12 +28,6 @@ namespace AuthorIntrusion.Common.Blocks
 		public BlockType BlockType
 		{
 			get { return blockType; }
-			set
-			{
-				Contract.Assert(value != null);
-				Contract.Assert(OwnerCollection.Project == value.Supervisor.Project);
-				blockType = value;
-			}
 		}
 
 		/// <summary>
@@ -93,6 +87,30 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
+		/// Sets the type of the block and fires the events to update the internal
+		/// structure. If the block type is identical, no events are fired.
+		/// </summary>
+		/// <param name="newBlockType">New type of the block.</param>
+		public void SetBlockType(BlockType newBlockType)
+		{
+			// Make sure we have a sane state.
+			Contract.Assert(newBlockType != null);
+			Contract.Assert(OwnerCollection.Project == newBlockType.Supervisor.Project);
+
+			// We only do things if we are changing the block type.
+			bool changed = blockType != newBlockType;
+
+			if (changed)
+			{
+				// Assign the new block type.
+				blockType = newBlockType;
+
+				// Fire the events in the block structure supervisor.
+				Project.BlockStructures.Update();
+			}
+		}
+
+		/// <summary>
 		/// Sets the parent block and fire the appropriate events to indicate the change.
 		/// If the block is identical, then no events will be fired.
 		/// </summary>
@@ -135,10 +153,21 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		/// <param name="ownerCollection">The ownerCollection.</param>
 		public Block(BlockOwnerCollection ownerCollection)
+			: this(ownerCollection, ownerCollection.Project.BlockTypes.Paragraph)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Block"/> class.
+		/// </summary>
+		/// <param name="ownerCollection">The ownerCollection.</param>
+		public Block(
+			BlockOwnerCollection ownerCollection,
+			BlockType initialBlockType)
 		{
 			BlockKey = BlockKey.GetNext();
 			OwnerCollection = ownerCollection;
-			BlockType = ownerCollection.Project.BlockTypes.Paragraph;
+			blockType = initialBlockType;
 			text = string.Empty;
 		}
 

@@ -45,10 +45,7 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			if (Count == 0)
 			{
-				var initialBlock = new Block(this)
-				{
-					BlockType = Project.BlockTypes.Paragraph
-				};
+				var initialBlock = new Block(this);
 
 				Add(initialBlock);
 			}
