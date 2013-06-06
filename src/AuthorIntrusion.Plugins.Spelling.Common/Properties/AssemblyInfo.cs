@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("AuthorIntrusion.Plugins.Counter.Tests")]
+[assembly: AssemblyTitle("AuthorIntrusion.Plugins.Spelling.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Hewlett-Packard")]
-[assembly: AssemblyProduct("AuthorIntrusion.Plugins.Counter.Tests")]
+[assembly: AssemblyProduct("AuthorIntrusion.Plugins.Spelling.Common")]
 [assembly: AssemblyCopyright("Copyright © Hewlett-Packard 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("0b2d345d-260a-4d20-8dbb-fd7b3687679e")]
+[assembly: Guid("42887cff-4636-43c7-ae2f-1df39b67268c")]
 
 // Version information for an assembly consists of the following four values:
 //

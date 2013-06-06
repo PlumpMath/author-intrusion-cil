@@ -73,6 +73,8 @@ namespace AuthorIntrusion.Common.Blocks
 			}
 		}
 
+		public TextSpanCollection TextSpans { get; private set; }
+
 		public int Version
 		{
 			get { return version; }
@@ -241,6 +243,7 @@ namespace AuthorIntrusion.Common.Blocks
 			blockType = initialBlockType;
 			text = string.Empty;
 			Properties = new BlockPropertyDictionary();
+			TextSpans = new TextSpanCollection();
 		}
 
 		#endregion

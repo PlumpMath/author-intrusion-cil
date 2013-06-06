@@ -9,7 +9,7 @@ namespace AuthorIntrusion.Common.Plugins
 	/// <summary>
 	/// Defines a controller that manages block relationships.
 	/// </summary>
-	public interface IBlockRelationshipController : IBlockAnalyzerController
+	public interface IBlockRelationshipController: IBlockAnalyzerController
 	{
 		#region Methods
 

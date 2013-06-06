@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using C5;
 using MfGames.Locking;
@@ -69,6 +70,35 @@ namespace AuthorIntrusion.Common.Plugins
 			// plugin and add it to the ordered list of project-specific plugins.
 			var projectPlugin = new ProjectPluginController(this, plugin);
 
+			// See if this is a plugin framework controller.
+			IProjectPluginController pluginController = projectPlugin.Controller;
+			var frameworkController = pluginController as IPluginFrameworkController;
+
+			if (frameworkController != null)
+			{
+				var pluginControllers = new ArrayList<IProjectPluginController>();
+
+				foreach (ProjectPluginController currentPlugin in Controllers)
+				{
+					pluginControllers.Add(currentPlugin.Controller);
+				}
+
+				frameworkController.InitializePluginFramework(Project, pluginControllers);
+			}
+
+			// Go through the list of existing plugin frameworks and see if they want to
+			// add this one to their internal management.
+			foreach (ProjectPluginController controller in Controllers)
+			{
+				frameworkController = controller.Controller as IPluginFrameworkController;
+
+				if (frameworkController != null)
+				{
+					frameworkController.HandleAddedController(Project, pluginController);
+				}
+			}
+
+			// Add the controllers to the list.
 			Controllers.Add(projectPlugin);
 
 			// Because we've made changes to the plugin, we need to sort and reorder it.
@@ -122,6 +152,36 @@ namespace AuthorIntrusion.Common.Plugins
 		public bool Contains(string pluginName)
 		{
 			return Controllers.Any(plugin => plugin.Name == pluginName);
+		}
+
+		/// <summary>
+		/// Gets the editor actions for a given text span.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="textSpan">The text span.</param>
+		/// <returns></returns>
+		public C5.IList<IEditorAction> GetEditorActions(
+			Block block,
+			TextSpan textSpan)
+		{
+			// Loop through all the text span controllers and add their actions to
+			// the list.
+			IEnumerable<ProjectPluginController> controllers =
+				Controllers.Where(
+					controller => controller.Controller is ITextSpanController);
+			var actions = new ArrayList<IEditorAction>();
+
+			foreach (ProjectPluginController controller in controllers)
+			{
+				var textSpanController = (ITextSpanController) controller.Controller;
+				C5.IList<IEditorAction> controllerActions =
+					textSpanController.GetEditorActions(block, textSpan);
+
+				actions.AddAll(controllerActions);
+			}
+
+			// Return the resulting list of actions.
+			return actions;
 		}
 
 		/// <summary>

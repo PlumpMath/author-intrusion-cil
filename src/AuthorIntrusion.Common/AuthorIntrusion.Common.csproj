@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\EditorAction.cs" />
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="Blocks\BlockCollection.cs" />
     <Compile Include="Blocks\BlockKey.cs" />
@@ -55,6 +56,8 @@
     <Compile Include="Blocks\BlockType.cs" />
     <Compile Include="Blocks\BlockTypeSupervisor.cs" />
     <Compile Include="Blocks\BlockStructure.cs" />
+    <Compile Include="Blocks\TextSpan.cs" />
+    <Compile Include="Blocks\TextSpanCollection.cs" />
     <Compile Include="Commands\BlockCommandSupervisor.cs" />
     <Compile Include="Commands\ChangeBlockTypeCommand.cs" />
     <Compile Include="Commands\ChangeMultipleBlockTypesCommand.cs" />
@@ -74,13 +77,16 @@
     <Compile Include="Commands\BlockKeyCommand.cs" />
     <Compile Include="Commands\SplitBlockCommand.cs" />
     <Compile Include="Commands\UndoRedoCommand.cs" />
+    <Compile Include="Actions\IEditorAction.cs" />
     <Compile Include="Plugins\BlockAnalyzer.cs" />
     <Compile Include="Plugins\IBlockAnalyzerController.cs" />
     <Compile Include="Plugins\IBlockRelationshipController.cs" />
     <Compile Include="Plugins\IBlockTypeController.cs" />
     <Compile Include="Plugins\IImmediateBlockEditor.cs" />
+    <Compile Include="Plugins\IPluginFrameworkController.cs" />
     <Compile Include="Plugins\IProjectPlugin.cs" />
     <Compile Include="Plugins\IProjectPluginController.cs" />
+    <Compile Include="Plugins\ITextSpanController.cs" />
     <Compile Include="Plugins\ProjectPluginController.cs" />
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Plugins\PluginSupervisor.cs" />

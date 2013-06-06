@@ -2,11 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
-using System.Threading;
 using AuthorIntrusion.Common.Blocks;
 using C5;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Plugins
 {

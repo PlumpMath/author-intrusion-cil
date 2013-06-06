@@ -14,59 +14,6 @@ namespace AuthorIntrusion.Common.Tests
 		#region Methods
 
 		[Test]
-		public void ComplicatedRelationshipTest()
-		{
-			// Act
-			BlockOwnerCollection blocks;
-			BlockCommandSupervisor commands;
-			BlockTypeSupervisor blockTypes;
-			SetupComplexMultilineTest(out blocks, out blockTypes, out commands);
-
-			// Assert
-			Assert.AreEqual(10, blocks.Count);
-
-			int index = 0;
-			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
-			Assert.IsNull(blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
-			Assert.AreEqual(blocks[0], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.Epigraph, blocks[index].BlockType);
-			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.EpigraphAttribution, blocks[index].BlockType);
-			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
-			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
-			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
-			Assert.AreEqual(blocks[0], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.Epigraph, blocks[index].BlockType);
-			Assert.AreEqual(blocks[6], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.EpigraphAttribution, blocks[index].BlockType);
-			Assert.AreEqual(blocks[6], blocks[index].ParentBlock);
-
-			index++;
-			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
-			Assert.AreEqual(blocks[6], blocks[index].ParentBlock);
-		}
-
-		[Test]
 		public void ChangeBlockTypeFromChapter()
 		{
 			// Arrange
@@ -120,6 +67,59 @@ namespace AuthorIntrusion.Common.Tests
 			index++;
 			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
 			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
+		}
+
+		[Test]
+		public void ComplicatedRelationshipTest()
+		{
+			// Act
+			BlockOwnerCollection blocks;
+			BlockCommandSupervisor commands;
+			BlockTypeSupervisor blockTypes;
+			SetupComplexMultilineTest(out blocks, out blockTypes, out commands);
+
+			// Assert
+			Assert.AreEqual(10, blocks.Count);
+
+			int index = 0;
+			Assert.AreEqual(blockTypes.Chapter, blocks[index].BlockType);
+			Assert.IsNull(blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blocks[0], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.Epigraph, blocks[index].BlockType);
+			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.EpigraphAttribution, blocks[index].BlockType);
+			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+			Assert.AreEqual(blocks[1], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.Scene, blocks[index].BlockType);
+			Assert.AreEqual(blocks[0], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.Epigraph, blocks[index].BlockType);
+			Assert.AreEqual(blocks[6], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.EpigraphAttribution, blocks[index].BlockType);
+			Assert.AreEqual(blocks[6], blocks[index].ParentBlock);
+
+			index++;
+			Assert.AreEqual(blockTypes.Paragraph, blocks[index].BlockType);
+			Assert.AreEqual(blocks[6], blocks[index].ParentBlock);
 		}
 
 		[Test]

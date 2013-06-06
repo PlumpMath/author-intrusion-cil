@@ -64,11 +64,11 @@ namespace AuthorIntrusion.Plugins.Counter
 			using (new WriteLock(block.Blocks.Lock))
 			{
 				// Log that we are analyzing this block.
-				Log("BEGIN AnalyzeBlock: {0}: Words {1:N0}",block,wordCount);
+				Log("BEGIN AnalyzeBlock: {0}: Words {1:N0}", block, wordCount);
 
 				// Grab the type deltas in the lock.
-				var typePath = CounterPaths.GetPath(block.BlockType);
-				int typeDelta = 1 - block.Properties.GetOrDefault(typePath,0);
+				HierarchicalPath typePath = CounterPaths.GetPath(block.BlockType);
+				int typeDelta = 1 - block.Properties.GetOrDefault(typePath, 0);
 				deltas[typePath] = typeDelta;
 
 				// Get a list of the block and its parents.
@@ -88,7 +88,7 @@ namespace AuthorIntrusion.Plugins.Counter
 				}
 
 				// Log that we finished processing this block.
-				Log("END   AnalyzeBlock: {0}: Words {1:N0}",block,wordCount);
+				Log("END   AnalyzeBlock: {0}: Words {1:N0}", block, wordCount);
 			}
 		}
 
@@ -115,7 +115,10 @@ namespace AuthorIntrusion.Plugins.Counter
 				// Get rid of blocks common in both lists.
 				var common = new HashSet<Block>();
 
-				foreach (Block parentBlock in oldParentBlocks.Where(parentBlock => newParentBlocks.Contains(parentBlock)))
+				foreach (
+					Block parentBlock in
+						oldParentBlocks.Where(
+							parentBlock => newParentBlocks.Contains(parentBlock)))
 				{
 					common.Add(parentBlock);
 				}
