@@ -60,7 +60,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			// project settings and optimize them.
 			if (!optimizedSubstitions)
 			{
-				RetrieveSettingSubstitutions();
+				RetrieveSettings();
 			}
 
 			// Pull out the edit text and add a leading space to simplify the
@@ -136,7 +136,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 		/// <summary>
 		/// Retrieves the setting substitutions and rebuilds the internal list.
 		/// </summary>
-		private void RetrieveSettingSubstitutions()
+		private void RetrieveSettings()
 		{
 			// Clear out the existing settings.
 			Substitutions.Clear();
@@ -177,7 +177,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 
 			// Set up the substitions from the configuration settings.
 			Substitutions = new ArrayList<RegisteredSubstitution>();
-			RetrieveSettingSubstitutions();
+			RetrieveSettings();
 		}
 
 		#endregion
