@@ -12,7 +12,7 @@ namespace AuthorIntrusion.Common.Plugins
 	/// Describes the interface of a controller that controls and manages 
 	/// <see cref="TextSpan"/> objects inside a block.
 	/// </summary>
-	public interface ITextSpanController: IProjectPluginController
+	public interface ITextControllerProjectPlugin: IProjectPlugin
 	{
 		#region Methods
 

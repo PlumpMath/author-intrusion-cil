@@ -22,8 +22,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Act
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -37,11 +37,11 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
 			// Act
-			controller.AddSubstitution(
+			projectPlugin.AddSubstitution(
 				"abbr", "abbreviation", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "abbr ");
@@ -58,11 +58,11 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
 			// Act
-			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 
@@ -79,10 +79,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
-			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 
@@ -102,10 +102,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
-			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 			commands.Undo();
@@ -126,10 +126,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
-			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 			commands.Undo();
@@ -150,10 +150,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
-			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 			commands.Undo();
@@ -175,10 +175,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			ImmediateCorrectionController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
-			controller.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 			commands.Undo();
@@ -202,7 +202,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		private void SetupCorrectionPlugin(
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
-			out ImmediateCorrectionController controller)
+			out ImmediateCorrectionProjectPlugin projectPlugin)
 		{
 			// Start getting us a simple plugin manager.
 			var plugin = new ImmediateCorrectionPlugin();
@@ -227,7 +227,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// Pull out the controller for the correction and cast it (since we know
 			// what type it is).
 			ProjectPluginController pluginController = project.Plugins.Controllers[0];
-			controller = (ImmediateCorrectionController) pluginController.Controller;
+			projectPlugin =
+				(ImmediateCorrectionProjectPlugin) pluginController.Controller;
 		}
 
 		#endregion

@@ -11,7 +11,7 @@ using MfGames.Settings;
 
 namespace AuthorIntrusion.Plugins.ImmediateCorrection
 {
-	public class ImmediateCorrectionController: IImmediateBlockEditor
+	public class ImmediateCorrectionProjectPlugin: IImmediateEditorProjectPlugin
 	{
 		#region Properties
 
@@ -167,7 +167,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 
 		#region Constructors
 
-		public ImmediateCorrectionController(
+		public ImmediateCorrectionProjectPlugin(
 			ImmediateCorrectionPlugin plugin,
 			Project project)
 		{

@@ -5,20 +5,20 @@
 namespace AuthorIntrusion.Common.Plugins
 {
 	/// <summary>
-	/// Defines a specific instance of an IProjectPlugin along with its configuration,
+	/// Defines a specific instance of an IPlugin along with its configuration,
 	/// current state, and settings.
 	/// </summary>
 	public class ProjectPluginController
 	{
 		#region Properties
 
-		public IProjectPluginController Controller { get; set; }
+		public IProjectPlugin Controller { get; set; }
 
 		public bool IsBlockAnalyzer
 		{
 			get
 			{
-				bool isImmediateEditor = Controller is IBlockAnalyzerController;
+				bool isImmediateEditor = Controller is IBlockAnalyzerProjectPlugin;
 				return isImmediateEditor;
 			}
 		}
@@ -27,7 +27,7 @@ namespace AuthorIntrusion.Common.Plugins
 		{
 			get
 			{
-				bool isImmediateEditor = Controller is IImmediateBlockEditor;
+				bool isImmediateEditor = Controller is IImmediateEditorProjectPlugin;
 				return isImmediateEditor;
 			}
 		}
@@ -37,7 +37,7 @@ namespace AuthorIntrusion.Common.Plugins
 			get { return Plugin.Name; }
 		}
 
-		public IProjectPlugin Plugin { get; set; }
+		public IPlugin Plugin { get; set; }
 		public PluginSupervisor Supervisor { get; set; }
 
 		#endregion
@@ -46,11 +46,11 @@ namespace AuthorIntrusion.Common.Plugins
 
 		public ProjectPluginController(
 			PluginSupervisor supervisor,
-			IProjectPlugin plugin)
+			IPlugin plugin)
 		{
 			Supervisor = supervisor;
 			Plugin = plugin;
-			Controller = plugin.GetController(supervisor.Project);
+			Controller = plugin.GetProjectPlugin(supervisor.Project);
 		}
 
 		#endregion

@@ -7,21 +7,21 @@ using AuthorIntrusion.Common.Blocks;
 namespace AuthorIntrusion.Common.Plugins
 {
 	/// <summary>
-	/// Defines a controller that listens to changes to a block type change.
+	/// Indicates a project plugin controller that performs immediate changes to the
+	/// text while the user is editing.
 	/// </summary>
-	public interface IBlockTypeController: IBlockAnalyzerController
+	public interface IImmediateEditorProjectPlugin: IProjectPlugin
 	{
 		#region Methods
 
 		/// <summary>
-		/// Indicates that a block changed its block type from oldBlockType into the
-		/// currently assigned one.
+		/// Checks for immediate edits after the user makes a change to the block.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		/// <param name="oldBlockType">Old type of the block.</param>
-		void ChangeBlockType(
+		/// <param name="textIndex">Index of the text.</param>
+		void ProcessImmediateEdits(
 			Block block,
-			BlockType oldBlockType);
+			int textIndex);
 
 		#endregion
 	}

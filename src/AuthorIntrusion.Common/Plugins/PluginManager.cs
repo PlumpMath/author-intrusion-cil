@@ -16,7 +16,7 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <summary>
 		/// Gets an unsorted list of block analyzers available in the system.
 		/// </summary>
-		public IProjectPlugin[] ProjectPlugins { get; private set; }
+		public IPlugin[] Plugins { get; private set; }
 
 		#endregion
 
@@ -30,9 +30,9 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <returns><c>true<c> if the plugin is found, otherwise </c>false</c>.</returns>
 		public bool TryGet(
 			string pluginName,
-			out IProjectPlugin plugin)
+			out IPlugin plugin)
 		{
-			foreach (IProjectPlugin projectPlugin in ProjectPlugins)
+			foreach (IPlugin projectPlugin in Plugins)
 			{
 				if (projectPlugin.Name == pluginName)
 				{
@@ -50,10 +50,10 @@ namespace AuthorIntrusion.Common.Plugins
 
 		#region Constructors
 
-		public PluginManager(params IProjectPlugin[] projectPlugins)
+		public PluginManager(params IPlugin[] plugins)
 		{
 			// Save all the block analzyers into a private array.
-			ProjectPlugins = projectPlugins;
+			Plugins = plugins;
 		}
 
 		#endregion

@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LocalWordsController.cs" />
+    <Compile Include="LocalWordsProjectPlugin.cs" />
     <Compile Include="LocalWordsPlugin.cs" />
     <Compile Include="LocalWordsSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

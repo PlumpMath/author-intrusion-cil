@@ -25,8 +25,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -41,8 +41,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "one.");
@@ -59,8 +59,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "ONE.");
@@ -77,8 +77,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "two.");
@@ -95,8 +95,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correct.");
@@ -113,8 +113,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "correct.");
@@ -131,8 +131,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -156,8 +156,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -174,8 +174,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			LocalWordsController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			LocalWordsProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -189,13 +189,13 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 
 		/// <summary>
 		/// Configures the environment to load the plugin manager and verify we
-		/// have access to our plugin and controller.
+		/// have access to our plugin and projectPlugin.
 		/// </summary>
 		private void SetupPlugin(
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,
-			out LocalWordsController controller)
+			out LocalWordsProjectPlugin projectPlugin)
 		{
 			// Start getting us a simple plugin manager.
 			var spelling = new SpellingFrameworkPlugin();
@@ -225,12 +225,12 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 				throw new ApplicationException("Cannot load 'Local Words' plugin.");
 			}
 
-			// Pull out the controller for the correction and cast it (since we know
+			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).
 			ProjectPluginController pluginController = plugins.Controllers[1];
-			controller = (LocalWordsController) pluginController.Controller;
-			controller.CaseSensitiveDictionary.Add("Correct");
-			controller.CaseInsensitiveDictionary.Add("one");
+			projectPlugin = (LocalWordsProjectPlugin) pluginController.Controller;
+			projectPlugin.CaseSensitiveDictionary.Add("Correct");
+			projectPlugin.CaseInsensitiveDictionary.Add("one");
 		}
 
 		#endregion

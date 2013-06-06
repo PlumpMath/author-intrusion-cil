@@ -15,8 +15,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 	/// <summary>
 	/// Controller that uses the NHunspell to handle spell-checking.
 	/// </summary>
-	public class NHunspellSpellingController: IProjectPluginController,
-		ISpellingController
+	public class NHunspellSpellingProjectPlugin: IProjectPlugin,
+		ISpellingProjectPlugin
 	{
 		#region Properties
 
@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 
 		#region Constructors
 
-		public NHunspellSpellingController(NHunspellSpellingPlugin plugin)
+		public NHunspellSpellingProjectPlugin(NHunspellSpellingPlugin plugin)
 		{
 			Plugin = plugin;
 		}

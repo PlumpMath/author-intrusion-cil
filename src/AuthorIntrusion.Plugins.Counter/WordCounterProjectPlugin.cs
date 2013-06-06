@@ -14,8 +14,8 @@ namespace AuthorIntrusion.Plugins.Counter
 	/// <summary>
 	/// A controller to handle word counting.
 	/// </summary>
-	public class WordCounterController: IBlockRelationshipController,
-		IBlockTypeController
+	public class WordCounterProjectPlugin: IBlockRelationshipProjectPlugin,
+		IBlockTypeProjectPlugin
 	{
 		#region Methods
 

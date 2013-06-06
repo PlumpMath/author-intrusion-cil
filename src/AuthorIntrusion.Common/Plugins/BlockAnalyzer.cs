@@ -12,7 +12,7 @@ namespace AuthorIntrusion.Common.Plugins
 		#region Properties
 
 		public Block Block { get; private set; }
-		public IList<IBlockAnalyzerController> BlockAnalyzers { get; set; }
+		public IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; set; }
 		public int BlockVersion { get; private set; }
 
 		#endregion
@@ -24,7 +24,7 @@ namespace AuthorIntrusion.Common.Plugins
 			// Loop through all the analyzers in the list and perform each one in turn.
 			ProjectBlockCollection blocks = Block.Project.Blocks;
 
-			foreach (IBlockAnalyzerController blockAnalyzer in BlockAnalyzers)
+			foreach (IBlockAnalyzerProjectPlugin blockAnalyzer in BlockAnalyzers)
 			{
 				// Check to see if the block had gone stale.
 				using (Block.AcquireReadLock())
@@ -57,7 +57,7 @@ namespace AuthorIntrusion.Common.Plugins
 		public BlockAnalyzer(
 			Block block,
 			int blockVersion,
-			IList<IBlockAnalyzerController> blockAnalyzers)
+			IList<IBlockAnalyzerProjectPlugin> blockAnalyzers)
 		{
 			Block = block;
 			BlockVersion = blockVersion;

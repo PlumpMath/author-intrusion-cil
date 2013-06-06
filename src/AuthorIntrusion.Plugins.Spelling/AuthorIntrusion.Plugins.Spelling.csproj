@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpellingFrameworkController.cs" />
+    <Compile Include="SpellingFrameworkProjectPlugin.cs" />
     <Compile Include="SpellingFrameworkPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellingWordSplitter.cs" />

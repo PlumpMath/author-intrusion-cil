@@ -10,7 +10,7 @@ namespace AuthorIntrusion.Common.Plugins
 	/// Defines the signature for a controller that integrates with other plugins
 	/// such as spelling.
 	/// </summary>
-	public interface IPluginFrameworkController: IProjectPluginController
+	public interface IFrameworkProjectPlugin: IProjectPlugin
 	{
 		#region Methods
 
@@ -21,7 +21,7 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <param name="controller">The controller.</param>
 		void HandleAddedController(
 			Project project,
-			IProjectPluginController controller);
+			IProjectPlugin controller);
 
 		/// <summary>
 		/// Called when a plugin controller is removed from a project.
@@ -30,7 +30,7 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <param name="controller">The controller.</param>
 		void HandleRemovedController(
 			Project project,
-			IProjectPluginController controller);
+			IProjectPlugin controller);
 
 		/// <summary>
 		/// Initializes the plugin framework after it is added to the system. This will
@@ -40,7 +40,7 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <param name="controllers">The controllers already enabled in the project. This list will not include the current controller.</param>
 		void InitializePluginFramework(
 			Project project,
-			IEnumerable<IProjectPluginController> controllers);
+			IEnumerable<IProjectPlugin> controllers);
 
 		#endregion
 	}

@@ -18,7 +18,7 @@ namespace AuthorIntrusion.Common.Blocks
 	{
 		#region Properties
 
-		public ITextSpanController Controller { get; set; }
+		public ITextControllerProjectPlugin Controller { get; set; }
 		public object Data { get; private set; }
 
 		public int Length
@@ -51,7 +51,7 @@ namespace AuthorIntrusion.Common.Blocks
 		public TextSpan(
 			int startTextIndex,
 			int stopTextIndex,
-			ITextSpanController controller,
+			ITextControllerProjectPlugin controller,
 			object data)
 		{
 			StartTextIndex = startTextIndex;

@@ -18,13 +18,13 @@ namespace AuthorIntrusion.Plugins.Spelling
 	/// <summary>
 	/// Project-specific controller for handling the spelling framework.
 	/// </summary>
-	public class SpellingFrameworkController: IPluginFrameworkController,
-		IBlockAnalyzerController,
-		ITextSpanController
+	public class SpellingFrameworkProjectPlugin: IFrameworkProjectPlugin,
+		IBlockAnalyzerProjectPlugin,
+		ITextControllerProjectPlugin
 	{
 		#region Properties
 
-		private ArrayList<ISpellingController> SpellingControllers { get; set; }
+		private ArrayList<ISpellingProjectPlugin> SpellingControllers { get; set; }
 		private SpellingWordSplitter Splitter { get; set; }
 
 		#endregion
@@ -130,9 +130,9 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 		public void HandleAddedController(
 			Project project,
-			IProjectPluginController controller)
+			IProjectPlugin controller)
 		{
-			var spellingController = controller as ISpellingController;
+			var spellingController = controller as ISpellingProjectPlugin;
 
 			if (spellingController != null)
 			{
@@ -143,9 +143,9 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 		public void HandleRemovedController(
 			Project project,
-			IProjectPluginController controller)
+			IProjectPlugin controller)
 		{
-			var spellingController = controller as ISpellingController;
+			var spellingController = controller as ISpellingProjectPlugin;
 
 			if (spellingController != null)
 			{
@@ -155,9 +155,9 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 		public void InitializePluginFramework(
 			Project project,
-			IEnumerable<IProjectPluginController> controllers)
+			IEnumerable<IProjectPlugin> controllers)
 		{
-			foreach (IProjectPluginController controller in controllers)
+			foreach (IProjectPlugin controller in controllers)
 			{
 				HandleAddedController(project, controller);
 			}
@@ -168,7 +168,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 			// Gather up all the suggestions from all the controllers.
 			var suggestions = new ArrayList<SpellingSuggestion>();
 
-			foreach (ISpellingController controller in SpellingControllers)
+			foreach (ISpellingProjectPlugin controller in SpellingControllers)
 			{
 				// Get the suggestions from the controller.
 				IEnumerable<SpellingSuggestion> controllerSuggestions =
@@ -204,9 +204,9 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 		#region Constructors
 
-		public SpellingFrameworkController()
+		public SpellingFrameworkProjectPlugin()
 		{
-			SpellingControllers = new ArrayList<ISpellingController>();
+			SpellingControllers = new ArrayList<ISpellingProjectPlugin>();
 			Splitter = new SpellingWordSplitter();
 		}
 

@@ -20,9 +20,9 @@ namespace AuthorIntrusion.Common.Plugins
 	{
 		#region Properties
 
-		public C5.IList<IBlockAnalyzerController> BlockAnalyzers { get; private set; }
+		public C5.IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; private set; }
 		public C5.IList<ProjectPluginController> Controllers { get; private set; }
-		public C5.IList<IImmediateBlockEditor> ImmediateEditors { get; private set; }
+		public C5.IList<IImmediateEditorProjectPlugin> ImmediateEditors { get; private set; }
 
 		/// <summary>
 		/// Gets the PluginManager associated with the environment.
@@ -47,7 +47,7 @@ namespace AuthorIntrusion.Common.Plugins
 		public bool Add(string pluginName)
 		{
 			// Look up the plugin from the plugin manager.
-			IProjectPlugin plugin;
+			IPlugin plugin;
 
 			if (!PluginManager.TryGet(pluginName, out plugin))
 			{
@@ -70,12 +70,12 @@ namespace AuthorIntrusion.Common.Plugins
 			var projectPlugin = new ProjectPluginController(this, plugin);
 
 			// See if this is a plugin framework controller.
-			IProjectPluginController pluginController = projectPlugin.Controller;
-			var frameworkController = pluginController as IPluginFrameworkController;
+			IProjectPlugin pluginController = projectPlugin.Controller;
+			var frameworkController = pluginController as IFrameworkProjectPlugin;
 
 			if (frameworkController != null)
 			{
-				var pluginControllers = new ArrayList<IProjectPluginController>();
+				var pluginControllers = new ArrayList<IProjectPlugin>();
 
 				foreach (ProjectPluginController currentPlugin in Controllers)
 				{
@@ -89,7 +89,7 @@ namespace AuthorIntrusion.Common.Plugins
 			// add this one to their internal management.
 			foreach (ProjectPluginController controller in Controllers)
 			{
-				frameworkController = controller.Controller as IPluginFrameworkController;
+				frameworkController = controller.Controller as IFrameworkProjectPlugin;
 
 				if (frameworkController != null)
 				{
@@ -120,11 +120,12 @@ namespace AuthorIntrusion.Common.Plugins
 			Block oldParentBlock)
 		{
 			IEnumerable<ProjectPluginController> controllers =
-				Controllers.Where(controller => controller is IBlockRelationshipController);
+				Controllers.Where(
+					controller => controller is IBlockRelationshipProjectPlugin);
 
 			foreach (ProjectPluginController controller in controllers)
 			{
-				var relationshipController = (IBlockRelationshipController) controller;
+				var relationshipController = (IBlockRelationshipProjectPlugin) controller;
 				relationshipController.ChangeBlockParent(block, oldParentBlock);
 			}
 		}
@@ -139,11 +140,11 @@ namespace AuthorIntrusion.Common.Plugins
 			BlockType oldBlockType)
 		{
 			IEnumerable<ProjectPluginController> controllers =
-				Controllers.Where(controller => controller is IBlockTypeController);
+				Controllers.Where(controller => controller is IBlockTypeProjectPlugin);
 
 			foreach (ProjectPluginController controller in controllers)
 			{
-				var blockTypeController = (IBlockTypeController) controller;
+				var blockTypeController = (IBlockTypeProjectPlugin) controller;
 				blockTypeController.ChangeBlockType(block, oldBlockType);
 			}
 		}
@@ -167,12 +168,13 @@ namespace AuthorIntrusion.Common.Plugins
 			// the list.
 			IEnumerable<ProjectPluginController> controllers =
 				Controllers.Where(
-					controller => controller.Controller is ITextSpanController);
+					controller => controller.Controller is ITextControllerProjectPlugin);
 			var actions = new ArrayList<IEditorAction>();
 
 			foreach (ProjectPluginController controller in controllers)
 			{
-				var textSpanController = (ITextSpanController) controller.Controller;
+				var textSpanController =
+					(ITextControllerProjectPlugin) controller.Controller;
 				C5.IList<IEditorAction> controllerActions =
 					textSpanController.GetEditorActions(block, textSpan);
 
@@ -236,7 +238,8 @@ namespace AuthorIntrusion.Common.Plugins
 			Block block,
 			int textIndex)
 		{
-			foreach (IImmediateBlockEditor immediateBlockEditor in ImmediateEditors)
+			foreach (
+				IImmediateEditorProjectPlugin immediateBlockEditor in ImmediateEditors)
 			{
 				immediateBlockEditor.ProcessImmediateEdits(block, textIndex);
 			}
@@ -284,8 +287,8 @@ namespace AuthorIntrusion.Common.Plugins
 		{
 			Project = project;
 			Controllers = new ArrayList<ProjectPluginController>();
-			ImmediateEditors = new ArrayList<IImmediateBlockEditor>();
-			BlockAnalyzers = new ArrayList<IBlockAnalyzerController>();
+			ImmediateEditors = new ArrayList<IImmediateEditorProjectPlugin>();
+			BlockAnalyzers = new ArrayList<IBlockAnalyzerProjectPlugin>();
 		}
 
 		#endregion

@@ -19,7 +19,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// Removes all the text spans of a given controller.
 		/// </summary>
 		/// <param name="controller">The controller to remove the spans for.</param>
-		public void Remove(IProjectPluginController controller)
+		public void Remove(IProjectPlugin controller)
 		{
 			var removeSpans = new HashSet<TextSpan>();
 

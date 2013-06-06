@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NHunspellSpellingController.cs" />
+    <Compile Include="NHunspellSpellingProjectPlugin.cs" />
     <Compile Include="NHunspellSpellingPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

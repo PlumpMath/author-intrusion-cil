@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CounterPaths.cs" />
-    <Compile Include="WordCounterController.cs" />
+    <Compile Include="WordCounterProjectPlugin.cs" />
     <Compile Include="WordCounterHelper.cs" />
     <Compile Include="WordCounterPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

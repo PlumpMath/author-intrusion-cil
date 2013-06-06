@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISpellingController.cs" />
+    <Compile Include="ISpellingProjectPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellingSuggestion.cs" />
   </ItemGroup>

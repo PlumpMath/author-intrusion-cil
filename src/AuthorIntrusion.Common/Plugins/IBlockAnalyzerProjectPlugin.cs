@@ -9,7 +9,7 @@ namespace AuthorIntrusion.Common.Plugins
 	/// <summary>
 	/// Defines a controller process that analyzes a block in a background thread.
 	/// </summary>
-	public interface IBlockAnalyzerController: IProjectPluginController
+	public interface IBlockAnalyzerProjectPlugin: IProjectPlugin
 	{
 		#region Methods
 

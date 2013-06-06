@@ -24,8 +24,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			NHunspellSpellingProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -40,8 +40,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			NHunspellSpellingProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correct.");
@@ -60,8 +60,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			NHunspellSpellingProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -86,8 +86,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			NHunspellSpellingProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -115,8 +115,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			NHunspellSpellingProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -147,8 +147,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			NHunspellSpellingProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -171,8 +171,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingController controller;
-			SetupPlugin(out blocks, out commands, out plugins, out controller);
+			NHunspellSpellingProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -186,13 +186,13 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 
 		/// <summary>
 		/// Configures the environment to load the plugin manager and verify we
-		/// have access to our plugin and controller.
+		/// have access to our plugin and projectPlugin.
 		/// </summary>
 		private void SetupPlugin(
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,
-			out NHunspellSpellingController controller)
+			out NHunspellSpellingProjectPlugin projectPlugin)
 		{
 			// Start getting us a simple plugin manager.
 			var spelling = new SpellingFrameworkPlugin();
@@ -222,10 +222,10 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 				throw new ApplicationException("Cannot load 'NHunspell' plugin.");
 			}
 
-			// Pull out the controller for the correction and cast it (since we know
+			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).
 			ProjectPluginController pluginController = plugins.Controllers[1];
-			controller = (NHunspellSpellingController) pluginController.Controller;
+			projectPlugin = (NHunspellSpellingProjectPlugin) pluginController.Controller;
 		}
 
 		#endregion

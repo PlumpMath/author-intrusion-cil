@@ -24,8 +24,8 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			// Act
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			WordCounterController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			WordCounterProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -39,8 +39,8 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			WordCounterController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			WordCounterProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 			SetupComplexMultilineTest(blocks.Project, 6);
 
 			BlockTypeSupervisor blockTypes = blocks.Project.BlockTypes;
@@ -105,8 +105,8 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			// Arrange
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
-			WordCounterController controller;
-			SetupCorrectionPlugin(out blocks, out commands, out controller);
+			WordCounterProjectPlugin projectPlugin;
+			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Line 1");
@@ -134,7 +134,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 		private void SetupCorrectionPlugin(
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
-			out WordCounterController controller)
+			out WordCounterProjectPlugin projectPlugin)
 		{
 			// Start getting us a simple plugin manager.
 			var plugin = new WordCounterPlugin();
@@ -159,10 +159,10 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			// Pull out the controller for the correction and cast it (since we know
 			// what type it is).
 			ProjectPluginController pluginController = project.Plugins.Controllers[0];
-			controller = (WordCounterController) pluginController.Controller;
+			projectPlugin = (WordCounterProjectPlugin) pluginController.Controller;
 
 			// Set up logging for the controller.
-			WordCounterController.Logger = Console.WriteLine;
+			WordCounterProjectPlugin.Logger = Console.WriteLine;
 		}
 
 		#endregion

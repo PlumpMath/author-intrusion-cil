@@ -11,7 +11,7 @@ namespace AuthorIntrusion.Plugins.Spelling.Common
 	/// Defines the signature for a controller that provides spell checking and
 	/// suggestions.
 	/// </summary>
-	public interface ISpellingController
+	public interface ISpellingProjectPlugin
 	{
 		#region Properties
 

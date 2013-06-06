@@ -16,8 +16,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 	/// It has both a case sensitive and case insensitive version (the latter being
 	/// the same as all lowercase terms in Emacs).
 	/// </summary>
-	public class LocalWordsController: IProjectPluginController,
-		ISpellingController
+	public class LocalWordsProjectPlugin: IProjectPlugin,
+		ISpellingProjectPlugin
 	{
 		#region Properties
 
@@ -82,7 +82,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 
 		#region Constructors
 
-		public LocalWordsController(Project project)
+		public LocalWordsProjectPlugin(Project project)
 		{
 			// Save the variables so we can access them later.
 			Project = project;

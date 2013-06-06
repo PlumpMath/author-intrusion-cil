@@ -12,7 +12,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 	/// user is typing. This establishes the basic framework for other plugins to
 	/// provide the corrections.
 	/// </summary>
-	public class ImmediateCorrectionPlugin: IProjectPlugin
+	public class ImmediateCorrectionPlugin: IPlugin
 	{
 		#region Properties
 
@@ -30,9 +30,9 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 
 		#region Methods
 
-		public IProjectPluginController GetController(Project project)
+		public IProjectPlugin GetProjectPlugin(Project project)
 		{
-			var controller = new ImmediateCorrectionController(this, project);
+			var controller = new ImmediateCorrectionProjectPlugin(this, project);
 			return controller;
 		}
 

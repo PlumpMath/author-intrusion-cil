@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImmediateCorrectionPlugin.cs" />
-    <Compile Include="ImmediateCorrectionController.cs" />
+    <Compile Include="ImmediateCorrectionProjectPlugin.cs" />
     <Compile Include="ImmediateCorrectionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisteredSubstitution.cs" />

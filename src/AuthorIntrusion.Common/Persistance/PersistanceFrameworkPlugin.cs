@@ -2,12 +2,15 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Plugins;
 
-namespace AuthorIntrusion.Plugins.Spelling.LocalWords
+namespace AuthorIntrusion.Common.Persistance
 {
-	public class LocalWordsPlugin: IPlugin
+	/// <summary>
+	/// Defines a system plugin for handling the persistance layer. This manages the
+	/// various ways a file can be loaded and saved from the filesystem and network.
+	/// </summary>
+	public class PersistanceFrameworkPlugin: IPlugin
 	{
 		#region Properties
 
@@ -18,7 +21,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 
 		public string Name
 		{
-			get { return "Local Words"; }
+			get { return "Persistance Framework"; }
 		}
 
 		#endregion
@@ -27,7 +30,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 
 		public IProjectPlugin GetProjectPlugin(Project project)
 		{
-			return new LocalWordsProjectPlugin(project);
+			return null;
 		}
 
 		#endregion
