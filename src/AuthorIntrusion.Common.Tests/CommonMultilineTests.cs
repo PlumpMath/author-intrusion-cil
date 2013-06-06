@@ -64,7 +64,7 @@ namespace AuthorIntrusion.Common.Tests
 			// Change the block types for the project. This basically builds up a
 			// structure of one chapter with any number of scenes that have one
 			// epigraph, one epigraph attribution, and two paragraphs.
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 
 			blocks[0].SetBlockType(blockTypes.Chapter);
 
@@ -94,7 +94,7 @@ namespace AuthorIntrusion.Common.Tests
 		}
 
 		protected void SetupComplexMultilineTest(
-			out BlockOwnerCollection blocks,
+			out ProjectBlockCollection blocks,
 			out BlockTypeSupervisor blockTypes,
 			out BlockCommandSupervisor commands,
 			int lineCount = 10)
@@ -119,7 +119,7 @@ namespace AuthorIntrusion.Common.Tests
 		/// <param name="commands">The commands supervisor for the project.</param>
 		/// <param name="lineCount">The number of blocks to insert into the projects.</param>
 		protected void SetupMultilineTest(
-			out BlockOwnerCollection blocks,
+			out ProjectBlockCollection blocks,
 			out BlockTypeSupervisor blockTypes,
 			out BlockCommandSupervisor commands,
 			int lineCount = 4)
@@ -170,7 +170,7 @@ namespace AuthorIntrusion.Common.Tests
 			int lineCount)
 		{
 			// Pull out some useful variables.
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 
 			// Modify the first line, which is always there.
 			blocks[0].SetText("Line 1");

@@ -17,7 +17,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void SingleLineTestCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands, 1);
@@ -39,7 +39,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void SingleLineTestUndoCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands, 1);
@@ -64,7 +64,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void SingleLineTestUndoRedoCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands, 1);
@@ -89,7 +89,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void SingleLineTestUndoRedoUndoCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands, 1);
@@ -116,7 +116,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void TestCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands);
@@ -146,7 +146,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void TestUndoCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands);
@@ -183,7 +183,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void TestUndoRedoCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands);
@@ -216,7 +216,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void TestUndoRedoUndoCommand()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands);

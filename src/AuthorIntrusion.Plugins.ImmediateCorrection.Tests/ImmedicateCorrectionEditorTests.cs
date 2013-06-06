@@ -20,7 +20,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void ActivatePlugin()
 		{
 			// Act
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -35,7 +35,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void SimpleLargerWordSubstitution()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void SimpleWordSubstitution()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -77,7 +77,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void SimpleWordSubstitutionUndo()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -100,7 +100,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void SimpleWordSubstitutionUndoRedo()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -124,7 +124,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void SimpleWordSubstitutionUndoUndo()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -148,7 +148,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void SimpleWordSubstitutionUndoUndoRedo()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -173,7 +173,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		public void SimpleWordSubstitutionUndoUndoRedoRedo()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -200,7 +200,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		/// have access to the ImmediateCorrectionPlugin.
 		/// </summary>
 		private void SetupCorrectionPlugin(
-			out BlockOwnerCollection blocks,
+			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out ImmediateCorrectionController controller)
 		{

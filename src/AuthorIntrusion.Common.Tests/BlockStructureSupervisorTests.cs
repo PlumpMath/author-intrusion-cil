@@ -17,7 +17,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void ChangeBlockTypeFromChapter()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupComplexMultilineTest(out blocks, out blockTypes, out commands);
@@ -73,7 +73,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void ComplicatedRelationshipTest()
 		{
 			// Act
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupComplexMultilineTest(out blocks, out blockTypes, out commands);
@@ -126,7 +126,7 @@ namespace AuthorIntrusion.Common.Tests
 		public void SimpleRelationshipTest()
 		{
 			// Act
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			SetupMultilineTest(out blocks, out blockTypes, out commands);

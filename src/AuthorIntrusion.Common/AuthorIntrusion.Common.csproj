@@ -49,7 +49,10 @@
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="Blocks\BlockCollection.cs" />
     <Compile Include="Blocks\BlockKey.cs" />
-    <Compile Include="Blocks\BlockOwnerCollection.cs" />
+    <Compile Include="Blocks\Locking\ReadBlockLock.cs" />
+    <Compile Include="Blocks\Locking\UpgradableReadBlockLock.cs" />
+    <Compile Include="Blocks\Locking\WriteBlockLock.cs" />
+    <Compile Include="Blocks\ProjectBlockCollection.cs" />
     <Compile Include="Blocks\BlockPosition.cs" />
     <Compile Include="Blocks\BlockPropertyDictionary.cs" />
     <Compile Include="Blocks\BlockStructureSupervisor.cs" />

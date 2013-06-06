@@ -21,7 +21,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		public void ActivatePlugin()
 		{
 			// Act
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingController controller;
@@ -37,7 +37,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		public void CheckCorrectWord()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingController controller;
@@ -57,7 +57,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		public void CheckIncorrectActions()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingController controller;
@@ -83,7 +83,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		public void CheckIncorrectSelected()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingController controller;
@@ -112,7 +112,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		public void CheckIncorrectSelectedUndo()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingController controller;
@@ -144,7 +144,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		public void CheckIncorrectTextSpan()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingController controller;
@@ -168,7 +168,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		public void CheckIncorrectWord()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingController controller;
@@ -189,7 +189,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		/// have access to our plugin and controller.
 		/// </summary>
 		private void SetupPlugin(
-			out BlockOwnerCollection blocks,
+			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,
 			out NHunspellSpellingController controller)

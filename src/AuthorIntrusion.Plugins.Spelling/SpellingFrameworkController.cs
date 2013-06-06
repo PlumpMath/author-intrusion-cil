@@ -12,7 +12,6 @@ using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Plugins.Spelling.Common;
 using C5;
 using MfGames.HierarchicalPaths;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Plugins.Spelling
 {
@@ -36,11 +35,18 @@ namespace AuthorIntrusion.Plugins.Spelling
 			Block block,
 			int blockVersion)
 		{
-			// Grab the text from the block.
+			// Grab the information about the block.
 			string text;
 
-			using (new ReadLock(block.Blocks.Lock))
+			using (block.AcquireReadLock())
 			{
+				// If we are stale, then break out.
+				if (block.IsStale(blockVersion))
+				{
+					return;
+				}
+
+				// Grab the information from the block.
 				text = block.Text;
 			}
 
@@ -58,7 +64,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 			}
 
 			// Inside a write lock, we need to make modifications to the block's list.
-			using (new WriteLock(block.Blocks.Lock))
+			using (block.AcquireWriteLock())
 			{
 				// Check one last time to see if the block is stale.
 				if (block.IsStale(blockVersion))

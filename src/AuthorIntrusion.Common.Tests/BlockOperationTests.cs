@@ -19,7 +19,7 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 
 			// Assert
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 
 			Assert.AreEqual(1, blocks.Count);
 

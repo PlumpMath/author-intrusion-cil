@@ -4,7 +4,6 @@
 
 using System;
 using System.Diagnostics.Contracts;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -50,11 +49,12 @@ namespace AuthorIntrusion.Common.Blocks
 		public void Update()
 		{
 			// We need to get a write lock on the block since we'll be making changes
-			// to the structure (and therefore the display).
-			using (new NestableWriteLock(Project.Blocks.Lock))
+			// to all the blocks and their relationships. This will, in effect, also
+			// ensure no block is being modified.
+			using (Project.Blocks.AcquireWriteLock())
 			{
 				// Go through all the blocks in the list.
-				BlockOwnerCollection blocks = Project.Blocks;
+				ProjectBlockCollection blocks = Project.Blocks;
 
 				for (int blockIndex = 0;
 					blockIndex < Project.Blocks.Count;

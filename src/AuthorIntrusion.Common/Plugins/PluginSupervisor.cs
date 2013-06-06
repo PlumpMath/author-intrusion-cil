@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using C5;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Plugins
 {
@@ -202,10 +201,10 @@ namespace AuthorIntrusion.Common.Plugins
 
 			try
 			{
-				// Grab the version in a read lock.
+				// Grab information about the block inside a read lock.
 				int blockVersion;
 
-				using (new NestableReadLock(block.Project.Blocks.Lock))
+				using (block.AcquireReadLock())
 				{
 					blockVersion = block.Version;
 				}

@@ -52,10 +52,7 @@ namespace AuthorIntrusion.Common.Commands
 				&& project.Blocks.Count == 0)
 			{
 				// Create a new placeholder block, which is blank.
-				var blankBlock = new Block(project.Blocks)
-				{
-					Text = "",
-				};
+				var blankBlock = new Block(project.Blocks);
 
 				project.Blocks.Add(blankBlock);
 

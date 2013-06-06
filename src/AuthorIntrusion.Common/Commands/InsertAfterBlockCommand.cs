@@ -31,7 +31,7 @@ namespace AuthorIntrusion.Common.Commands
 			Block block)
 		{
 			// Pull out some common elements we'll need.
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 			int blockIndex = blocks.IndexOf(block) + 1;
 
 			// Because of how block keys work, the ID is unique very time so we have

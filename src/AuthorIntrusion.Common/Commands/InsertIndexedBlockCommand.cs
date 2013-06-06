@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -27,7 +26,8 @@ namespace AuthorIntrusion.Common.Commands
 
 		public void Do(Project project)
 		{
-			using (new WriteLock(project.Blocks.Lock))
+			// We need a write lock since we are making changes to the collection itself.
+			using (project.Blocks.AcquireWriteLock())
 			{
 				project.Blocks.Insert(BlockIndex, Block);
 			}

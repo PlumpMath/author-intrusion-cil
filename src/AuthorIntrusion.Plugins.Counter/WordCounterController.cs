@@ -8,7 +8,6 @@ using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Plugins;
 using C5;
 using MfGames.HierarchicalPaths;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Plugins.Counter
 {
@@ -30,12 +29,6 @@ namespace AuthorIntrusion.Plugins.Counter
 			Block block,
 			int blockVersion)
 		{
-			// First check to see if we've gotten stale.
-			if (block.IsStale(blockVersion))
-			{
-				return;
-			}
-
 			// Grab the text and get the word counts.
 			int wordCount;
 			int characterCount;
@@ -61,10 +54,16 @@ namespace AuthorIntrusion.Plugins.Counter
 
 			// Get a write lock on the blocks list and update that block and all
 			// parent blocks in the document.
-			using (new WriteLock(block.Blocks.Lock))
+			using (block.AcquireWriteLock())
 			{
 				// Log that we are analyzing this block.
 				Log("BEGIN AnalyzeBlock: {0}: Words {1:N0}", block, wordCount);
+
+				// First check to see if we've gotten stale.
+				if (block.IsStale(blockVersion))
+				{
+					return;
+				}
 
 				// Grab the type deltas in the lock.
 				HierarchicalPath typePath = CounterPaths.GetPath(block.BlockType);
@@ -97,7 +96,7 @@ namespace AuthorIntrusion.Plugins.Counter
 			Block oldParentBlock)
 		{
 			// We need a write lock on the blocks while we make this change.
-			using (new WriteLock(block.Blocks.Lock))
+			using (block.AcquireWriteLock())
 			{
 				Log("ChangeBlockParent: {0}: Old Parent {1}", block, oldParentBlock);
 
@@ -115,10 +114,9 @@ namespace AuthorIntrusion.Plugins.Counter
 				// Get rid of blocks common in both lists.
 				var common = new HashSet<Block>();
 
-				foreach (
-					Block parentBlock in
-						oldParentBlocks.Where(
-							parentBlock => newParentBlocks.Contains(parentBlock)))
+				foreach (Block parentBlock in
+					oldParentBlocks.Where(parentBlock => newParentBlocks.Contains(parentBlock))
+					)
 				{
 					common.Add(parentBlock);
 				}
@@ -156,7 +154,7 @@ namespace AuthorIntrusion.Plugins.Counter
 			BlockType oldBlockType)
 		{
 			// We need a write lock on the blocks while we make this change.
-			using (new WriteLock(block.Blocks.Lock))
+			using (block.AcquireWriteLock())
 			{
 				// Report what we're doing if we have logging on.
 				Log("ChangeBlockType: {0}: Old Type {1}", block, oldBlockType);

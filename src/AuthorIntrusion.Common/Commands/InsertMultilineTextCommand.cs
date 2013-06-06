@@ -76,10 +76,8 @@ namespace AuthorIntrusion.Common.Commands
 					i--)
 				{
 					// Insert the line and set its text value.
-					var newBlock = new Block(project.Blocks)
-					{
-						Text = lines[i],
-					};
+					var newBlock = new Block(project.Blocks);
+					newBlock.SetText(lines[i]);
 
 					project.Blocks.Insert(firstBlockIndex + 1, newBlock);
 

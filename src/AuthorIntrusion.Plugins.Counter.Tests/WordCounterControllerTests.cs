@@ -22,7 +22,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 		public void ActivatePlugin()
 		{
 			// Act
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			WordCounterController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -37,7 +37,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 		public void CountComplexSetup()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			WordCounterController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -103,7 +103,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 		public void SimpleChange()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			WordCounterController controller;
 			SetupCorrectionPlugin(out blocks, out commands, out controller);
@@ -132,7 +132,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 		/// have access to the ImmediateCorrectionPlugin.
 		/// </summary>
 		private void SetupCorrectionPlugin(
-			out BlockOwnerCollection blocks,
+			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out WordCounterController controller)
 		{

@@ -32,7 +32,7 @@ namespace AuthorIntrusion.Common
 		/// <summary>
 		/// Contains all the ordered blocks inside the project.
 		/// </summary>
-		public BlockOwnerCollection Blocks { get; private set; }
+		public ProjectBlockCollection Blocks { get; private set; }
 
 		/// <summary>
 		/// Gets the commands supervisor for handling commands, undo, and redo.
@@ -63,7 +63,7 @@ namespace AuthorIntrusion.Common
 			Settings = new ProjectSettings();
 
 			BlockTypes = new BlockTypeSupervisor(this);
-			Blocks = new BlockOwnerCollection(this);
+			Blocks = new ProjectBlockCollection(this);
 
 			// The block structure needs both block types and blocks to be initialized.
 			BlockStructures = new BlockStructureSupervisor(this);

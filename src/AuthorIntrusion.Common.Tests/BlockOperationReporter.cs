@@ -12,7 +12,7 @@ namespace AuthorIntrusion.Common.Tests
 	{
 		#region Methods
 
-		public void Register(BlockOwnerCollection ownerCollection)
+		public void Register(ProjectBlockCollection ownerCollection)
 		{
 			ownerCollection.ItemsAdded += OnItemsAdded;
 			ownerCollection.ItemsRemoved += OnItemsRemoved;

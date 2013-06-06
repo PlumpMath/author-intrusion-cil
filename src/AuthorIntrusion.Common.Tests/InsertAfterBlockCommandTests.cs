@@ -18,9 +18,9 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.Text = "Testing 123";
+			block.SetText("Testing 123");
 			BlockKey blockKey = block.BlockKey;
 
 			// Act
@@ -44,9 +44,9 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.Text = "Testing 123";
+			block.SetText("Testing 123");
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);
@@ -70,9 +70,9 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.Text = "Testing 123";
+			block.SetText("Testing 123");
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);
@@ -99,9 +99,9 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
-			BlockOwnerCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.Text = "Testing 123";
+			block.SetText("Testing 123");
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);

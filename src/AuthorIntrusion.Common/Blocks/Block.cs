@@ -2,9 +2,11 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
 using System.Diagnostics.Contracts;
+using System.Threading;
+using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -35,7 +37,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// <summary>
 		/// Gets the blocks collection for this block.
 		/// </summary>
-		public BlockOwnerCollection Blocks
+		public ProjectBlockCollection Blocks
 		{
 			get { return Project.Blocks; }
 		}
@@ -43,7 +45,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// <summary>
 		/// Gets the owner collection associated with this block.
 		/// </summary>
-		public BlockOwnerCollection OwnerCollection { get; private set; }
+		public ProjectBlockCollection OwnerCollection { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the block that is the organizational parent for this block.
@@ -66,11 +68,6 @@ namespace AuthorIntrusion.Common.Blocks
 		public string Text
 		{
 			get { return text; }
-			set
-			{
-				text = value ?? string.Empty;
-				version++;
-			}
 		}
 
 		public TextSpanCollection TextSpans { get; private set; }
@@ -83,6 +80,47 @@ namespace AuthorIntrusion.Common.Blocks
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Acquires a read lock on the entire collection. There may be multiple
+		/// readers or a single writer, but not both at the same time. This is
+		/// expected to be used in a using() construct as the disposing of the
+		/// opaque return value releases the read lock.
+		/// 
+		/// <code>using (blocks.AcquireReadLock()) {}</code>
+		/// </summary>
+		/// <returns>An opaque lock object that will release lock on disposal.</returns>
+		public IDisposable AcquireReadLock()
+		{
+			return new ReadBlockLock(this, accessLock);
+		}
+
+		/// <summary>
+		/// Acquires an upgradable read lock on the entire collection. This is
+		/// expected to be used in a using() construct as the disposing of the
+		/// opaque return value releases the read lock.
+		/// 
+		/// <code>using (blocks.AcquireUpgradableReadLock()) {}</code>
+		/// </summary>
+		/// <returns>An opaque lock object that will release lock on disposal.</returns>
+		public IDisposable AcquireUpgradableReadLock()
+		{
+			return new UpgradableReadBlockLock(this, accessLock);
+		}
+
+		/// <summary>
+		/// Acquires a write lock on the entire collection. There may be multiple
+		/// readers or a single writer, but not both at the same time. This is
+		/// expected to be used in a using() construct as the disposing of the
+		/// opaque return value releases the read lock.
+		/// 
+		/// <code>using (blocks.AcquireWriteLock()) {}</code>
+		/// </summary>
+		/// <returns>An opaque lock object that will release lock on disposal.</returns>
+		public IDisposable AcquireWriteLock()
+		{
+			return new WriteBlockLock(this, accessLock);
+		}
 
 		public IList<Block> GetBlockAndParents()
 		{
@@ -108,11 +146,13 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </returns>
 		public bool IsStale(int blockVersion)
 		{
-			// We need a read lock on this to prevent changes.
-			using (new NestableReadLock(Blocks.Lock))
-			{
-				return version != blockVersion;
-			}
+			// Ensure we have a lock in effect.
+			Contract.Assert(
+				accessLock.IsReadLockHeld || accessLock.IsUpgradeableReadLockHeld
+					|| accessLock.IsWriteLockHeld);
+
+			// Determine if we have the same version.
+			return version != blockVersion;
 		}
 
 		/// <summary>
@@ -188,8 +228,8 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public void SetText(string newText)
 		{
-			// Check to see if the text changed.
-			using (new NestableUpgradableReadLock(Project.Blocks.Lock))
+			// We need write access to the block.
+			using (AcquireWriteLock())
 			{
 				// If nothing changed, then we don't have to do anything.
 				if (newText == Text)
@@ -197,8 +237,9 @@ namespace AuthorIntrusion.Common.Blocks
 					return;
 				}
 
-				// Update the text, which bumps up the version.
-				Text = newText;
+				// Update the text and bump up the version of this block.
+				text = newText ?? string.Empty;
+				version++;
 
 				// Trigger the events for any listening plugins.
 				Project.Plugins.ProcessBlockAnalysis(this);
@@ -224,7 +265,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// Initializes a new instance of the <see cref="Block"/> class.
 		/// </summary>
 		/// <param name="ownerCollection">The ownerCollection.</param>
-		public Block(BlockOwnerCollection ownerCollection)
+		public Block(ProjectBlockCollection ownerCollection)
 			: this(ownerCollection, ownerCollection.Project.BlockTypes.Paragraph)
 		{
 		}
@@ -235,7 +276,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// <param name="ownerCollection">The ownerCollection.</param>
 		/// <param name="initialBlockType">Initial type of the block.</param>
 		public Block(
-			BlockOwnerCollection ownerCollection,
+			ProjectBlockCollection ownerCollection,
 			BlockType initialBlockType)
 		{
 			BlockKey = BlockKey.GetNext();
@@ -244,11 +285,14 @@ namespace AuthorIntrusion.Common.Blocks
 			text = string.Empty;
 			Properties = new BlockPropertyDictionary();
 			TextSpans = new TextSpanCollection();
+			accessLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 		}
 
 		#endregion
 
 		#region Fields
+
+		private readonly ReaderWriterLockSlim accessLock;
 
 		private BlockType blockType;
 		private string text;

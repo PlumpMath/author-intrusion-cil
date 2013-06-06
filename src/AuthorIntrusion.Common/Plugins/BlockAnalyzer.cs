@@ -22,16 +22,19 @@ namespace AuthorIntrusion.Common.Plugins
 		public void Run()
 		{
 			// Loop through all the analyzers in the list and perform each one in turn.
-			BlockOwnerCollection blocks = Block.Project.Blocks;
+			ProjectBlockCollection blocks = Block.Project.Blocks;
 
 			foreach (IBlockAnalyzerController blockAnalyzer in BlockAnalyzers)
 			{
 				// Check to see if the block had gone stale.
-				if (Block.IsStale(BlockVersion))
+				using (Block.AcquireReadLock())
 				{
-					// The block is stale, so we just dump out since there will be
-					// another task to reanalyze this block.
-					return;
+					if (Block.IsStale(BlockVersion))
+					{
+						// The block is stale, so we just dump out since there will be
+						// another task to reanalyze this block.
+						return;
+					}
 				}
 
 				// Perform the analysis on the given block.

@@ -151,7 +151,10 @@
 &#xD;
 		&lt;Entry&gt;&#xD;
 			&lt;Match&gt;&#xD;
-				&lt;Kind Is="destructor"/&gt;&#xD;
+				&lt;Or&gt;&#xD;
+					&lt;Kind Is="destructor"/&gt;&#xD;
+					&lt;Name Is="Dispose"/&gt;&#xD;
+				&lt;/Or&gt;&#xD;
 			&lt;/Match&gt;&#xD;
 			&lt;Sort&gt;&#xD;
 				&lt;Static/&gt;&#xD;

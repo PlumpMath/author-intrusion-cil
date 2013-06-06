@@ -4,7 +4,6 @@
 
 using AuthorIntrusion.Common.Blocks;
 using C5;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -40,7 +39,7 @@ namespace AuthorIntrusion.Common.Commands
 		public void Do(Project project)
 		{
 			// Since we're making chanegs to the list, we need a write lock.
-			using (new NestableWriteLock(project.Blocks.Lock))
+			using (project.Blocks.AcquireWriteLock())
 			{
 				// Clear out the inverse since we'll be rebuilding it.
 				GetInverseCommand(project);

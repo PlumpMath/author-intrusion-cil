@@ -22,7 +22,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void ActivatePlugin()
 		{
 			// Act
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -38,7 +38,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseInsensitiveCorrectWord()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseInsensitiveCorrectWordDifferentCase()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -74,7 +74,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseInsensitiveIncorrectWord()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -92,7 +92,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseSensitiveCorrectWord()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -110,7 +110,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseSensitiveCorrectWordWrongCase()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -128,7 +128,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseSensitiveIncorrectActions()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -153,7 +153,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseSensitiveIncorrectTextSpan()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -171,7 +171,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		public void CheckCaseSensitiveIncorrectWord()
 		{
 			// Arrange
-			BlockOwnerCollection blocks;
+			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			LocalWordsController controller;
@@ -192,7 +192,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 		/// have access to our plugin and controller.
 		/// </summary>
 		private void SetupPlugin(
-			out BlockOwnerCollection blocks,
+			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,
 			out LocalWordsController controller)

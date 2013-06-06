@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
-using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -29,8 +28,8 @@ namespace AuthorIntrusion.Common.Commands
 		public void Do(Project project)
 		{
 			// Because this is a block command, we need to get a writer lock on the
-			// block subsystem.
-			using (new NestableWriteLock(project.Blocks.Lock))
+			// block.
+			using (project.Blocks.AcquireUpgradableReadLock())
 			{
 				UnlockedDo(project);
 			}
@@ -38,16 +37,20 @@ namespace AuthorIntrusion.Common.Commands
 
 		public IBlockCommand GetInverseCommand(Project project)
 		{
-			// Since this command is a non-manipulating, we only need a read lock on
-			// the system to get the current state.
-			using (new NestableReadLock(project.Blocks.Lock))
+			// We need a read access to the project.
+			using (project.Blocks.AcquireReadLock())
 			{
 				// Retrieve the block that is referenced by the key so we can keep
 				// the extending classes relatively small.
 				Block block = project.Blocks[BlockKey];
 
-				// Perform the action on the block.
-				return GetInverseCommand(project, block);
+				// Since this command is a non-manipulating, we only need a read lock on
+				// the system to get the current state.
+				using (block.AcquireReadLock())
+				{
+					// Perform the action on the block.
+					return GetInverseCommand(project, block);
+				}
 			}
 		}
 
@@ -61,8 +64,12 @@ namespace AuthorIntrusion.Common.Commands
 			// the extending classes relatively small.
 			Block block = project.Blocks[BlockKey];
 
-			// Perform the action on the block.
-			Do(project, block);
+			// We need write access to this block.
+			using (block.AcquireWriteLock())
+			{
+				// Perform the action on the block.
+				Do(project, block);
+			}
 		}
 
 		/// <summary>
