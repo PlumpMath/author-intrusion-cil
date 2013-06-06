@@ -2,6 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using C5;
+
 namespace AuthorIntrusion.Common.Plugins
 {
 	public class PluginManager
@@ -57,6 +59,28 @@ namespace AuthorIntrusion.Common.Plugins
 		{
 			// Save all the block analzyers into a private array.
 			Plugins = plugins;
+
+			// Once we have the plugins sorted, we need to allow the framework
+			// plugins to hook themselves up to the other plugins.
+			foreach (IPlugin plugin in plugins)
+			{
+				// See if this is a framework plugin (e.g., one that coordinates with
+				// other plugins).
+				var frameworkPlugin = plugin as IFrameworkPlugin;
+
+				if (frameworkPlugin == null)
+				{
+					continue;
+				}
+
+				// Build a list of plugins that doesn't include the framework plugin.
+				var relatedPlugins = new ArrayList<IPlugin>();
+				relatedPlugins.AddAll(plugins);
+				relatedPlugins.Remove(plugin);
+
+				// Register the plugins with the calling class.
+				frameworkPlugin.RegisterPlugins(relatedPlugins);
+			}
 		}
 
 		#endregion

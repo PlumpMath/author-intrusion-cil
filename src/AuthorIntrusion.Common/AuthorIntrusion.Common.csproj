@@ -81,11 +81,13 @@
     <Compile Include="Commands\SplitBlockCommand.cs" />
     <Compile Include="Commands\UndoRedoCommand.cs" />
     <Compile Include="Actions\IEditorAction.cs" />
+    <Compile Include="Persistance\IPersistancePlugin.cs" />
     <Compile Include="Persistance\PersistanceFrameworkPlugin.cs" />
     <Compile Include="Plugins\BlockAnalyzer.cs" />
     <Compile Include="Plugins\IBlockAnalyzerProjectPlugin.cs" />
     <Compile Include="Plugins\IBlockRelationshipProjectPlugin.cs" />
     <Compile Include="Plugins\IBlockTypeProjectPlugin.cs" />
+    <Compile Include="Plugins\IFrameworkPlugin.cs" />
     <Compile Include="Plugins\IImmediateEditorProjectPlugin.cs" />
     <Compile Include="Plugins\IFrameworkProjectPlugin.cs" />
     <Compile Include="Plugins\IPlugin.cs" />

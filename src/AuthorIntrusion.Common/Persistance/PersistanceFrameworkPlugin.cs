@@ -2,7 +2,10 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
+using System.Linq;
 using AuthorIntrusion.Common.Plugins;
+using C5;
 
 namespace AuthorIntrusion.Common.Persistance
 {
@@ -10,14 +13,9 @@ namespace AuthorIntrusion.Common.Persistance
 	/// Defines a system plugin for handling the persistance layer. This manages the
 	/// various ways a file can be loaded and saved from the filesystem and network.
 	/// </summary>
-	public class PersistanceFrameworkPlugin: IProjectPluginProviderPlugin
+	public class PersistanceFrameworkPlugin: IFrameworkPlugin
 	{
 		#region Properties
-
-		public bool AllowMultiple
-		{
-			get { return false; }
-		}
 
 		public string Name
 		{
@@ -28,10 +26,33 @@ namespace AuthorIntrusion.Common.Persistance
 
 		#region Methods
 
-		public IProjectPlugin GetProjectPlugin(Project project)
+		public void RegisterPlugins(IEnumerable<IPlugin> additionalPlugins)
 		{
-			return null;
+			// Go through all the plugins and add the persistence plugins to our
+			// internal list.
+			IEnumerable<IPersistancePlugin> persistancePlugins =
+				additionalPlugins.OfType<IPersistancePlugin>();
+
+			foreach (IPersistancePlugin plugin in persistancePlugins)
+			{
+				plugins.Add(plugin);
+			}
 		}
+
+		#endregion
+
+		#region Constructors
+
+		public PersistanceFrameworkPlugin()
+		{
+			plugins = new ArrayList<IPersistancePlugin>();
+		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly ArrayList<IPersistancePlugin> plugins;
 
 		#endregion
 	}
