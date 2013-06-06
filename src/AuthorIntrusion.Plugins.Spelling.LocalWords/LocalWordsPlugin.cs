@@ -7,7 +7,7 @@ using AuthorIntrusion.Common.Plugins;
 
 namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 {
-	public class LocalWordsPlugin: IPlugin
+	public class LocalWordsPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 

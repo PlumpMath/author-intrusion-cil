@@ -37,7 +37,7 @@ namespace AuthorIntrusion.Common.Plugins
 			get { return Plugin.Name; }
 		}
 
-		public IPlugin Plugin { get; set; }
+		public IProjectPluginProviderPlugin Plugin { get; set; }
 		public PluginSupervisor Supervisor { get; set; }
 
 		#endregion
@@ -46,7 +46,7 @@ namespace AuthorIntrusion.Common.Plugins
 
 		public ProjectPluginController(
 			PluginSupervisor supervisor,
-			IPlugin plugin)
+			IProjectPluginProviderPlugin plugin)
 		{
 			Supervisor = supervisor;
 			Plugin = plugin;

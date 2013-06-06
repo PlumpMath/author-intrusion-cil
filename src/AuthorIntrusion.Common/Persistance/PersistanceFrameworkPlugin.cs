@@ -10,7 +10,7 @@ namespace AuthorIntrusion.Common.Persistance
 	/// Defines a system plugin for handling the persistance layer. This manages the
 	/// various ways a file can be loaded and saved from the filesystem and network.
 	/// </summary>
-	public class PersistanceFrameworkPlugin: IPlugin
+	public class PersistanceFrameworkPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 

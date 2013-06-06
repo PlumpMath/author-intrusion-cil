@@ -11,7 +11,7 @@ namespace AuthorIntrusion.Plugins.Counter
 	/// Plugin to implement an automatic word count plugin that keeps track of word
 	/// (and character) counting on a paragraph and structural level.
 	/// </summary>
-	public class WordCounterPlugin: IPlugin
+	public class WordCounterPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 

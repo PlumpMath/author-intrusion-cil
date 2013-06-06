@@ -89,6 +89,7 @@
     <Compile Include="Plugins\IImmediateEditorProjectPlugin.cs" />
     <Compile Include="Plugins\IFrameworkProjectPlugin.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
+    <Compile Include="Plugins\IProjectPluginProviderPlugin.cs" />
     <Compile Include="Plugins\IProjectPlugin.cs" />
     <Compile Include="Plugins\ITextControllerProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectPluginController.cs" />

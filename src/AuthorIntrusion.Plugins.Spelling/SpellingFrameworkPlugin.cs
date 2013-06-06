@@ -11,7 +11,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 	/// Primary plugin for the entire spelling (spell-checking) framework. This
 	/// base plugin is used to register and coordinate other spelling plugins.
 	/// </summary>
-	public class SpellingFrameworkPlugin: IPlugin
+	public class SpellingFrameworkPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 

@@ -47,9 +47,9 @@ namespace AuthorIntrusion.Common.Plugins
 		public bool Add(string pluginName)
 		{
 			// Look up the plugin from the plugin manager.
-			IPlugin plugin;
+			IProjectPluginProviderPlugin plugin;
 
-			if (!PluginManager.TryGet(pluginName, out plugin))
+			if (!PluginManager.TryGetProjectPlugin(pluginName, out plugin))
 			{
 				// We couldn't find the plugin inside the manager.
 				return false;

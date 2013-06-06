@@ -8,7 +8,7 @@ using NHunspell;
 
 namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 {
-	public class NHunspellSpellingPlugin: IPlugin
+	public class NHunspellSpellingPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 

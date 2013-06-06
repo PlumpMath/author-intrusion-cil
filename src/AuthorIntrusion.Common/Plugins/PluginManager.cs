@@ -23,20 +23,23 @@ namespace AuthorIntrusion.Common.Plugins
 		#region Methods
 
 		/// <summary>
-		/// Tries to get the given plugin via the name.
+		/// Tries to get the given project plugin via the name.
 		/// </summary>
 		/// <param name="pluginName">Name of the plugin.</param>
 		/// <param name="plugin">The plugin, if found.</param>
 		/// <returns><c>true<c> if the plugin is found, otherwise </c>false</c>.</returns>
-		public bool TryGet(
+		public bool TryGetProjectPlugin(
 			string pluginName,
-			out IPlugin plugin)
+			out IProjectPluginProviderPlugin plugin)
 		{
+			// Go through all the project plugins and make sure they are both a
+			// project plugin and they match the name.
 			foreach (IPlugin projectPlugin in Plugins)
 			{
-				if (projectPlugin.Name == pluginName)
+				if (projectPlugin.Name == pluginName
+					&& projectPlugin is IProjectPluginProviderPlugin)
 				{
-					plugin = projectPlugin;
+					plugin = (IProjectPluginProviderPlugin) projectPlugin;
 					return true;
 				}
 			}

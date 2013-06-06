@@ -12,7 +12,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 	/// user is typing. This establishes the basic framework for other plugins to
 	/// provide the corrections.
 	/// </summary>
-	public class ImmediateCorrectionPlugin: IPlugin
+	public class ImmediateCorrectionPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 
