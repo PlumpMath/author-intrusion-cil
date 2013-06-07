@@ -59,6 +59,7 @@
     <Compile Include="InsertAfterBlockCommandTests.cs" />
     <Compile Include="InsertMultilineTextCommandTests.cs" />
     <Compile Include="InsertTextBlockCommandTests.cs" />
+    <Compile Include="ProjectMacrosTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplaceTextCommandTests.cs" />
     <Compile Include="SetTextBlockCommandTests.cs" />
