@@ -2,10 +2,16 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
+using System.Linq;
 using C5;
 
 namespace AuthorIntrusion.Common.Plugins
 {
+	/// <summary>
+	/// Gathers and coordinates the various plugins used in the system. This includes
+	/// both project- and system-specific plugins.
+	/// </summary>
 	public class PluginManager
 	{
 		#region Properties
@@ -23,6 +29,24 @@ namespace AuthorIntrusion.Common.Plugins
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the plugin with the specified name.
+		/// </summary>
+		/// <param name="pluginName">Name of the plugin.</param>
+		/// <returns></returns>
+		/// <exception cref="C5.NoSuchItemException">Cannot find plugin:  + pluginName</exception>
+		public IPlugin Get(string pluginName)
+		{
+			IEnumerable<IPlugin> namedPlugins = Plugins.Where(p => p.Name == pluginName);
+
+			foreach (IPlugin plugin in namedPlugins)
+			{
+				return plugin;
+			}
+
+			throw new NoSuchItemException("Cannot find plugin: " + pluginName);
+		}
 
 		/// <summary>
 		/// Tries to get the given project plugin via the name.
