@@ -36,10 +36,10 @@ namespace AuthorIntrusion.Common.Projects
 			// that expand into other macros.
 			string results = input;
 
-			while (results.IndexOf('<') >= 0)
+			while (results.IndexOf('{') >= 0)
 			{
 				// Create a template with all of the variables inside it.
-				var template = new Template(results, '<', '>');
+				var template = new Template(results, '{', '}');
 
 				foreach (KeyValuePair<string, string> macro in Substitutions)
 				{

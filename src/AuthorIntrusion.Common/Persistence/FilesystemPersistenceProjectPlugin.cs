@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml;
+using System.Xml.Serialization;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Common.Projects;
 using MfGames.HierarchicalPaths;
@@ -17,8 +18,6 @@ namespace AuthorIntrusion.Common.Persistence
 	/// </summary>
 	public class FilesystemPersistenceProjectPlugin: IProjectPlugin
 	{
-		public const string ProjectNamespace = "urn:mfgames.com/author-intrusion/project/0";
-
 		#region Properties
 
 		public Guid PluginId { get; private set; }
@@ -54,7 +53,7 @@ namespace AuthorIntrusion.Common.Persistence
 			ProjectMacros macros = SetupMacros(directory);
 
 			// Validate the state.
-			string projectFilename = macros.ExpandMacros("<ProjectPath>");
+			string projectFilename = macros.ExpandMacros("{ProjectPath}");
 
 			if (string.IsNullOrWhiteSpace(projectFilename))
 			{
@@ -82,7 +81,14 @@ namespace AuthorIntrusion.Common.Persistence
 
 			// Start the document and tag.
 			writer.WriteStartDocument(true);
-			writer.WriteStartElement("ai", "project", ProjectNamespace);
+			writer.WriteStartElement("project", XmlConstants.ProjectNamespace);
+
+			// The first time in the project file needs to be the settings we used to
+			// serialize them. This allows the loading process to identify where the
+			// other files will be located.
+			FilesystemPersistenceSettings settings = Settings;
+			var settingsSerializer = new XmlSerializer(settings.GetType());
+			settingsSerializer.Serialize(writer, settings);
 
 			// Return the resulting writer. We don't finish the outermost XML
 			// tag since we'll handle it through the close method.
@@ -109,10 +115,10 @@ namespace AuthorIntrusion.Common.Persistence
 		{
 			FilesystemPersistenceSettings settings = Settings;
 
-			settings.ProjectFilename = "<ProjectDir>/project.aiproj";
-			settings.ExternalBlocksDirectory = "<ProjectDir>/Blocks";
-			settings.ExternalSettingsDirectory = "<ProjectDir>/Settings";
-			settings.ProjectSettingsDirectory = "<ProjectDir>/Settings";
+			settings.ProjectFilename = "{ProjectDir}/project.aiproj";
+			settings.ProjectBlocksDirectory = "{ProjectDir}/Blocks";
+			settings.ExternalSettingsDirectory = "{ProjectDir}/Settings";
+			//settings.ProjectSettingsDirectory = "{ProjectDir}/Settings";
 		}
 
 		/// <summary>
