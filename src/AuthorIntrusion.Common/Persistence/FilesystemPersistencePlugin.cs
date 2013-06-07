@@ -29,7 +29,7 @@ namespace AuthorIntrusion.Common.Persistence
 
 		public IProjectPlugin GetProjectPlugin(Project project)
 		{
-			var projectPlugin = new FilesystemPersistenceProjectPlugin();
+			var projectPlugin = new FilesystemPersistenceProjectPlugin(project);
 			return projectPlugin;
 		}
 

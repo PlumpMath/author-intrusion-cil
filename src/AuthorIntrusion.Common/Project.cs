@@ -40,6 +40,11 @@ namespace AuthorIntrusion.Common
 		public BlockCommandSupervisor Commands { get; private set; }
 
 		/// <summary>
+		/// Gets the macros associated with the project.
+		/// </summary>
+		public ProjectMacros Macros { get; private set; }
+
+		/// <summary>
 		/// Gets the plugin supervisor associated with the project.
 		/// </summary>
 		public PluginSupervisor Plugins { get; private set; }
@@ -70,6 +75,7 @@ namespace AuthorIntrusion.Common
 
 			Commands = new BlockCommandSupervisor(this);
 			Plugins = new PluginSupervisor(this);
+			Macros = new ProjectMacros();
 		}
 
 		#endregion

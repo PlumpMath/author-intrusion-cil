@@ -34,6 +34,12 @@ namespace AuthorIntrusion.Common.Persistence
 		public string ExternalSettingsDirectory { get; set; }
 
 		/// <summary>
+		/// Gets or sets the project filename. This will have the macros expanded.
+		/// If it is blank or null, then it is considered an error condition.
+		/// </summary>
+		public string ProjectFilename { get; set; }
+
+		/// <summary>
 		/// Gets or sets the project settings directory. This is expanded with
 		/// macros to determine where the project settings will be stored. If
 		/// this is blank, then the project settings will be stored in the project
