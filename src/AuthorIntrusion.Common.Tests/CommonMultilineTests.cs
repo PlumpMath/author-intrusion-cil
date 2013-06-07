@@ -91,6 +91,9 @@ namespace AuthorIntrusion.Common.Tests
 					block.SetBlockType(blockTypes.Paragraph);
 				}
 			}
+
+			// Let everything finish running.
+			project.Plugins.WaitForBlockAnalzyers();
 		}
 
 		protected void SetupComplexMultilineTest(

@@ -55,6 +55,7 @@
     <Compile Include="DeleteBlockCommandTests.cs" />
     <Compile Include="DeleteMultilineTextCommandTests.cs" />
     <Compile Include="DeleteTextCommandTests.cs" />
+    <Compile Include="FilesystemPersistenceProjectPluginTests.cs" />
     <Compile Include="InsertAfterBlockCommandTests.cs" />
     <Compile Include="InsertMultilineTextCommandTests.cs" />
     <Compile Include="InsertTextBlockCommandTests.cs" />

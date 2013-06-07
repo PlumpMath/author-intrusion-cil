@@ -4,13 +4,13 @@
 
 using AuthorIntrusion.Common.Plugins;
 
-namespace AuthorIntrusion.Common.Persistance
+namespace AuthorIntrusion.Common.Persistence
 {
 	/// <summary>
 	/// Defines the common interface for all plugins that are involved with reading
 	/// and writing project data to a filesystem or network.
 	/// </summary>
-	public interface IPersistancePlugin: IProjectPluginProviderPlugin
+	public interface IPersistencePlugin: IProjectPluginProviderPlugin
 	{
 	}
 }
