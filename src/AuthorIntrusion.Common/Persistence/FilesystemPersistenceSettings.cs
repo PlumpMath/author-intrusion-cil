@@ -32,6 +32,11 @@ namespace AuthorIntrusion.Common.Persistence
 		public string ExternalSettingsDirectory { get; set; }
 
 		/// <summary>
+		/// Gets or sets the project block types filename. It will have macros expanded.
+		/// </summary>
+		public string ProjectBlockTypesFilename { get; set; }
+
+		/// <summary>
 		/// Gets or sets the external blocks directory. This is the directory where
 		/// external blocks (e.g., chapters that are extracted from the main file) are
 		/// stored.
@@ -69,6 +74,21 @@ namespace AuthorIntrusion.Common.Persistence
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Configures a standard file layout that uses an entire directory for
+		/// the layout. This layout is set up to optimize the handling of the
+		/// project's content, settings, and data with a source control system, such as
+		/// Git.
+		/// </summary>
+		public void SetIndividualDirectoryLayout()
+		{
+			ProjectFilename = "{ProjectDir}/Project.aiproj";
+			ProjectBlockTypesFilename = "{ProjectDir}/Data/Block Types.xml";
+			ProjectBlocksDirectory = "{ProjectDir}/Blocks";
+			ExternalSettingsDirectory = "{ProjectDir}/Settings";
+			ProjectSettingsDirectory = "{ProjectDir}/Settings";
+		}
+
 		public void WriteXml(XmlWriter writer)
 		{
 			// Always start with the version field, because that will control how
@@ -77,6 +97,8 @@ namespace AuthorIntrusion.Common.Persistence
 
 			// Write out the various properties.
 			writer.WriteNonNullElementString("project-filename", ProjectFilename);
+			writer.WriteNonNullElementString(
+				"project-block-types-filename", ProjectBlockTypesFilename);
 			writer.WriteNonNullElementString(
 				"project-blocks-directory", ProjectBlocksDirectory);
 			writer.WriteNonNullElementString(

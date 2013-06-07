@@ -32,6 +32,12 @@ namespace AuthorIntrusion.Common.Projects
 		/// <returns>The output string with macros expanded.</returns>
 		public string ExpandMacros(string input)
 		{
+			// If we have a null, then just return a null.
+			if (string.IsNullOrWhiteSpace(input))
+			{
+				return input;
+			}
+
 			// We have to repeatedly run through the macros since we have macros
 			// that expand into other macros.
 			string results = input;

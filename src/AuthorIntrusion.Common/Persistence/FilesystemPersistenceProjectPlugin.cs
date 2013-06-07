@@ -7,8 +7,10 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Common.Projects;
+using MfGames.Extensions.System.IO;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Common.Persistence
@@ -64,9 +66,128 @@ namespace AuthorIntrusion.Common.Persistence
 			// Create the project file.
 			using (XmlWriter writer = SaveProjectFile(new FileInfo(projectFilename)))
 			{
+				// Write out the various components.
+				SaveProjectBlockTypes(writer, macros);
+				SaveProjectBlocks(writer, macros);
+
 				// Finish up by closing the project file.
 				writer.Close();
 			}
+		}
+
+		private static XmlWriterSettings CreateXmlSettings()
+		{
+			var settings = new XmlWriterSettings
+			{
+				Encoding = Encoding.UTF8,
+				Indent = true,
+				IndentChars = "\t",
+			};
+
+			return settings;
+		}
+
+		/// <summary>
+		/// Saves the project blocks types to the appropriate location so they can
+		/// be reconstructed later.
+		/// </summary>
+		/// <param name="projectWriter">The XML writer for the project file.</param>
+		/// <param name="macros">The macros.</param>
+		private void SaveProjectBlockTypes(
+			XmlWriter projectWriter,
+			ProjectMacros macros)
+		{
+			// Figure out which writer we'll be using.
+			XmlWriter writer = projectWriter;
+			string filename = macros.ExpandMacros(Settings.ProjectBlockTypesFilename);
+
+			if (!string.IsNullOrWhiteSpace(filename))
+			{
+				// Make sure the directory exists.
+				new FileInfo(filename).EnsureParentExists();
+
+				// Create an XML writer for this filename.
+				XmlWriterSettings xmlSettings = CreateXmlSettings();
+				writer = XmlWriter.Create(filename, xmlSettings);
+			}
+
+			// Start by creating the initial element.
+			const string ns = XmlConstants.ProjectNamespace;
+
+			writer.WriteStartElement("block-types", ns);
+
+			// Go through the blocks in the list.
+			foreach (BlockType blockType in Project.BlockTypes.BlockTypes.Values)
+			{
+				// We don't write out system types.
+				if (blockType.IsSystem)
+				{
+					continue;
+				}
+
+				// Write out this item.
+				writer.WriteStartElement("block-type", ns);
+
+				// Write out the relevant fields.
+				writer.WriteElementString("name", ns, blockType.Name);
+				writer.WriteElementString(
+					"is-structural", ns, blockType.IsStructural.ToString());
+
+				// Finish up the item element.
+				writer.WriteEndElement();
+			}
+
+			// Finish up the blocks element.
+			writer.WriteEndElement();
+
+			// If we aren't using the project file, then close the writer.
+			if (projectWriter != writer)
+			{
+				writer.Close();
+				writer.Dispose();
+			}
+		}
+
+		/// <summary>
+		/// Saves the project blocks starting with the main project while allowing
+		/// for external files to be saved in the appropriate location.
+		/// </summary>
+		/// <param name="writer">The XML writer for the project file.</param>
+		/// <param name="macros">The macros.</param>
+		private void SaveProjectBlocks(
+			XmlWriter writer,
+			ProjectMacros macros)
+		{
+			// Start by creating the initial element.
+			const string ns = XmlConstants.ProjectNamespace;
+
+			writer.WriteStartElement("blocks", ns);
+
+			// We need a write lock on the blocks to avoid changes. This also prevents
+			// any background tasks from modifying the blocks during the save process.
+			ProjectBlockCollection blocks = Project.Blocks;
+
+			using (blocks.AcquireWriteLock())
+			{
+				// Go through the blocks in the list.
+				foreach (Block block in blocks)
+				{
+					// Write out this block.
+					writer.WriteStartElement("block", ns);
+
+					// For this pass, we only include block elements that are
+					// user-entered. We'll do a second pass to include the processed
+					// data including TextSpans and parsing status later.
+					writer.WriteElementString("type", ns, block.BlockType.Name);
+					writer.WriteElementString("text", ns, block.Text);
+
+					// Finish up the block.
+					writer.WriteEndElement();
+				}
+			}
+
+			// Finish up the blocks element.
+			writer.WriteEndElement();
 		}
 
 		/// <summary>
@@ -93,32 +214,6 @@ namespace AuthorIntrusion.Common.Persistence
 			// Return the resulting writer. We don't finish the outermost XML
 			// tag since we'll handle it through the close method.
 			return writer;
-		}
-
-		private static XmlWriterSettings CreateXmlSettings()
-		{
-			var settings = new XmlWriterSettings
-			{
-				Encoding = Encoding.UTF8,
-				Indent = true,
-				IndentChars = "\t",
-			};
-
-			return settings;
-		}
-
-		/// <summary>
-		/// Configures a standard file layout that uses an entire directory for
-		/// the layout.
-		/// </summary>
-		public void SetIndividualDirectoryLayout()
-		{
-			FilesystemPersistenceSettings settings = Settings;
-
-			settings.ProjectFilename = "{ProjectDir}/project.aiproj";
-			settings.ProjectBlocksDirectory = "{ProjectDir}/Blocks";
-			settings.ExternalSettingsDirectory = "{ProjectDir}/Settings";
-			//settings.ProjectSettingsDirectory = "{ProjectDir}/Settings";
 		}
 
 		/// <summary>

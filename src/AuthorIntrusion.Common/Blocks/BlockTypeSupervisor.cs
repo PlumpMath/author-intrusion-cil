@@ -26,6 +26,11 @@ namespace AuthorIntrusion.Common.Blocks
 			get { return BlockTypes[blockTypeName]; }
 		}
 
+		/// <summary>
+		/// Gets the block types associated with this Supervisor.
+		/// </summary>
+		public IDictionary<string, BlockType> BlockTypes { get; private set; }
+
 		public BlockType Chapter
 		{
 			get { return this[ChapterName]; }
@@ -61,11 +66,6 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			get { return this[SceneName]; }
 		}
-
-		/// <summary>
-		/// Gets the block types associated with this Supervisor.
-		/// </summary>
-		protected HashDictionary<string, BlockType> BlockTypes { get; private set; }
 
 		#endregion
 

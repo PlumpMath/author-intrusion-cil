@@ -49,7 +49,7 @@ namespace AuthorIntrusion.Common.Tests
 			SetupComplexMultilineTest(blocks.Project, 10);
 
 			// Act
-			projectPlugin.SetIndividualDirectoryLayout();
+			projectPlugin.Settings.SetIndividualDirectoryLayout();
 			projectPlugin.Save(testDirectory);
 
 			// Assert
