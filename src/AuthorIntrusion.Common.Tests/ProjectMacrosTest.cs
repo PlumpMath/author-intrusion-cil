@@ -36,7 +36,7 @@ namespace AuthorIntrusion.Common.Tests
 			macros.Substitutions["ProjectDir"] = "pd";
 
 			// Act
-			string results = macros.ExpandMacros("<ProjectPath>");
+			string results = macros.ExpandMacros("{ProjectPath}");
 
 			// Assert
 			Assert.AreEqual("", results);
@@ -49,10 +49,10 @@ namespace AuthorIntrusion.Common.Tests
 			var macros = new ProjectMacros();
 
 			macros.Substitutions["ProjectDir"] = "pd";
-			macros.Substitutions["ProjectPath"] = "<ProjectDir>/p";
+			macros.Substitutions["ProjectPath"] = "{ProjectDir}/p";
 
 			// Act
-			string results = macros.ExpandMacros("<ProjectPath>");
+			string results = macros.ExpandMacros("{ProjectPath}");
 
 			// Assert
 			Assert.AreEqual("pd/p", results);
@@ -67,7 +67,7 @@ namespace AuthorIntrusion.Common.Tests
 			macros.Substitutions["ProjectDir"] = "pd";
 
 			// Act
-			string results = macros.ExpandMacros("<ProjectDir>");
+			string results = macros.ExpandMacros("{ProjectDir}");
 
 			// Assert
 			Assert.AreEqual("pd", results);

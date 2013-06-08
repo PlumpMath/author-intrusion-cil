@@ -2,7 +2,9 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
 using C5;
+using MfGames.Conversion;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Common.Blocks
@@ -10,7 +12,7 @@ namespace AuthorIntrusion.Common.Blocks
 	/// <summary>
 	/// Implements a dictionary of properties to be assigned to a block.
 	/// </summary>
-	public class BlockPropertyDictionary: HashDictionary<HierarchicalPath, object>
+	public class BlockPropertyDictionary: HashDictionary<HierarchicalPath, string>
 	{
 		#region Methods
 
@@ -26,30 +28,37 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			if (Contains(path))
 			{
-				this[path] = (int) this[path] + amount;
+				int value = Convert.ToInt32(this[path]);
+				this[path] = Convert.ToString(value + amount);
 			}
 			else
 			{
-				this[path] = amount;
+				this[path] = Convert.ToString(amount);
 			}
 		}
 
 		public TResult Get<TResult>(HierarchicalPath path)
 		{
-			var result = (TResult) this[path];
+			string value = this[path];
+			TResult result = ExtendableConvert.Instance.Convert<string, TResult>(value);
 			return result;
 		}
 
+		/// <summary>
+		/// Gets the value at the path, or the default if the item is not a stored
+		/// property.
+		/// </summary>
+		/// <typeparam name="TResult">The type of the result.</typeparam>
+		/// <param name="path">The path.</param>
+		/// <param name="defaultValue">The default value.</param>
+		/// <returns>Either the converted value or the default value.</returns>
 		public TResult GetOrDefault<TResult>(
 			HierarchicalPath path,
 			TResult defaultValue)
 		{
-			if (Contains(path))
-			{
-				return (TResult) this[path];
-			}
-
-			return defaultValue;
+			return Contains(path)
+				? Get<TResult>(path)
+				: defaultValue;
 		}
 
 		#endregion

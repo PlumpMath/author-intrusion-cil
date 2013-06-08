@@ -144,7 +144,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public const string BookName = "Book";
 		public const string ChapterName = "Chapter";
-		public const string EpigraphAttributionName = "EpigraphAttribution";
+		public const string EpigraphAttributionName = "Epigraph Attribution";
 		public const string EpigraphName = "Epigraph";
 		public const string ParagraphName = "Paragraph";
 		public const string SceneName = "Scene";

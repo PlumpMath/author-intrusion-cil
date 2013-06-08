@@ -6,7 +6,6 @@ using System;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using MfGames.Extensions.System.Xml;
 
 namespace AuthorIntrusion.Common.Persistence
 {
@@ -23,42 +22,41 @@ namespace AuthorIntrusion.Common.Persistence
 	{
 		#region Properties
 
-		/// <summary>
-		/// Gets or sets the external settings directory. This is the directory
-		/// where non-project settings are stored. Macros inside the variable will
-		/// be expanded at the point of saving. If this is blank or null, then the
-		/// project settings will be stored in the project file.
-		/// </summary>
+		public string ContentDataFilename { get; set; }
+		public string ContentFilename { get; set; }
+		public string DataDirectory { get; set; }
 		public string ExternalSettingsDirectory { get; set; }
+		public string ExternalSettingsFilename { get; set; }
+		public string InternalContentDataFilename { get; set; }
+		public string InternalContentDirectory { get; set; }
+		public string InternalContentFilename { get; set; }
 
-		/// <summary>
-		/// Gets or sets the project block types filename. It will have macros expanded.
-		/// </summary>
-		public string ProjectBlockTypesFilename { get; set; }
+		public bool NeedsProjectDirectory
+		{
+			get { return string.IsNullOrWhiteSpace(ProjectDirectory); }
+		}
 
-		/// <summary>
-		/// Gets or sets the external blocks directory. This is the directory where
-		/// external blocks (e.g., chapters that are extracted from the main file) are
-		/// stored.
-		/// 
-		/// If this is null or empty, then external files are not allowed. This will
-		/// have macros expanded.
-		/// </summary>
-		public string ProjectBlocksDirectory { get; set; }
+		public bool NeedsProjectFilename
+		{
+			get { return string.IsNullOrWhiteSpace(ProjectFilename); }
+		}
 
-		/// <summary>
-		/// Gets or sets the project filename. This will have the macros expanded.
-		/// If it is blank or null, then it is considered an error condition.
-		/// </summary>
+		public string ProjectDirectory { get; set; }
 		public string ProjectFilename { get; set; }
 
 		/// <summary>
-		/// Gets or sets the project settings directory. This is expanded with
-		/// macros to determine where the project settings will be stored. If
-		/// this is blank, then the project settings will be stored in the project
-		/// file.
+		/// Gets or sets the filename for the settings file. This will contains the
+		/// settings for plugins and configuration settings will be stored here.
+		/// 
+		/// External settings are identified by the ExternalSettingsFilename property.
 		/// </summary>
-		public string ProjectSettingsDirectory { get; set; }
+		/// <remarks>
+		/// This can have macro substitutions (e.g., "{ProjectDir}") in the name
+		/// which will be expanded during use.
+		/// </remarks>
+		public string SettingsFilename { get; set; }
+
+		public string StructureFilename { get; set; }
 
 		#endregion
 
@@ -71,7 +69,18 @@ namespace AuthorIntrusion.Common.Persistence
 
 		public void ReadXml(XmlReader reader)
 		{
-			throw new NotImplementedException();
+			// Read until we get to the end element.
+			while (reader.Read())
+			{
+				Console.WriteLine("XML: " + reader.LocalName);
+
+				if (reader.NodeType == XmlNodeType.EndElement
+					&& reader.LocalName == "sets"
+					&& reader.NamespaceURI == XmlConstants.ProjectNamespace)
+				{
+					return;
+				}
+			}
 		}
 
 		/// <summary>
@@ -82,29 +91,71 @@ namespace AuthorIntrusion.Common.Persistence
 		/// </summary>
 		public void SetIndividualDirectoryLayout()
 		{
-			ProjectFilename = "{ProjectDir}/Project.aiproj";
-			ProjectBlockTypesFilename = "{ProjectDir}/Data/Block Types.xml";
-			ProjectBlocksDirectory = "{ProjectDir}/Blocks";
-			ExternalSettingsDirectory = "{ProjectDir}/Settings";
-			ProjectSettingsDirectory = "{ProjectDir}/Settings";
+			// Setting project directory to null and setting the filename tells
+			// any calling method that we need an output directory instead of a filename
+			// dialog box.
+			ProjectDirectory = null;
+			ProjectFilename = "{ProjectDirectory}/Project.aiproj";
+
+			DataDirectory = "{ProjectDirectory}/Data";
+
+			SettingsFilename = "{ProjectDirectory}/Settings.xml";
+			StructureFilename = "{ProjectDirectory}/Structure.xml";
+
+			ContentFilename = "{ProjectDirectory}/Content.xml";
+			ContentDataFilename = "{DataDirectory}/Content Data.xml";
+			InternalContentDirectory = "{ProjectDirectory}/Content";
+			InternalContentFilename = "{InternalContentDirectory}/{ContentName}.xml";
+			InternalContentDataFilename =
+				"{DataDirectory}/Content/{ContentName} Data.xml";
+
+			ExternalSettingsDirectory = "{ProjectDirectory}/Settings";
+			ExternalSettingsFilename =
+				"{ExternalSettingsDirectory}/{SettingsProviderName}/{SettingsName}.xml";
 		}
 
+		/// <summary>
+		/// Converts an object into its XML representation.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.Xml.XmlWriter" /> stream to which the object is serialized.</param>
 		public void WriteXml(XmlWriter writer)
 		{
 			// Always start with the version field, because that will control how
 			// we read it back in.
-			writer.WriteElementString("version", "1");
+			writer.WriteStartElement("sets", XmlConstants.ProjectNamespace);
+			writer.WriteElementString("version", XmlConstants.ProjectNamespace, "1");
 
 			// Write out the various properties.
-			writer.WriteNonNullElementString("project-filename", ProjectFilename);
-			writer.WriteNonNullElementString(
-				"project-block-types-filename", ProjectBlockTypesFilename);
-			writer.WriteNonNullElementString(
-				"project-blocks-directory", ProjectBlocksDirectory);
-			writer.WriteNonNullElementString(
-				"project-settings-directory", ProjectSettingsDirectory);
-			writer.WriteNonNullElementString(
-				"external-settings-directory", ExternalSettingsDirectory);
+			WriteKeyValue(writer, "ContentDataFilename", ContentDataFilename);
+			WriteKeyValue(writer, "ContentFilename", ContentFilename);
+			WriteKeyValue(writer, "DataDirectory", DataDirectory);
+			WriteKeyValue(writer, "ExternalSettingsDirectory", ExternalSettingsDirectory);
+			WriteKeyValue(writer, "ExternalSettingsFilename", ExternalSettingsFilename);
+			WriteKeyValue(
+				writer, "InternalContentDataFilename", InternalContentDataFilename);
+			WriteKeyValue(writer, "InternalContentDirectory", InternalContentDirectory);
+			WriteKeyValue(writer, "InternalContentFilename", InternalContentFilename);
+			WriteKeyValue(writer, "ProjectDirectory", ProjectDirectory);
+			WriteKeyValue(writer, "ProjectFilename", ProjectFilename);
+			WriteKeyValue(writer, "SettingsFilename", SettingsFilename);
+			WriteKeyValue(writer, "StructureFilename", StructureFilename);
+
+			// Finish up the element.
+			writer.WriteEndElement();
+		}
+
+		private void WriteKeyValue(
+			XmlWriter writer,
+			string key,
+			string value)
+		{
+			if (!string.IsNullOrWhiteSpace(value))
+			{
+				writer.WriteStartElement("set", XmlConstants.ProjectNamespace);
+				writer.WriteAttributeString("key", key);
+				writer.WriteAttributeString("value", value);
+				writer.WriteEndElement();
+			}
 		}
 
 		#endregion
