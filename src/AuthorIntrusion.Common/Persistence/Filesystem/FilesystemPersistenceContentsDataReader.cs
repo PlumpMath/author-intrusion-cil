@@ -5,6 +5,7 @@
 using System;
 using System.Xml;
 using AuthorIntrusion.Common.Blocks;
+using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Common.Persistence.Filesystem
 {
@@ -27,7 +28,7 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			// Figure out which reader we'll be using.
 			bool createdReader;
 			XmlReader reader = GetXmlReader(
-				projectReader, Settings.ContentFilename, out createdReader);
+				projectReader, Settings.ContentDataFilename, out createdReader);
 
 			// Loop through the resulting file until we get to the end of the
 			// XML element we care about.
@@ -53,8 +54,18 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 							return;
 
 						case "block-data":
+							// Increment the block index.
 							blockIndex++;
-							return;
+
+							// If we exceeded the end of the blocks, then we won't
+							// be able to process anymore and should just return.
+							if (blockIndex >= blocks.Count)
+							{
+								return;
+							}
+
+							// Otherwise, continue on.
+							break;
 					}
 				}
 
@@ -88,11 +99,16 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 						string textHashValue = reader.ReadString();
 						int textHash = Convert.ToInt32(textHashValue, 16);
 
-						if (blockIndex >= blocks.Count
-							|| textHash != blocks[blockIndex].Text.GetHashCode())
+						if (textHash != blocks[blockIndex].Text.GetHashCode())
 						{
 							return;
 						}
+						break;
+
+					case "property":
+						var path = new HierarchicalPath(reader["path"]);
+						string value = reader.ReadString();
+						blocks[blockIndex].Properties[path] = value;
 						break;
 				}
 			}

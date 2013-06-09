@@ -23,9 +23,6 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 		/// <param name="projectFile">The project file.</param>
 		public void Read(FileInfo projectFile)
 		{
-			// Create a new, empty project.
-			var project = new Project();
-
 			// Open up an XML stream for the project.
 			using (XmlReader reader = GetXmlReader(projectFile))
 			{
@@ -38,13 +35,13 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				// Read in the various components.
 				var settingsReader = new FilesystemPersistenceSettingsReader(this);
 				var structureReader = new FilesystemPersistenceStructureReader(this);
-				var contentsReader = new FilesystemPersistenceContentReader(this);
+				var contentReader = new FilesystemPersistenceContentReader(this);
+				var contentDataReader = new FilesystemPersistenceContentDataReader(this);
 
 				settingsReader.Read(reader);
 				structureReader.Read(reader);
-				contentsReader.Read(reader);
-
-				//SaveContentData(writer,macros);
+				contentReader.Read(reader);
+				contentDataReader.Read(reader);
 			}
 		}
 

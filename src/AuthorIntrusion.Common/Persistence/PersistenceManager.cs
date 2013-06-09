@@ -37,10 +37,9 @@ namespace AuthorIntrusion.Common.Persistence
 			// of reading this project.
 			var validPlugins = new ArrayList<IPersistencePlugin>();
 
-			foreach (
-				IPersistencePlugin persistencePlugin in
-					plugin.PersistentPlugins.Where(
-						persistencePlugin => persistencePlugin.CanRead(projectFile)))
+			foreach (IPersistencePlugin persistencePlugin in
+				plugin.PersistentPlugins.Where(
+					persistencePlugin => persistencePlugin.CanRead(projectFile)))
 			{
 				validPlugins.Add(persistencePlugin);
 			}

@@ -83,6 +83,11 @@ namespace AuthorIntrusion.Common.Persistence
 
 			macros.Substitutions["ProjectDirectory"] = projectFile.Directory.FullName;
 			macros.Substitutions["ProjectFile"] = projectFile.FullName;
+			macros.Substitutions["DataDirectory"] = settings.DataDirectory;
+			macros.Substitutions["InternalContentDirectory"] =
+				settings.InternalContentDirectory;
+			macros.Substitutions["ExternalSettingsDirectory"] =
+				settings.ExternalSettingsDirectory;
 
 			// Load the project starting with the project.
 			var project = new Project();

@@ -9,6 +9,7 @@ using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
+using MfGames.HierarchicalPaths;
 using NUnit.Framework;
 
 namespace AuthorIntrusion.Common.Tests
@@ -77,6 +78,8 @@ namespace AuthorIntrusion.Common.Tests
 			// Arrange: Create a project with some interesting data and write it out.
 			SetupComplexMultilineTest(blocks.Project, 10);
 			blocks.Project.BlockTypes.Add("Custom Type", false);
+			blocks[0].Properties[new HierarchicalPath("/Test")] = "Custom Property";
+			blocks[0].TextSpans.Add(new TextSpan(1, 3, null, null));
 			projectPlugin.Settings.SetIndividualDirectoryLayout();
 			projectPlugin.Save(testDirectory);
 
@@ -129,6 +132,11 @@ namespace AuthorIntrusion.Common.Tests
 
 			Assert.AreEqual(blockTypes.Paragraph, blocks[9].BlockType);
 			Assert.AreEqual("Line 10", blocks[9].Text);
+
+			// Assert: Verify content data.
+			Assert.AreEqual(1, blocks[0].Properties.Count);
+			Assert.AreEqual(
+				"Custom Property", blocks[0].Properties[new HierarchicalPath("/Test")]);
 		}
 
 		/// <summary>
