@@ -152,29 +152,22 @@ namespace AuthorIntrusion.Common.Persistence
 				projectWriter, macros, Settings.ContentFilename, out createdWriter);
 
 			// Start by creating the initial element.
-			const string ns = XmlConstants.ProjectNamespace;
-
-			writer.WriteStartElement("contents", ns);
+			writer.WriteStartElement("contents", ProjectNamespace);
 			writer.WriteElementString("version", "1");
 
 			// Go through the blocks in the project.
 			ProjectBlockCollection blocks = Project.Blocks;
 
-			for (int blockIndex = 0;
-				blockIndex < blocks.Count;
-				blockIndex++)
+			foreach (Block block in blocks)
 			{
-				// Write out this block.
-				Block block = blocks[blockIndex];
-				writer.WriteStartElement("block", ns);
-				writer.WriteAttributeString(
-					"index", blockIndex.ToString(CultureInfo.InvariantCulture));
+				// Write the beginning of the block.
+				writer.WriteStartElement("block", ProjectNamespace);
 
 				// For this pass, we only include block elements that are
 				// user-entered. We'll do a second pass to include the processed
 				// data including TextSpans and parsing status later.
-				writer.WriteElementString("type", ns, block.BlockType.Name);
-				writer.WriteElementString("text", ns, block.Text);
+				writer.WriteElementString("type", ProjectNamespace, block.BlockType.Name);
+				writer.WriteElementString("text", ProjectNamespace, block.Text);
 
 				// Finish up the block.
 				writer.WriteEndElement();
@@ -206,7 +199,7 @@ namespace AuthorIntrusion.Common.Persistence
 				projectWriter, macros, Settings.ContentDataFilename, out createdWriter);
 
 			// Start by creating the initial element.
-			writer.WriteStartElement("content-data", ns);
+			writer.WriteStartElement("content-data", ProjectNamespace);
 			writer.WriteElementString("version", "1");
 
 			// Go through the blocks in the list.
@@ -226,9 +219,14 @@ namespace AuthorIntrusion.Common.Persistence
 				}
 
 				// Write out this block.
-				writer.WriteStartElement("block-data", ns);
+				writer.WriteStartElement("block-data", ProjectNamespace);
 				writer.WriteAttributeString(
 					"index", blockIndex.ToString(CultureInfo.InvariantCulture));
+
+				// Write out the text of the block so we can identify it later. It
+				// normally will be in order, but this is a second verification
+				// that won't change.
+				writer.WriteElementString("text", ProjectNamespace, block.Text);
 
 				// For this pass, we write out the data generates by the plugins
 				// and internal state.
@@ -292,11 +290,28 @@ namespace AuthorIntrusion.Common.Persistence
 				projectWriter, macros, Settings.SettingsFilename, out createdWriter);
 
 			// Start by creating the initial element.
-			writer.WriteStartElement("settings", ns);
+			writer.WriteStartElement("settings", ProjectNamespace);
 			writer.WriteElementString("version", "1");
 
 			// Write out the project settings.
-			// TODO This breaks everything. Project.Settings.Save(writer);
+			Project project = Project;
+
+			project.Settings.Save(writer);
+
+			// Write out the plugin controllers.
+				var projectControllers = project.Plugins.Controllers;
+			
+			if (!projectControllers.IsEmpty)
+			{
+				writer.WriteStartElement("plugins", ProjectNamespace);
+
+				foreach (ProjectPluginController controller in projectControllers)
+				{
+					writer.WriteElementString("plugin", ProjectNamespace, controller.Name);
+				}
+
+				writer.WriteEndElement();
+			}
 
 			// Finish up the blocks element.
 			writer.WriteEndElement();
@@ -330,13 +345,11 @@ namespace AuthorIntrusion.Common.Persistence
 				projectWriter, macros, Settings.StructureFilename, out createdWriter);
 
 			// Start by creating the initial element.
-			const string ns = XmlConstants.ProjectNamespace;
-
-			writer.WriteStartElement("structure", ns);
+			writer.WriteStartElement("structure", ProjectNamespace);
 			writer.WriteElementString("version", "1");
 
 			// Write out the blocks types first.
-			writer.WriteStartElement("block-types", ns);
+			writer.WriteStartElement("block-types", ProjectNamespace);
 
 			foreach (string blockTypeName in blockTypeNames)
 			{
@@ -349,12 +362,12 @@ namespace AuthorIntrusion.Common.Persistence
 				}
 
 				// Write out this item.
-				writer.WriteStartElement("block-type", ns);
+				writer.WriteStartElement("block-type", ProjectNamespace);
 
 				// Write out the relevant fields.
-				writer.WriteElementString("name", ns, blockType.Name);
+				writer.WriteElementString("name", ProjectNamespace, blockType.Name);
 				writer.WriteElementString(
-					"is-structural", ns, blockType.IsStructural.ToString());
+					"is-structural", ProjectNamespace, blockType.IsStructural.ToString());
 
 				// Finish up the item element.
 				writer.WriteEndElement();
@@ -414,7 +427,7 @@ namespace AuthorIntrusion.Common.Persistence
 			}
 
 			// Write out the start element for the properties list.
-			writer.WriteStartElement("properties", ns);
+			writer.WriteStartElement("properties", ProjectNamespace);
 
 			// Go through all the properties, in order, and write it out.
 			var propertyPaths = new ArrayList<HierarchicalPath>();
@@ -439,17 +452,18 @@ namespace AuthorIntrusion.Common.Persistence
 			string elementName)
 		{
 			// Start by writing out the element.
-			const string ns = XmlConstants.ProjectNamespace;
-
-			writer.WriteStartElement(elementName, ns);
+			writer.WriteStartElement(elementName, ProjectNamespace);
 
 			// Write out the elements of this structure.
-			writer.WriteElementString("block-type", ns, blockStructure.BlockType.Name);
-			writer.WriteStartElement("occurances", ns);
+			writer.WriteElementString(
+				"block-type", ProjectNamespace, blockStructure.BlockType.Name);
+			writer.WriteStartElement("occurances", ProjectNamespace);
 			writer.WriteAttributeString(
-				"minimum", blockStructure.MinimumOccurances.ToString());
+				"minimum",
+				blockStructure.MinimumOccurances.ToString(CultureInfo.InvariantCulture));
 			writer.WriteAttributeString(
-				"maximum", blockStructure.MaximumOccurances.ToString());
+				"maximum",
+				blockStructure.MaximumOccurances.ToString(CultureInfo.InvariantCulture));
 			writer.WriteEndElement();
 
 			// Write out the child elements, if we have one.
@@ -485,7 +499,7 @@ namespace AuthorIntrusion.Common.Persistence
 			}
 
 			// Write out the text spans.
-			writer.WriteStartElement("text-spans", ns);
+			writer.WriteStartElement("text-spans", ProjectNamespace);
 
 			foreach (TextSpan textSpan in block.TextSpans)
 			{
@@ -514,7 +528,7 @@ namespace AuthorIntrusion.Common.Persistence
 
 		#region Fields
 
-		private const string ns = XmlConstants.ProjectNamespace;
+		private const string ProjectNamespace = XmlConstants.ProjectNamespace;
 
 		#endregion
 	}

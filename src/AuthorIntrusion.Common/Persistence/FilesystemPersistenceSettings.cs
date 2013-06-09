@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -69,16 +68,73 @@ namespace AuthorIntrusion.Common.Persistence
 
 		public void ReadXml(XmlReader reader)
 		{
+			// We are already at the starting point of this element, so read until the
+			// end.
+			string elementName = reader.LocalName;
+
 			// Read until we get to the end element.
 			while (reader.Read())
 			{
-				Console.WriteLine("XML: " + reader.LocalName);
+				// If we aren't in our namespace, we don't need to bother.
+				if (reader.NamespaceURI != XmlConstants.ProjectNamespace)
+				{
+					continue;
+				}
 
-				if (reader.NodeType == XmlNodeType.EndElement
-					&& reader.LocalName == "sets"
-					&& reader.NamespaceURI == XmlConstants.ProjectNamespace)
+				// If we got to the end of the node, then stop reading.
+				if (reader.LocalName == elementName)
 				{
 					return;
+				}
+
+				// Look for a key, if we have it, set that value.
+				if (reader.NodeType == XmlNodeType.Element
+					&& reader.LocalName == "setting")
+				{
+					// Set has two parameters. We use the key to figure out which
+					// variable to set.
+					string key = reader["key"];
+					string value = reader["value"];
+
+					switch (key)
+					{
+						case "ContentDataFilename":
+							ContentDataFilename = value;
+							break;
+						case "ContentFilename":
+							ContentFilename = value;
+							break;
+						case "DataDirectory":
+							DataDirectory = value;
+							break;
+						case "ExternalSettingsDirectory":
+							ExternalSettingsDirectory = value;
+							break;
+						case "ExternalSettingsFilename":
+							ExternalSettingsFilename = value;
+							break;
+						case "InternalContentDataFilename":
+							InternalContentDataFilename = value;
+							break;
+						case "InternalContentDirectory":
+							InternalContentDirectory = value;
+							break;
+						case "InternalContentFilename":
+							InternalContentFilename = value;
+							break;
+						case "ProjectDirectory":
+							ProjectDirectory = value;
+							break;
+						case "ProjectFilename":
+							ProjectFilename = value;
+							break;
+						case "SettingsFilename":
+							SettingsFilename = value;
+							break;
+						case "StructureFilename":
+							StructureFilename = value;
+							break;
+					}
 				}
 			}
 		}
@@ -122,36 +178,38 @@ namespace AuthorIntrusion.Common.Persistence
 		{
 			// Always start with the version field, because that will control how
 			// we read it back in.
-			writer.WriteStartElement("sets", XmlConstants.ProjectNamespace);
 			writer.WriteElementString("version", XmlConstants.ProjectNamespace, "1");
 
 			// Write out the various properties.
-			WriteKeyValue(writer, "ContentDataFilename", ContentDataFilename);
-			WriteKeyValue(writer, "ContentFilename", ContentFilename);
-			WriteKeyValue(writer, "DataDirectory", DataDirectory);
-			WriteKeyValue(writer, "ExternalSettingsDirectory", ExternalSettingsDirectory);
-			WriteKeyValue(writer, "ExternalSettingsFilename", ExternalSettingsFilename);
-			WriteKeyValue(
+			WriteSetting(writer, "ContentDataFilename", ContentDataFilename);
+			WriteSetting(writer, "ContentFilename", ContentFilename);
+			WriteSetting(writer, "DataDirectory", DataDirectory);
+			WriteSetting(writer, "ExternalSettingsDirectory", ExternalSettingsDirectory);
+			WriteSetting(writer, "ExternalSettingsFilename", ExternalSettingsFilename);
+			WriteSetting(
 				writer, "InternalContentDataFilename", InternalContentDataFilename);
-			WriteKeyValue(writer, "InternalContentDirectory", InternalContentDirectory);
-			WriteKeyValue(writer, "InternalContentFilename", InternalContentFilename);
-			WriteKeyValue(writer, "ProjectDirectory", ProjectDirectory);
-			WriteKeyValue(writer, "ProjectFilename", ProjectFilename);
-			WriteKeyValue(writer, "SettingsFilename", SettingsFilename);
-			WriteKeyValue(writer, "StructureFilename", StructureFilename);
-
-			// Finish up the element.
-			writer.WriteEndElement();
+			WriteSetting(writer, "InternalContentDirectory", InternalContentDirectory);
+			WriteSetting(writer, "InternalContentFilename", InternalContentFilename);
+			WriteSetting(writer, "ProjectDirectory", ProjectDirectory);
+			WriteSetting(writer, "ProjectFilename", ProjectFilename);
+			WriteSetting(writer, "SettingsFilename", SettingsFilename);
+			WriteSetting(writer, "StructureFilename", StructureFilename);
 		}
 
-		private void WriteKeyValue(
+		/// <summary>
+		/// Writes the setting value to an XML writer.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		/// <param name="key">The key.</param>
+		/// <param name="value">The value.</param>
+		private void WriteSetting(
 			XmlWriter writer,
 			string key,
 			string value)
 		{
 			if (!string.IsNullOrWhiteSpace(value))
 			{
-				writer.WriteStartElement("set", XmlConstants.ProjectNamespace);
+				writer.WriteStartElement("setting", XmlConstants.ProjectNamespace);
 				writer.WriteAttributeString("key", key);
 				writer.WriteAttributeString("value", value);
 				writer.WriteEndElement();
