@@ -87,6 +87,8 @@
     <Compile Include="Persistence\FilesystemPersistencePlugin.cs" />
     <Compile Include="Persistence\FilesystemPersistenceProjectPlugin.cs" />
     <Compile Include="Persistence\FilesystemPersistenceSettings.cs" />
+    <Compile Include="Persistence\Filesystem\FilesystemPersistenceContentsDataReader.cs" />
+    <Compile Include="Persistence\Filesystem\FilesystemPersistenceContentReader.cs" />
     <Compile Include="Persistence\Filesystem\FilesystemPersistenceSettingsReader.cs" />
     <Compile Include="Persistence\Filesystem\FilesystemPersistenceStructureReader.cs" />
     <Compile Include="Persistence\IPersistencePlugin.cs" />

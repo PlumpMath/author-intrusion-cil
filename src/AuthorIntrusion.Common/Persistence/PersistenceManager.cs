@@ -14,17 +14,16 @@ namespace AuthorIntrusion.Common.Persistence
 	/// </summary>
 	public class PersistenceManager
 	{
-		private readonly PersistenceFrameworkPlugin plugin;
+		#region Properties
 
 		/// <summary>
 		/// Gets or sets the singleton instance of the persistence manager.
 		/// </summary>
 		public static PersistenceManager Instance { get; set; }
 
-		public PersistenceManager(PersistenceFrameworkPlugin plugin)
-		{
-			this.plugin = plugin;
-		}
+		#endregion
+
+		#region Methods
 
 		public Project ReadProject(FileInfo projectFile)
 		{
@@ -38,7 +37,10 @@ namespace AuthorIntrusion.Common.Persistence
 			// of reading this project.
 			var validPlugins = new ArrayList<IPersistencePlugin>();
 
-			foreach (IPersistencePlugin persistencePlugin in plugin.PersistentPlugins.Where(persistencePlugin => persistencePlugin.CanRead(projectFile)))
+			foreach (
+				IPersistencePlugin persistencePlugin in
+					plugin.PersistentPlugins.Where(
+						persistencePlugin => persistencePlugin.CanRead(projectFile)))
 			{
 				validPlugins.Add(persistencePlugin);
 			}
@@ -52,14 +54,32 @@ namespace AuthorIntrusion.Common.Persistence
 			// If we have more than one plugin, we can't handle it.
 			if (validPlugins.Count > 1)
 			{
-				throw new FileLoadException("Too many plugins claim they can read the file: " + projectFile);
+				throw new FileLoadException(
+					"Too many plugins claim they can read the file: " + projectFile);
 			}
 
 			// Pass the loading process to the actual plugin we'll be using.
-			var persistentPlugin = validPlugins[0];
+			IPersistencePlugin persistentPlugin = validPlugins[0];
 
 			Project project = persistentPlugin.ReadProject(projectFile);
 			return project;
 		}
+
+		#endregion
+
+		#region Constructors
+
+		public PersistenceManager(PersistenceFrameworkPlugin plugin)
+		{
+			this.plugin = plugin;
+		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly PersistenceFrameworkPlugin plugin;
+
+		#endregion
 	}
 }

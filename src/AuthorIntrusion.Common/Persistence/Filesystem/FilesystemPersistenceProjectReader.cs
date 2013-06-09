@@ -35,17 +35,15 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				//
 				// The reading must be performed in the same order as writing.
 
-				// Read in the settings.
+				// Read in the various components.
 				var settingsReader = new FilesystemPersistenceSettingsReader(this);
+				var structureReader = new FilesystemPersistenceStructureReader(this);
+				var contentsReader = new FilesystemPersistenceContentReader(this);
 
 				settingsReader.Read(reader);
-
-				// Read in the structure.
-				var structureReader = new FilesystemPersistenceStructureReader(this);
-
 				structureReader.Read(reader);
+				contentsReader.Read(reader);
 
-				//SaveContent(writer,macros);
 				//SaveContentData(writer,macros);
 			}
 		}

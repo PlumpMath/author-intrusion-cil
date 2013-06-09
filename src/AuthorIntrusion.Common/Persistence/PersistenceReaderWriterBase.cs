@@ -18,25 +18,7 @@ namespace AuthorIntrusion.Common.Persistence
 
 		#endregion
 
-		#region Constructors
-
-		protected PersistenceReaderWriterBase(
-			PersistenceReaderWriterBase<TSettings> baseReader)
-			: this(baseReader.Project, baseReader.Settings, baseReader.Macros)
-		{
-		}
-
-		protected PersistenceReaderWriterBase(
-			Project project,
-			TSettings settings,
-			ProjectMacros macros)
-		{
-			Project = project;
-			Settings = settings;
-			Macros = macros;
-		}
-
-		#endregion
+		#region Methods
 
 		/// <summary>
 		/// Gets the XML reader for a given file.
@@ -63,7 +45,8 @@ namespace AuthorIntrusion.Common.Persistence
 		/// <param name="filename">The filename.</param>
 		/// <param name="createdReader">if set to <c>true</c> then the reader was created.</param>
 		/// <returns>The XML reader to use.</returns>
-		protected XmlReader GetXmlReader(XmlReader projectReader,
+		protected XmlReader GetXmlReader(
+			XmlReader projectReader,
 			string filename,
 			out bool createdReader)
 		{
@@ -84,5 +67,27 @@ namespace AuthorIntrusion.Common.Persistence
 			createdReader = true;
 			return reader;
 		}
+
+		#endregion
+
+		#region Constructors
+
+		protected PersistenceReaderWriterBase(
+			PersistenceReaderWriterBase<TSettings> baseReader)
+			: this(baseReader.Project, baseReader.Settings, baseReader.Macros)
+		{
+		}
+
+		protected PersistenceReaderWriterBase(
+			Project project,
+			TSettings settings,
+			ProjectMacros macros)
+		{
+			Project = project;
+			Settings = settings;
+			Macros = macros;
+		}
+
+		#endregion
 	}
 }

@@ -55,7 +55,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert
 			string projectFilename = Path.Combine(
-				testDirectory.FullName, "project.aiproj");
+				testDirectory.FullName, "Project.aiproj");
 			Assert.IsTrue(File.Exists(projectFilename));
 		}
 
@@ -87,6 +87,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Assert: Block Types
 			BlockTypeSupervisor blockTypes = project.BlockTypes;
+			blocks = project.Blocks;
 
 			Assert.AreEqual(2, project.Plugins.Controllers.Count);
 			Assert.NotNull(blockTypes["Custom Type"]);
@@ -110,6 +111,24 @@ namespace AuthorIntrusion.Common.Tests
 				blockTypes.Paragraph,
 				project.BlockStructures.RootBlockStructure.ChildStructures[0]
 					.ChildStructures[2].BlockType);
+
+			// Assert: Blocks
+			Assert.AreEqual(10, blocks.Count);
+
+			Assert.AreEqual(blockTypes.Chapter, blocks[0].BlockType);
+			Assert.AreEqual("Line 1", blocks[0].Text);
+
+			Assert.AreEqual(blockTypes.Scene, blocks[1].BlockType);
+			Assert.AreEqual("Line 2", blocks[1].Text);
+
+			Assert.AreEqual(blockTypes.Epigraph, blocks[2].BlockType);
+			Assert.AreEqual("Line 3", blocks[2].Text);
+
+			Assert.AreEqual(blockTypes.EpigraphAttribution, blocks[3].BlockType);
+			Assert.AreEqual("Line 4", blocks[3].Text);
+
+			Assert.AreEqual(blockTypes.Paragraph, blocks[9].BlockType);
+			Assert.AreEqual("Line 10", blocks[9].Text);
 		}
 
 		/// <summary>

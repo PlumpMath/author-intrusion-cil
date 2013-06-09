@@ -266,7 +266,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		/// <param name="ownerCollection">The ownerCollection.</param>
 		public Block(ProjectBlockCollection ownerCollection)
-			: this(ownerCollection, ownerCollection.Project.BlockTypes.Paragraph)
+			: this(ownerCollection, ownerCollection.Project.BlockTypes.Paragraph, "")
 		{
 		}
 
@@ -275,14 +275,16 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		/// <param name="ownerCollection">The ownerCollection.</param>
 		/// <param name="initialBlockType">Initial type of the block.</param>
+		/// <param name="text">The text.</param>
 		public Block(
 			ProjectBlockCollection ownerCollection,
-			BlockType initialBlockType)
+			BlockType initialBlockType,
+			string text = "")
 		{
 			BlockKey = BlockKey.GetNext();
 			OwnerCollection = ownerCollection;
 			blockType = initialBlockType;
-			text = string.Empty;
+			this.text = text;
 			Properties = new BlockPropertyDictionary();
 			TextSpans = new TextSpanCollection();
 			accessLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);

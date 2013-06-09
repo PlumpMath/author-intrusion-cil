@@ -15,12 +15,9 @@ namespace AuthorIntrusion.Common.Persistence
 	/// All of the string variables in here can have project macros in them, which are
 	/// expanded at the point of saving.
 	/// </summary>
-	[XmlRoot(XmlElementName,
-		Namespace = XmlConstants.ProjectNamespace)]
+	[XmlRoot(XmlElementName, Namespace = XmlConstants.ProjectNamespace)]
 	public class FilesystemPersistenceSettings: IXmlSerializable
 	{
-		public const string XmlElementName = "filesystem-persistence-settings";
-
 		#region Properties
 
 		public string ContentDataFilename { get; set; }
@@ -217,6 +214,12 @@ namespace AuthorIntrusion.Common.Persistence
 				writer.WriteEndElement();
 			}
 		}
+
+		#endregion
+
+		#region Fields
+
+		public const string XmlElementName = "filesystem-persistence-settings";
 
 		#endregion
 	}

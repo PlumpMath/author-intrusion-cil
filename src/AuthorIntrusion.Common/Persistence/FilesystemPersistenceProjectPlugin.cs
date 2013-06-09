@@ -75,8 +75,8 @@ namespace AuthorIntrusion.Common.Persistence
 				using (XmlWriter writer = SaveProjectFile(new FileInfo(projectFilename)))
 				{
 					// Write out the various components.
-					SaveSettings(writer,macros);
-					SaveStructure(writer,macros);
+					SaveSettings(writer, macros);
+					SaveStructure(writer, macros);
 					SaveContent(writer, macros);
 					SaveContentData(writer, macros);
 
@@ -152,7 +152,7 @@ namespace AuthorIntrusion.Common.Persistence
 				projectWriter, macros, Settings.ContentFilename, out createdWriter);
 
 			// Start by creating the initial element.
-			writer.WriteStartElement("contents", ProjectNamespace);
+			writer.WriteStartElement("content", ProjectNamespace);
 			writer.WriteElementString("version", "1");
 
 			// Go through the blocks in the project.
@@ -168,6 +168,8 @@ namespace AuthorIntrusion.Common.Persistence
 				// data including TextSpans and parsing status later.
 				writer.WriteElementString("type", ProjectNamespace, block.BlockType.Name);
 				writer.WriteElementString("text", ProjectNamespace, block.Text);
+				writer.WriteElementString(
+					"text-hash", ProjectNamespace, block.Text.GetHashCode().ToString("X8"));
 
 				// Finish up the block.
 				writer.WriteEndElement();
@@ -220,13 +222,12 @@ namespace AuthorIntrusion.Common.Persistence
 
 				// Write out this block.
 				writer.WriteStartElement("block-data", ProjectNamespace);
-				writer.WriteAttributeString(
-					"index", blockIndex.ToString(CultureInfo.InvariantCulture));
 
 				// Write out the text of the block so we can identify it later. It
 				// normally will be in order, but this is a second verification
 				// that won't change.
-				writer.WriteElementString("text", ProjectNamespace, block.Text);
+				writer.WriteElementString(
+					"text-hash", ProjectNamespace, block.Text.GetHashCode().ToString("X8"));
 
 				// For this pass, we write out the data generates by the plugins
 				// and internal state.

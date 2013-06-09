@@ -15,7 +15,7 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 
 		/// <summary>
 		/// Reads the structure file, either from the project reader or the Structure
-		/// file depending on the persistence Structure.
+		/// file depending on the persistence settings.
 		/// </summary>
 		/// <param name="projectReader">The project reader.</param>
 		public void Read(XmlReader projectReader)

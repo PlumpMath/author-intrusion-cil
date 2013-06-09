@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -50,24 +49,26 @@ namespace AuthorIntrusion.Common.Persistence
 			// Open up an XML reader to pull out the critical components we
 			// need to finish loading the file.
 			FilesystemPersistenceSettings settings = null;
-	
-			using (FileStream stream = projectFile.Open(FileMode.Open, FileAccess.Read))
-			using (XmlReader reader = XmlReader.Create(stream))
-			{
-				// Read until we get the file-persistent-settings file.
-				while (reader.Read())
-				{
-					// Ignore everything but the settings object we need to read.
-					if (reader.NamespaceURI != XmlConstants.ProjectNamespace
-						|| reader.NodeType != XmlNodeType.Element
-						|| reader.LocalName != FilesystemPersistenceSettings.XmlElementName)
-					{
-						continue;
-					}
 
-					// Load the settings object into memory.
-					var serializer = new XmlSerializer(typeof (FilesystemPersistenceSettings));
-					settings = (FilesystemPersistenceSettings) serializer.Deserialize(reader);
+			using (FileStream stream = projectFile.Open(FileMode.Open, FileAccess.Read))
+			{
+				using (XmlReader reader = XmlReader.Create(stream))
+				{
+					// Read until we get the file-persistent-settings file.
+					while (reader.Read())
+					{
+						// Ignore everything but the settings object we need to read.
+						if (reader.NamespaceURI != XmlConstants.ProjectNamespace
+							|| reader.NodeType != XmlNodeType.Element
+							|| reader.LocalName != FilesystemPersistenceSettings.XmlElementName)
+						{
+							continue;
+						}
+
+						// Load the settings object into memory.
+						var serializer = new XmlSerializer(typeof (FilesystemPersistenceSettings));
+						settings = (FilesystemPersistenceSettings) serializer.Deserialize(reader);
+					}
 				}
 			}
 
