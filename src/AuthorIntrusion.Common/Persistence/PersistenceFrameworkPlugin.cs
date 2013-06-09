@@ -28,6 +28,14 @@ namespace AuthorIntrusion.Common.Persistence
 			get { return "Persistence Framework"; }
 		}
 
+		/// <summary>
+		/// Gets the list of persistent plugins registered with the framework.
+		/// </summary>
+		public ArrayList<IPersistencePlugin> PersistentPlugins
+		{
+			get { return plugins; }
+		}
+
 		#endregion
 
 		#region Methods
@@ -42,10 +50,10 @@ namespace AuthorIntrusion.Common.Persistence
 		{
 			// Go through all the plugins and add the persistence plugins to our
 			// internal list.
-			IEnumerable<IPersistencePlugin> PersistencePlugins =
+			IEnumerable<IPersistencePlugin> persistencePlugins =
 				additionalPlugins.OfType<IPersistencePlugin>();
 
-			foreach (IPersistencePlugin plugin in PersistencePlugins)
+			foreach (IPersistencePlugin plugin in persistencePlugins)
 			{
 				plugins.Add(plugin);
 			}

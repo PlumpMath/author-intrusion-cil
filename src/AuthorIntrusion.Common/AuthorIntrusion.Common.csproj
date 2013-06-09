@@ -87,9 +87,14 @@
     <Compile Include="Persistence\FilesystemPersistencePlugin.cs" />
     <Compile Include="Persistence\FilesystemPersistenceProjectPlugin.cs" />
     <Compile Include="Persistence\FilesystemPersistenceSettings.cs" />
+    <Compile Include="Persistence\Filesystem\FilesystemPersistenceSettingsReader.cs" />
+    <Compile Include="Persistence\Filesystem\FilesystemPersistenceStructureReader.cs" />
     <Compile Include="Persistence\IPersistencePlugin.cs" />
     <Compile Include="Persistence\PersistenceFrameworkPlugin.cs" />
     <Compile Include="Persistence\PersistenceFrameworkProjectPlugin.cs" />
+    <Compile Include="Persistence\PersistenceManager.cs" />
+    <Compile Include="Persistence\Filesystem\FilesystemPersistenceProjectReader.cs" />
+    <Compile Include="Persistence\PersistenceReaderWriterBase.cs" />
     <Compile Include="Plugins\BlockAnalyzer.cs" />
     <Compile Include="Plugins\IBlockAnalyzerProjectPlugin.cs" />
     <Compile Include="Plugins\IBlockRelationshipProjectPlugin.cs" />

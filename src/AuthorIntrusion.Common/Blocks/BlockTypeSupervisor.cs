@@ -69,6 +69,31 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#endregion
 
+		#region Methods
+
+		/// <summary>
+		/// Adds the specified block type to the collection.
+		/// </summary>
+		/// <param name="blockTypeName">Name of the block type.</param>
+		/// <param name="isStructural">if set to <c>true</c> [is structural].</param>
+		/// <param name="isSystem">if set to <c>true</c> [is system].</param>
+		public void Add(
+			string blockTypeName,
+			bool isStructural,
+			bool isSystem = false)
+		{
+			var blockType = new BlockType(this)
+			{
+				Name = blockTypeName,
+				IsStructural = isStructural,
+				IsSystem = isSystem
+			};
+
+			BlockTypes.Add(blockTypeName, blockType);
+		}
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>

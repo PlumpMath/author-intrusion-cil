@@ -75,8 +75,8 @@ namespace AuthorIntrusion.Common.Persistence
 				using (XmlWriter writer = SaveProjectFile(new FileInfo(projectFilename)))
 				{
 					// Write out the various components.
-					SaveStructure(writer, macros);
-					SaveSettings(writer, macros);
+					SaveSettings(writer,macros);
+					SaveStructure(writer,macros);
 					SaveContent(writer, macros);
 					SaveContentData(writer, macros);
 
@@ -299,15 +299,27 @@ namespace AuthorIntrusion.Common.Persistence
 			project.Settings.Save(writer);
 
 			// Write out the plugin controllers.
-				var projectControllers = project.Plugins.Controllers;
-			
+			IList<ProjectPluginController> projectControllers =
+				project.Plugins.Controllers;
+
 			if (!projectControllers.IsEmpty)
 			{
-				writer.WriteStartElement("plugins", ProjectNamespace);
+				// We always work with sorted plugins to simplify change control.
+				var pluginNames = new ArrayList<string>();
 
 				foreach (ProjectPluginController controller in projectControllers)
 				{
-					writer.WriteElementString("plugin", ProjectNamespace, controller.Name);
+					pluginNames.Add(controller.Name);
+				}
+
+				pluginNames.Sort();
+
+				// Write out a list of plugins.
+				writer.WriteStartElement("plugins", ProjectNamespace);
+
+				foreach (string pluginName in pluginNames)
+				{
+					writer.WriteElementString("plugin", ProjectNamespace, pluginName);
 				}
 
 				writer.WriteEndElement();
