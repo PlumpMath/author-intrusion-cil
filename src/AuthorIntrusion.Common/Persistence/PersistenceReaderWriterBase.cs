@@ -3,8 +3,10 @@
 // http://mfgames.com/author-intrusion/license
 
 using System.IO;
+using System.Text;
 using System.Xml;
 using AuthorIntrusion.Common.Projects;
+using MfGames.Extensions.System.IO;
 
 namespace AuthorIntrusion.Common.Persistence
 {
@@ -19,6 +21,22 @@ namespace AuthorIntrusion.Common.Persistence
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Creates the common XML settings for most writers.
+		/// </summary>
+		/// <returns></returns>
+		protected static XmlWriterSettings CreateXmlSettings()
+		{
+			var settings = new XmlWriterSettings
+			{
+				Encoding = Encoding.UTF8,
+				Indent = true,
+				IndentChars = "\t",
+			};
+
+			return settings;
+		}
 
 		/// <summary>
 		/// Gets the XML reader for a given file.
@@ -68,6 +86,62 @@ namespace AuthorIntrusion.Common.Persistence
 			return reader;
 		}
 
+		/// <summary>
+		/// Gets the macro or project XML writer. If the given variable expands to
+		/// a value, an XML writer is created and returned. Otherwise, the given
+		/// project writer is used instead.
+		/// </summary>
+		/// <param name="projectWriter">The project writer.</param>
+		/// <param name="macros">The macros.</param>
+		/// <param name="variable">The variable.</param>
+		/// <param name="createdWriter">if set to <c>true</c> [created writer].</param>
+		/// <returns></returns>
+		protected static XmlWriter GetXmlWriter(
+			XmlWriter projectWriter,
+			ProjectMacros macros,
+			string variable,
+			out bool createdWriter)
+		{
+			// Expand the variable to get the filename.
+			string filename = macros.ExpandMacros(variable);
+
+			// If the value is null, then we use the project writer.
+			if (string.IsNullOrWhiteSpace(filename))
+			{
+				createdWriter = false;
+				return projectWriter;
+			}
+
+			// Create the writer and return it.
+			var file = new FileInfo(filename);
+			XmlWriter writer = GetXmlWriter(file);
+
+			createdWriter = true;
+
+			return writer;
+		}
+
+		/// <summary>
+		/// Constructs an XML writer and returns it.
+		/// </summary>
+		/// <param name="file">The file.</param>
+		/// <returns></returns>
+		protected static XmlWriter GetXmlWriter(FileInfo file)
+		{
+			// Make sure the parent directory exists for this writer.
+			file.EnsureParentExists();
+
+			// Create an XML writer for this file and return it.
+			XmlWriterSettings xmlSettings = CreateXmlSettings();
+			XmlWriter writer = XmlWriter.Create(file.FullName, xmlSettings);
+
+			// Start the writer's document tag.
+			writer.WriteStartDocument(true);
+
+			// Return the resulting writer.
+			return writer;
+		}
+
 		#endregion
 
 		#region Constructors
@@ -87,6 +161,12 @@ namespace AuthorIntrusion.Common.Persistence
 			Settings = settings;
 			Macros = macros;
 		}
+
+		#endregion
+
+		#region Fields
+
+		protected const string ProjectNamespace = XmlConstants.ProjectNamespace;
 
 		#endregion
 	}
