@@ -15,6 +15,11 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 	{
 		#region Properties
 
+		public string Key
+		{
+			get { return "Immediate Correction"; }
+		}
+
 		public ImmediateCorrectionPlugin Plugin { get; set; }
 		public Project Project { get; set; }
 		public ArrayList<RegisteredSubstitution> Substitutions { get; private set; }

@@ -17,6 +17,15 @@ namespace AuthorIntrusion.Plugins.Counter
 	public class WordCounterProjectPlugin: IBlockRelationshipProjectPlugin,
 		IBlockTypeProjectPlugin
 	{
+		#region Properties
+
+		public string Key
+		{
+			get { return "Word Counter"; }
+		}
+
+		#endregion
+
 		#region Methods
 
 		/// <summary>

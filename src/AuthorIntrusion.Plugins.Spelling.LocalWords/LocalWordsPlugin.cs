@@ -16,7 +16,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			get { return false; }
 		}
 
-		public string Name
+		public string Key
 		{
 			get { return "Local Words"; }
 		}

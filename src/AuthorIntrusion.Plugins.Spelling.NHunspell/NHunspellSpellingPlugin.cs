@@ -17,7 +17,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			get { return false; }
 		}
 
-		public string Name
+		public string Key
 		{
 			get { return "NHunspell"; }
 		}

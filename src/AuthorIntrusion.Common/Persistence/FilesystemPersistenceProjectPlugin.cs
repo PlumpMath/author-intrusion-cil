@@ -24,6 +24,11 @@ namespace AuthorIntrusion.Common.Persistence
 	{
 		#region Properties
 
+		public string Key
+		{
+			get { return "Filesystem Persistence"; }
+		}
+
 		public Guid PluginId { get; private set; }
 		public Project Project { get; private set; }
 		public static HierarchicalPath RootSettingsKey { get; private set; }
@@ -516,6 +521,38 @@ namespace AuthorIntrusion.Common.Persistence
 
 			foreach (TextSpan textSpan in block.TextSpans)
 			{
+				// Write out the beginning of the text span element.
+				writer.WriteStartElement("text-span", ProjectNamespace);
+
+				// Write out the common elements.
+				writer.WriteStartElement("index", ProjectNamespace);
+				writer.WriteAttributeString(
+					"start", textSpan.StartTextIndex.ToString(CultureInfo.InvariantCulture));
+				writer.WriteAttributeString(
+					"stop", textSpan.StopTextIndex.ToString(CultureInfo.InvariantCulture));
+				writer.WriteEndElement();
+
+				// If we have an associated controller, we need to write it out and
+				// it's data. Since we don't know how to write it out, we pass the
+				// writing to the controller.
+				if (textSpan.Controller != null)
+				{
+					// Write out the name of the controller.
+					writer.WriteElementString(
+						"plugin", ProjectNamespace, textSpan.Controller.Key);
+
+					// If we have data, then write out the plugin data tag and pass
+					// the writing to the controller.
+					if (textSpan.Data != null)
+					{
+						writer.WriteStartElement("plugin-data", ProjectNamespace);
+						textSpan.Controller.WriteTextSpanData(writer, textSpan.Data);
+						writer.WriteEndElement();
+					}
+				}
+
+				// Finish up the tag.
+				writer.WriteEndElement();
 			}
 
 			writer.WriteEndElement();

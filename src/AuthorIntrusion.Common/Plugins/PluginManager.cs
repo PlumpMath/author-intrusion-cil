@@ -38,7 +38,7 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <exception cref="C5.NoSuchItemException">Cannot find plugin:  + pluginName</exception>
 		public IPlugin Get(string pluginName)
 		{
-			IEnumerable<IPlugin> namedPlugins = Plugins.Where(p => p.Name == pluginName);
+			IEnumerable<IPlugin> namedPlugins = Plugins.Where(p => p.Key == pluginName);
 
 			foreach (IPlugin plugin in namedPlugins)
 			{
@@ -62,7 +62,7 @@ namespace AuthorIntrusion.Common.Plugins
 			// project plugin and they match the name.
 			foreach (IPlugin projectPlugin in Plugins)
 			{
-				if (projectPlugin.Name == pluginName
+				if (projectPlugin.Key == pluginName
 					&& projectPlugin is IProjectPluginProviderPlugin)
 				{
 					plugin = (IProjectPluginProviderPlugin) projectPlugin;

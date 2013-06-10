@@ -2,8 +2,10 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
@@ -23,6 +25,11 @@ namespace AuthorIntrusion.Plugins.Spelling
 		ITextControllerProjectPlugin
 	{
 		#region Properties
+
+		public string Key
+		{
+			get { return "Spelling Framework"; }
+		}
 
 		private ArrayList<ISpellingProjectPlugin> SpellingControllers { get; set; }
 		private SpellingWordSplitter Splitter { get; set; }
@@ -53,9 +60,10 @@ namespace AuthorIntrusion.Plugins.Spelling
 			// Split the word and perform spell-checking.
 			var misspelledWords = new ArrayList<TextSpan>();
 			C5.IList<TextSpan> words = Splitter.SplitAndNormalize(text);
+			IEnumerable<TextSpan> misspelledSpans =
+				words.Where(span => !IsCorrect(span.GetText(text)));
 
-			foreach (TextSpan span in words.Where(span => !IsCorrect(span.GetText(text)))
-				)
+			foreach (TextSpan span in misspelledSpans)
 			{
 				// We aren't correct, so add it to the list.
 				span.Controller = this;
@@ -161,6 +169,14 @@ namespace AuthorIntrusion.Plugins.Spelling
 			{
 				HandleAddedController(project, controller);
 			}
+		}
+
+		public void WriteTextSpanData(
+			XmlWriter writer,
+			object data)
+		{
+			throw new ApplicationException(
+				"Had a request for writing a text span but spelling has no data.");
 		}
 
 		private C5.IList<SpellingSuggestion> GetSuggestions(string word)

@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Xml;
 using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using C5;
@@ -30,6 +31,18 @@ namespace AuthorIntrusion.Common.Plugins
 		IList<IEditorAction> GetEditorActions(
 			Block block,
 			TextSpan textSpan);
+
+		/// <summary>
+		/// Writes out the data stored in a TextSpan created by this controller.
+		/// This will only be called if the text span data is not null and a wrapper
+		/// tag will already be started before this is called. It is also the 
+		/// responsibility of the calling code to close the opened tag.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		/// <param name="data">The data.</param>
+		void WriteTextSpanData(
+			XmlWriter writer,
+			object data);
 
 		#endregion
 	}

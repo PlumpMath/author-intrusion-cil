@@ -213,7 +213,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			plugins = project.Plugins;
 
 			// Load in the immediate correction editor.
-			if (!plugins.Add("Spelling"))
+			if (!plugins.Add("Spelling Framework"))
 			{
 				// We couldn't load it for some reason.
 				throw new ApplicationException("Cannot load 'Spelling' plugin.");

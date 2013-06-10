@@ -20,9 +20,9 @@ namespace AuthorIntrusion.Plugins.Spelling
 			get { return false; }
 		}
 
-		public string Name
+		public string Key
 		{
-			get { return "Spelling"; }
+			get { return "Spelling Framework"; }
 		}
 
 		#endregion

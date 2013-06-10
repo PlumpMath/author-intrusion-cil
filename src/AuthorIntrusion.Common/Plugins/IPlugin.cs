@@ -12,9 +12,14 @@ namespace AuthorIntrusion.Common.Plugins
 		#region Properties
 
 		/// <summary>
-		/// Gets the cannon, human-readable name of the plugin.
+		/// Gets the internal name of the plugin. This is not displayed to the
+		/// user and it is used to look up the plugin via a string, so it must not
+		/// be translated and cannot change between versions.
+		/// 
+		/// This should contain information to distinguish between different instances
+		/// of the project plugin if the plugin allows multiple instances.
 		/// </summary>
-		string Name { get; }
+		string Key { get; }
 
 		#endregion
 	}

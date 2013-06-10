@@ -2,13 +2,13 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
+using AuthorIntrusion.Plugins.Spelling;
 using MfGames.HierarchicalPaths;
 using NUnit.Framework;
 
@@ -30,7 +30,7 @@ namespace AuthorIntrusion.Common.Tests
 			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
-			Assert.AreEqual(2, plugins.Controllers.Count);
+			Assert.AreEqual(3, plugins.Controllers.Count);
 		}
 
 		[Test]
@@ -49,6 +49,10 @@ namespace AuthorIntrusion.Common.Tests
 			// Arrange: Create a project with some interesting data.
 			SetupComplexMultilineTest(blocks.Project, 10);
 			blocks.Project.BlockTypes.Add("Custom Type", false);
+			blocks[0].Properties[new HierarchicalPath("/Test")] = "Custom Property";
+			blocks[0].TextSpans.Add(new TextSpan(1, 3, null, null));
+			blocks[0].SetText("Incor Wurd Onz");
+			plugins.WaitForBlockAnalzyers();
 
 			// Act
 			projectPlugin.Settings.SetIndividualDirectoryLayout();
@@ -80,6 +84,8 @@ namespace AuthorIntrusion.Common.Tests
 			blocks.Project.BlockTypes.Add("Custom Type", false);
 			blocks[0].Properties[new HierarchicalPath("/Test")] = "Custom Property";
 			blocks[0].TextSpans.Add(new TextSpan(1, 3, null, null));
+			blocks[0].SetText("Incor Wurd Onz");
+			plugins.WaitForBlockAnalzyers();
 			projectPlugin.Settings.SetIndividualDirectoryLayout();
 			projectPlugin.Save(testDirectory);
 
@@ -92,7 +98,7 @@ namespace AuthorIntrusion.Common.Tests
 			BlockTypeSupervisor blockTypes = project.BlockTypes;
 			blocks = project.Blocks;
 
-			Assert.AreEqual(2, project.Plugins.Controllers.Count);
+			Assert.AreEqual(3, project.Plugins.Controllers.Count);
 			Assert.NotNull(blockTypes["Custom Type"]);
 			Assert.IsFalse(blockTypes["Custom Type"].IsStructural);
 
@@ -119,7 +125,7 @@ namespace AuthorIntrusion.Common.Tests
 			Assert.AreEqual(10, blocks.Count);
 
 			Assert.AreEqual(blockTypes.Chapter, blocks[0].BlockType);
-			Assert.AreEqual("Line 1", blocks[0].Text);
+			Assert.AreEqual("Incor Wurd Onz", blocks[0].Text);
 
 			Assert.AreEqual(blockTypes.Scene, blocks[1].BlockType);
 			Assert.AreEqual("Line 2", blocks[1].Text);
@@ -179,7 +185,9 @@ namespace AuthorIntrusion.Common.Tests
 			// Start getting us a simple plugin manager.
 			var persistencePlugin = new PersistenceFrameworkPlugin();
 			var filesystemPlugin = new FilesystemPersistencePlugin();
-			var pluginManager = new PluginManager(persistencePlugin, filesystemPlugin);
+			var spellingPlugin = new SpellingFrameworkPlugin();
+			var pluginManager = new PluginManager(
+				persistencePlugin, filesystemPlugin, spellingPlugin);
 
 			PluginManager.Instance = pluginManager;
 			PersistenceManager.Instance = new PersistenceManager(persistencePlugin);
@@ -192,20 +200,10 @@ namespace AuthorIntrusion.Common.Tests
 			commands = project.Commands;
 			plugins = project.Plugins;
 
-			// Load in the immediate correction editor.
-			if (!plugins.Add("Persistence Framework"))
-			{
-				// We couldn't load it for some reason.
-				throw new ApplicationException(
-					"Cannot load 'Persistence Framework' plugin.");
-			}
-
-			if (!plugins.Add("Filesystem Persistence"))
-			{
-				// We couldn't load it for some reason.
-				throw new ApplicationException(
-					"Cannot load 'Filesystem Persistence' plugin.");
-			}
+			// Load in the plugins we'll be using in these tests.
+			plugins.Add("Persistence Framework");
+			plugins.Add("Filesystem Persistence");
+			plugins.Add("Spelling Framework");
 
 			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).

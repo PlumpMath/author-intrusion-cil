@@ -23,6 +23,12 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 
 		public C5.HashSet<string> CaseInsensitiveDictionary { get; private set; }
 		public C5.HashSet<string> CaseSensitiveDictionary { get; private set; }
+
+		public string Key
+		{
+			get { return "Local Words"; }
+		}
+
 		public Importance Weight { get; set; }
 		private Project Project { get; set; }
 

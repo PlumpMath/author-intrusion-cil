@@ -23,7 +23,7 @@ namespace AuthorIntrusion.Common.Persistence
 			get { return true; }
 		}
 
-		public string Name
+		public string Key
 		{
 			get { return "Filesystem Persistence"; }
 		}

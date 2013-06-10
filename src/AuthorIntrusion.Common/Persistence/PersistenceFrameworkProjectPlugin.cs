@@ -8,6 +8,15 @@ namespace AuthorIntrusion.Common.Persistence
 {
 	public class PersistenceFrameworkProjectPlugin: IProjectPlugin
 	{
+		#region Properties
+
+		public string Key
+		{
+			get { return "Persistence Framework"; }
+		}
+
+		#endregion
+
 		#region Constructors
 
 		public PersistenceFrameworkProjectPlugin(Project project)

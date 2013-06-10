@@ -21,7 +21,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			get { return false; }
 		}
 
-		public string Name
+		public string Key
 		{
 			get { return "Immediate Correction"; }
 		}

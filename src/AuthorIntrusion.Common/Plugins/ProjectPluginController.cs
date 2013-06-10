@@ -34,7 +34,7 @@ namespace AuthorIntrusion.Common.Plugins
 
 		public string Name
 		{
-			get { return Plugin.Name; }
+			get { return Plugin.Key; }
 		}
 
 		public IProjectPluginProviderPlugin Plugin { get; set; }

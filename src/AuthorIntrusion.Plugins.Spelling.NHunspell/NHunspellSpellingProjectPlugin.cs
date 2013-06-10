@@ -20,6 +20,11 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 	{
 		#region Properties
 
+		public string Key
+		{
+			get { return "NHunspell"; }
+		}
+
 		public Importance Weight { get; set; }
 		private NHunspellSpellingPlugin Plugin { get; set; }
 
