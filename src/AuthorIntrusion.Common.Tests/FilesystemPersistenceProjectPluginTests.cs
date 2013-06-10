@@ -82,9 +82,10 @@ namespace AuthorIntrusion.Common.Tests
 			// Arrange: Create a project with some interesting data and write it out.
 			SetupComplexMultilineTest(blocks.Project, 10);
 			blocks.Project.BlockTypes.Add("Custom Type", false);
-			blocks[0].Properties[new HierarchicalPath("/Test")] = "Custom Property";
-			blocks[0].TextSpans.Add(new TextSpan(1, 3, null, null));
-			blocks[0].SetText("Incor Wurd Onz");
+			Block block = blocks[0];
+			block.Properties[new HierarchicalPath("/Test")] = "Custom Property";
+			block.TextSpans.Add(new TextSpan(1, 3, null, null));
+			block.SetText("Incor Wurd Onz");
 			plugins.WaitForBlockAnalzyers();
 			projectPlugin.Settings.SetIndividualDirectoryLayout();
 			projectPlugin.Save(testDirectory);
@@ -95,6 +96,8 @@ namespace AuthorIntrusion.Common.Tests
 			Project project = persistenceManager.ReadProject(projectFile);
 
 			// Assert: Block Types
+			block = project.Blocks[0];
+
 			BlockTypeSupervisor blockTypes = project.BlockTypes;
 			blocks = project.Blocks;
 
@@ -124,8 +127,8 @@ namespace AuthorIntrusion.Common.Tests
 			// Assert: Blocks
 			Assert.AreEqual(10, blocks.Count);
 
-			Assert.AreEqual(blockTypes.Chapter, blocks[0].BlockType);
-			Assert.AreEqual("Incor Wurd Onz", blocks[0].Text);
+			Assert.AreEqual(blockTypes.Chapter, block.BlockType);
+			Assert.AreEqual("Incor Wurd Onz", block.Text);
 
 			Assert.AreEqual(blockTypes.Scene, blocks[1].BlockType);
 			Assert.AreEqual("Line 2", blocks[1].Text);
@@ -140,9 +143,23 @@ namespace AuthorIntrusion.Common.Tests
 			Assert.AreEqual("Line 10", blocks[9].Text);
 
 			// Assert: Verify content data.
-			Assert.AreEqual(1, blocks[0].Properties.Count);
+			Assert.AreEqual(1, block.Properties.Count);
 			Assert.AreEqual(
-				"Custom Property", blocks[0].Properties[new HierarchicalPath("/Test")]);
+				"Custom Property", block.Properties[new HierarchicalPath("/Test")]);
+
+			// Assert: Verify text spans.
+			Assert.AreEqual(4, block.TextSpans.Count);
+
+			Assert.AreEqual(1, block.TextSpans[0].StartTextIndex);
+			Assert.AreEqual(3, block.TextSpans[0].StopTextIndex);
+			Assert.IsNull(block.TextSpans[0].Controller);
+			Assert.IsNull(block.TextSpans[0].Data);
+
+			Assert.AreEqual(0, block.TextSpans[1].StartTextIndex);
+			Assert.AreEqual(5, block.TextSpans[1].StopTextIndex);
+			Assert.AreEqual(
+				project.Plugins["Spelling Framework"], block.TextSpans[1].Controller);
+			Assert.IsNull(block.TextSpans[1].Data);
 		}
 
 		/// <summary>
@@ -209,7 +226,7 @@ namespace AuthorIntrusion.Common.Tests
 			// what type it is).
 			ProjectPluginController pluginController = plugins.Controllers[1];
 			projectPlugin =
-				(FilesystemPersistenceProjectPlugin) pluginController.Controller;
+				(FilesystemPersistenceProjectPlugin) pluginController.ProjectPlugin;
 		}
 
 		#endregion

@@ -5,6 +5,7 @@
 using System;
 using System.Xml;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Plugins;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Common.Persistence.Filesystem
@@ -36,6 +37,10 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			bool reachedData = reader.NamespaceURI == XmlConstants.ProjectNamespace
 				&& reader.LocalName == "content-data";
 			int blockIndex = 0;
+			int startTextIndex = 0;
+			int stopTextIndex = 0;
+			ITextControllerProjectPlugin plugin = null;
+			object pluginData = null;
 
 			while (reader.Read())
 			{
@@ -65,6 +70,17 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 							}
 
 							// Otherwise, continue on.
+							break;
+
+						case "text-span":
+							// Construct a text span from the gathered properties.
+							var textSpan = new TextSpan(
+								startTextIndex, stopTextIndex, plugin, pluginData);
+							blocks[blockIndex].TextSpans.Add(textSpan);
+
+							// Clear out the data to catch any additional errors.
+							plugin = null;
+							pluginData = null;
 							break;
 					}
 				}
@@ -109,6 +125,16 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 						var path = new HierarchicalPath(reader["path"]);
 						string value = reader.ReadString();
 						blocks[blockIndex].Properties[path] = value;
+						break;
+
+					case "index":
+						startTextIndex = Convert.ToInt32(reader["start"]);
+						stopTextIndex = Convert.ToInt32(reader["stop"]);
+						break;
+
+					case "plugin":
+						string projectKey = reader.ReadString();
+						plugin = (ITextControllerProjectPlugin) Project.Plugins[projectKey];
 						break;
 				}
 			}

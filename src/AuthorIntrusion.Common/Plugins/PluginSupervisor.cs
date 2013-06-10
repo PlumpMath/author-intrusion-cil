@@ -20,6 +20,32 @@ namespace AuthorIntrusion.Common.Plugins
 	{
 		#region Properties
 
+		/// <summary>
+		/// Gets the <see cref="IProjectPlugin"/> with the specified plugin key.
+		/// </summary>
+		/// <value>
+		/// The <see cref="IProjectPlugin"/>.
+		/// </value>
+		/// <param name="pluginKey">The plugin key.</param>
+		/// <returns>The IProjectPlugin of the given key.</returns>
+		/// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot find plugin with Key of  + pluginKey</exception>
+		public IProjectPlugin this[string pluginKey]
+		{
+			get
+			{
+				foreach (ProjectPluginController controller in Controllers)
+				{
+					if (controller.ProjectPlugin.Key == pluginKey)
+					{
+						return controller.ProjectPlugin;
+					}
+				}
+
+				throw new KeyNotFoundException(
+					"Cannot find plugin with Key of " + pluginKey);
+			}
+		}
+
 		public C5.IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; private set; }
 		public C5.IList<ProjectPluginController> Controllers { get; private set; }
 		public C5.IList<IImmediateEditorProjectPlugin> ImmediateEditors { get; private set; }
@@ -70,7 +96,7 @@ namespace AuthorIntrusion.Common.Plugins
 			var projectPlugin = new ProjectPluginController(this, plugin);
 
 			// See if this is a plugin framework controller.
-			IProjectPlugin pluginController = projectPlugin.Controller;
+			IProjectPlugin pluginController = projectPlugin.ProjectPlugin;
 			var frameworkController = pluginController as IFrameworkProjectPlugin;
 
 			if (frameworkController != null)
@@ -79,7 +105,7 @@ namespace AuthorIntrusion.Common.Plugins
 
 				foreach (ProjectPluginController currentPlugin in Controllers)
 				{
-					pluginControllers.Add(currentPlugin.Controller);
+					pluginControllers.Add(currentPlugin.ProjectPlugin);
 				}
 
 				frameworkController.InitializePluginFramework(Project, pluginControllers);
@@ -89,7 +115,7 @@ namespace AuthorIntrusion.Common.Plugins
 			// add this one to their internal management.
 			foreach (ProjectPluginController controller in Controllers)
 			{
-				frameworkController = controller.Controller as IFrameworkProjectPlugin;
+				frameworkController = controller.ProjectPlugin as IFrameworkProjectPlugin;
 
 				if (frameworkController != null)
 				{
@@ -168,13 +194,13 @@ namespace AuthorIntrusion.Common.Plugins
 			// the list.
 			IEnumerable<ProjectPluginController> controllers =
 				Controllers.Where(
-					controller => controller.Controller is ITextControllerProjectPlugin);
+					controller => controller.ProjectPlugin is ITextControllerProjectPlugin);
 			var actions = new ArrayList<IEditorAction>();
 
 			foreach (ProjectPluginController controller in controllers)
 			{
 				var textSpanController =
-					(ITextControllerProjectPlugin) controller.Controller;
+					(ITextControllerProjectPlugin) controller.ProjectPlugin;
 				C5.IList<IEditorAction> controllerActions =
 					textSpanController.GetEditorActions(block, textSpan);
 
@@ -266,7 +292,7 @@ namespace AuthorIntrusion.Common.Plugins
 			foreach (ProjectPluginController controller in
 				Controllers.Where(controller => controller.IsImmediateEditor))
 			{
-				ImmediateEditors.Add(controller.Controller);
+				ImmediateEditors.Add(controller.ProjectPlugin);
 			}
 
 			// Determine the block analzyers and put them into their own list.
@@ -275,7 +301,7 @@ namespace AuthorIntrusion.Common.Plugins
 			foreach (ProjectPluginController controller in
 				Controllers.Where(controller => controller.IsBlockAnalyzer))
 			{
-				BlockAnalyzers.Add(controller.Controller);
+				BlockAnalyzers.Add(controller.ProjectPlugin);
 			}
 		}
 

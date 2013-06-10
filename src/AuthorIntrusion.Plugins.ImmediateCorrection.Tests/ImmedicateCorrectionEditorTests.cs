@@ -228,7 +228,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// what type it is).
 			ProjectPluginController pluginController = project.Plugins.Controllers[0];
 			projectPlugin =
-				(ImmediateCorrectionProjectPlugin) pluginController.Controller;
+				(ImmediateCorrectionProjectPlugin) pluginController.ProjectPlugin;
 		}
 
 		#endregion

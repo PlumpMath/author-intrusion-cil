@@ -228,7 +228,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords.Tests
 			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).
 			ProjectPluginController pluginController = plugins.Controllers[1];
-			projectPlugin = (LocalWordsProjectPlugin) pluginController.Controller;
+			projectPlugin = (LocalWordsProjectPlugin) pluginController.ProjectPlugin;
 			projectPlugin.CaseSensitiveDictionary.Add("Correct");
 			projectPlugin.CaseInsensitiveDictionary.Add("one");
 		}

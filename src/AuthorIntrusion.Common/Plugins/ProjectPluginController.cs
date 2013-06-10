@@ -12,13 +12,11 @@ namespace AuthorIntrusion.Common.Plugins
 	{
 		#region Properties
 
-		public IProjectPlugin Controller { get; set; }
-
 		public bool IsBlockAnalyzer
 		{
 			get
 			{
-				bool isImmediateEditor = Controller is IBlockAnalyzerProjectPlugin;
+				bool isImmediateEditor = ProjectPlugin is IBlockAnalyzerProjectPlugin;
 				return isImmediateEditor;
 			}
 		}
@@ -27,7 +25,7 @@ namespace AuthorIntrusion.Common.Plugins
 		{
 			get
 			{
-				bool isImmediateEditor = Controller is IImmediateEditorProjectPlugin;
+				bool isImmediateEditor = ProjectPlugin is IImmediateEditorProjectPlugin;
 				return isImmediateEditor;
 			}
 		}
@@ -38,6 +36,7 @@ namespace AuthorIntrusion.Common.Plugins
 		}
 
 		public IProjectPluginProviderPlugin Plugin { get; set; }
+		public IProjectPlugin ProjectPlugin { get; set; }
 		public PluginSupervisor Supervisor { get; set; }
 
 		#endregion
@@ -50,7 +49,7 @@ namespace AuthorIntrusion.Common.Plugins
 		{
 			Supervisor = supervisor;
 			Plugin = plugin;
-			Controller = plugin.GetProjectPlugin(supervisor.Project);
+			ProjectPlugin = plugin.GetProjectPlugin(supervisor.Project);
 		}
 
 		#endregion

@@ -159,7 +159,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			// Pull out the controller for the correction and cast it (since we know
 			// what type it is).
 			ProjectPluginController pluginController = project.Plugins.Controllers[0];
-			projectPlugin = (WordCounterProjectPlugin) pluginController.Controller;
+			projectPlugin = (WordCounterProjectPlugin) pluginController.ProjectPlugin;
 
 			// Set up logging for the controller.
 			WordCounterProjectPlugin.Logger = Console.WriteLine;

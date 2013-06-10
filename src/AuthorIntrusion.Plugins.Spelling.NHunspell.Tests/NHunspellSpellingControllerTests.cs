@@ -225,7 +225,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).
 			ProjectPluginController pluginController = plugins.Controllers[1];
-			projectPlugin = (NHunspellSpellingProjectPlugin) pluginController.Controller;
+			projectPlugin =
+				(NHunspellSpellingProjectPlugin) pluginController.ProjectPlugin;
 		}
 
 		#endregion
