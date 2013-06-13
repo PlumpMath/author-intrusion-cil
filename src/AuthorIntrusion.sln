@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.Spe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.Spelling.LocalWords.Tests", "AuthorIntrusion.Plugins.Spelling.LocalWords.Tests\AuthorIntrusion.Plugins.Spelling.LocalWords.Tests.csproj", "{D50E762A-FA71-4A9B-85FF-37E2F0488026}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{2514F609-2FC2-48B0-9D1A-2BAC8BC270C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Gui.GtkGui", "AuthorIntrusion.Gui.GtkGui\AuthorIntrusion.Gui.GtkGui.csproj", "{F75C57D2-9954-4E2E-AF3F-57C5770B0E19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +111,10 @@ Global
 		{D50E762A-FA71-4A9B-85FF-37E2F0488026}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D50E762A-FA71-4A9B-85FF-37E2F0488026}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D50E762A-FA71-4A9B-85FF-37E2F0488026}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F75C57D2-9954-4E2E-AF3F-57C5770B0E19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F75C57D2-9954-4E2E-AF3F-57C5770B0E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F75C57D2-9954-4E2E-AF3F-57C5770B0E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F75C57D2-9954-4E2E-AF3F-57C5770B0E19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,5 +133,7 @@ Global
 		{4B25BA0F-00CE-48A7-951E-EECBCCD4B8B0} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
 		{69A53342-73A3-48F2-9C87-493CC82289B2} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
 		{D338F511-6F3A-453D-B144-F6A5532495C5} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
+		{F75C57D2-9954-4E2E-AF3F-57C5770B0E19} = {2514F609-2FC2-48B0-9D1A-2BAC8BC270C5}
+		{052F9132-87EC-40DA-8AD9-25B05FBB98F0} = {2514F609-2FC2-48B0-9D1A-2BAC8BC270C5}
 	EndGlobalSection
 EndGlobal
