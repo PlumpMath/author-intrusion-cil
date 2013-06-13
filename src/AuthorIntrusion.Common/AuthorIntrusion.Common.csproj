@@ -84,6 +84,7 @@
     <Compile Include="Commands\SplitBlockCommand.cs" />
     <Compile Include="Commands\UndoRedoCommand.cs" />
     <Compile Include="Actions\IEditorAction.cs" />
+    <Compile Include="Events\ProjectEventArgs.cs" />
     <Compile Include="Persistence\FilesystemPersistencePlugin.cs" />
     <Compile Include="Persistence\FilesystemPersistenceProjectPlugin.cs" />
     <Compile Include="Persistence\FilesystemPersistenceSettings.cs" />

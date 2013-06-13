@@ -33,7 +33,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 			// Create the main window, show its contents, and start the Gtk loop.
 			var mainWindow = resolver.Get<MainWindow>();
-			
+
 			mainWindow.ShowAll();
 
 			// Start running the application.

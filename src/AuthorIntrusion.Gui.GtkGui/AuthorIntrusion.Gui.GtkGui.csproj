@@ -122,6 +122,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AuthorIntrusion.Common\AuthorIntrusion.Common.csproj">
+      <Project>{00EBF5AB-EFBA-49DD-9B50-C588CED63A89}</Project>
+      <Name>AuthorIntrusion.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
       <Project>{D6565C98-F476-4538-B8E0-D0F1234C8D14}</Project>
       <Name>AuthorIntrusion</Name>

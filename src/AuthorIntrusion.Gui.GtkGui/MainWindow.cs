@@ -3,6 +3,8 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.IO;
+using AuthorIntrusion.Common.Events;
 using Gtk;
 using MfGames.GtkExt.TextEditor;
 using MfGames.GtkExt.TextEditor.Models;
@@ -21,6 +23,10 @@ namespace AuthorIntrusion.Gui.GtkGui
 		/// </summary>
 		private void CreateGui()
 		{
+			// Hook up the accelerator group.
+			accelerators = new AccelGroup();
+			AddAccelGroup(accelerators);
+
 			// The main frame has a VBox to arrange all the components. The VBox
 			// contains the menu, the primary text editor, and a status bar.
 			var vertical = new VBox(false, 0);
@@ -39,8 +45,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		private Widget CreateGuiEditor()
 		{
 			// Create the editor for the user.
-			var editorView = new EditorView();
-			editorView.SetLineBuffer(new MemoryLineBuffer());
+			editorView = new EditorView();
 
 			// Wrap the text editor in a scrollbar.
 			var scrolledWindow = new ScrolledWindow();
@@ -67,16 +72,19 @@ namespace AuthorIntrusion.Gui.GtkGui
 		private Widget CreateGuiMenubar()
 		{
 			// Create the menu items we'll be using.
-			newMenuItem = new MenuItem("_New");
+			newMenuItem = new ImageMenuItem(Stock.New, accelerators);
 			newMenuItem.Activated += OnProjectMenuNewItem;
 
-			openMenuItem = new MenuItem("_Open");
+			openMenuItem = new ImageMenuItem(Stock.Open, accelerators);
 			openMenuItem.Activated += OnProjectMenuOpenItem;
 
-			saveMenuItem = new MenuItem("_Save");
+			saveMenuItem = new ImageMenuItem(Stock.Save, accelerators)
+			{
+				Sensitive = false
+			};
 			saveMenuItem.Activated += OnProjectMenuSaveItem;
 
-			exitMenuItem = new MenuItem("_Quit");
+			exitMenuItem = new ImageMenuItem(Stock.Quit, accelerators);
 			exitMenuItem.Activated += OnProjectMenuExitItem;
 
 			// Create the project menu.
@@ -117,6 +125,22 @@ namespace AuthorIntrusion.Gui.GtkGui
 			Application.Quit();
 		}
 
+		/// <summary>
+		/// Called when a project is loaded.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="ProjectEventArgs"/> instance containing the event data.</param>
+		private void OnProjectLoaded(
+			object sender,
+			ProjectEventArgs e)
+		{
+			// Set up the line buffer for the loaded project.
+			editorView.SetLineBuffer(new MemoryLineBuffer());
+
+			// Update the GUI element.
+			UpdateGuiState();
+		}
+
 		private void OnProjectMenuExitItem(
 			object sender,
 			EventArgs e)
@@ -134,12 +158,83 @@ namespace AuthorIntrusion.Gui.GtkGui
 			object sender,
 			EventArgs e)
 		{
+			// We need an open file dialog box and use that to select the project.
+			var dialog = new FileChooserDialog(
+				"Open Author Intrusion Project",
+				this,
+				FileChooserAction.Open,
+				"Cancel",
+				ResponseType.Cancel,
+				"Open",
+				ResponseType.Accept);
+
+			// Set up the filter on the dialog.
+			var filter = new FileFilter
+			{
+				Name = "Project Files"
+			};
+			filter.AddMimeType("binary/x-author-intrusion");
+			filter.AddPattern("*.aiproj");
+			dialog.AddFilter(filter);
+
+			// Show the dialog and process the results.
+			try
+			{
+				// Show the dialog and get the button the user selected.
+				int results = dialog.Run();
+
+				// If the user accepted a file, then use that to open the file.
+				if (results != (int) ResponseType.Accept)
+				{
+					return;
+				}
+
+				// Get the project file and load it.
+				var file = new FileInfo(dialog.Filename);
+
+				if (!file.Exists)
+				{
+					return;
+				}
+
+				// Load the project into memory.
+				projectManager.OpenProject(file);
+			}
+			finally
+			{
+				// Destroy the dialog the box.
+				dialog.Destroy();
+			}
 		}
 
 		private void OnProjectMenuSaveItem(
 			object sender,
 			EventArgs e)
 		{
+		}
+
+		/// <summary>
+		/// Called when a project is unloaded.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="ProjectEventArgs"/> instance containing the event data.</param>
+		private void OnProjectUnloaded(
+			object sender,
+			ProjectEventArgs e)
+		{
+			// Remove the line buffer.
+			editorView.ClearLineBuffer();
+
+			// Update the GUI state elements.
+			UpdateGuiState();
+		}
+
+		/// <summary>
+		/// Updates the state of various components of the GUI.
+		/// </summary>
+		private void UpdateGuiState()
+		{
+			saveMenuItem.Sensitive = projectManager.HasLoadedProject;
 		}
 
 		#endregion
@@ -151,6 +246,9 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			// Set up the manager to handle project loading and unloading.
 			this.projectManager = projectManager;
+
+			projectManager.ProjectLoaded += OnProjectLoaded;
+			projectManager.ProjectUnloaded += OnProjectUnloaded;
 
 			// Set up the GUI elements.
 			CreateGui();
@@ -165,6 +263,9 @@ namespace AuthorIntrusion.Gui.GtkGui
 		#endregion
 
 		#region Fields
+
+		private AccelGroup accelerators;
+		private EditorView editorView;
 
 		private MenuItem exitMenuItem;
 
