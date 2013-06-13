@@ -7,7 +7,6 @@ using System.IO;
 using AuthorIntrusion.Common.Events;
 using Gtk;
 using MfGames.GtkExt.TextEditor;
-using MfGames.GtkExt.TextEditor.Models;
 
 namespace AuthorIntrusion.Gui.GtkGui
 {
@@ -135,7 +134,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 			ProjectEventArgs e)
 		{
 			// Set up the line buffer for the loaded project.
-			editorView.SetLineBuffer(new MemoryLineBuffer());
+			var projectLineBuffer = new ProjectLineBuffer(e.Project);
+			editorView.SetLineBuffer(projectLineBuffer);
 
 			// Update the GUI element.
 			UpdateGuiState();
