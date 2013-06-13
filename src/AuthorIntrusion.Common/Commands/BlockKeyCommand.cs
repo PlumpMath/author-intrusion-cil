@@ -25,15 +25,12 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		public void Do(Project project)
-		{
-			// Because this is a block command, we need to get a writer lock on the
-			// block.
-			using (project.Blocks.AcquireUpgradableReadLock())
-			{
-				UnlockedDo(project);
-			}
-		}
+		/// <summary>
+		/// Acquires the locks needed for a specific operation and then performs
+		/// UnlockedDo().
+		/// </summary>
+		/// <param name="project">The project.</param>
+		public abstract void Do(Project project);
 
 		public IBlockCommand GetInverseCommand(Project project)
 		{

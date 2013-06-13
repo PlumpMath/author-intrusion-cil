@@ -10,7 +10,7 @@ namespace AuthorIntrusion.Common.Commands
 	/// Encapsulates the functionality for a command that takes a single block and
 	/// index (e.g., BlockPosition).
 	/// </summary>
-	public abstract class BlockPositionCommand: BlockKeyCommand
+	public abstract class BlockPositionCommand: SingleBlockKeyCommand
 	{
 		#region Properties
 
