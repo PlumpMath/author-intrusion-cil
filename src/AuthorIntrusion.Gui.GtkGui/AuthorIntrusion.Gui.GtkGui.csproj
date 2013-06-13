@@ -121,6 +121,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
+      <Project>{D6565C98-F476-4538-B8E0-D0F1234C8D14}</Project>
+      <Name>AuthorIntrusion</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

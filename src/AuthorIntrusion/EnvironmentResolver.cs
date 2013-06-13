@@ -20,6 +20,17 @@ namespace AuthorIntrusion
 		#region Methods
 
 		/// <summary>
+		/// Gets a specific type of the given instance and returns it.
+		/// </summary>
+		/// <typeparam name="TResult">The type of the result.</typeparam>
+		/// <returns>The TResult item.</returns>
+		public TResult Get<TResult>()
+		{
+			var result = kernel.Get<TResult>();
+			return result;
+		}
+
+		/// <summary>
 		/// Loads and initializes the plugin manager with all the plugins that can
 		/// be found in the current environment.
 		/// </summary>

@@ -23,9 +23,18 @@ namespace AuthorIntrusion.Gui.GtkGui
 			// Initial the Gtk GUI framework.
 			Application.Init("Author Intrusion", ref args);
 
-			// Create a single window and show it.
-			var window = new MainWindow();
-			window.ShowAll();
+			// We use the Inversion of Control (IoC) container to resolve all the
+			// elements of the window. This lets everything wire up together without
+			// having a lot of maintenance or singletons.
+			var resolver = new EnvironmentResolver();
+
+			// Set up the environment.
+			resolver.LoadPluginManager();
+
+			// Create the main window, show its contents, and start the Gtk loop.
+			var mainWindow = resolver.Get<MainWindow>();
+			
+			mainWindow.ShowAll();
 
 			// Start running the application.
 			Application.Run();
