@@ -90,18 +90,19 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 		public void WriteSettings()
 		{
 			// Get the settings and clear out the lists.
-			var settings = Project.Settings.Get<LocalWordsSettings>(LocalWordsSettings.SettingsPath);
+			var settings =
+				Project.Settings.Get<LocalWordsSettings>(LocalWordsSettings.SettingsPath);
 
 			settings.CaseInsensitiveDictionary.Clear();
 			settings.CaseSensitiveDictionary.Clear();
 
 			// Add in the words from the settings.
-			foreach(string word in CaseInsensitiveDictionary)
+			foreach (string word in CaseInsensitiveDictionary)
 			{
 				settings.CaseInsensitiveDictionary.Add(word);
 			}
 
-			foreach(string word in CaseSensitiveDictionary)
+			foreach (string word in CaseSensitiveDictionary)
 			{
 				settings.CaseSensitiveDictionary.Add(word);
 			}

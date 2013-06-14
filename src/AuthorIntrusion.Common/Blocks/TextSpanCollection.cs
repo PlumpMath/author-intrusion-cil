@@ -16,6 +16,21 @@ namespace AuthorIntrusion.Common.Blocks
 		#region Methods
 
 		/// <summary>
+		/// Returns true if there is text span that contains the given index.
+		/// </summary>
+		/// <param name="textIndex"></param>
+		/// <returns></returns>
+		public bool Contains(int textIndex)
+		{
+			// If we have any text span in range, then return true. Otherwise,
+			// return false to indicate nothing contains this range.
+			return
+				this.Any(
+					textSpan =>
+						textIndex >= textSpan.StartTextIndex && textIndex < textSpan.StopTextIndex);
+		}
+
+		/// <summary>
 		/// Removes all the text spans of a given controller.
 		/// </summary>
 		/// <param name="controller">The controller to remove the spans for.</param>

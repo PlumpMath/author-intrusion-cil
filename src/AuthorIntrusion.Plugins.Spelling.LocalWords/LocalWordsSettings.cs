@@ -17,11 +17,6 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 	[XmlRoot("local-words-settings", Namespace = XmlConstants.ProjectNamespace)]
 	public class LocalWordsSettings: IXmlSerializable
 	{
-		public XmlSchema GetSchema()
-		{
-			return null;
-		}
-
 		#region Properties
 
 		public HashSet<string> CaseInsensitiveDictionary { get; private set; }
@@ -30,6 +25,11 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 		#endregion
 
 		#region Methods
+
+		public XmlSchema GetSchema()
+		{
+			return null;
+		}
 
 		public void ReadXml(XmlReader reader)
 		{

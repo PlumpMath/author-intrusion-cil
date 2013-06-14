@@ -106,7 +106,8 @@ namespace AuthorIntrusion.Integration.Tests
 			BlockTypeSupervisor blockTypes = project.BlockTypes;
 			blocks = project.Blocks;
 
-			Assert.AreEqual(6, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
+			Assert.AreEqual(
+				6, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
 			Assert.NotNull(blockTypes["Custom Type"]);
 			Assert.IsFalse(blockTypes["Custom Type"].IsStructural);
 
@@ -252,7 +253,8 @@ namespace AuthorIntrusion.Integration.Tests
 			var immediateCorrectionProjectPlugin =
 				(ImmediateCorrectionProjectPlugin) plugins["Immediate Correction"];
 
-			immediateCorrectionProjectPlugin.AddSubstitution("Grey", "Gray", SubstitutionOptions.WholeWord);
+			immediateCorrectionProjectPlugin.AddSubstitution(
+				"Grey", "Gray", SubstitutionOptions.WholeWord);
 
 			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).

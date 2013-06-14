@@ -2,10 +2,13 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
+using MfGames.GtkExt;
 using MfGames.GtkExt.TextEditor.Models;
 using MfGames.GtkExt.TextEditor.Models.Buffers;
 
@@ -46,6 +49,33 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			string line = GetLineText(lineIndex, lineContexts);
 			return line.Length;
+		}
+
+		public override string GetLineMarkup(
+			int lineIndex,
+			LineContexts lineContexts)
+		{
+			// We need to get a read-only lock on the block.
+			using (blocks.AcquireReadLock())
+			{
+				// Grab the block.
+				Block block = blocks[lineIndex];
+
+				using (block.AcquireReadLock())
+				{
+					// Now that we have a block, grab the text and text spans and
+					// format them. If we don't have any text spans, we can return
+					// a simple formatted string.
+					string text = block.Text;
+					TextSpanCollection spans = block.TextSpans;
+					string markup = spans.IsEmpty
+						? PangoUtility.Escape(text)
+						: FormatText(text, spans);
+
+					// Return the resulting markup.
+					return markup;
+				}
+			}
 		}
 
 		public override string GetLineNumber(int lineIndex)
@@ -217,6 +247,60 @@ namespace AuthorIntrusion.Gui.GtkGui
 						new BufferPosition(operation.LineIndex, commands.LastPosition.TextIndex));
 				return results;
 			}
+		}
+
+		/// <summary>
+		/// Formats the text using the spans, adding in error formatting if there
+		/// is a text span.
+		/// </summary>
+		/// <param name="text">The text to format.</param>
+		/// <param name="spans">The spans we need to use to format.</param>
+		/// <returns>A Pango-formatted string.</returns>
+		private string FormatText(
+			string text,
+			TextSpanCollection spans)
+		{
+			// Create a string builder and go through the text, one character at a time.
+			var buffer = new StringBuilder();
+			bool inSpan = false;
+
+			for (int index = 0;
+				index < text.Length;
+				index++)
+			{
+				// Grab the character at this position in the text.
+				char c = text[index];
+				bool hasSpan = spans.Contains(index);
+
+				// If the inSpan and hasSpan is different, we need to either
+				// open or close the span.
+				if (hasSpan != inSpan)
+				{
+					// Add in the tag depending on if we are opening or close the tag.
+					string tag = inSpan
+						? "</span>"
+						: "<span underline='error' underline_color='red' color='red'>";
+
+					buffer.Append(tag);
+
+					// Update the current inSpan state.
+					inSpan = hasSpan;
+				}
+
+				// Add in the character we've been processing.
+				buffer.Append(c);
+			}
+
+			// Check to see if we were in a tag, if we are, we need to close it.
+			if (inSpan)
+			{
+				buffer.Append("</span>");
+			}
+
+			// Return the resulting buffer.
+			string markup = buffer.ToString();
+			Debug.WriteLine("M: " + markup);
+			return markup;
 		}
 
 		#endregion

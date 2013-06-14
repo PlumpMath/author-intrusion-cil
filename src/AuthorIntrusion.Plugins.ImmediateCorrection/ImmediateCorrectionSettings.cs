@@ -15,8 +15,9 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 	/// <summary>
 	/// A configuration settings for an immediate correction controller.
 	/// </summary>
-	[XmlRoot("immediate-correction-settings",Namespace = XmlConstants.ProjectNamespace)]
-	public class ImmediateCorrectionSettings:IXmlSerializable
+	[XmlRoot("immediate-correction-settings",
+		Namespace = XmlConstants.ProjectNamespace)]
+	public class ImmediateCorrectionSettings: IXmlSerializable
 	{
 		#region Properties
 
@@ -74,10 +75,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 		public void WriteXml(XmlWriter writer)
 		{
 			// Write out a version field.
-			writer.WriteElementString("version","1");
+			writer.WriteElementString("version", "1");
 
 			// Write out all the substitutions.
-			foreach(RegisteredSubstitution substitution in Substitutions)
+			foreach (RegisteredSubstitution substitution in Substitutions)
 			{
 				writer.WriteStartElement("substitution", XmlConstants.ProjectNamespace);
 				writer.WriteAttributeString("search", substitution.Search);

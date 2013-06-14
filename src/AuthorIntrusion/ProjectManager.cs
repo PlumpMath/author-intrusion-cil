@@ -70,23 +70,6 @@ namespace AuthorIntrusion
 			ProjectFile = null;
 		}
 
-		public void SaveProject()
-		{
-			if (HasLoadedProject)
-			{
-				// Get the filesystem plugin.
-				var plugin =
-					(FilesystemPersistenceProjectPlugin)
-						Project.Plugins["Filesystem Persistence"];
-
-				plugin.Settings.SetIndividualDirectoryLayout();
-				plugin.Settings.ProjectDirectory = ProjectFile.Directory.FullName;
-
-				// Save the project file.
-				plugin.Save(ProjectFile.Directory);
-			}
-		}
-
 		/// <summary>
 		/// Opens the project from the given file and loads it into memory.
 		/// </summary>
@@ -103,6 +86,23 @@ namespace AuthorIntrusion
 
 			SetProject(project);
 			ProjectFile = projectFile;
+		}
+
+		public void SaveProject()
+		{
+			if (HasLoadedProject)
+			{
+				// Get the filesystem plugin.
+				var plugin =
+					(FilesystemPersistenceProjectPlugin)
+						Project.Plugins["Filesystem Persistence"];
+
+				plugin.Settings.SetIndividualDirectoryLayout();
+				plugin.Settings.ProjectDirectory = ProjectFile.Directory.FullName;
+
+				// Save the project file.
+				plugin.Save(ProjectFile.Directory);
+			}
 		}
 
 		/// <summary>

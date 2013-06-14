@@ -196,9 +196,7 @@ namespace AuthorIntrusion.Common.Tests
 			var persistencePlugin = new PersistenceFrameworkPlugin();
 			var filesystemPlugin = new FilesystemPersistencePlugin();
 
-			var pluginManager = new PluginManager(
-				persistencePlugin,
-				filesystemPlugin);
+			var pluginManager = new PluginManager(persistencePlugin, filesystemPlugin);
 
 			PluginManager.Instance = pluginManager;
 			PersistenceManager.Instance = new PersistenceManager(persistencePlugin);
