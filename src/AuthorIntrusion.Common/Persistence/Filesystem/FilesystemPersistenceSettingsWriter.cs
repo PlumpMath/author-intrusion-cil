@@ -32,6 +32,7 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			// Write out the project settings.
 			Project project = Project;
 
+			project.Settings.Flush();
 			project.Settings.Save(writer);
 
 			// Write out the plugin controllers.

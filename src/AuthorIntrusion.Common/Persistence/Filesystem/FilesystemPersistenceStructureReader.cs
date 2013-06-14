@@ -106,6 +106,7 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			// If we created the reader, close it.
 			if (createdReader)
 			{
+				reader.Close();
 				reader.Dispose();
 			}
 		}

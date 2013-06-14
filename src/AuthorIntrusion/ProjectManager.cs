@@ -79,7 +79,7 @@ namespace AuthorIntrusion
 					(FilesystemPersistenceProjectPlugin)
 						Project.Plugins["Filesystem Persistence"];
 
-				plugin.Settings.ProjectFilename = ProjectFile.FullName;
+				plugin.Settings.SetIndividualDirectoryLayout();
 				plugin.Settings.ProjectDirectory = ProjectFile.Directory.FullName;
 
 				// Save the project file.

@@ -115,7 +115,7 @@ namespace AuthorIntrusion.Common.Persistence
 		{
 			Project = project;
 			PluginId = Guid.NewGuid();
-			SettingsKey = new HierarchicalPath(PluginId.ToString(), RootSettingsKey);
+			SettingsKey = RootSettingsKey; // TODO new HierarchicalPath(PluginId.ToString(),RootSettingsKey);
 		}
 
 		#endregion

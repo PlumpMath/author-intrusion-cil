@@ -42,6 +42,9 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				structureReader.Read(reader);
 				contentReader.Read(reader);
 				contentDataReader.Read(reader);
+
+				// Close the file and stream.
+				reader.Close();
 			}
 		}
 
