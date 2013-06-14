@@ -62,10 +62,9 @@ namespace AuthorIntrusion.Gui.GtkGui
 			using (blocks.AcquireReadLock())
 			{
 				// Create the command and submit it to the project's command manager.
-				//Block block = blocks[lineIndex];
-				//string blockType = block.BlockType.Name;
-				//TODO return blockType
-				return "Paragraph";
+				Block block = blocks[lineIndex];
+				string blockTypeName = block.BlockType.Name;
+				return blockTypeName;
 			}
 		}
 

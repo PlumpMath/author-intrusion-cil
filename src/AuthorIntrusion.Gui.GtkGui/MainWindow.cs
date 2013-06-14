@@ -45,6 +45,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			// Create the editor for the user.
 			editorView = new EditorView();
+			EditorViewTheme.SetupTheme(editorView.Theme);
 
 			// Wrap the text editor in a scrollbar.
 			var scrolledWindow = new ScrolledWindow();
