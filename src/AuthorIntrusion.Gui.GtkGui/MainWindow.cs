@@ -78,6 +78,12 @@ namespace AuthorIntrusion.Gui.GtkGui
 			openMenuItem = new ImageMenuItem(Stock.Open, accelerators);
 			openMenuItem.Activated += OnProjectMenuOpenItem;
 
+			closeMenuItem = new ImageMenuItem(Stock.Close, accelerators)
+			{
+				Sensitive = false
+			};
+			closeMenuItem.Activated += OnProjectMenuCloseItem;
+
 			saveMenuItem = new ImageMenuItem(Stock.Save, accelerators)
 			{
 				Sensitive = false
@@ -92,6 +98,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			{
 				newMenuItem,
 				openMenuItem,
+				closeMenuItem,
 				new SeparatorMenuItem(),
 				saveMenuItem,
 				new SeparatorMenuItem(),
@@ -140,6 +147,13 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 			// Update the GUI element.
 			UpdateGuiState();
+		}
+
+		private void OnProjectMenuCloseItem(
+			object sender,
+			EventArgs e)
+		{
+			projectManager.CloseProject();
 		}
 
 		private void OnProjectMenuExitItem(
@@ -212,6 +226,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			object sender,
 			EventArgs e)
 		{
+			projectManager.SaveProject();
 		}
 
 		/// <summary>
@@ -236,6 +251,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		private void UpdateGuiState()
 		{
 			saveMenuItem.Sensitive = projectManager.HasLoadedProject;
+			closeMenuItem.Sensitive = projectManager.HasLoadedProject;
 		}
 
 		#endregion
@@ -266,6 +282,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		#region Fields
 
 		private AccelGroup accelerators;
+		private ImageMenuItem closeMenuItem;
 		private EditorView editorView;
 
 		private MenuItem exitMenuItem;

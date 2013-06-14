@@ -38,6 +38,11 @@ namespace AuthorIntrusion
 		/// </summary>
 		public Project Project { get; private set; }
 
+		/// <summary>
+		/// The file of the currently loaded project.
+		/// </summary>
+		protected FileInfo ProjectFile { get; private set; }
+
 		#endregion
 
 		#region Events
@@ -57,6 +62,32 @@ namespace AuthorIntrusion
 		#region Methods
 
 		/// <summary>
+		/// Closes the currently loaded project, if any.
+		/// </summary>
+		public void CloseProject()
+		{
+			SetProject(null);
+			ProjectFile = null;
+		}
+
+		public void SaveProject()
+		{
+			if (HasLoadedProject)
+			{
+				// Get the filesystem plugin.
+				var plugin =
+					(FilesystemPersistenceProjectPlugin)
+						Project.Plugins["Filesystem Persistence"];
+
+				plugin.Settings.ProjectFilename = ProjectFile.FullName;
+				plugin.Settings.ProjectDirectory = ProjectFile.Directory.FullName;
+
+				// Save the project file.
+				plugin.Save(ProjectFile.Directory);
+			}
+		}
+
+		/// <summary>
 		/// Opens the project from the given file and loads it into memory.
 		/// </summary>
 		/// <param name="projectFile">The project file.</param>
@@ -71,6 +102,7 @@ namespace AuthorIntrusion
 			Project project = plugin.ReadProject(projectFile);
 
 			SetProject(project);
+			ProjectFile = projectFile;
 		}
 
 		/// <summary>
