@@ -66,7 +66,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 		/// <summary>
 		/// Retrieves the setting substitutions and rebuilds the internal list.
 		/// </summary>
-		public void RetrieveSettings()
+		public void ReadSettings()
 		{
 			// Clear out the existing settings.
 			CaseInsensitiveDictionary.Clear();
@@ -84,6 +84,29 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			}
 		}
 
+		/// <summary>
+		/// Write out the settings to the settings.
+		/// </summary>
+		public void WriteSettings()
+		{
+			// Get the settings and clear out the lists.
+			var settings = Project.Settings.Get<LocalWordsSettings>(LocalWordsSettings.SettingsPath);
+
+			settings.CaseInsensitiveDictionary.Clear();
+			settings.CaseSensitiveDictionary.Clear();
+
+			// Add in the words from the settings.
+			foreach(string word in CaseInsensitiveDictionary)
+			{
+				settings.CaseInsensitiveDictionary.Add(word);
+			}
+
+			foreach(string word in CaseSensitiveDictionary)
+			{
+				settings.CaseSensitiveDictionary.Add(word);
+			}
+		}
+
 		#endregion
 
 		#region Constructors
@@ -98,7 +121,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			CaseSensitiveDictionary = new C5.HashSet<string>();
 
 			// Load in the initial settings.
-			RetrieveSettings();
+			ReadSettings();
 		}
 
 		#endregion

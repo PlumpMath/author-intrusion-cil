@@ -4,17 +4,23 @@
 
 using System.IO;
 using System.Runtime.CompilerServices;
+using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
+using AuthorIntrusion.Common.Tests;
+using AuthorIntrusion.Plugins.ImmediateCorrection;
+using AuthorIntrusion.Plugins.Spelling;
+using AuthorIntrusion.Plugins.Spelling.LocalWords;
+using AuthorIntrusion.Plugins.Spelling.NHunspell;
 using MfGames.HierarchicalPaths;
 using NUnit.Framework;
 
-namespace AuthorIntrusion.Common.Tests
+namespace AuthorIntrusion.Integration.Tests
 {
 	[TestFixture]
-	public class FilesystemPersistenceProjectPluginTests: CommonMultilineTests
+	public class PersistenceTests: CommonMultilineTests
 	{
 		#region Methods
 
@@ -29,7 +35,7 @@ namespace AuthorIntrusion.Common.Tests
 			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
-			Assert.AreEqual(2, plugins.Controllers.Count);
+			Assert.AreEqual(6, plugins.Controllers.Count);
 		}
 
 		[Test]
@@ -100,7 +106,7 @@ namespace AuthorIntrusion.Common.Tests
 			BlockTypeSupervisor blockTypes = project.BlockTypes;
 			blocks = project.Blocks;
 
-			Assert.AreEqual(2, project.Plugins.Controllers.Count);
+			Assert.AreEqual(6, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
 			Assert.NotNull(blockTypes["Custom Type"]);
 			Assert.IsFalse(blockTypes["Custom Type"].IsStructural);
 
@@ -147,12 +153,18 @@ namespace AuthorIntrusion.Common.Tests
 				"Custom Property", block.Properties[new HierarchicalPath("/Test")]);
 
 			// Assert: Verify text spans.
-			Assert.AreEqual(1, block.TextSpans.Count);
+			Assert.AreEqual(4, block.TextSpans.Count);
 
 			Assert.AreEqual(1, block.TextSpans[0].StartTextIndex);
 			Assert.AreEqual(3, block.TextSpans[0].StopTextIndex);
 			Assert.IsNull(block.TextSpans[0].Controller);
 			Assert.IsNull(block.TextSpans[0].Data);
+
+			Assert.AreEqual(0, block.TextSpans[1].StartTextIndex);
+			Assert.AreEqual(5, block.TextSpans[1].StopTextIndex);
+			Assert.AreEqual(
+				project.Plugins["Spelling Framework"], block.TextSpans[1].Controller);
+			Assert.IsNull(block.TextSpans[1].Data);
 		}
 
 		/// <summary>
@@ -195,10 +207,18 @@ namespace AuthorIntrusion.Common.Tests
 			// Start getting us a simple plugin manager.
 			var persistencePlugin = new PersistenceFrameworkPlugin();
 			var filesystemPlugin = new FilesystemPersistencePlugin();
+			var spellingPlugin = new SpellingFrameworkPlugin();
+			var nhunspellPlugin = new NHunspellSpellingPlugin();
+			var localWordsPlugin = new LocalWordsPlugin();
+			var immediateCorrectionPlugin = new ImmediateCorrectionPlugin();
 
 			var pluginManager = new PluginManager(
 				persistencePlugin,
-				filesystemPlugin);
+				filesystemPlugin,
+				spellingPlugin,
+				nhunspellPlugin,
+				localWordsPlugin,
+				immediateCorrectionPlugin);
 
 			PluginManager.Instance = pluginManager;
 			PersistenceManager.Instance = new PersistenceManager(persistencePlugin);
@@ -218,6 +238,21 @@ namespace AuthorIntrusion.Common.Tests
 			plugins.Add("NHunspell");
 			plugins.Add("Local Words");
 			plugins.Add("Immediate Correction");
+
+			// Set up the local words lookup.
+			var localWordsProjectPlugin =
+				(LocalWordsProjectPlugin) plugins["Local Words"];
+
+			localWordsProjectPlugin.ReadSettings();
+			localWordsProjectPlugin.CaseInsensitiveDictionary.Add("insensitive");
+			localWordsProjectPlugin.CaseSensitiveDictionary.Add("Sensitive");
+			localWordsProjectPlugin.WriteSettings();
+
+			// Set up the immediate correction plugin.
+			var immediateCorrectionProjectPlugin =
+				(ImmediateCorrectionProjectPlugin) plugins["Immediate Correction"];
+
+			immediateCorrectionProjectPlugin.AddSubstitution("Grey", "Gray", SubstitutionOptions.WholeWord);
 
 			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).

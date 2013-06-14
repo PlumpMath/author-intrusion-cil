@@ -3,6 +3,8 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.IO;
+using System.Xml.Serialization;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
@@ -229,6 +231,31 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectPluginController pluginController = project.Plugins.Controllers[0];
 			projectPlugin =
 				(ImmediateCorrectionProjectPlugin) pluginController.ProjectPlugin;
+		}
+
+		[Test]
+		public void SerializeDeserializeSettings()
+		{
+			// Arrange
+			var settings = new ImmediateCorrectionSettings();
+			settings.Substitutions.Add(
+				new RegisteredSubstitution("a", "b", SubstitutionOptions.WholeWord));
+
+			var serializer = new XmlSerializer(typeof(ImmediateCorrectionSettings));
+			var memoryStream = new MemoryStream();
+
+			// Act
+			serializer.Serialize(memoryStream, settings);
+
+			byte[] buffer = memoryStream.GetBuffer();
+			var newMemoryStream = new MemoryStream(buffer);
+			var newSettings = (ImmediateCorrectionSettings) serializer.Deserialize(newMemoryStream);
+
+			// Assert
+			Assert.AreEqual(1, newSettings.Substitutions.Count);
+			Assert.AreEqual("a",newSettings.Substitutions[0].Search);
+			Assert.AreEqual("b",newSettings.Substitutions[0].Replacement);
+			Assert.AreEqual(SubstitutionOptions.WholeWord,newSettings.Substitutions[0].Options);
 		}
 
 		#endregion

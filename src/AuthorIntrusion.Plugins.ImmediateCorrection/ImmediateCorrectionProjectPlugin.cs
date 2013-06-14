@@ -164,6 +164,9 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 				}
 			}
 
+			// Sort the substitutions.
+			Substitutions.Sort();
+
 			// Clear out the optimization list so we rebuild it on the first request.
 			optimizedSubstitions = true;
 		}
