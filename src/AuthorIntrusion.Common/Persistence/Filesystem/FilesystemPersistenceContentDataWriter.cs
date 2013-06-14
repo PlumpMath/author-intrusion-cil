@@ -57,8 +57,12 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				// Write out the text of the block so we can identify it later. It
 				// normally will be in order, but this is a second verification
 				// that won't change.
-				writer.WriteElementString(
-					"text-hash", ProjectNamespace, block.Text.GetHashCode().ToString("X8"));
+				writer.WriteStartElement("block-key", ProjectNamespace);
+				writer.WriteAttributeString(
+					"block-index", blockIndex.ToString(CultureInfo.InvariantCulture));
+				writer.WriteAttributeString(
+					"text-hash", block.Text.GetHashCode().ToString("X8"));
+				writer.WriteEndElement();
 
 				// For this pass, we write out the data generates by the plugins
 				// and internal state.

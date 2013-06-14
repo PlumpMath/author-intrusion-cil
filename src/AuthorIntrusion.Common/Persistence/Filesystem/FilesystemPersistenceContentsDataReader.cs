@@ -58,20 +58,6 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 						case "content-data":
 							return;
 
-						case "block-data":
-							// Increment the block index.
-							blockIndex++;
-
-							// If we exceeded the end of the blocks, then we won't
-							// be able to process anymore and should just return.
-							if (blockIndex >= blocks.Count)
-							{
-								return;
-							}
-
-							// Otherwise, continue on.
-							break;
-
 						case "text-span":
 							// Construct a text span from the gathered properties.
 							var textSpan = new TextSpan(
@@ -108,17 +94,22 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				// We process the remaining elements based on their local name.
 				switch (reader.LocalName)
 				{
-					case "text-hash":
-						// Grab the text hash. If one doesn't match, then we stop
-						// processing entirely since the data file appears to be out
-						// of sync with the rest of the file.
-						string textHashValue = reader.ReadString();
-						int textHash = Convert.ToInt32(textHashValue, 16);
+					case "block-key":
+						// Grab the information to identify the block. We can't use
+						// block key directly so we have an index into the original
+						// block data and a hash of the text.
+						blockIndex = Convert.ToInt32(reader["block-index"]);
+						int textHash = Convert.ToInt32(reader["text-hash"], 16);
 
-						if (textHash != blocks[blockIndex].Text.GetHashCode())
+						// Figure out if we are asking for an index that doesn't exist
+						// or if the hash doesn't work. If they don't, then stop
+						// processing entirely.
+						if (blockIndex >= blocks.Count
+							|| blocks[blockIndex].Text.GetHashCode() != textHash)
 						{
 							return;
 						}
+
 						break;
 
 					case "property":
