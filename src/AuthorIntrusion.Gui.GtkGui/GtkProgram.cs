@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.IO;
 using Gtk;
 
 namespace AuthorIntrusion.Gui.GtkGui
@@ -35,6 +36,13 @@ namespace AuthorIntrusion.Gui.GtkGui
 			var mainWindow = resolver.Get<MainWindow>();
 
 			mainWindow.ShowAll();
+
+			// If we have some arguments, try to load the file as project.
+			if (args.Length > 0)
+			{
+				var projectFile = new FileInfo(args[0]);
+				mainWindow.OpenProject(projectFile);
+			}
 
 			// Start running the application.
 			Application.Run();

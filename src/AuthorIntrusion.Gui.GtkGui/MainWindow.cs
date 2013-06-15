@@ -220,14 +220,24 @@ namespace AuthorIntrusion.Gui.GtkGui
 					return;
 				}
 
-				// Load the project into memory.
-				projectManager.OpenProject(file);
+				// Open the project.
+				OpenProject(file);
 			}
 			finally
 			{
 				// Destroy the dialog the box.
 				dialog.Destroy();
 			}
+		}
+
+		/// <summary>
+		/// Opens the given project file.
+		/// </summary>
+		/// <param name="file">A file object to load.</param>
+		public void OpenProject(FileInfo file)
+		{
+			// Load the project into memory.
+			projectManager.OpenProject(file);
 		}
 
 		private void OnProjectMenuSaveItem(
