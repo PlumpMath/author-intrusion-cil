@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
 
 namespace AuthorIntrusion.Common.Commands
@@ -39,7 +40,7 @@ namespace AuthorIntrusion.Common.Commands
 		public void Do(Project project)
 		{
 			// Since we're making chanegs to the list, we need a write lock.
-			using (project.Blocks.AcquireWriteLock())
+			using (project.Blocks.AcquireLock(RequestLock.Write))
 			{
 				// Clear out the inverse since we'll be rebuilding it.
 				GetInverseCommand(project);

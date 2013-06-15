@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using NUnit.Framework;
 
@@ -20,7 +21,10 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.SetText("Testing 123");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("Testing 123");
+			}
 			BlockKey blockKey = block.BlockKey;
 
 			// Act
@@ -46,7 +50,10 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.SetText("Testing 123");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("Testing 123");
+			}
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);
@@ -72,7 +79,10 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.SetText("Testing 123");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("Testing 123");
+			}
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);
@@ -101,7 +111,10 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.SetText("Testing 123");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("Testing 123");
+			}
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);

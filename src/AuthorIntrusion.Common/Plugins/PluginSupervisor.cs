@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
 
 namespace AuthorIntrusion.Common.Plugins
@@ -232,7 +233,7 @@ namespace AuthorIntrusion.Common.Plugins
 				// Grab information about the block inside a read lock.
 				int blockVersion;
 
-				using (block.AcquireReadLock())
+				using (block.AcquireBlockLock(RequestLock.Read))
 				{
 					blockVersion = block.Version;
 				}

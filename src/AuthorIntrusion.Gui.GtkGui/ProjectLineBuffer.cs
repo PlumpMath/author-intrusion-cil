@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Text;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using MfGames.GtkExt;
 using MfGames.GtkExt.TextEditor.Models;
@@ -26,7 +27,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			get
 			{
-				using (blocks.AcquireReadLock())
+				using (blocks.AcquireLock(RequestLock.Read))
 				{
 					int results = blocks.Count;
 					return results;
@@ -56,25 +57,21 @@ namespace AuthorIntrusion.Gui.GtkGui
 			LineContexts lineContexts)
 		{
 			// We need to get a read-only lock on the block.
-			using (blocks.AcquireReadLock())
+			Block block;
+
+			using (blocks.AcquireBlockLock(RequestLock.Read, lineIndex, out block))
 			{
-				// Grab the block.
-				Block block = blocks[lineIndex];
+				// Now that we have a block, grab the text and text spans and
+				// format them. If we don't have any text spans, we can return
+				// a simple formatted string.
+				string text = block.Text;
+				TextSpanCollection spans = block.TextSpans;
+				string markup = spans.IsEmpty
+					? PangoUtility.Escape(text)
+					: FormatText(text, spans);
 
-				using (block.AcquireReadLock())
-				{
-					// Now that we have a block, grab the text and text spans and
-					// format them. If we don't have any text spans, we can return
-					// a simple formatted string.
-					string text = block.Text;
-					TextSpanCollection spans = block.TextSpans;
-					string markup = spans.IsEmpty
-						? PangoUtility.Escape(text)
-						: FormatText(text, spans);
-
-					// Return the resulting markup.
-					return markup;
-				}
+				// Return the resulting markup.
+				return markup;
 			}
 		}
 
@@ -89,7 +86,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			// We only need a read-lock on the blocks just to make sure nothing moves
 			// underneath us while we get the block key.
-			using (blocks.AcquireReadLock())
+			using (blocks.AcquireLock(RequestLock.Read))
 			{
 				// Create the command and submit it to the project's command manager.
 				Block block = blocks[lineIndex];
@@ -102,7 +99,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			int lineIndex,
 			LineContexts lineContexts)
 		{
-			using (blocks.AcquireReadLock())
+			using (blocks.AcquireLock(RequestLock.Read))
 			{
 				Block block = blocks[lineIndex];
 				string line = block.Text;
@@ -115,7 +112,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			// We only need a read-lock on the blocks just to make sure nothing moves
 			// underneath us while we get the block key.
-			using (blocks.AcquireReadLock())
+			using (blocks.AcquireLock(RequestLock.Read))
 			{
 				// Create the command and submit it to the project's command manager.
 				Block block = blocks[operation.LineIndex];
@@ -143,7 +140,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			// We need a write lock on the block and a read lock on the blocks.
 			Block block = blocks[operation.BufferPosition.LineIndex];
 
-			using (block.AcquireWriteLock())
+			using (block.AcquireBlockLock(RequestLock.Write))
 			{
 				// Create the command and submit it to the project's command manager.
 				var command =
@@ -168,7 +165,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			// We only need a read-lock on the blocks just to make sure nothing moves
 			// underneath us while we get the block key.
-			using (blocks.AcquireReadLock())
+			using (blocks.AcquireLock(RequestLock.Read))
 			{
 				// Create the command and submit it to the project's command manager.
 				Block block = blocks[operation.LineIndex];
@@ -192,7 +189,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			// We need a write lock on the blocks since this will be making changes
 			// to the structure of the document.
-			using (blocks.AcquireWriteLock())
+			using (blocks.AcquireLock(RequestLock.Write))
 			{
 				// Create the command and submit it to the project's command manager.
 				Block block = blocks[operation.LineIndex];
@@ -218,7 +215,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			// We only need a read-lock on the blocks just to make sure nothing moves
 			// underneath us while we get the block key.
-			using (blocks.AcquireReadLock())
+			using (blocks.AcquireLock(RequestLock.Read))
 			{
 				// Add each delete line into a composite command.
 				var deleteCommand = new CompositeCommand();

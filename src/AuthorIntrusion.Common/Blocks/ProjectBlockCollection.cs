@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading;
+using AuthorIntrusion.Common.Blocks.Locking;
 using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Blocks
@@ -27,44 +28,128 @@ namespace AuthorIntrusion.Common.Blocks
 		#region Methods
 
 		/// <summary>
-		/// Acquires a read lock on the entire collection. There may be multiple
-		/// readers or a single writer, but not both at the same time. This is
-		/// expected to be used in a using() construct as the disposing of the
-		/// opaque return value releases the read lock.
-		/// 
-		/// <code>using (blocks.AcquireReadLock()) {}</code>
+		/// Acquires a lock on the collection, of the requested type, and also a lock
+		/// on the block referenced by the index.
 		/// </summary>
-		/// <returns>An opaque lock object that will release lock on disposal.</returns>
-		public IDisposable AcquireReadLock()
+		/// <param name="blockIndex">The index of the block to lock.</param>
+		/// <param name="block">The block retrieved by the index.</param>
+		/// <param name="requestedBlockLock"></param>
+		/// <returns>An opaque lock object that will release the lock on disposal.</returns>
+		public IDisposable AcquireBlockLock(
+			RequestLock requestedBlockLock,
+			int blockIndex,
+			out Block block)
 		{
-			return new NestableReadLock(accessLock);
+			return AcquireBlockLock(
+				RequestLock.Read, requestedBlockLock, blockIndex, out block);
 		}
 
 		/// <summary>
-		/// Acquires an upgradable read lock on the entire collection. This is
-		/// expected to be used in a using() construct as the disposing of the
-		/// opaque return value releases the read lock.
-		/// 
-		/// <code>using (blocks.AcquireUpgradableReadLock()) {}</code>
+		/// Acquires a lock on the collection, of the requested type, and also a lock
+		/// on the block referenced by the index.
 		/// </summary>
-		/// <returns>An opaque lock object that will release lock on disposal.</returns>
-		public IDisposable AcquireUpgradableReadLock()
+		/// <param name="requestedCollectionLock"></param>
+		/// <param name="blockIndex">The index of the block to lock.</param>
+		/// <param name="block">The block retrieved by the index.</param>
+		/// <param name="requestedBlockLock"></param>
+		/// <returns>An opaque lock object that will release the lock on disposal.</returns>
+		public IDisposable AcquireBlockLock(
+			RequestLock requestedCollectionLock,
+			RequestLock requestedBlockLock,
+			int blockIndex,
+			out Block block)
 		{
-			return new NestableUpgradableReadLock(accessLock);
+			// Start by getting a read lock on the collection itself.
+			IDisposable collectionLock = AcquireLock(requestedCollectionLock);
+
+			// Grab the block via the index.
+			block = this[blockIndex];
+
+			// Get a read lock on the block and then return it.
+			IDisposable blockLock = block.AcquireLock(
+				collectionLock, requestedCollectionLock);
+			return blockLock;
+		}
+
+		public IDisposable AcquireBlockLock(
+			RequestLock requestedBlockLock,
+			BlockKey blockKey,
+			out Block block)
+		{
+			return AcquireBlockLock(
+				RequestLock.Read, requestedBlockLock, blockKey, out block);
+		}
+
+		public IDisposable AcquireBlockLock(
+			RequestLock requestedCollectionLock,
+			RequestLock requestedBlockLock,
+			BlockKey blockKey,
+			out Block block)
+		{
+			// Start by getting a read lock on the collection itself.
+			IDisposable collectionLock = AcquireLock(requestedCollectionLock);
+
+			// Grab the block via the index.
+			block = this[blockKey];
+
+			// Get a read lock on the block and then return it.
+			IDisposable blockLock = block.AcquireLock(collectionLock, requestedBlockLock);
+			return blockLock;
+		}
+
+		public IDisposable AcquireBlockLock(
+			RequestLock requestedBlockLock,
+			Block block)
+		{
+			return AcquireBlockLock(RequestLock.Read, requestedBlockLock, block);
+		}
+
+		public IDisposable AcquireBlockLock(
+			RequestLock requestedCollectionLock,
+			RequestLock requestedBlockLock,
+			Block block)
+		{
+			// Start by getting a read lock on the collection itself.
+			IDisposable collectionLock = AcquireLock(requestedCollectionLock);
+
+			// Get a read lock on the block and then return it.
+			IDisposable blockLock = block.AcquireLock(collectionLock, requestedBlockLock);
+			return blockLock;
 		}
 
 		/// <summary>
-		/// Acquires a write lock on the entire collection. There may be multiple
-		/// readers or a single writer, but not both at the same time. This is
-		/// expected to be used in a using() construct as the disposing of the
-		/// opaque return value releases the read lock.
+		/// Acquires a lock of the specified type and returns an opaque lock object
+		/// that will release the lock when disposed.
 		/// 
-		/// <code>using (blocks.AcquireWriteLock()) {}</code>
+		/// <code>using (blocks.AcquireLock(RequestLock.Read)) {}</code>
 		/// </summary>
 		/// <returns>An opaque lock object that will release lock on disposal.</returns>
-		public IDisposable AcquireWriteLock()
+		public IDisposable AcquireLock(RequestLock requestLock)
 		{
-			return new NestableWriteLock(accessLock);
+			// Acquire the lock based on the requested type.
+			IDisposable acquiredLock;
+
+			switch (requestLock)
+			{
+				case RequestLock.Read:
+					acquiredLock = new NestableReadLock(accessLock);
+					break;
+
+				case RequestLock.UpgradableRead:
+					acquiredLock = new NestableUpgradableReadLock(accessLock);
+					break;
+
+				case RequestLock.Write:
+					acquiredLock = new NestableWriteLock(accessLock);
+					break;
+
+				default:
+					throw new InvalidOperationException(
+						"Could not acquire lock with unknown type: " + requestLock);
+			}
+
+			// Return the resulting lock.
+			return acquiredLock;
 		}
 
 		/// <summary>

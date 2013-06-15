@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -16,9 +17,13 @@ namespace AuthorIntrusion.Common.Commands
 
 		public override void Do(Project project)
 		{
-			using (project.Blocks.AcquireWriteLock())
+			Block block;
+
+			using (
+				project.Blocks.AcquireBlockLock(
+					RequestLock.Write, RequestLock.Write, BlockKey, out block))
 			{
-				UnlockedDo(project);
+				Do(block);
 			}
 		}
 

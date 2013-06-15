@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
@@ -56,7 +57,10 @@ namespace AuthorIntrusion.Integration.Tests
 			blocks.Project.BlockTypes.Add("Custom Type", false);
 			blocks[0].Properties[new HierarchicalPath("/Test")] = "Custom Property";
 			blocks[0].TextSpans.Add(new TextSpan(1, 3, null, null));
-			blocks[0].SetText("Incor Wurd Onz");
+			using (blocks[0].AcquireBlockLock(RequestLock.Write))
+			{
+				blocks[0].SetText("Incor Wurd Onz");
+			}
 			plugins.WaitForBlockAnalzyers();
 
 			// Act
@@ -90,7 +94,10 @@ namespace AuthorIntrusion.Integration.Tests
 			Block block = blocks[0];
 			block.Properties[new HierarchicalPath("/Test")] = "Custom Property";
 			block.TextSpans.Add(new TextSpan(1, 3, null, null));
-			block.SetText("Incor Wurd Onz");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("Incor Wurd Onz");
+			}
 			plugins.WaitForBlockAnalzyers();
 			projectPlugin.Settings.SetIndividualDirectoryLayout();
 			projectPlugin.Save(testDirectory);

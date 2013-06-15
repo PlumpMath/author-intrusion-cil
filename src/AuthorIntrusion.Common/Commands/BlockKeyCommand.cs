@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -35,48 +36,21 @@ namespace AuthorIntrusion.Common.Commands
 		public IBlockCommand GetInverseCommand(Project project)
 		{
 			// We need a read access to the project.
-			using (project.Blocks.AcquireReadLock())
-			{
-				// Retrieve the block that is referenced by the key so we can keep
-				// the extending classes relatively small.
-				Block block = project.Blocks[BlockKey];
+			Block block;
 
-				// Since this command is a non-manipulating, we only need a read lock on
-				// the system to get the current state.
-				using (block.AcquireReadLock())
-				{
-					// Perform the action on the block.
-					return GetInverseCommand(project, block);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Performs the Do() method without locking.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		public void UnlockedDo(Project project)
-		{
-			// Retrieve the block that is referenced by the key so we can keep
-			// the extending classes relatively small.
-			Block block = project.Blocks[BlockKey];
-
-			// We need write access to this block.
-			using (block.AcquireWriteLock())
+			using (project.Blocks.AcquireBlockLock(RequestLock.Read, BlockKey, out block)
+				)
 			{
 				// Perform the action on the block.
-				Do(project, block);
+				return GetInverseCommand(project, block);
 			}
 		}
 
 		/// <summary>
 		/// Performs the command on the given block.
 		/// </summary>
-		/// <param name="project">The project that contains the current state.</param>
 		/// <param name="block">The block to perform the action on.</param>
-		protected abstract void Do(
-			Project project,
-			Block block);
+		protected abstract void Do(Block block);
 
 		/// <summary>
 		/// Gets the inverse command for a given block.

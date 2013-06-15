@@ -9,6 +9,7 @@ using System.Xml;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Plugins.Spelling.Common;
@@ -45,7 +46,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 			// Grab the information about the block.
 			string text;
 
-			using (block.AcquireReadLock())
+			using (block.AcquireBlockLock(RequestLock.Read))
 			{
 				// If we are stale, then break out.
 				if (block.IsStale(blockVersion))
@@ -72,7 +73,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 			}
 
 			// Inside a write lock, we need to make modifications to the block's list.
-			using (block.AcquireWriteLock())
+			using (block.AcquireBlockLock(RequestLock.Write))
 			{
 				// Check one last time to see if the block is stale.
 				if (block.IsStale(blockVersion))

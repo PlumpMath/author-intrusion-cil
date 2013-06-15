@@ -29,9 +29,7 @@ namespace AuthorIntrusion.Common.Commands
 		/// </summary>
 		/// <param name="project">The project that contains the current state.</param>
 		/// <param name="block">The block to perform the action on.</param>
-		protected override void Do(
-			Project project,
-			Block block)
+		protected override void Do(Block block)
 		{
 			// Figure out what the new text string would be.
 			string newText = block.Text.Insert(TextIndex, Text);
@@ -42,7 +40,7 @@ namespace AuthorIntrusion.Common.Commands
 
 			// After we insert text, we need to give the immediate editor plugins a
 			// chance to made any alterations to the output.
-			project.Plugins.ProcessImmediateEdits(block, TextIndex + Text.Length);
+			block.Project.Plugins.ProcessImmediateEdits(block, TextIndex + Text.Length);
 		}
 
 		protected override IBlockCommand GetInverseCommand(

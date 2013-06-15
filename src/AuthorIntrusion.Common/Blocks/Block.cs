@@ -35,17 +35,9 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
-		/// Gets the blocks collection for this block.
-		/// </summary>
-		public ProjectBlockCollection Blocks
-		{
-			get { return Project.Blocks; }
-		}
-
-		/// <summary>
 		/// Gets the owner collection associated with this block.
 		/// </summary>
-		public ProjectBlockCollection OwnerCollection { get; private set; }
+		public ProjectBlockCollection Blocks { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the block that is the organizational parent for this block.
@@ -54,7 +46,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public Project Project
 		{
-			get { return OwnerCollection.Project; }
+			get { return Blocks.Project; }
 		}
 
 		/// <summary>
@@ -81,45 +73,25 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#region Methods
 
-		/// <summary>
-		/// Acquires a read lock on the entire collection. There may be multiple
-		/// readers or a single writer, but not both at the same time. This is
-		/// expected to be used in a using() construct as the disposing of the
-		/// opaque return value releases the read lock.
-		/// 
-		/// <code>using (blocks.AcquireReadLock()) {}</code>
-		/// </summary>
-		/// <returns>An opaque lock object that will release lock on disposal.</returns>
-		public IDisposable AcquireReadLock()
+		public IDisposable AcquireBlockLock(RequestLock requestedBlockLock)
 		{
-			return new ReadBlockLock(this, accessLock);
+			IDisposable acquiredLock = Blocks.AcquireBlockLock(requestedBlockLock, this);
+			return acquiredLock;
 		}
 
 		/// <summary>
-		/// Acquires an upgradable read lock on the entire collection. This is
-		/// expected to be used in a using() construct as the disposing of the
-		/// opaque return value releases the read lock.
+		/// Acquires a lock on a block while using the given opaque lock object for
+		/// the collection lock. When the block's lock is disposed, so will the
+		/// collection lock.
 		/// 
-		/// <code>using (blocks.AcquireUpgradableReadLock()) {}</code>
+		/// <code>using (blocks.AcquireLock(accessLock)) {}</code>
 		/// </summary>
 		/// <returns>An opaque lock object that will release lock on disposal.</returns>
-		public IDisposable AcquireUpgradableReadLock()
+		public IDisposable AcquireLock(
+			IDisposable collectionLock,
+			RequestLock requestedLock)
 		{
-			return new UpgradableReadBlockLock(this, accessLock);
-		}
-
-		/// <summary>
-		/// Acquires a write lock on the entire collection. There may be multiple
-		/// readers or a single writer, but not both at the same time. This is
-		/// expected to be used in a using() construct as the disposing of the
-		/// opaque return value releases the read lock.
-		/// 
-		/// <code>using (blocks.AcquireWriteLock()) {}</code>
-		/// </summary>
-		/// <returns>An opaque lock object that will release lock on disposal.</returns>
-		public IDisposable AcquireWriteLock()
-		{
-			return new WriteBlockLock(this, accessLock);
+			return new BlockLock(collectionLock, accessLock, requestedLock);
 		}
 
 		public IList<Block> GetBlockAndParents()
@@ -183,7 +155,7 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			// Make sure we have a sane state.
 			Contract.Assert(newBlockType != null);
-			Contract.Assert(OwnerCollection.Project == newBlockType.Supervisor.Project);
+			Contract.Assert(Blocks.Project == newBlockType.Supervisor.Project);
 
 			// We only do things if we are changing the block type.
 			bool changed = blockType != newBlockType;
@@ -228,22 +200,21 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public void SetText(string newText)
 		{
-			// We need write access to the block.
-			using (AcquireWriteLock())
+			// Verify that we have a write lock on this block.
+			Contract.Assert(accessLock.IsWriteLockHeld);
+
+			// If nothing changed, then we don't have to do anything.
+			if (newText == Text)
 			{
-				// If nothing changed, then we don't have to do anything.
-				if (newText == Text)
-				{
-					return;
-				}
-
-				// Update the text and bump up the version of this block.
-				text = newText ?? string.Empty;
-				version++;
-
-				// Trigger the events for any listening plugins.
-				Project.Plugins.ProcessBlockAnalysis(this);
+				return;
 			}
+
+			// Update the text and bump up the version of this block.
+			text = newText ?? string.Empty;
+			version++;
+
+			// Trigger the events for any listening plugins.
+			Project.Plugins.ProcessBlockAnalysis(this);
 		}
 
 		public override string ToString()
@@ -261,28 +232,24 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#region Constructors
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Block"/> class.
-		/// </summary>
-		/// <param name="ownerCollection">The ownerCollection.</param>
-		public Block(ProjectBlockCollection ownerCollection)
-			: this(ownerCollection, ownerCollection.Project.BlockTypes.Paragraph, "")
+		public Block(ProjectBlockCollection blocks)
+			: this(blocks, blocks.Project.BlockTypes.Paragraph, string.Empty)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Block" /> class.
 		/// </summary>
-		/// <param name="ownerCollection">The ownerCollection.</param>
+		/// <param name="blocks">The ownerCollection.</param>
 		/// <param name="initialBlockType">Initial type of the block.</param>
 		/// <param name="text">The text.</param>
 		public Block(
-			ProjectBlockCollection ownerCollection,
+			ProjectBlockCollection blocks,
 			BlockType initialBlockType,
 			string text = "")
 		{
 			BlockKey = BlockKey.GetNext();
-			OwnerCollection = ownerCollection;
+			Blocks = blocks;
 			blockType = initialBlockType;
 			this.text = text;
 			Properties = new BlockPropertyDictionary();

@@ -25,9 +25,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(
-			Project project,
-			Block block)
+		protected override void Do(Block block)
 		{
 			block.SetText(Text);
 		}

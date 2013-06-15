@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -51,7 +52,7 @@ namespace AuthorIntrusion.Common.Blocks
 			// We need to get a write lock on the block since we'll be making changes
 			// to all the blocks and their relationships. This will, in effect, also
 			// ensure no block is being modified.
-			using (Project.Blocks.AcquireWriteLock())
+			using (Project.Blocks.AcquireLock(RequestLock.Write))
 			{
 				// Go through all the blocks in the list.
 				ProjectBlockCollection blocks = Project.Blocks;

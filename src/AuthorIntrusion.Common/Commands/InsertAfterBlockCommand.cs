@@ -26,12 +26,10 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(
-			Project project,
-			Block block)
+		protected override void Do(Block block)
 		{
 			// Pull out some common elements we'll need.
-			ProjectBlockCollection blocks = project.Blocks;
+			ProjectBlockCollection blocks = block.Blocks;
 			int blockIndex = blocks.IndexOf(block) + 1;
 
 			// Because of how block keys work, the ID is unique very time so we have

@@ -4,6 +4,7 @@
 
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -56,8 +57,8 @@ namespace AuthorIntrusion.Common.Commands
 			InverseCommand.Commands.Add(inverseDeleteFirstCommand);
 
 			// Perform the commands.
-			deleteFirstCommand.UnlockedDo(project);
-			insertFirstCommand.UnlockedDo(project);
+			deleteFirstCommand.Do(project);
+			insertFirstCommand.Do(project);
 
 			// Update the final lines text with the remains of the first line.
 			int lastLineLength = lines[lines.Length - 1].Length;
@@ -77,7 +78,10 @@ namespace AuthorIntrusion.Common.Commands
 				{
 					// Insert the line and set its text value.
 					var newBlock = new Block(project.Blocks);
-					newBlock.SetText(lines[i]);
+					using (newBlock.AcquireBlockLock(RequestLock.Write))
+					{
+						newBlock.SetText(lines[i]);
+					}
 
 					project.Blocks.Insert(firstBlockIndex + 1, newBlock);
 

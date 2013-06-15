@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 
 namespace AuthorIntrusion.Common.Tests
@@ -176,7 +177,10 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks = project.Blocks;
 
 			// Modify the first line, which is always there.
-			blocks[0].SetText("Line 1");
+			using (blocks[0].AcquireBlockLock(RequestLock.Write))
+			{
+				blocks[0].SetText("Line 1");
+			}
 
 			// Add in the additional lines after the first one.
 			for (int i = 1;
@@ -184,7 +188,10 @@ namespace AuthorIntrusion.Common.Tests
 				i++)
 			{
 				var block = new Block(blocks);
-				block.SetText("Line " + (i + 1));
+				using (block.AcquireBlockLock(RequestLock.Write))
+				{
+					block.SetText("Line " + (i + 1));
+				}
 				blocks.Add(block);
 			}
 		}

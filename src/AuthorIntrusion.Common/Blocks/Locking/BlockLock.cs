@@ -13,24 +13,43 @@ namespace AuthorIntrusion.Common.Blocks.Locking
 	/// in an using() code block and released once the read-lock is no longer
 	/// needed.
 	/// </summary>
-	public class ReadBlockLock: IDisposable
+	public class BlockLock: IDisposable
 	{
 		#region Constructors
 
 		/// <summary>
 		/// Acquires a read lock on both the block and the block collection.
 		/// </summary>
-		/// <param name="block">The block to get read access to.</param>
-		/// <param name="readerWriterLock">The lock object used to acquire the lock.</param>
-		public ReadBlockLock(
-			Block block,
-			ReaderWriterLockSlim readerWriterLock)
+		/// <param name="collectionLock">The lock on the block collection.</param>
+		/// <param name="blockLock">The lock object used to acquire the lock.</param>
+		/// <param name="requestLock"></param>
+		public BlockLock(
+			IDisposable collectionLock,
+			ReaderWriterLockSlim accessLock,
+			RequestLock requestLock)
 		{
-			// We always get a lock on the collection first.
-			collectionLock = block.Project.Blocks.AcquireReadLock();
+			// Keep track of the collection lock so we can release it.
+			this.collectionLock = collectionLock;
 
-			// Get a read lock on this block.
-			blockLock = new NestableReadLock(readerWriterLock);
+			// Acquire the lock based on the requested type.
+			switch (requestLock)
+			{
+				case RequestLock.Read:
+					blockLock = new NestableReadLock(accessLock);
+					break;
+
+				case RequestLock.UpgradableRead:
+					blockLock = new NestableUpgradableReadLock(accessLock);
+					break;
+
+				case RequestLock.Write:
+					blockLock = new NestableWriteLock(accessLock);
+					break;
+
+				default:
+					throw new InvalidOperationException(
+						"Could not acquire lock with unknown type: " + requestLock);
+			}
 		}
 
 		#endregion
@@ -58,7 +77,7 @@ namespace AuthorIntrusion.Common.Blocks.Locking
 
 		#region Fields
 
-		private NestableReadLock blockLock;
+		private IDisposable blockLock;
 		private IDisposable collectionLock;
 
 		#endregion

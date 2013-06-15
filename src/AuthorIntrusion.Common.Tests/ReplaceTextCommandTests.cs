@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using NUnit.Framework;
 
@@ -20,7 +21,10 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.SetText("abcd");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("abcd");
+			}
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
@@ -46,7 +50,10 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.SetText("abcd");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("abcd");
+			}
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
@@ -74,7 +81,10 @@ namespace AuthorIntrusion.Common.Tests
 			var project = new Project();
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
-			block.SetText("abcd");
+			using (block.AcquireBlockLock(RequestLock.Write))
+			{
+				block.SetText("abcd");
+			}
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 

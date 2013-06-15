@@ -29,13 +29,11 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(
-			Project project,
-			Block block)
+		protected override void Do(Block block)
 		{
 			// Figure out the current state at the point of deleting and populate the
 			// composite command to restore that state if the operation is undone.
-			int blockIndex = project.Blocks.IndexOf(block);
+			int blockIndex = block.Blocks.IndexOf(block);
 			IBlockCommand insertCommand = new InsertIndexedBlockCommand(
 				blockIndex, block);
 
@@ -44,17 +42,17 @@ namespace AuthorIntrusion.Common.Commands
 			inverseCommand.Commands.Add(insertCommand);
 
 			// Delete the block from the list.
-			project.Blocks.Remove(block);
+			block.Blocks.Remove(block);
 
 			// If we have no more blocks, then we need to ensure we have a minimum
 			// number of blocks.
 			if (!IgnoreMinimumLines
-				&& project.Blocks.Count == 0)
+				&& block.Blocks.Count == 0)
 			{
 				// Create a new placeholder block, which is blank.
-				var blankBlock = new Block(project.Blocks);
+				var blankBlock = new Block(block.Blocks, block.Project.BlockTypes.Paragraph);
 
-				project.Blocks.Add(blankBlock);
+				block.Blocks.Add(blankBlock);
 
 				// Set the last position to this newly created block.
 				LastPosition = new BlockPosition(blankBlock, 0);
@@ -74,9 +72,9 @@ namespace AuthorIntrusion.Common.Commands
 				// Ideally, this would be the block in the current position, but if this
 				// is the last line, then use that.
 				LastPosition = new BlockPosition(
-					blockIndex < project.Blocks.Count
-						? project.Blocks[blockIndex].BlockKey
-						: project.Blocks[blockIndex - 1].BlockKey,
+					blockIndex < block.Blocks.Count
+						? block.Blocks[blockIndex].BlockKey
+						: block.Blocks[blockIndex - 1].BlockKey,
 					0);
 			}
 		}
@@ -95,7 +93,7 @@ namespace AuthorIntrusion.Common.Commands
 		public DeleteBlockCommand(BlockKey blockKey)
 			: base(blockKey)
 		{
-			inverseCommand = new CompositeCommand(true);
+			inverseCommand = new CompositeCommand();
 		}
 
 		#endregion

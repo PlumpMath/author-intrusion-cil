@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Persistence.Filesystem;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Common.Projects;
@@ -69,7 +70,7 @@ namespace AuthorIntrusion.Common.Persistence
 			// any background tasks from modifying the blocks during the save process.
 			ProjectBlockCollection blocks = Project.Blocks;
 
-			using (blocks.AcquireWriteLock())
+			using (blocks.AcquireLock(RequestLock.Write))
 			{
 				// Create a new project writer and write out the results.
 				var projectWriter = new FilesystemPersistenceProjectWriter(

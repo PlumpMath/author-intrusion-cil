@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
 
 namespace AuthorIntrusion.Common.Plugins
@@ -27,7 +28,7 @@ namespace AuthorIntrusion.Common.Plugins
 			foreach (IBlockAnalyzerProjectPlugin blockAnalyzer in BlockAnalyzers)
 			{
 				// Check to see if the block had gone stale.
-				using (Block.AcquireReadLock())
+				using (blocks.AcquireBlockLock(RequestLock.Read, Block))
 				{
 					if (Block.IsStale(BlockVersion))
 					{

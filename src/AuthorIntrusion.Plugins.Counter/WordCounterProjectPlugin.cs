@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Plugins;
 using C5;
 using MfGames.HierarchicalPaths;
@@ -63,7 +64,7 @@ namespace AuthorIntrusion.Plugins.Counter
 
 			// Get a write lock on the blocks list and update that block and all
 			// parent blocks in the document.
-			using (block.AcquireWriteLock())
+			using (block.AcquireBlockLock(RequestLock.Write))
 			{
 				// Log that we are analyzing this block.
 				Log("BEGIN AnalyzeBlock: {0}: Words {1:N0}", block, wordCount);
@@ -105,7 +106,7 @@ namespace AuthorIntrusion.Plugins.Counter
 			Block oldParentBlock)
 		{
 			// We need a write lock on the blocks while we make this change.
-			using (block.AcquireWriteLock())
+			using (block.AcquireBlockLock(RequestLock.Write))
 			{
 				Log("ChangeBlockParent: {0}: Old Parent {1}", block, oldParentBlock);
 
@@ -163,7 +164,7 @@ namespace AuthorIntrusion.Plugins.Counter
 			BlockType oldBlockType)
 		{
 			// We need a write lock on the blocks while we make this change.
-			using (block.AcquireWriteLock())
+			using (block.AcquireBlockLock(RequestLock.Write))
 			{
 				// Report what we're doing if we have logging on.
 				Log("ChangeBlockType: {0}: Old Type {1}", block, oldBlockType);

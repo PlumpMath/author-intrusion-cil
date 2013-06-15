@@ -24,9 +24,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(
-			Project project,
-			Block block)
+		protected override void Do(Block block)
 		{
 			// Figure out what the new text string would be.
 			string newText = block.Text.Remove(TextIndex, Length);
