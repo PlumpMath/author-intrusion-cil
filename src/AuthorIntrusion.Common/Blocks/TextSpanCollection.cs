@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using System.Linq;
 using AuthorIntrusion.Common.Plugins;
 using C5;
@@ -31,12 +32,26 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
+		/// Retrieves all the TextSpans at a given text position.
+		/// </summary>
+		/// <param name="textIndex"></param>
+		/// <returns></returns>
+		public IEnumerable<TextSpan> GetAll(int textIndex)
+		{
+			return
+				this.Where(
+					textSpan =>
+						textIndex >= textSpan.StartTextIndex && textIndex < textSpan.StopTextIndex)
+				    .ToList();
+		}
+
+		/// <summary>
 		/// Removes all the text spans of a given controller.
 		/// </summary>
 		/// <param name="controller">The controller to remove the spans for.</param>
 		public void Remove(IProjectPlugin controller)
 		{
-			var removeSpans = new HashSet<TextSpan>();
+			var removeSpans = new C5.HashSet<TextSpan>();
 
 			foreach (TextSpan textSpan in
 				this.Where(textSpan => textSpan.Controller == controller))

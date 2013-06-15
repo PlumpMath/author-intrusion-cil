@@ -6,10 +6,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using AuthorIntrusion.Common;
+using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
+using C5;
+using Gtk;
 using MfGames.GtkExt;
+using MfGames.GtkExt.TextEditor;
+using MfGames.GtkExt.TextEditor.Events;
 using MfGames.GtkExt.TextEditor.Models;
 using MfGames.GtkExt.TextEditor.Models.Buffers;
 
@@ -300,15 +305,86 @@ namespace AuthorIntrusion.Gui.GtkGui
 			return markup;
 		}
 
+		/// <summary>
+		/// Called when the context menu is being populated.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="args">The event arguments.</param>
+		private void OnPopulateContextMenu(
+			object sender,
+			PopulateContextMenuArgs args)
+		{
+			// We need a read lock on both the collection and the specific block
+			// for the given line index.
+			BufferPosition position = editorView.Caret.Position;
+			int blockIndex = position.LineIndex;
+			Block block;
+
+			using (blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
+			{
+				// Figure out if we have any spans for this position.
+				if (!block.TextSpans.Contains(position.CharacterIndex))
+				{
+					// Nothing to add, so we can stop processing.
+					return;
+				}
+
+				// Gather up all the text spans for the current position in the line.
+				var textSpans = new ArrayList<TextSpan>();
+
+				textSpans.AddAll(block.TextSpans.GetAll(position.CharacterIndex));
+
+				// Gather up the menu items for this point.
+				bool firstItem = true;
+
+				foreach (TextSpan textSpan in textSpans)
+				{
+					IList<IEditorAction> actions = textSpan.Controller.GetEditorActions(
+						block, textSpan);
+
+					foreach (IEditorAction action in actions)
+					{
+						// Add the separator, if we need it.
+						if (firstItem)
+						{
+							args.Menu.Add(new SeparatorMenuItem());
+							firstItem = false;
+						}
+
+						// Create a menu item and add it.
+						IEditorAction doAction = action;
+
+						var menuItem = new MenuItem(action.DisplayName);
+						menuItem.Activated += delegate
+						{
+							doAction.Do();
+							RaiseLineChanged(new LineChangedArgs(blockIndex));
+						};
+
+						args.Menu.Add(menuItem);
+					}
+				}
+			}
+		}
+
 		#endregion
 
 		#region Constructors
 
-		public ProjectLineBuffer(Project project)
+		public ProjectLineBuffer(
+			Project project,
+			EditorView editorView)
 		{
+			// Save the parameters as member fields for later.
 			this.project = project;
+			this.editorView = editorView;
+
+			// Pull out some common elements.
 			blocks = this.project.Blocks;
 			commands = project.Commands;
+
+			// Hook up the events.
+			editorView.Controller.PopulateContextMenu += OnPopulateContextMenu;
 		}
 
 		#endregion
@@ -317,6 +393,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 		private readonly ProjectBlockCollection blocks;
 		private readonly BlockCommandSupervisor commands;
+		private readonly EditorView editorView;
 		private readonly Project project;
 
 		#endregion

@@ -142,7 +142,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			ProjectEventArgs e)
 		{
 			// Set up the line buffer for the loaded project.
-			var projectLineBuffer = new ProjectLineBuffer(e.Project);
+			var projectLineBuffer = new ProjectLineBuffer(e.Project, editorView);
 			editorView.SetLineBuffer(projectLineBuffer);
 
 			// Update the GUI element.
