@@ -5,6 +5,7 @@
 using AuthorIntrusion.Common.Blocks;
 using Cairo;
 using MfGames.GtkExt;
+using MfGames.GtkExt.TextEditor;
 using MfGames.GtkExt.TextEditor.Models.Styles;
 
 namespace AuthorIntrusion.Gui.GtkGui
@@ -19,6 +20,9 @@ namespace AuthorIntrusion.Gui.GtkGui
 		/// <param name="theme"></param>
 		public static void SetupTheme(Theme theme)
 		{
+			// Set up the indicator elements.
+			SetupThemeIndicators(theme);
+
 			// Set up the paragraph style.
 			var paragraphyStyle = new LineBlockStyle(theme.TextLineStyle)
 			{
@@ -83,6 +87,39 @@ namespace AuthorIntrusion.Gui.GtkGui
 			theme.LineStyles[BlockTypeSupervisor.EpigraphName] = epigraphStyle;
 			theme.LineStyles[BlockTypeSupervisor.EpigraphAttributionName] =
 				epigraphAttributationStyle;
+		}
+
+		private static void SetupThemeIndicators(Theme theme)
+		{
+			// Set up the indicator styles.
+			theme.IndicatorRenderStyle = IndicatorRenderStyle.Ratio;
+			theme.IndicatorPixelHeight = 2;
+			theme.IndicatorRatioPixelGap = 1;
+
+			var indicatorBackgroundStyle = new RegionBlockStyle
+			{
+				//BackgroundColor = new Color(1, 0.9, 1)
+			};
+
+			var indicatorVisibleStyle = new RegionBlockStyle
+			{
+				BackgroundColor = new Color(1, 1, 0.9)
+			};
+
+			indicatorVisibleStyle.Borders.SetBorder(new Border(1, new Color(0, 0.5, 0)));
+
+			// Add the styles to the theme.
+			theme.RegionStyles[IndicatorView.BackgroundRegionName] =
+				indicatorBackgroundStyle;
+			theme.RegionStyles[IndicatorView.VisibleRegionName] = indicatorVisibleStyle;
+
+			// Set up the various indicators.
+			theme.IndicatorStyles["Error"] = new IndicatorStyle(
+				"Error", 100, new Color(1, 0, 0));
+			theme.IndicatorStyles["Warning"] = new IndicatorStyle(
+				"Warning", 10, new Color(1, 165 / 255.0, 0));
+			theme.IndicatorStyles["Chapter"] = new IndicatorStyle(
+				"Chapter", 2, new Color(100 / 255.0, 149 / 255.0, 237 / 255.0));
 		}
 
 		#endregion

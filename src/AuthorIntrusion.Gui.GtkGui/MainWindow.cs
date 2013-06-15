@@ -52,14 +52,22 @@ namespace AuthorIntrusion.Gui.GtkGui
 			scrolledWindow.VscrollbarPolicy = PolicyType.Always;
 			scrolledWindow.Add(editorView);
 
-			//// Create the indicator bar that is 10 px wide.
-			//var indicatorView = new IndicatorView(editorView);
-			//indicatorView.SetSizeRequest(20,1);
+			// Create the indicator bar that is 10 px wide.
+			indicatorView = new IndicatorView(editorView);
+			indicatorView.SetSizeRequest(20, 1);
+
+			var indicatorFrame = new Frame
+			{
+				BorderWidth = 2,
+				ShadowType = ShadowType.None,
+				Shadow = ShadowType.None
+			};
+			indicatorFrame.Add(indicatorView);
 
 			// Add the editor and bar to the current tab.
 			var editorBand = new HBox(false, 0);
 			editorBand.PackStart(scrolledWindow, true, true, 0);
-			//editorBand.PackStart(indicatorView,false,false,4);
+			editorBand.PackStart(indicatorFrame, false, false, 4);
 
 			// Return the top-most frame.
 			return editorBand;
@@ -286,6 +294,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 		private EditorView editorView;
 
 		private MenuItem exitMenuItem;
+		private IndicatorView indicatorView;
 
 		private MenuItem newMenuItem;
 		private MenuItem openMenuItem;

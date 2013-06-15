@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -48,6 +49,34 @@ namespace AuthorIntrusion.Gui.GtkGui
 		#endregion
 
 		#region Methods
+
+		public override IEnumerable<ILineIndicator> GetLineIndicators(
+			int lineIndex,
+			int startCharacterIndex,
+			int endCharacterIndex)
+		{
+			// Create a list of indicators.
+			var indicators = new ArrayList<ILineIndicator>();
+
+			// Grab the line and use the block type to figure out the indicator.
+			Block block;
+
+			using (blocks.AcquireBlockLock(RequestLock.Read, lineIndex, out block))
+			{
+				string blockTypeName = block.BlockType.Name;
+
+				switch (blockTypeName)
+				{
+					case "Chapter":
+						ILineIndicator indicator = new ProjectLineIndicator(blockTypeName);
+						indicators.Add(indicator);
+						break;
+				}
+			}
+
+			// Return the resulting indicators.
+			return indicators;
+		}
 
 		public override int GetLineLength(
 			int lineIndex,
@@ -339,8 +368,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 				foreach (TextSpan textSpan in textSpans)
 				{
-					IList<IEditorAction> actions = textSpan.Controller.GetEditorActions(
-						block, textSpan);
+					C5.IList<IEditorAction> actions =
+						textSpan.Controller.GetEditorActions(block, textSpan);
 
 					foreach (IEditorAction action in actions)
 					{
