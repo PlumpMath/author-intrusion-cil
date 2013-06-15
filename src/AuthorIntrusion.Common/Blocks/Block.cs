@@ -80,8 +80,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public IDisposable AcquireBlockLock(RequestLock requestedBlockLock)
 		{
-			IDisposable acquiredLock = Blocks.AcquireBlockLock(requestedBlockLock, this);
-			return acquiredLock;
+			return AcquireBlockLock(RequestLock.Read, requestedBlockLock);
 		}
 
 		/// <summary>
@@ -284,5 +283,12 @@ namespace AuthorIntrusion.Common.Blocks
 		private volatile int version;
 
 		#endregion
+
+		public IDisposable AcquireBlockLock(RequestLock requestedCollectionLock,
+			RequestLock requestedBlockLock)
+		{
+			IDisposable acquiredLock = Blocks.AcquireBlockLock(requestedCollectionLock, requestedBlockLock,this);
+			return acquiredLock;
+		}
 	}
 }

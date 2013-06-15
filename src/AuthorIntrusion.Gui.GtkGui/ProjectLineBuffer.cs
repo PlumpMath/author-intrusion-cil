@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -12,10 +11,8 @@ using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
-using AuthorIntrusion.Common.Events;
 using C5;
 using Gtk;
-using MfGames.Commands;
 using MfGames.GtkExt;
 using MfGames.GtkExt.TextEditor;
 using MfGames.GtkExt.TextEditor.Events;
@@ -52,21 +49,6 @@ namespace AuthorIntrusion.Gui.GtkGui
 		#endregion
 
 		#region Methods
-
-		public override LineBufferOperationResults DeleteLines(
-			int lineIndex,
-			int count)
-		{
-			using (project.Blocks.AcquireLock(RequestLock.Write))
-			{
-				Block block = project.Blocks[lineIndex];
-				var command = new DeleteBlockCommand(block.BlockKey);
-				var context = new BlockCommandContext(project);
-				project.Commands.Do(command, context);
-
-				return GetOperationResults();
-			}
-		}
 
 		public override IEnumerable<ILineIndicator> GetLineIndicators(
 			int lineIndex,
@@ -159,201 +141,143 @@ namespace AuthorIntrusion.Gui.GtkGui
 			}
 		}
 
-		public override LineBufferOperationResults InsertLines(
-			int lineIndex,
-			int count)
-		{
-			var composite = new CompositeCommand<BlockCommandContext>(true, false);
-
-			using (project.Blocks.AcquireLock(RequestLock.Write))
-			{
-				for (int i = 0;
-					i < count;
-					i++)
-				{
-					var block = new Block(project.Blocks);
-					var command = new InsertIndexedBlockCommand(lineIndex, block);
-					composite.Commands.Add(command);
-				}
-
-				var context = new BlockCommandContext(project);
-				project.Commands.Do(composite, context);
-
-				return GetOperationResults();
-			}
-		}
-
-		public override LineBufferOperationResults InsertText(
-			int lineIndex,
-			int characterIndex,
-			string text)
-		{
-			using (project.Blocks.AcquireLock(RequestLock.Write))
-			{
-				Block block = project.Blocks[lineIndex];
-				var position = new BlockPosition(block.BlockKey, characterIndex);
-				var command = new InsertTextCommand(position, text);
-				var context = new BlockCommandContext(project);
-				project.Commands.Do(command, context);
-
-				return GetOperationResults();
-			}
-		}
-
-		public void RaiseLineDeleted(int lineIndex)
-		{
-			var args = new LineRangeEventArgs(lineIndex, lineIndex);
-			base.RaiseLinesDeleted(args);
-		}
-
-		public void RaiseLineInserted(int lineIndex)
-		{
-			var args = new LineRangeEventArgs(lineIndex, lineIndex);
-			base.RaiseLinesInserted(args);
-		}
-
 		protected override LineBufferOperationResults Do(
 			DeleteTextOperation operation)
 		{
-			//// We only need a read-lock on the blocks just to make sure nothing moves
-			//// underneath us while we get the block key.
-			//using (blocks.AcquireLock(RequestLock.Read))
-			//{
-			//	// Create the command and submit it to the project's command manager.
-			//	Block block = blocks[operation.LineIndex];
-			//	var command =
-			//		new DeleteTextCommand(
-			//			new BlockPosition(block.BlockKey, operation.CharacterRange.StartIndex),
-			//			operation.CharacterRange.Length);
-			//	commands.Do(command);
+			// We only need a read-lock on the blocks just to make sure nothing moves
+			// underneath us while we get the block key.
+			using (blocks.AcquireLock(RequestLock.Read))
+			{
+				// Create the command and submit it to the project's command manager.
+				Block block = blocks[operation.LineIndex];
+				var command =
+					new DeleteTextCommand(
+						new BlockPosition(block.BlockKey, operation.CharacterRange.StartIndex),
+						operation.CharacterRange.Length);
+				commands.Do(command);
 
-			//	// Fire a line changed operation.
-			//	RaiseLineChanged(new LineChangedArgs(operation.LineIndex));
+				// Fire a line changed operation.
+				RaiseLineChanged(new LineChangedArgs(operation.LineIndex));
 
-			//	// Construct the operation results for the delete from information in the
-			//	// command manager.
-			//	var results =
-			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
-			//	return results;
-			//}
-			throw new NotImplementedException();
+				// Construct the operation results for the delete from information in the
+				// command manager.
+				var results =
+					new LineBufferOperationResults(
+						new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+				return results;
+			}
 		}
 
 		protected override LineBufferOperationResults Do(
 			InsertTextOperation operation)
 		{
-			//// We need a write lock on the block and a read lock on the blocks.
-			//Block block = blocks[operation.BufferPosition.LineIndex];
+			// We need a write lock on the block and a read lock on the blocks.
+			Block block = blocks[operation.BufferPosition.LineIndex];
 
-			//using (block.AcquireBlockLock(RequestLock.Write))
-			//{
-			//	// Create the command and submit it to the project's command manager.
-			//	var command =
-			//		new InsertTextCommand(
-			//			new BlockPosition(block.BlockKey, operation.BufferPosition.CharacterIndex),
-			//			operation.Text);
-			//	commands.Do(command);
+			using (block.AcquireBlockLock(RequestLock.Write, RequestLock.Write))
+			{
+				// Create the command and submit it to the project's command manager.
+				var command =
+					new InsertTextCommand(
+						new BlockPosition(block.BlockKey, operation.BufferPosition.CharacterIndex),
+						operation.Text);
+				commands.Do(command);
 
-			//	// Fire a line changed operation.
-			//	RaiseLineChanged(new LineChangedArgs(operation.BufferPosition.LineIndex));
+				// Fire a line changed operation.
+				RaiseLineChanged(new LineChangedArgs(operation.BufferPosition.LineIndex));
 
-			//	// Construct the operation results for the delete from information in the
-			//	// command manager.
-			//	var results =
-			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
-			//	return results;
-			//}
-			throw new NotImplementedException();
+				// Construct the operation results for the delete from information in the
+				// command manager.
+				var results =
+					new LineBufferOperationResults(
+						new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+				return results;
+			}
 		}
 
 		protected override LineBufferOperationResults Do(SetTextOperation operation)
 		{
-			//// We only need a read-lock on the blocks just to make sure nothing moves
-			//// underneath us while we get the block key.
-			//using (blocks.AcquireLock(RequestLock.Read))
-			//{
-			//	// Create the command and submit it to the project's command manager.
-			//	Block block = blocks[operation.LineIndex];
-			//	var command = new SetTextCommand(block.BlockKey, operation.Text);
-			//	commands.Do(command);
+			// We only need a read-lock on the blocks just to make sure nothing moves
+			// underneath us while we get the block key.
+			using (blocks.AcquireLock(RequestLock.Read))
+			{
+				// Create the command and submit it to the project's command manager.
+				Block block = blocks[operation.LineIndex];
+				var command = new SetTextCommand(block.BlockKey, operation.Text);
+				commands.Do(command);
 
-			//	// Fire a line changed operation.
-			//	RaiseLineChanged(new LineChangedArgs(operation.LineIndex));
+				// Fire a line changed operation.
+				RaiseLineChanged(new LineChangedArgs(operation.LineIndex));
 
-			//	// Construct the operation results for the delete from information in the
-			//	// command manager.
-			//	var results =
-			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
-			//	return results;
-			//}
-			throw new NotImplementedException();
+				// Construct the operation results for the delete from information in the
+				// command manager.
+				var results =
+					new LineBufferOperationResults(
+						new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+				return results;
+			}
 		}
 
 		protected override LineBufferOperationResults Do(
 			InsertLinesOperation operation)
 		{
-			//// We need a write lock on the blocks since this will be making changes
-			//// to the structure of the document.
-			//using (blocks.AcquireLock(RequestLock.Write))
-			//{
-			//	// Create the command and submit it to the project's command manager.
-			//	Block block = blocks[operation.LineIndex];
-			//	var command = new InsertAfterBlockCommand(block.BlockKey, operation.Count);
-			//	commands.Do(command);
+			// We need a write lock on the blocks since this will be making changes
+			// to the structure of the document.
+			using (blocks.AcquireLock(RequestLock.Write))
+			{
+				// Create the command and submit it to the project's command manager.
+				Block block = blocks[operation.LineIndex];
+				var command = new InsertAfterBlockCommand(block.BlockKey, operation.Count);
+				commands.Do(command);
 
-			//	// Raise the events to indicate the line changed.
-			//	RaiseLinesInserted(
-			//		new LineRangeEventArgs(
-			//			operation.LineIndex, operation.LineIndex + operation.Count));
+				// Raise the events to indicate the line changed.
+				RaiseLinesInserted(
+					new LineRangeEventArgs(
+						operation.LineIndex, operation.LineIndex + operation.Count));
 
-			//	// Construct the operation results for the delete from information in the
-			//	// command manager.
-			//	var results =
-			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
-			//	return results;
-			//}
-			throw new NotImplementedException();
+				// Construct the operation results for the delete from information in the
+				// command manager.
+				var results =
+					new LineBufferOperationResults(
+						new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+				return results;
+			}
 		}
 
 		protected override LineBufferOperationResults Do(
 			DeleteLinesOperation operation)
 		{
-			//// We only need a read-lock on the blocks just to make sure nothing moves
-			//// underneath us while we get the block key.
-			//using (blocks.AcquireLock(RequestLock.Read))
-			//{
-			//	// Add each delete line into a composite command.
-			//	var deleteCommand = new CompositeCommand();
+			// We only need a read-lock on the blocks just to make sure nothing moves
+			// underneath us while we get the block key.
+			using (blocks.AcquireLock(RequestLock.Read))
+			{
+				// Add each delete line into a composite command.
+				var deleteCommand = new CompositeCommand();
 
-			//	for (int lineIndex = operation.LineIndex;
-			//		lineIndex < operation.LineIndex + operation.Count;
-			//		lineIndex++)
-			//	{
-			//		Block block = blocks[lineIndex];
-			//		var command = new DeleteBlockCommand(block.BlockKey);
-			//		deleteCommand.Commands.Add(command);
-			//	}
+				for (int lineIndex = operation.LineIndex;
+					lineIndex < operation.LineIndex + operation.Count;
+					lineIndex++)
+				{
+					Block block = blocks[lineIndex];
+					var command = new DeleteBlockCommand(block.BlockKey);
+					deleteCommand.Commands.Add(command);
+				}
 
-			//	// Submit the delete line.
-			//	commands.Do(deleteCommand);
+				// Submit the delete line.
+				commands.Do(deleteCommand);
 
-			//	// Raise the deleted line events.
-			//	RaiseLinesDeleted(
-			//		new LineRangeEventArgs(
-			//			operation.LineIndex, operation.LineIndex + operation.Count));
+				// Raise the deleted line events.
+				RaiseLinesDeleted(
+					new LineRangeEventArgs(
+						operation.LineIndex, operation.LineIndex + operation.Count));
 
-			//	// Construct the operation results for the delete from information in the
-			//	// command manager.
-			//	var results =
-			//		new LineBufferOperationResults(
-			//			new BufferPosition(operation.LineIndex, commands.LastPosition.TextIndex));
-			//	return results;
-			//}
-			throw new NotImplementedException();
+				// Construct the operation results for the delete from information in the
+				// command manager.
+				var results =
+					new LineBufferOperationResults(
+						new BufferPosition(operation.LineIndex, commands.LastPosition.TextIndex));
+				return results;
+			}
 		}
 
 		/// <summary>
@@ -410,34 +334,6 @@ namespace AuthorIntrusion.Gui.GtkGui
 			return markup;
 		}
 
-		private LineBufferOperationResults GetOperationResults()
-		{
-			int blockIndex =
-				project.Blocks.IndexOf(project.Commands.LastPosition.BlockKey);
-			var results =
-				new LineBufferOperationResults(
-					new BufferPosition(blockIndex, project.Commands.LastPosition.TextIndex));
-			return results;
-		}
-
-		private void OnBlockTextChanged(
-			object sender,
-			BlockEventArgs e)
-		{
-			int blockIndex = blocks.IndexOf(e.Block);
-			var args = new LineChangedArgs(blockIndex);
-			RaiseLineChanged(args);
-		}
-
-		private void OnBlockTypeChanged(
-			object sender,
-			BlockEventArgs e)
-		{
-			int blockIndex = blocks.IndexOf(e.Block);
-			var args = new LineChangedArgs(blockIndex);
-			RaiseLineChanged(args);
-		}
-
 		/// <summary>
 		/// Called when the context menu is being populated.
 		/// </summary>
@@ -452,8 +348,6 @@ namespace AuthorIntrusion.Gui.GtkGui
 			BufferPosition position = editorView.Caret.Position;
 			int blockIndex = position.LineIndex;
 			Block block;
-
-			var context = new BlockCommandContext(project);
 
 			using (blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
 			{
@@ -492,7 +386,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 						var menuItem = new MenuItem(action.DisplayName);
 						menuItem.Activated += delegate
 						{
-							doAction.Do(context);
+							doAction.Do();
 							RaiseLineChanged(new LineChangedArgs(blockIndex));
 						};
 
@@ -520,8 +414,6 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 			// Hook up the events.
 			editorView.Controller.PopulateContextMenu += OnPopulateContextMenu;
-			blocks.BlockTextChanged += OnBlockTextChanged;
-			blocks.BlockTypeChanged += OnBlockTypeChanged;
 		}
 
 		#endregion

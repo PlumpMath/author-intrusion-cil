@@ -72,6 +72,13 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			// Pull out the edit text and add a leading space to simplify the
 			// "whole word" substitutions.
 			string editText = block.Text.Substring(0, textIndex);
+
+			if (editText.Length - 1 < 0)
+			{
+				return;
+			}
+
+			// Figure out if we're at a word break.
 			char finalCharacter = editText[editText.Length - 1];
 			bool isWordBreak = char.IsPunctuation(finalCharacter)
 				|| char.IsWhiteSpace(finalCharacter);

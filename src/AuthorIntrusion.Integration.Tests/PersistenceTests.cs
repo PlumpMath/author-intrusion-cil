@@ -11,6 +11,7 @@ using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Common.Tests;
+using AuthorIntrusion.Plugins.ImmediateBlockTypes;
 using AuthorIntrusion.Plugins.ImmediateCorrection;
 using AuthorIntrusion.Plugins.Spelling;
 using AuthorIntrusion.Plugins.Spelling.LocalWords;
@@ -36,7 +37,7 @@ namespace AuthorIntrusion.Integration.Tests
 			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
-			Assert.AreEqual(6, plugins.Controllers.Count);
+			Assert.AreEqual(7, plugins.Controllers.Count);
 		}
 
 		[Test]
@@ -114,7 +115,7 @@ namespace AuthorIntrusion.Integration.Tests
 			blocks = project.Blocks;
 
 			Assert.AreEqual(
-				6, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
+				7, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
 			Assert.NotNull(blockTypes["Custom Type"]);
 			Assert.IsFalse(blockTypes["Custom Type"].IsStructural);
 
@@ -219,6 +220,7 @@ namespace AuthorIntrusion.Integration.Tests
 			var nhunspellPlugin = new NHunspellSpellingPlugin();
 			var localWordsPlugin = new LocalWordsPlugin();
 			var immediateCorrectionPlugin = new ImmediateCorrectionPlugin();
+			var immediateBlockTypesPlugin = new ImmediateBlockTypesPlugin();
 
 			var pluginManager = new PluginManager(
 				persistencePlugin,
@@ -226,7 +228,8 @@ namespace AuthorIntrusion.Integration.Tests
 				spellingPlugin,
 				nhunspellPlugin,
 				localWordsPlugin,
-				immediateCorrectionPlugin);
+				immediateCorrectionPlugin,
+				immediateBlockTypesPlugin);
 
 			PluginManager.Instance = pluginManager;
 			PersistenceManager.Instance = new PersistenceManager(persistencePlugin);
@@ -246,14 +249,15 @@ namespace AuthorIntrusion.Integration.Tests
 			plugins.Add("NHunspell");
 			plugins.Add("Local Words");
 			plugins.Add("Immediate Correction");
+			plugins.Add("Immediate Block Types");
 
 			// Set up the local words lookup.
 			var localWordsProjectPlugin =
 				(LocalWordsProjectPlugin) plugins["Local Words"];
 
 			localWordsProjectPlugin.ReadSettings();
-			localWordsProjectPlugin.CaseInsensitiveDictionary.Add("insensitive");
-			localWordsProjectPlugin.CaseSensitiveDictionary.Add("Sensitive");
+			localWordsProjectPlugin.CaseInsensitiveDictionary.Add("teig");
+			localWordsProjectPlugin.CaseSensitiveDictionary.Add("Moonfire");
 			localWordsProjectPlugin.WriteSettings();
 
 			// Set up the immediate correction plugin.
@@ -262,6 +266,20 @@ namespace AuthorIntrusion.Integration.Tests
 
 			immediateCorrectionProjectPlugin.AddSubstitution(
 				"Grey", "Gray", SubstitutionOptions.WholeWord);
+			immediateCorrectionProjectPlugin.AddSubstitution(
+				"GWG","Great Waryoni Garèo",SubstitutionOptions.None);
+
+			// Set up the immediate block types.
+			var immediateBlockTypesProjectPlugin =
+				(ImmediateBlockTypesProjectPlugin)plugins["Immediate Block Types"];
+
+			foreach (BlockType blockType in project.BlockTypes.BlockTypes.Values)
+			{
+				string prefix = string.Format("{0}: ", blockType.Name);
+
+				immediateBlockTypesProjectPlugin.Settings.Replacements[prefix] =
+					blockType.Name;
+			}
 
 			// Pull out the projectPlugin for the correction and cast it (since we know
 			// what type it is).

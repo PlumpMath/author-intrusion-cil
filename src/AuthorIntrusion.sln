@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Gui.GtkGui"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Integration.Tests", "AuthorIntrusion.Integration.Tests\AuthorIntrusion.Integration.Tests.csproj", "{91D7AC38-160D-46A9-B50E-FFD1DE40C8C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Plugins.ImmediateBlockTypes", "AuthorIntrusion.Plugins.ImmediateBlockTypes\AuthorIntrusion.Plugins.ImmediateBlockTypes.csproj", "{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{91D7AC38-160D-46A9-B50E-FFD1DE40C8C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91D7AC38-160D-46A9-B50E-FFD1DE40C8C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91D7AC38-160D-46A9-B50E-FFD1DE40C8C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,5 +148,6 @@ Global
 		{4B25BA0F-00CE-48A7-951E-EECBCCD4B8B0} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
 		{69A53342-73A3-48F2-9C87-493CC82289B2} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
 		{D338F511-6F3A-453D-B144-F6A5532495C5} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
+		{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50} = {9EE6D6B3-47C7-454A-832A-57A82FA1F803}
 	EndGlobalSection
 EndGlobal
