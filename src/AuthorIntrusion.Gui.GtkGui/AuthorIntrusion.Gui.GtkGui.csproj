@@ -60,25 +60,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MfGames.4.0\lib\net35\MfGames.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MfGames.GtkExt, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.0.0.1\lib\net40\MfGames.GtkExt.dll</HintPath>
+      <HintPath>..\packages\MfGames.GtkExt.0.0.2\lib\net45\MfGames.GtkExt.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.Actions, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MfGames.GtkExt.Actions, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.0.0.1\lib\net40\MfGames.GtkExt.Actions.dll</HintPath>
+      <HintPath>..\packages\MfGames.GtkExt.0.0.2\lib\net45\MfGames.GtkExt.Actions.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.Configurators, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MfGames.GtkExt.Configurators, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.0.0.1\lib\net40\MfGames.GtkExt.Configurators.dll</HintPath>
+      <HintPath>..\packages\MfGames.GtkExt.0.0.2\lib\net45\MfGames.GtkExt.Configurators.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.TextEditor, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MfGames.GtkExt.TextEditor, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.0.0.1\lib\net40\MfGames.GtkExt.TextEditor.dll</HintPath>
+      <HintPath>..\packages\MfGames.GtkExt.0.0.2\lib\net45\MfGames.GtkExt.TextEditor.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.TextEditor.Models, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MfGames.GtkExt.TextEditor.Models, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.0.0.1\lib\net40\MfGames.GtkExt.TextEditor.Models.dll</HintPath>
+      <HintPath>..\packages\MfGames.GtkExt.0.0.2\lib\net45\MfGames.GtkExt.TextEditor.Models.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cairo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

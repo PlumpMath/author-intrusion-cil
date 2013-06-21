@@ -102,36 +102,38 @@ namespace AuthorIntrusion.Plugins.Spelling
 			Block block,
 			TextSpan textSpan)
 		{
-			// We only get to this point if we have a misspelled word.
-			string word = textSpan.GetText(block.Text);
+			//// We only get to this point if we have a misspelled word.
+			//string word = textSpan.GetText(block.Text);
 
-			// Get the suggestions for the word.
-			C5.IList<SpellingSuggestion> suggestions = GetSuggestions(word);
+			//// Get the suggestions for the word.
+			//C5.IList<SpellingSuggestion> suggestions = GetSuggestions(word);
 
-			// Go through the suggestions and create an editor action for each one.
-			// These will already be ordered coming out of the GetSuggestions()
-			// method.
-			BlockCommandSupervisor commands = block.Project.Commands;
-			var actions = new ArrayList<IEditorAction>(suggestions.Count);
+			//// Go through the suggestions and create an editor action for each one.
+			//// These will already be ordered coming out of the GetSuggestions()
+			//// method.
+			//BlockCommandSupervisor commands = block.Project.Commands;
+			//var actions = new ArrayList<IEditorAction>(suggestions.Count);
+			var actions = new ArrayList<IEditorAction>();
 
-			foreach (SpellingSuggestion suggestion in suggestions)
-			{
-				// Figure out the operation we'll be using to implement the change.
-				var command =
-					new ReplaceTextCommand(
-						new BlockPosition(block.BlockKey, textSpan.StartTextIndex),
-						textSpan.Length,
-						suggestion.Suggestion);
+			// TODO: Need to fix this.
+			//foreach (SpellingSuggestion suggestion in suggestions)
+			//{
+			//	// Figure out the operation we'll be using to implement the change.
+			//	var command =
+			//		new ReplaceTextCommand(
+			//			new BlockPosition(block.BlockKey, textSpan.StartTextIndex),
+			//			textSpan.Length,
+			//			suggestion.Suggestion);
 
-				// Create the suggestion action, along with the replacement command.
-				var action =
-					new EditorAction(
-						string.Format("Change to \"{0}\"", suggestion.Suggestion),
-						new HierarchicalPath("/Plugins/Spelling/Change"),
-						() => commands.Do(command));
+			//	// Create the suggestion action, along with the replacement command.
+			//	var action =
+			//		new EditorAction(
+			//			string.Format("Change to \"{0}\"", suggestion.Suggestion),
+			//			new HierarchicalPath("/Plugins/Spelling/Change"),
+			//			() => commands.Do(command));
 
-				actions.Add(action);
-			}
+			//	actions.Add(action);
+			//}
 
 			// Return all the change actions.
 			return actions;

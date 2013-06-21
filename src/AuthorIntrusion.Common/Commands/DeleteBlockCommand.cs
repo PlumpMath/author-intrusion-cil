@@ -20,70 +20,59 @@ namespace AuthorIntrusion.Common.Commands
 		/// </value>
 		public bool IgnoreMinimumLines { get; set; }
 
-		public override bool IsUndoable
-		{
-			get { return true; }
-		}
-
 		#endregion
 
 		#region Methods
 
 		protected override void Do(Block block)
 		{
-			// Figure out the current state at the point of deleting and populate the
-			// composite command to restore that state if the operation is undone.
-			int blockIndex = block.Blocks.IndexOf(block);
-			IBlockCommand insertCommand = new InsertIndexedBlockCommand(
-				blockIndex, block);
+			// TODO: Need to fix this.
+			//// Figure out the current state at the point of deleting and populate the
+			//// composite command to restore that state if the operation is undone.
+			//int blockIndex = block.Blocks.IndexOf(block);
+			//IBlockCommand insertCommand = new InsertIndexedBlockCommand(
+			//	blockIndex, block);
 
-			inverseCommand.LastPosition = new BlockPosition(block, block.Text.Length);
-			inverseCommand.Commands.Clear();
-			inverseCommand.Commands.Add(insertCommand);
+			//inverseCommand.LastPosition = new BlockPosition(block, block.Text.Length);
+			//inverseCommand.Commands.Clear();
+			//inverseCommand.Commands.Add(insertCommand);
 
-			// Delete the block from the list.
-			block.Blocks.Remove(block);
+			//// Delete the block from the list.
+			//block.Blocks.Remove(block);
 
-			// If we have no more blocks, then we need to ensure we have a minimum
-			// number of blocks.
-			if (!IgnoreMinimumLines
-				&& block.Blocks.Count == 0)
-			{
-				// Create a new placeholder block, which is blank.
-				var blankBlock = new Block(block.Blocks, block.Project.BlockTypes.Paragraph);
+			//// If we have no more blocks, then we need to ensure we have a minimum
+			//// number of blocks.
+			//if (!IgnoreMinimumLines
+			//	&& block.Blocks.Count == 0)
+			//{
+			//	// Create a new placeholder block, which is blank.
+			//	var blankBlock = new Block(block.Blocks, block.Project.BlockTypes.Paragraph);
 
-				block.Blocks.Add(blankBlock);
+			//	block.Blocks.Add(blankBlock);
 
-				// Set the last position to this newly created block.
-				LastPosition = new BlockPosition(blankBlock, 0);
+			//	// Set the last position to this newly created block.
+			//	LastPosition = new BlockPosition(blankBlock, 0);
 
-				// Because we added a block, we also have to add in the delete
-				// for the reverse operation.
-				var deleteBlankCommand = new DeleteBlockCommand(blankBlock.BlockKey)
-				{
-					IgnoreMinimumLines = true,
-				};
+			//	// Because we added a block, we also have to add in the delete
+			//	// for the reverse operation.
+			//	var deleteBlankCommand = new DeleteBlockCommand(blankBlock.BlockKey)
+			//	{
+			//		IgnoreMinimumLines = true,
+			//	};
 
-				inverseCommand.Commands.InsertFirst(deleteBlankCommand);
-			}
-			else if (!IgnoreMinimumLines)
-			{
-				// We have to figure out where the cursor would be after this operation.
-				// Ideally, this would be the block in the current position, but if this
-				// is the last line, then use that.
-				LastPosition = new BlockPosition(
-					blockIndex < block.Blocks.Count
-						? block.Blocks[blockIndex].BlockKey
-						: block.Blocks[blockIndex - 1].BlockKey,
-					0);
-			}
-		}
-
-		protected override IBlockCommand GetInverseCommand(
-			Project project,
-			Block block)
-		{
-			return inverseCommand;
+			//	inverseCommand.Commands.InsertFirst(deleteBlankCommand);
+			//}
+			//else if (!IgnoreMinimumLines)
+			//{
+			//	// We have to figure out where the cursor would be after this operation.
+			//	// Ideally, this would be the block in the current position, but if this
+			//	// is the last line, then use that.
+			//	LastPosition = new BlockPosition(
+			//		blockIndex < block.Blocks.Count
+			//			? block.Blocks[blockIndex].BlockKey
+			//			: block.Blocks[blockIndex - 1].BlockKey,
+			//		0);
+			//}
 		}
 
 		#endregion
@@ -93,14 +82,7 @@ namespace AuthorIntrusion.Common.Commands
 		public DeleteBlockCommand(BlockKey blockKey)
 			: base(blockKey)
 		{
-			inverseCommand = new CompositeCommand();
 		}
-
-		#endregion
-
-		#region Fields
-
-		private readonly CompositeCommand inverseCommand;
 
 		#endregion
 	}

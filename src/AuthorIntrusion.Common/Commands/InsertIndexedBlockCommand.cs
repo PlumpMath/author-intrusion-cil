@@ -25,18 +25,14 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		public void Do(Project project)
+		public void Do(BlockCommandContext context)
 		{
-			// We need a write lock since we are making changes to the collection itself.
-			using (project.Blocks.AcquireLock(RequestLock.Write))
-			{
-				project.Blocks.Insert(BlockIndex, Block);
-			}
-		}
-
-		public IBlockCommand GetInverseCommand(Project project)
-		{
-			return new DeleteBlockCommand(Block.BlockKey);
+			// TODO: Need to fix this.
+			//// We need a write lock since we are making changes to the collection itself.
+			//using (project.Blocks.AcquireLock(RequestLock.Write))
+			//{
+			//	project.Blocks.Insert(BlockIndex, Block);
+			//}
 		}
 
 		#endregion

@@ -19,9 +19,6 @@ namespace AuthorIntrusion.Common.Commands
 		/// </summary>
 		public BlockKey BlockKey { get; private set; }
 
-		public abstract bool IsUndoable { get; }
-		public BlockPosition LastPosition { get; protected set; }
-
 		#endregion
 
 		#region Methods
@@ -30,36 +27,13 @@ namespace AuthorIntrusion.Common.Commands
 		/// Acquires the locks needed for a specific operation and then performs
 		/// UnlockedDo().
 		/// </summary>
-		/// <param name="project">The project.</param>
-		public abstract void Do(Project project);
-
-		public IBlockCommand GetInverseCommand(Project project)
-		{
-			// We need a read access to the project.
-			Block block;
-
-			using (project.Blocks.AcquireBlockLock(RequestLock.Read, BlockKey, out block)
-				)
-			{
-				// Perform the action on the block.
-				return GetInverseCommand(project, block);
-			}
-		}
+		public abstract void Do(BlockCommandContext state);
 
 		/// <summary>
 		/// Performs the command on the given block.
 		/// </summary>
 		/// <param name="block">The block to perform the action on.</param>
 		protected abstract void Do(Block block);
-
-		/// <summary>
-		/// Gets the inverse command for a given block.
-		/// </summary>
-		/// <param name="project">The project that contains the current state.</param>
-		/// <param name="block">The block to perform the action on.</param>
-		protected abstract IBlockCommand GetInverseCommand(
-			Project project,
-			Block block);
 
 		#endregion
 

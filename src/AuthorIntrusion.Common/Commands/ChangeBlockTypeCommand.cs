@@ -15,11 +15,6 @@ namespace AuthorIntrusion.Common.Commands
 
 		public BlockType BlockType { get; private set; }
 
-		public override bool IsUndoable
-		{
-			get { return true; }
-		}
-
 		#endregion
 
 		#region Methods
@@ -27,14 +22,6 @@ namespace AuthorIntrusion.Common.Commands
 		protected override void Do(Block block)
 		{
 			block.SetBlockType(BlockType);
-		}
-
-		protected override IBlockCommand GetInverseCommand(
-			Project project,
-			Block block)
-		{
-			var inverse = new ChangeBlockTypeCommand(block.BlockKey, block.BlockType);
-			return inverse;
 		}
 
 		#endregion
@@ -47,7 +34,6 @@ namespace AuthorIntrusion.Common.Commands
 			: base(blockKey)
 		{
 			BlockType = blockType;
-			LastPosition = new BlockPosition(blockKey, 0);
 		}
 
 		#endregion

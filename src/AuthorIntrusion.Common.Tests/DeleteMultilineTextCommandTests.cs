@@ -27,7 +27,7 @@ namespace AuthorIntrusion.Common.Tests
 				new DeleteMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
-			commands.Do(command);
+			// DREM commands.Do(command);
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
@@ -51,10 +51,10 @@ namespace AuthorIntrusion.Common.Tests
 				new DeleteMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
-			commands.Do(command);
+			// DREM commands.Do(command);
 
 			// Act
-			commands.Undo();
+			// DREM commands.Undo();
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
@@ -90,11 +90,11 @@ namespace AuthorIntrusion.Common.Tests
 				new DeleteMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
-			commands.Do(command);
-			commands.Undo();
+			// DREM commands.Do(command);
+			// DREM commands.Undo();
 
 			// Act
-			commands.Redo();
+			// DREM commands.Redo();
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
@@ -118,12 +118,12 @@ namespace AuthorIntrusion.Common.Tests
 				new DeleteMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
-			commands.Do(command);
-			commands.Undo();
-			commands.Redo();
+			// DREM commands.Do(command);
+			// DREM commands.Undo();
+			// DREM commands.Redo();
 
 			// Act
-			commands.Undo();
+			// DREM commands.Undo();
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);

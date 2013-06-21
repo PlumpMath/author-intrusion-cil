@@ -31,7 +31,7 @@ namespace AuthorIntrusion.Common.Tests
 			// Act
 			var command = new ReplaceTextCommand(
 				new BlockPosition(blockKey, 2), 1, "YES");
-			project.Commands.Do(command);
+			// DREM project.Commands.Do(command);
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
@@ -59,10 +59,10 @@ namespace AuthorIntrusion.Common.Tests
 
 			var command = new ReplaceTextCommand(
 				new BlockPosition(blockKey, 2), 1, "YES");
-			project.Commands.Do(command);
+			// DREM project.Commands.Do(command);
 
 			// Act
-			project.Commands.Undo();
+			// DREM project.Commands.Undo();
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
@@ -90,11 +90,11 @@ namespace AuthorIntrusion.Common.Tests
 
 			var command = new ReplaceTextCommand(
 				new BlockPosition(blockKey, 2), 1, "YES");
-			project.Commands.Do(command);
-			project.Commands.Undo();
+			// DREM project.Commands.Do(command);
+			// DREM project.Commands.Undo();
 
 			// Act
-			project.Commands.Redo();
+			// DREM project.Commands.Redo();
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);

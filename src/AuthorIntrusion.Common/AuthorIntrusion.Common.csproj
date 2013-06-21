@@ -39,6 +39,12 @@
     <Reference Include="MfGames">
       <HintPath>..\packages\MfGames.4.0\lib\net35\MfGames.dll</HintPath>
     </Reference>
+    <Reference Include="MfGames.Commands">
+      <HintPath>..\packages\MfGames.Commands.0.1\lib\net45\MfGames.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.Commands.TextEditing">
+      <HintPath>..\packages\MfGames.Commands.0.1\lib\net45\MfGames.Commands.TextEditing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,11 +69,11 @@
     <Compile Include="Blocks\BlockStructure.cs" />
     <Compile Include="Blocks\TextSpan.cs" />
     <Compile Include="Blocks\TextSpanCollection.cs" />
+    <Compile Include="Commands\BlockCommandContext.cs" />
     <Compile Include="Commands\BlockCommandSupervisor.cs" />
     <Compile Include="Commands\ChangeBlockTypeCommand.cs" />
     <Compile Include="Commands\ChangeMultipleBlockTypesCommand.cs" />
     <Compile Include="Commands\CompositeBlockPositionCommand.cs" />
-    <Compile Include="Commands\CompositeCommand.cs" />
     <Compile Include="Commands\DeleteBlockCommand.cs" />
     <Compile Include="Commands\DeleteMultilineTextCommand.cs" />
     <Compile Include="Commands\DeleteTextCommand.cs" />

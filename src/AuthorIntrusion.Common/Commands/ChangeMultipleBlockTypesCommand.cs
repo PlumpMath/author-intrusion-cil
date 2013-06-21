@@ -37,28 +37,29 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		public void Do(Project project)
+		public void Do(BlockCommandContext context)
 		{
-			// Since we're making chanegs to the list, we need a write lock.
-			using (project.Blocks.AcquireLock(RequestLock.Write))
-			{
-				// Clear out the inverse since we'll be rebuilding it.
-				GetInverseCommand(project);
-				InverseCommand.Changes.Clear();
+			// TODO: Need to fix this.
+			//// Since we're making chanegs to the list, we need a write lock.
+			//using (project.Blocks.AcquireLock(RequestLock.Write))
+			//{
+			//	// Clear out the inverse since we'll be rebuilding it.
+			//	GetInverseCommand(project);
+			//	InverseCommand.Changes.Clear();
 
-				// Go through all the blocks in the project.
-				foreach (Block block in project.Blocks)
-				{
-					if (Changes.Contains(block.BlockKey))
-					{
-						BlockType blockType = Changes[block.BlockKey];
-						BlockType existingType = block.BlockType;
+			//	// Go through all the blocks in the project.
+			//	foreach (Block block in project.Blocks)
+			//	{
+			//		if (Changes.Contains(block.BlockKey))
+			//		{
+			//			BlockType blockType = Changes[block.BlockKey];
+			//			BlockType existingType = block.BlockType;
 
-						InverseCommand.Changes[block.BlockKey] = existingType;
-						block.SetBlockType(blockType);
-					}
-				}
-			}
+			//			InverseCommand.Changes[block.BlockKey] = existingType;
+			//			block.SetBlockType(blockType);
+			//		}
+			//	}
+			//}
 		}
 
 		public IBlockCommand GetInverseCommand(Project project)

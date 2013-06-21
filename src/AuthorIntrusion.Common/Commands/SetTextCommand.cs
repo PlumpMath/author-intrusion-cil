@@ -14,11 +14,6 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
-		public override bool IsUndoable
-		{
-			get { return true; }
-		}
-
 		public string Text { get; private set; }
 
 		#endregion
@@ -28,14 +23,6 @@ namespace AuthorIntrusion.Common.Commands
 		protected override void Do(Block block)
 		{
 			block.SetText(Text);
-		}
-
-		protected override IBlockCommand GetInverseCommand(
-			Project project,
-			Block block)
-		{
-			var command = new SetTextCommand(BlockKey, block.Text);
-			return command;
 		}
 
 		#endregion
@@ -48,7 +35,6 @@ namespace AuthorIntrusion.Common.Commands
 			: base(blockKey)
 		{
 			Text = text;
-			LastPosition = new BlockPosition(blockKey, text.Length);
 		}
 
 		#endregion

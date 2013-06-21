@@ -15,16 +15,17 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Methods
 
-		public override void Do(Project project)
+		public override void Do(BlockCommandContext context)
 		{
-			Block block;
+			// TODO: Need to fix.
+			//Block block;
 
-			using (
-				project.Blocks.AcquireBlockLock(
-					RequestLock.Write, RequestLock.Write, BlockKey, out block))
-			{
-				Do(block);
-			}
+			//using (
+			//	project.Blocks.AcquireBlockLock(
+			//		RequestLock.Write, RequestLock.Write, BlockKey, out block))
+			//{
+			//	Do(block);
+			//}
 		}
 
 		#endregion

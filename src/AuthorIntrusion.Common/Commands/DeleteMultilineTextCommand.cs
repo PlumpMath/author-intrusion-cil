@@ -13,67 +13,56 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
-		public bool IsUndoable
-		{
-			get { return true; }
-		}
-
 		public BlockPosition LastPosition { get; private set; }
 
 		public BlockPosition StartBlockPosition { get; set; }
 		public BlockPosition StopBlockPosition { get; set; }
 
-		protected CompositeCommand InverseCommand { get; private set; }
-
 		#endregion
 
 		#region Methods
 
-		public void Do(Project project)
+		public void Do(BlockCommandContext context)
 		{
-			// We have to clear the undo buffer every time because we'll be creating
-			// new blocks.
-			InverseCommand.Commands.Clear();
-			InverseCommand.LastPosition = StopBlockPosition;
+			// TODO: Need to fix this.
+			//// We have to clear the undo buffer every time because we'll be creating
+			//// new blocks.
+			//InverseCommand.Commands.Clear();
+			//InverseCommand.LastPosition = StopBlockPosition;
 
-			// Set up our own position.
-			LastPosition = StartBlockPosition;
+			//// Set up our own position.
+			//LastPosition = StartBlockPosition;
 
-			// Figure out line ranges we'll be deleting text from.
-			Block startBlock = project.Blocks[StartBlockPosition.BlockKey];
-			Block stopBlock = project.Blocks[StopBlockPosition.BlockKey];
+			//// Figure out line ranges we'll be deleting text from.
+			//Block startBlock = project.Blocks[StartBlockPosition.BlockKey];
+			//Block stopBlock = project.Blocks[StopBlockPosition.BlockKey];
 
-			int startIndex = project.Blocks.IndexOf(startBlock);
-			int stopIndex = project.Blocks.IndexOf(stopBlock);
+			//int startIndex = project.Blocks.IndexOf(startBlock);
+			//int stopIndex = project.Blocks.IndexOf(stopBlock);
 
-			// Figure out where we'll be replacing lines.
-			int startLength = startBlock.Text.Length - StartBlockPosition.TextIndex;
-			string stopText = stopBlock.Text.Substring(StopBlockPosition.TextIndex);
+			//// Figure out where we'll be replacing lines.
+			//int startLength = startBlock.Text.Length - StartBlockPosition.TextIndex;
+			//string stopText = stopBlock.Text.Substring(StopBlockPosition.TextIndex);
 
-			var startReplace = new ReplaceTextCommand(
-				StartBlockPosition, startLength, stopText);
-			IBlockCommand startInverse = startReplace.GetInverseCommand(project);
+			//var startReplace = new ReplaceTextCommand(
+			//	StartBlockPosition, startLength, stopText);
+			//IBlockCommand startInverse = startReplace.GetInverseCommand(project);
 
-			InverseCommand.Commands.Add(startInverse);
-			startReplace.Do(project);
+			//InverseCommand.Commands.Add(startInverse);
+			//startReplace.Do(project);
 
-			// Go through the remaining lines.
-			for (int i = startIndex + 1;
-				i <= stopIndex;
-				i++)
-			{
-				var middleDelete =
-					new DeleteBlockCommand(project.Blocks[startIndex + 1].BlockKey);
-				IBlockCommand middleInverse = middleDelete.GetInverseCommand(project);
+			//// Go through the remaining lines.
+			//for (int i = startIndex + 1;
+			//	i <= stopIndex;
+			//	i++)
+			//{
+			//	var middleDelete =
+			//		new DeleteBlockCommand(project.Blocks[startIndex + 1].BlockKey);
+			//	IBlockCommand middleInverse = middleDelete.GetInverseCommand(project);
 
-				InverseCommand.Commands.Insert(1, middleInverse);
-				middleDelete.Do(project);
-			}
-		}
-
-		public IBlockCommand GetInverseCommand(Project project)
-		{
-			return InverseCommand;
+			//	InverseCommand.Commands.Insert(1, middleInverse);
+			//	middleDelete.Do(project);
+			//}
 		}
 
 		#endregion
@@ -87,7 +76,6 @@ namespace AuthorIntrusion.Common.Commands
 			// Save the text for the changes.
 			StartBlockPosition = startPosition;
 			StopBlockPosition = stopPosition;
-			InverseCommand = new CompositeCommand();
 		}
 
 		#endregion

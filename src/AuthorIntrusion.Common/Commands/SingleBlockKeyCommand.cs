@@ -14,15 +14,15 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Methods
 
-		public override void Do(Project project)
+		public override void Do(BlockCommandContext context)
 		{
-			ProjectBlockCollection blocks = project.Blocks;
-			Block block;
+			//ProjectBlockCollection blocks = project.Blocks;
+			//Block block;
 
-			using (blocks.AcquireBlockLock(RequestLock.Write, BlockKey, out block))
-			{
-				Do(block);
-			}
+			//using (blocks.AcquireBlockLock(RequestLock.Write, BlockKey, out block))
+			//{
+			//	Do(block);
+			//}
 		}
 
 		#endregion

@@ -134,7 +134,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			plugins.WaitForBlockAnalzyers();
 
 			// Act
-			commands.Undo();
+			// DREM commands.Undo();
 
 			// Assert
 			Assert.AreEqual("Correc.", block.Text);

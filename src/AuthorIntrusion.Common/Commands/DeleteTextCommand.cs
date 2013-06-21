@@ -13,11 +13,6 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
-		public override bool IsUndoable
-		{
-			get { return true; }
-		}
-
 		public int Length { get; private set; }
 
 		#endregion
@@ -34,16 +29,6 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(newText);
 		}
 
-		protected override IBlockCommand GetInverseCommand(
-			Project project,
-			Block block)
-		{
-			// Create an insert text operation that is the inverse of the delete.
-			string deletedText = block.Text.Substring(TextIndex, Length);
-			var command = new InsertTextCommand(BlockPosition, deletedText);
-			return command;
-		}
-
 		#endregion
 
 		#region Constructors
@@ -54,7 +39,6 @@ namespace AuthorIntrusion.Common.Commands
 			: base(position)
 		{
 			Length = length;
-			LastPosition = position;
 		}
 
 		#endregion

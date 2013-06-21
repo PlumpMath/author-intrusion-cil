@@ -61,81 +61,82 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			Block block,
 			int textIndex)
 		{
-			// If we aren't optimized, we have to pull the settings back in from the
-			// project settings and optimize them.
-			if (!optimizedSubstitions)
-			{
-				RetrieveSettings();
-			}
+			// TODO: Need to fix this.
+			//// If we aren't optimized, we have to pull the settings back in from the
+			//// project settings and optimize them.
+			//if (!optimizedSubstitions)
+			//{
+			//	RetrieveSettings();
+			//}
 
-			// Pull out the edit text and add a leading space to simplify the
-			// "whole word" substitutions.
-			string editText = block.Text.Substring(0, textIndex);
-			char finalCharacter = editText[editText.Length - 1];
-			bool isWordBreak = char.IsPunctuation(finalCharacter)
-				|| char.IsWhiteSpace(finalCharacter);
+			//// Pull out the edit text and add a leading space to simplify the
+			//// "whole word" substitutions.
+			//string editText = block.Text.Substring(0, textIndex);
+			//char finalCharacter = editText[editText.Length - 1];
+			//bool isWordBreak = char.IsPunctuation(finalCharacter)
+			//	|| char.IsWhiteSpace(finalCharacter);
 
-			// Go through the substitution elements and look for each one.
-			foreach (RegisteredSubstitution substitution in Substitutions)
-			{
-				// If we are doing whole word searches, then we don't bother if
-				// the final character isn't a word break or if it isn't a word
-				// break before it.
-				ReplaceTextCommand command;
-				int searchLength = substitution.Search.Length;
-				int startSearchIndex = editText.Length - searchLength;
+			//// Go through the substitution elements and look for each one.
+			//foreach (RegisteredSubstitution substitution in Substitutions)
+			//{
+			//	// If we are doing whole word searches, then we don't bother if
+			//	// the final character isn't a word break or if it isn't a word
+			//	// break before it.
+			//	ReplaceTextCommand command;
+			//	int searchLength = substitution.Search.Length;
+			//	int startSearchIndex = editText.Length - searchLength;
 
-				if (substitution.IsWholeWord)
-				{
-					// Check to see if we have a valid search term.
-					if (!isWordBreak)
-					{
-						continue;
-					}
+			//	if (substitution.IsWholeWord)
+			//	{
+			//		// Check to see if we have a valid search term.
+			//		if (!isWordBreak)
+			//		{
+			//			continue;
+			//		}
 
-					if (startSearchIndex > 0
-						&& char.IsPunctuation(editText[startSearchIndex - 1]))
-					{
-						continue;
-					}
+			//		if (startSearchIndex > 0
+			//			&& char.IsPunctuation(editText[startSearchIndex - 1]))
+			//		{
+			//			continue;
+			//		}
 
-					// Make sure the string we're looking at actually is the same.
-					string editSubstring = editText.Substring(
-						startSearchIndex - 1, substitution.Search.Length);
+			//		// Make sure the string we're looking at actually is the same.
+			//		string editSubstring = editText.Substring(
+			//			startSearchIndex - 1, substitution.Search.Length);
 
-					if (editSubstring != substitution.Search)
-					{
-						// The words don't match.
-						continue;
-					}
+			//		if (editSubstring != substitution.Search)
+			//		{
+			//			// The words don't match.
+			//			continue;
+			//		}
 
-					// Perform the substitution with a replace operation.
-					command =
-						new ReplaceTextCommand(
-							new BlockPosition(block.BlockKey, startSearchIndex - 1),
-							searchLength + 1,
-							substitution.Replacement + finalCharacter);
-				}
-				else
-				{
-					// Perform a straight comparison search.
-					if (!editText.EndsWith(substitution.Search))
-					{
-						continue;
-					}
+			//		// Perform the substitution with a replace operation.
+			//		command =
+			//			new ReplaceTextCommand(
+			//				new BlockPosition(block.BlockKey, startSearchIndex - 1),
+			//				searchLength + 1,
+			//				substitution.Replacement + finalCharacter);
+			//	}
+			//	else
+			//	{
+			//		// Perform a straight comparison search.
+			//		if (!editText.EndsWith(substitution.Search))
+			//		{
+			//			continue;
+			//		}
 
-					// Figure out the replace operation.
-					command =
-						new ReplaceTextCommand(
-							new BlockPosition(block.BlockKey, startSearchIndex),
-							searchLength,
-							substitution.Replacement);
-				}
+			//		// Figure out the replace operation.
+			//		command =
+			//			new ReplaceTextCommand(
+			//				new BlockPosition(block.BlockKey, startSearchIndex),
+			//				searchLength,
+			//				substitution.Replacement);
+			//	}
 
-				// Add the command to the deferred execution so the command could
-				// be properly handled via the undo/redo management.
-				block.Project.Commands.DeferredDo(command);
-			}
+			//	// Add the command to the deferred execution so the command could
+			//	// be properly handled via the undo/redo management.
+			//	block.Project.Commands.DeferredDo(command);
+			//}
 		}
 
 		/// <summary>

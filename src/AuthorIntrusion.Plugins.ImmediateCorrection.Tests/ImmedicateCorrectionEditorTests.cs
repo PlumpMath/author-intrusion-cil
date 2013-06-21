@@ -116,7 +116,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			commands.InsertText(blocks[0], 0, "teh ");
 
 			// Act
-			commands.Undo();
+			// DREM commands.Undo();
 
 			// Assert
 			Assert.AreEqual("teh ", blocks[0].Text);
@@ -137,10 +137,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			commands.Undo();
+			// DREM commands.Undo();
 
 			// Act
-			commands.Redo();
+			// DREM commands.Redo();
 
 			// Assert
 			Assert.AreEqual("the ", blocks[0].Text);
@@ -161,10 +161,10 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			commands.Undo();
+			// DREM commands.Undo();
 
 			// Act
-			commands.Undo();
+			// DREM commands.Undo();
 
 			// Assert
 			Assert.AreEqual("", blocks[0].Text);
@@ -185,11 +185,11 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			commands.Undo();
-			commands.Undo();
+			// DREM commands.Undo();
+			// DREM commands.Undo();
 
 			// Act
-			commands.Redo();
+			// DREM commands.Redo();
 
 			// Assert
 			Assert.AreEqual("teh ", blocks[0].Text);
@@ -210,12 +210,12 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			commands.Undo();
-			commands.Undo();
-			commands.Redo();
+			// DREM commands.Undo();
+			// DREM commands.Undo();
+			// DREM commands.Redo();
 
 			// Act
-			commands.Redo();
+			// DREM commands.Redo();
 
 			// Assert
 			Assert.AreEqual("the ", blocks[0].Text);

@@ -15,11 +15,6 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
-		public override bool IsUndoable
-		{
-			get { return true; }
-		}
-
 		protected int Count { get; private set; }
 
 		#endregion
@@ -28,40 +23,34 @@ namespace AuthorIntrusion.Common.Commands
 
 		protected override void Do(Block block)
 		{
-			// Pull out some common elements we'll need.
-			ProjectBlockCollection blocks = block.Blocks;
-			int blockIndex = blocks.IndexOf(block) + 1;
+			// TODO: Fix this.
+			//// Pull out some common elements we'll need.
+			//ProjectBlockCollection blocks = block.Blocks;
+			//int blockIndex = blocks.IndexOf(block) + 1;
 
-			// Because of how block keys work, the ID is unique very time so we have
-			// to update our inverse operation.
-			inverseComposite.Commands.Clear();
-			inverseComposite.LastPosition = new BlockPosition(
-				block.BlockKey, block.Text.Length);
+			//// Because of how block keys work, the ID is unique very time so we have
+			//// to update our inverse operation.
+			//inverseComposite.Commands.Clear();
+			//inverseComposite.LastPosition = new BlockPosition(
+			//	block.BlockKey, block.Text.Length);
 
-			// Go through and create each block at a time, adding it to the inverse
-			// command as we create them.
-			for (int count = 0;
-				count < Count;
-				count++)
-			{
-				// Create and insert a new block into the system.
-				var newBlock = new Block(blocks);
-				blocks.Insert(blockIndex, newBlock);
+			//// Go through and create each block at a time, adding it to the inverse
+			//// command as we create them.
+			//for (int count = 0;
+			//	count < Count;
+			//	count++)
+			//{
+			//	// Create and insert a new block into the system.
+			//	var newBlock = new Block(blocks);
+			//	blocks.Insert(blockIndex, newBlock);
 
-				// Add the corresponding delete block to the inverse command.
-				var deleteCommand = new DeleteBlockCommand(newBlock.BlockKey);
-				inverseComposite.Commands.Add(deleteCommand);
+			//	// Add the corresponding delete block to the inverse command.
+			//	var deleteCommand = new DeleteBlockCommand(newBlock.BlockKey);
+			//	inverseComposite.Commands.Add(deleteCommand);
 
-				// Set up the last position for this block.
-				LastPosition = new BlockPosition(newBlock.BlockKey, 0);
-			}
-		}
-
-		protected override IBlockCommand GetInverseCommand(
-			Project project,
-			Block block)
-		{
-			return inverseComposite;
+			//	// Set up the last position for this block.
+			//	LastPosition = new BlockPosition(newBlock.BlockKey, 0);
+			//}
 		}
 
 		#endregion
@@ -73,22 +62,17 @@ namespace AuthorIntrusion.Common.Commands
 			int count)
 			: base(blockKey)
 		{
-			// Make sure we have a sane state.
-			Contract.Assert(count > 0);
+			// TODO: Need to fix this.
+			//// Make sure we have a sane state.
+			//Contract.Assert(count > 0);
 
-			// Keep track of the counts.
-			Count = count;
+			//// Keep track of the counts.
+			//Count = count;
 
-			// Create the initial inverse command. This is a composite because we
-			// have to rebuild it every time we perform a do or redo operation.
-			inverseComposite = new CompositeCommand();
+			//// Create the initial inverse command. This is a composite because we
+			//// have to rebuild it every time we perform a do or redo operation.
+			//inverseComposite = new CompositeCommand();
 		}
-
-		#endregion
-
-		#region Fields
-
-		private readonly CompositeCommand inverseComposite;
 
 		#endregion
 	}

@@ -3,10 +3,11 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
 {
-	public abstract class CompositeBlockPositionCommand: CompositeCommand
+	public abstract class CompositeBlockPositionCommand: CompositeCommand<BlockCommandContext>
 	{
 		#region Properties
 
@@ -24,7 +25,7 @@ namespace AuthorIntrusion.Common.Commands
 		protected CompositeBlockPositionCommand(
 			BlockPosition position,
 			bool isUndoable = true)
-			: base(isUndoable)
+			: base(isUndoable, false)
 		{
 			BlockPosition = position;
 		}
