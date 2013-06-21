@@ -25,7 +25,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
-			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
+			BlockCommandContext context;
+			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -41,7 +42,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
-			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
+			BlockCommandContext context;
+			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correct.");
@@ -61,7 +63,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
-			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
+			BlockCommandContext context;
+			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -87,7 +90,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
-			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
+			BlockCommandContext context;
+			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -116,7 +120,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
-			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
+			BlockCommandContext context;
+			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -134,7 +139,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			plugins.WaitForBlockAnalzyers();
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual("Correc.", block.Text);
@@ -148,7 +153,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
-			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
+			BlockCommandContext context;
+			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -172,7 +178,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
-			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
+			BlockCommandContext context;
+			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -188,7 +195,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		/// Configures the environment to load the plugin manager and verify we
 		/// have access to our plugin and projectPlugin.
 		/// </summary>
-		private void SetupPlugin(
+		private void SetupPlugin(out BlockCommandContext context,
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,
@@ -205,6 +212,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			// make changes.
 			var project = new Project();
 
+			context = new BlockCommandContext(project);
 			blocks = project.Blocks;
 			commands = project.Commands;
 			plugins = project.Plugins;

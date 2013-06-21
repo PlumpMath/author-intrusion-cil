@@ -19,6 +19,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
+			BlockCommandContext context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			using (block.AcquireBlockLock(RequestLock.Write))
@@ -29,7 +30,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Act
 			var command = new InsertAfterBlockCommand(blockKey, 1);
-			// DREM project.Commands.Do(command);
+			project.Commands.Do(command, context);
 
 			// Assert
 			Assert.AreEqual(2, blocks.Count);
@@ -48,6 +49,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
+			BlockCommandContext context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			using (block.AcquireBlockLock(RequestLock.Write))
@@ -57,10 +59,10 @@ namespace AuthorIntrusion.Common.Tests
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);
-			// DREM project.Commands.Do(command);
+			project.Commands.Do(command, context);
 
 			// Act
-			// DREM project.Commands.Undo();
+			project.Commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
@@ -77,6 +79,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
+			BlockCommandContext context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			using (block.AcquireBlockLock(RequestLock.Write))
@@ -86,11 +89,11 @@ namespace AuthorIntrusion.Common.Tests
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);
-			// DREM project.Commands.Do(command);
-			// DREM project.Commands.Undo();
+			project.Commands.Do(command, context);
+			project.Commands.Undo(context);
 
 			// Act
-			// DREM project.Commands.Redo();
+			project.Commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual(2, blocks.Count);
@@ -109,6 +112,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
+			BlockCommandContext context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			using (block.AcquireBlockLock(RequestLock.Write))
@@ -118,10 +122,10 @@ namespace AuthorIntrusion.Common.Tests
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new InsertAfterBlockCommand(blockKey, 1);
-			// DREM project.Commands.Do(command);
+			project.Commands.Do(command, context);
 
 			// Act
-			// DREM project.Commands.Undo();
+			project.Commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);

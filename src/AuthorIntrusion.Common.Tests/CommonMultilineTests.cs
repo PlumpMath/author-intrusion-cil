@@ -118,11 +118,12 @@ namespace AuthorIntrusion.Common.Tests
 		/// Creates a project with a set number of lines and gives them a state that
 		/// can easily be tested for.
 		/// </summary>
+		/// <param name="context"></param>
 		/// <param name="blocks">The block collection in the project.</param>
 		/// <param name="blockTypes">The block types supervisor for the project.</param>
 		/// <param name="commands">The commands supervisor for the project.</param>
 		/// <param name="lineCount">The number of blocks to insert into the projects.</param>
-		protected void SetupMultilineTest(
+		protected void SetupMultilineTest(out BlockCommandContext context,
 			out ProjectBlockCollection blocks,
 			out BlockTypeSupervisor blockTypes,
 			out BlockCommandSupervisor commands,
@@ -131,6 +132,7 @@ namespace AuthorIntrusion.Common.Tests
 			// Everything is based on the project.
 			var project = new Project();
 
+			context = new BlockCommandContext(project);
 			blocks = project.Blocks;
 			commands = project.Commands;
 			blockTypes = project.BlockTypes;

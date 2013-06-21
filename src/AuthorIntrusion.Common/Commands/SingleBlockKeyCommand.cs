@@ -16,13 +16,13 @@ namespace AuthorIntrusion.Common.Commands
 
 		public override void Do(BlockCommandContext context)
 		{
-			//ProjectBlockCollection blocks = project.Blocks;
-			//Block block;
+			ProjectBlockCollection blocks = context.Blocks;
+			Block block;
 
-			//using (blocks.AcquireBlockLock(RequestLock.Write, BlockKey, out block))
-			//{
-			//	Do(block);
-			//}
+			using(blocks.AcquireBlockLock(RequestLock.Write,BlockKey,out block))
+			{
+				Do(block);
+			}
 		}
 
 		#endregion

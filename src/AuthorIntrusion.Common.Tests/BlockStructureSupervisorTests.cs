@@ -129,7 +129,8 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);

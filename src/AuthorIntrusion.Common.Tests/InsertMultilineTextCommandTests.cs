@@ -20,13 +20,14 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			// Act
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[3].BlockKey, 6), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
+			commands.Do(command, context);
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
@@ -64,15 +65,16 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[3].BlockKey, 5), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
+			commands.Do(command, context);
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
@@ -102,16 +104,17 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[3].BlockKey, 6), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
-			// DREM commands.Undo();
+			commands.Do(command, context);
+			commands.Undo(context);
 
 			// Act
-			// DREM commands.Redo();
+			commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
@@ -149,17 +152,18 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[3].BlockKey, 5), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
-			// DREM commands.Undo();
-			// DREM commands.Redo();
+			commands.Do(command, context);
+			commands.Undo(context);
+			commands.Redo(context);
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
@@ -189,13 +193,14 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			// Act
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
+			commands.Do(command, context);
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
@@ -233,15 +238,16 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
+			commands.Do(command, context);
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
@@ -271,16 +277,17 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
-			// DREM commands.Undo();
+			commands.Do(command, context);
+			commands.Undo(context);
 
 			// Act
-			// DREM commands.Redo();
+			commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual(6, blocks.Count);
@@ -318,17 +325,18 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command =
 				new InsertMultilineTextCommand(
 					new BlockPosition(blocks[0].BlockKey, 5), "AAA\nBBB\nCCC");
-			// DREM commands.Do(command);
-			// DREM commands.Undo();
-			// DREM commands.Redo();
+			commands.Do(command, context);
+			commands.Undo(context);
+			commands.Redo(context);
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);

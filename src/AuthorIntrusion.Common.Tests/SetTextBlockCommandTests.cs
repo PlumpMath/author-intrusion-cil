@@ -18,6 +18,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
+			BlockCommandContext context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			int blockVersion = block.Version;
@@ -25,7 +26,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			// Act
 			var command = new SetTextCommand(blockKey, "Testing 123");
-			// DREM project.Commands.Do(command);
+			project.Commands.Do(command, context);
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
@@ -43,16 +44,17 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
+			BlockCommandContext context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new SetTextCommand(blockKey, "Testing 123");
-			// DREM project.Commands.Do(command);
+			project.Commands.Do(command, context);
 
 			// Act
-			// DREM project.Commands.Undo();
+			project.Commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);
@@ -69,18 +71,19 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
+			BlockCommandContext context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
 			var command = new SetTextCommand(blockKey, "Testing 123");
-			// DREM project.Commands.Do(command);
+			project.Commands.Do(command, context);
 
-			// DREM project.Commands.Undo();
+			project.Commands.Undo(context);
 
 			// Act
-			// DREM project.Commands.Redo();
+			project.Commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual(1, blocks.Count);

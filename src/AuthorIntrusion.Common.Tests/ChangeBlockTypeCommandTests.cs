@@ -20,12 +20,13 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			// Act
 			var command = new ChangeBlockTypeCommand(
 				blocks[0].BlockKey, blockTypes.Paragraph);
-			// DREM commands.Do(command);
+			commands.Do(command, context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
@@ -55,14 +56,15 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command = new ChangeBlockTypeCommand(
 				blocks[0].BlockKey, blockTypes.Paragraph);
-			// DREM commands.Do(command);
+			commands.Do(command, context);
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
@@ -92,15 +94,16 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command = new ChangeBlockTypeCommand(
 				blocks[0].BlockKey, blockTypes.Paragraph);
-			// DREM commands.Do(command);
+			commands.Do(command, context);
 			// DREM	commands.Undo();
 
 			// Act
-			// DREM commands.Redo();
+			commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);
@@ -130,16 +133,17 @@ namespace AuthorIntrusion.Common.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
-			SetupMultilineTest(out blocks, out blockTypes, out commands);
+			BlockCommandContext context;
+			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command = new ChangeBlockTypeCommand(
 				blocks[0].BlockKey, blockTypes.Paragraph);
-			// DREM commands.Do(command);
-			// DREM commands.Undo();
-			// DREM commands.Redo();
+			commands.Do(command, context);
+			commands.Undo(context);
+			commands.Redo(context);
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual(4, blocks.Count);

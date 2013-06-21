@@ -25,7 +25,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -67,7 +68,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			// Act
 			projectPlugin.AddSubstitution(
@@ -88,7 +90,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			// Act
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
@@ -109,14 +112,15 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual("teh ", blocks[0].Text);
@@ -132,15 +136,16 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Act
-			// DREM commands.Redo();
+			commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual("the ", blocks[0].Text);
@@ -156,15 +161,16 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Act
-			// DREM commands.Undo();
+			commands.Undo(context);
 
 			// Assert
 			Assert.AreEqual("", blocks[0].Text);
@@ -180,16 +186,17 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			// DREM commands.Undo();
-			// DREM commands.Undo();
+			commands.Undo(context);
+			commands.Undo(context);
 
 			// Act
-			// DREM commands.Redo();
+			commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual("teh ", blocks[0].Text);
@@ -205,17 +212,18 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
-			SetupCorrectionPlugin(out blocks, out commands, out projectPlugin);
+			BlockCommandContext context;
+			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
 			commands.InsertText(blocks[0], 0, "teh ");
-			// DREM commands.Undo();
-			// DREM commands.Undo();
-			// DREM commands.Redo();
+			commands.Undo(context);
+			commands.Undo(context);
+			commands.Redo(context);
 
 			// Act
-			// DREM commands.Redo();
+			commands.Redo(context);
 
 			// Assert
 			Assert.AreEqual("the ", blocks[0].Text);
@@ -228,7 +236,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		/// Configures the environment to load the plugin manager and verify we
 		/// have access to the ImmediateCorrectionPlugin.
 		/// </summary>
-		private void SetupCorrectionPlugin(
+		private void SetupCorrectionPlugin(out BlockCommandContext context,
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out ImmediateCorrectionProjectPlugin projectPlugin)
@@ -243,6 +251,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			// make changes.
 			var project = new Project();
 
+			context = new BlockCommandContext(project);
 			blocks = project.Blocks;
 			commands = project.Commands;
 
