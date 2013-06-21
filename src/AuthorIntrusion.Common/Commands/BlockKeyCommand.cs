@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
-using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -19,6 +18,16 @@ namespace AuthorIntrusion.Common.Commands
 		/// </summary>
 		public BlockKey BlockKey { get; private set; }
 
+		public virtual bool CanUndo
+		{
+			get { return true; }
+		}
+
+		public virtual bool IsTransient
+		{
+			get { return false; }
+		}
+
 		#endregion
 
 		#region Methods
@@ -27,13 +36,27 @@ namespace AuthorIntrusion.Common.Commands
 		/// Acquires the locks needed for a specific operation and then performs
 		/// UnlockedDo().
 		/// </summary>
-		public abstract void Do(BlockCommandContext state);
+		public abstract void Do(BlockCommandContext context);
+
+		public void Redo(BlockCommandContext context)
+		{
+			Do(context);
+		}
+
+		public abstract void Undo(BlockCommandContext context);
 
 		/// <summary>
 		/// Performs the command on the given block.
 		/// </summary>
+		/// <param name="context"></param>
 		/// <param name="block">The block to perform the action on.</param>
-		protected abstract void Do(Block block);
+		protected abstract void Do(
+			BlockCommandContext context,
+			Block block);
+
+		protected abstract void Undo(
+			BlockCommandContext context,
+			Block block);
 
 		#endregion
 

@@ -123,7 +123,8 @@ namespace AuthorIntrusion.Common.Tests
 		/// <param name="blockTypes">The block types supervisor for the project.</param>
 		/// <param name="commands">The commands supervisor for the project.</param>
 		/// <param name="lineCount">The number of blocks to insert into the projects.</param>
-		protected void SetupMultilineTest(out BlockCommandContext context,
+		protected void SetupMultilineTest(
+			out BlockCommandContext context,
 			out ProjectBlockCollection blocks,
 			out BlockTypeSupervisor blockTypes,
 			out BlockCommandSupervisor commands,

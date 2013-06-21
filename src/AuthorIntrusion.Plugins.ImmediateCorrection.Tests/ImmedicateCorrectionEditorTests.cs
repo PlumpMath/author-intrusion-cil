@@ -26,7 +26,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -69,7 +70,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			// Act
 			projectPlugin.AddSubstitution(
@@ -91,7 +93,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			// Act
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
@@ -113,7 +116,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
@@ -137,7 +141,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
@@ -162,7 +167,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
@@ -187,7 +193,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
@@ -213,7 +220,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			BlockCommandSupervisor commands;
 			ImmediateCorrectionProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupCorrectionPlugin(out context, out blocks, out commands, out projectPlugin);
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
 
 			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
 
@@ -236,7 +244,8 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 		/// Configures the environment to load the plugin manager and verify we
 		/// have access to the ImmediateCorrectionPlugin.
 		/// </summary>
-		private void SetupCorrectionPlugin(out BlockCommandContext context,
+		private void SetupCorrectionPlugin(
+			out BlockCommandContext context,
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out ImmediateCorrectionProjectPlugin projectPlugin)

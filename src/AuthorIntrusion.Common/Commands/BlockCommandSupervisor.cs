@@ -5,7 +5,6 @@
 using System;
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
@@ -14,7 +13,8 @@ namespace AuthorIntrusion.Common.Commands
 	/// Project-based manager class to handle command processing along with the undo
 	/// and redo functionality.
 	/// </summary>
-	public class BlockCommandSupervisor:UndoRedoCommandController<BlockCommandContext>
+	public class BlockCommandSupervisor:
+		UndoRedoCommandController<BlockCommandContext>
 	{
 		#region Properties
 

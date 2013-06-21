@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using AuthorIntrusion.Common.Blocks;
 using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
@@ -12,7 +11,7 @@ namespace AuthorIntrusion.Common.Commands
 	/// structure for the project. Examples of these commands would be inserting or
 	/// deleting text, changing block types, or the individual results of auto-correct.
 	/// </summary>
-	public interface IBlockCommand:ICommand<BlockCommandContext>
+	public interface IBlockCommand: IUndoableCommand<BlockCommandContext>
 	{
 	}
 }

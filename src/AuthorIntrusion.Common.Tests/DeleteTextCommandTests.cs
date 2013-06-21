@@ -19,7 +19,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
-			BlockCommandContext context = new BlockCommandContext(project);
+			var context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			using (block.AcquireBlockLock(RequestLock.Write))
@@ -48,7 +48,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
-			BlockCommandContext context = new BlockCommandContext(project);
+			var context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			using (block.AcquireBlockLock(RequestLock.Write))
@@ -79,7 +79,7 @@ namespace AuthorIntrusion.Common.Tests
 		{
 			// Arrange
 			var project = new Project();
-			BlockCommandContext context = new BlockCommandContext(project);
+			var context = new BlockCommandContext(project);
 			ProjectBlockCollection blocks = project.Blocks;
 			Block block = blocks[0];
 			using (block.AcquireBlockLock(RequestLock.Write))

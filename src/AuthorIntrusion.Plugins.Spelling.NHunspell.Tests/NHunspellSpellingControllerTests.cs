@@ -26,7 +26,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
+			SetupPlugin(
+				out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
 			Project project = blocks.Project;
@@ -43,7 +44,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
+			SetupPlugin(
+				out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correct.");
@@ -64,7 +66,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
+			SetupPlugin(
+				out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -91,7 +94,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
+			SetupPlugin(
+				out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -121,7 +125,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
+			SetupPlugin(
+				out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Arrange: Edit the text
 			Block block = blocks[0];
@@ -154,7 +159,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
+			SetupPlugin(
+				out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -179,7 +185,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			PluginSupervisor plugins;
 			NHunspellSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
-			SetupPlugin(out context, out blocks, out commands, out plugins, out projectPlugin);
+			SetupPlugin(
+				out context, out blocks, out commands, out plugins, out projectPlugin);
 
 			// Act
 			commands.InsertText(blocks[0], 0, "Correc.");
@@ -195,7 +202,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 		/// Configures the environment to load the plugin manager and verify we
 		/// have access to our plugin and projectPlugin.
 		/// </summary>
-		private void SetupPlugin(out BlockCommandContext context,
+		private void SetupPlugin(
+			out BlockCommandContext context,
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,

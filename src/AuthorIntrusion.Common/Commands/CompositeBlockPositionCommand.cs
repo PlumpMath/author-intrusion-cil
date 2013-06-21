@@ -7,7 +7,8 @@ using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
 {
-	public abstract class CompositeBlockPositionCommand: CompositeCommand<BlockCommandContext>
+	public abstract class CompositeBlockPositionCommand:
+		CompositeCommand<BlockCommandContext>
 	{
 		#region Properties
 

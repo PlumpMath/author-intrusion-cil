@@ -19,14 +19,26 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(Block block)
+		protected override void Do(
+			BlockCommandContext context,
+			Block block)
 		{
+			// Save the previous text so we can restore it.
+			previousText = block.Text;
+
 			// Figure out what the new text string would be.
 			string newText = block.Text.Remove(TextIndex, Length);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
 			block.SetText(newText);
+		}
+
+		protected override void Undo(
+			BlockCommandContext context,
+			Block block)
+		{
+			block.SetText(previousText);
 		}
 
 		#endregion
@@ -40,6 +52,12 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			Length = length;
 		}
+
+		#endregion
+
+		#region Fields
+
+		private string previousText;
 
 		#endregion
 	}

@@ -24,55 +24,58 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(Block block)
+		protected override void Do(
+			BlockCommandContext context,
+			Block block)
 		{
-			// TODO: Need to fix this.
-			//// Figure out the current state at the point of deleting and populate the
-			//// composite command to restore that state if the operation is undone.
-			//int blockIndex = block.Blocks.IndexOf(block);
-			//IBlockCommand insertCommand = new InsertIndexedBlockCommand(
-			//	blockIndex, block);
+			// We need the index of the block so we can restore it back into
+			// its place.
+			removedBlockIndex = block.Blocks.IndexOf(block);
+			removedBlock = block;
 
-			//inverseCommand.LastPosition = new BlockPosition(block, block.Text.Length);
-			//inverseCommand.Commands.Clear();
-			//inverseCommand.Commands.Add(insertCommand);
+			// Delete the block from the list.
+			block.Blocks.Remove(block);
 
-			//// Delete the block from the list.
-			//block.Blocks.Remove(block);
+			// If we have no more blocks, then we need to ensure we have a minimum
+			// number of blocks.
+			addedBlankBlock = null;
 
-			//// If we have no more blocks, then we need to ensure we have a minimum
-			//// number of blocks.
-			//if (!IgnoreMinimumLines
-			//	&& block.Blocks.Count == 0)
-			//{
-			//	// Create a new placeholder block, which is blank.
-			//	var blankBlock = new Block(block.Blocks, block.Project.BlockTypes.Paragraph);
+			if (!IgnoreMinimumLines
+				&& block.Blocks.Count == 0)
+			{
+				// Create a new placeholder block, which is blank.
+				addedBlankBlock = new Block(
+					block.Blocks, block.Project.BlockTypes.Paragraph);
 
-			//	block.Blocks.Add(blankBlock);
+				block.Blocks.Add(addedBlankBlock);
+			}
+			else if (!IgnoreMinimumLines)
+			{
+				// TODO: Need to fix this.
+				//// We have to figure out where the cursor would be after this operation.
+				//// Ideally, this would be the block in the current position, but if this
+				//// is the last line, then use that.
+				//LastPosition = new BlockPosition(
+				//	blockIndex < block.Blocks.Count
+				//		? block.Blocks[blockIndex].BlockKey
+				//		: block.Blocks[blockIndex - 1].BlockKey,
+				//	0);
+			}
+		}
 
-			//	// Set the last position to this newly created block.
-			//	LastPosition = new BlockPosition(blankBlock, 0);
+		protected override void Undo(
+			BlockCommandContext context,
+			Block block)
+		{
+			// Insert in the old block.
+			context.Blocks.Insert(removedBlockIndex, removedBlock);
 
-			//	// Because we added a block, we also have to add in the delete
-			//	// for the reverse operation.
-			//	var deleteBlankCommand = new DeleteBlockCommand(blankBlock.BlockKey)
-			//	{
-			//		IgnoreMinimumLines = true,
-			//	};
-
-			//	inverseCommand.Commands.InsertFirst(deleteBlankCommand);
-			//}
-			//else if (!IgnoreMinimumLines)
-			//{
-			//	// We have to figure out where the cursor would be after this operation.
-			//	// Ideally, this would be the block in the current position, but if this
-			//	// is the last line, then use that.
-			//	LastPosition = new BlockPosition(
-			//		blockIndex < block.Blocks.Count
-			//			? block.Blocks[blockIndex].BlockKey
-			//			: block.Blocks[blockIndex - 1].BlockKey,
-			//		0);
-			//}
+			// Remove the blank block, if we added one.
+			if (addedBlankBlock != null)
+			{
+				context.Blocks.Remove(addedBlankBlock);
+				addedBlankBlock = null;
+			}
 		}
 
 		#endregion
@@ -83,6 +86,14 @@ namespace AuthorIntrusion.Common.Commands
 			: base(blockKey)
 		{
 		}
+
+		#endregion
+
+		#region Fields
+
+		private Block addedBlankBlock;
+		private Block removedBlock;
+		private int removedBlockIndex;
 
 		#endregion
 	}

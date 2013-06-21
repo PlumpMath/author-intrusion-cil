@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
-using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {

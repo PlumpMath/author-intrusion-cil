@@ -16,22 +16,20 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
+		public bool CanUndo
+		{
+			get { return true; }
+		}
+
 		/// <summary>
 		/// Gets the list of changes to block keys and their new types.
 		/// </summary>
 		public HashDictionary<BlockKey, BlockType> Changes { get; private set; }
 
-		public bool IsUndoable
+		public bool IsTransient
 		{
-			get { return true; }
+			get { return false; }
 		}
-
-		public BlockPosition LastPosition
-		{
-			get { return BlockPosition.Empty; }
-		}
-
-		private ChangeMultipleBlockTypesCommand InverseCommand { get; set; }
 
 		#endregion
 
@@ -39,39 +37,53 @@ namespace AuthorIntrusion.Common.Commands
 
 		public void Do(BlockCommandContext context)
 		{
-			// TODO: Need to fix this.
-			//// Since we're making chanegs to the list, we need a write lock.
-			//using (project.Blocks.AcquireLock(RequestLock.Write))
-			//{
-			//	// Clear out the inverse since we'll be rebuilding it.
-			//	GetInverseCommand(project);
-			//	InverseCommand.Changes.Clear();
+			// Since we're making chanegs to the list, we need a write lock.
+			ProjectBlockCollection blocks = context.Blocks;
 
-			//	// Go through all the blocks in the project.
-			//	foreach (Block block in project.Blocks)
-			//	{
-			//		if (Changes.Contains(block.BlockKey))
-			//		{
-			//			BlockType blockType = Changes[block.BlockKey];
-			//			BlockType existingType = block.BlockType;
+			using (blocks.AcquireLock(RequestLock.Write))
+			{
+				// Clear out the undo list since we'll be rebuilding it.
+				previousBlockTypes.Clear();
 
-			//			InverseCommand.Changes[block.BlockKey] = existingType;
-			//			block.SetBlockType(blockType);
-			//		}
-			//	}
-			//}
+				// Go through all the blocks in the project.
+				foreach (Block block in blocks)
+				{
+					if (Changes.Contains(block.BlockKey))
+					{
+						BlockType blockType = Changes[block.BlockKey];
+						BlockType existingType = block.BlockType;
+
+						previousBlockTypes[block.BlockKey] = existingType;
+						block.SetBlockType(blockType);
+					}
+				}
+			}
 		}
 
-		public IBlockCommand GetInverseCommand(Project project)
+		public void Redo(BlockCommandContext context)
 		{
-			// If we don't already have an inverse, then create one. We'll populate the
-			// contents of the command as part of the "do" operation.
-			if (InverseCommand == null)
-			{
-				InverseCommand = new ChangeMultipleBlockTypesCommand();
-			}
+			Do(context);
+		}
 
-			return InverseCommand;
+		public void Undo(BlockCommandContext context)
+		{
+			// Since we're making chanegs to the list, we need a write lock.
+			ProjectBlockCollection blocks = context.Blocks;
+
+			using (blocks.AcquireLock(RequestLock.Write))
+			{
+				// Go through all the blocks in the project.
+				foreach (Block block in blocks)
+				{
+					if (Changes.Contains(block.BlockKey))
+					{
+						// Revert the type of this block.
+						BlockType blockType = previousBlockTypes[block.BlockKey];
+
+						block.SetBlockType(blockType);
+					}
+				}
+			}
 		}
 
 		#endregion
@@ -81,7 +93,14 @@ namespace AuthorIntrusion.Common.Commands
 		public ChangeMultipleBlockTypesCommand()
 		{
 			Changes = new HashDictionary<BlockKey, BlockType>();
+			previousBlockTypes = new HashDictionary<BlockKey, BlockType>();
 		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly HashDictionary<BlockKey, BlockType> previousBlockTypes;
 
 		#endregion
 	}

@@ -4,7 +4,6 @@
 
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
-using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {

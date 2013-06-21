@@ -22,10 +22,16 @@ namespace AuthorIntrusion.Common.Commands
 		/// <summary>
 		/// Performs the command on the given block.
 		/// </summary>
-		/// <param name="project">The project that contains the current state.</param>
+		/// <param name="context"></param>
 		/// <param name="block">The block to perform the action on.</param>
-		protected override void Do(Block block)
+		/// <param name="project">The project that contains the current state.</param>
+		protected override void Do(
+			BlockCommandContext context,
+			Block block)
 		{
+			// Save the previous text so we can undo it.
+			previousText = block.Text;
+
 			// Figure out what the new text string would be.
 			string newText = block.Text.Insert(TextIndex, Text);
 
@@ -36,6 +42,13 @@ namespace AuthorIntrusion.Common.Commands
 			// After we insert text, we need to give the immediate editor plugins a
 			// chance to made any alterations to the output.
 			block.Project.Plugins.ProcessImmediateEdits(block, TextIndex + Text.Length);
+		}
+
+		protected override void Undo(
+			BlockCommandContext context,
+			Block block)
+		{
+			block.SetText(previousText);
 		}
 
 		#endregion
@@ -49,6 +62,12 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			Text = text;
 		}
+
+		#endregion
+
+		#region Fields
+
+		private string previousText;
 
 		#endregion
 	}

@@ -2,7 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
 
 namespace AuthorIntrusion.Common.Commands
@@ -21,7 +20,9 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(Block block)
+		protected override void Do(
+			BlockCommandContext context,
+			Block block)
 		{
 			// TODO: Fix this.
 			//// Pull out some common elements we'll need.

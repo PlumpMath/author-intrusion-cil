@@ -20,9 +20,19 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(Block block)
+		protected override void Do(
+			BlockCommandContext context,
+			Block block)
 		{
+			previousText = block.Text;
 			block.SetText(Text);
+		}
+
+		protected override void Undo(
+			BlockCommandContext context,
+			Block block)
+		{
+			block.SetText(previousText);
 		}
 
 		#endregion
@@ -36,6 +46,12 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			Text = text;
 		}
+
+		#endregion
+
+		#region Fields
+
+		private string previousText;
 
 		#endregion
 	}

@@ -19,9 +19,24 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(Block block)
+		protected override void Do(
+			BlockCommandContext context,
+			Block block)
 		{
+			// We need to keep track of the previous block type so we can change
+			// it back with Undo.
+			previousBlockType = block.BlockType;
+
+			// Set the block type.
 			block.SetBlockType(BlockType);
+		}
+
+		protected override void Undo(
+			BlockCommandContext context,
+			Block block)
+		{
+			// Revert the block type.
+			block.SetBlockType(previousBlockType);
 		}
 
 		#endregion
@@ -35,6 +50,12 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			BlockType = blockType;
 		}
+
+		#endregion
+
+		#region Fields
+
+		private BlockType previousBlockType;
 
 		#endregion
 	}

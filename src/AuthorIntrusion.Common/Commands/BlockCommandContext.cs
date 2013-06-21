@@ -8,10 +8,7 @@ namespace AuthorIntrusion.Common.Commands
 {
 	public class BlockCommandContext
 	{
-		/// <summary>
-		/// Contains the project associated with this context.
-		/// </summary>
-		public Project Project { get; private set; }
+		#region Properties
 
 		/// <summary>
 		/// Contains the blocks associated with the project.
@@ -21,9 +18,20 @@ namespace AuthorIntrusion.Common.Commands
 			get { return Project.Blocks; }
 		}
 
+		/// <summary>
+		/// Contains the project associated with this context.
+		/// </summary>
+		public Project Project { get; private set; }
+
+		#endregion
+
+		#region Constructors
+
 		public BlockCommandContext(Project project)
 		{
 			Project = project;
 		}
+
+		#endregion
 	}
 }

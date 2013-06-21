@@ -19,9 +19,20 @@ namespace AuthorIntrusion.Common.Commands
 			ProjectBlockCollection blocks = context.Blocks;
 			Block block;
 
-			using(blocks.AcquireBlockLock(RequestLock.Write,BlockKey,out block))
+			using (blocks.AcquireBlockLock(RequestLock.Write, BlockKey, out block))
 			{
-				Do(block);
+				Do(context, block);
+			}
+		}
+
+		public override void Undo(BlockCommandContext context)
+		{
+			ProjectBlockCollection blocks = context.Blocks;
+			Block block;
+
+			using (blocks.AcquireBlockLock(RequestLock.Write, BlockKey, out block))
+			{
+				Undo(context, block);
 			}
 		}
 

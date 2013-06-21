@@ -21,7 +21,8 @@ namespace AuthorIntrusion.Common.Tests
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			BlockCommandContext context;
-			SetupMultilineTest(out context, out blocks, out blockTypes, out commands, lineCount: 1);
+			SetupMultilineTest(
+				out context, out blocks, out blockTypes, out commands, lineCount: 1);
 
 			// Act
 			var command = new DeleteBlockCommand(blocks[0].BlockKey);
@@ -44,7 +45,8 @@ namespace AuthorIntrusion.Common.Tests
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			BlockCommandContext context;
-			SetupMultilineTest(out context, out blocks, out blockTypes, out commands, lineCount: 1);
+			SetupMultilineTest(
+				out context, out blocks, out blockTypes, out commands, lineCount: 1);
 
 			var command = new DeleteBlockCommand(blocks[0].BlockKey);
 			commands.Do(command, context);
@@ -70,7 +72,8 @@ namespace AuthorIntrusion.Common.Tests
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			BlockCommandContext context;
-			SetupMultilineTest(out context, out blocks, out blockTypes, out commands, lineCount: 1);
+			SetupMultilineTest(
+				out context, out blocks, out blockTypes, out commands, lineCount: 1);
 
 			var command = new DeleteBlockCommand(blocks[0].BlockKey);
 			commands.Do(command, context);
@@ -96,7 +99,8 @@ namespace AuthorIntrusion.Common.Tests
 			BlockCommandSupervisor commands;
 			BlockTypeSupervisor blockTypes;
 			BlockCommandContext context;
-			SetupMultilineTest(out context, out blocks, out blockTypes, out commands, lineCount: 1);
+			SetupMultilineTest(
+				out context, out blocks, out blockTypes, out commands, lineCount: 1);
 
 			var command = new DeleteBlockCommand(blocks[0].BlockKey);
 			commands.Do(command, context);

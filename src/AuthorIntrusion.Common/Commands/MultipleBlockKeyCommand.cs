@@ -19,11 +19,23 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			Block block;
 
-			using(
+			using (
 				context.Blocks.AcquireBlockLock(
-					RequestLock.Write,RequestLock.Write,BlockKey,out block))
+					RequestLock.Write, RequestLock.Write, BlockKey, out block))
 			{
-				Do(block);
+				Do(context, block);
+			}
+		}
+
+		public override void Undo(BlockCommandContext context)
+		{
+			Block block;
+
+			using (
+				context.Blocks.AcquireBlockLock(
+					RequestLock.Write, RequestLock.Write, BlockKey, out block))
+			{
+				Undo(context, block);
 			}
 		}
 
