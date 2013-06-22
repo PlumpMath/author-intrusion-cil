@@ -21,7 +21,8 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <param name="context"></param>
 		/// <param name="block">The block.</param>
 		/// <param name="textIndex">Index of the text.</param>
-		void ProcessImmediateEdits(BlockCommandContext context,
+		void ProcessImmediateEdits(
+			BlockCommandContext context,
 			Block block,
 			int textIndex);
 

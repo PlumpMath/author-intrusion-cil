@@ -109,7 +109,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			IList<IEditorAction> actions = plugins.GetEditorActions(block, textSpan);
 
 			// Act
-			actions[1].Do();
+			actions[1].Do(context);
 			plugins.WaitForBlockAnalzyers();
 
 			// Assert
@@ -140,7 +140,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			IList<IEditorAction> actions = plugins.GetEditorActions(block, textSpan);
 
 			// Arrange: Perform the first edit.
-			actions[1].Do();
+			actions[1].Do(context);
 			plugins.WaitForBlockAnalzyers();
 
 			// Act

@@ -128,7 +128,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 					new EditorAction(
 						string.Format("Change to \"{0}\"", suggestion.Suggestion),
 						new HierarchicalPath("/Plugins/Spelling/Change"),
-						() => commands.Do(command));
+						(context) => commands.Do(command, context));
 
 				actions.Add(action);
 			}

@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using AuthorIntrusion.Common.Commands;
 using MfGames.Enumerations;
 using MfGames.HierarchicalPaths;
 
@@ -15,15 +16,15 @@ namespace AuthorIntrusion.Common.Actions
 		public string DisplayName { get; private set; }
 		public Importance Importance { get; private set; }
 		public HierarchicalPath ResourceKey { get; private set; }
-		private Action Action { get; set; }
+		private Action<BlockCommandContext> Action { get; set; }
 
 		#endregion
 
 		#region Methods
 
-		public void Do()
+		public void Do(BlockCommandContext context)
 		{
-			Action();
+			Action(context);
 		}
 
 		#endregion
@@ -33,7 +34,7 @@ namespace AuthorIntrusion.Common.Actions
 		public EditorAction(
 			string displayName,
 			HierarchicalPath resourceKey,
-			Action action,
+			Action<BlockCommandContext> action,
 			Importance importance = Importance.Normal)
 		{
 			DisplayName = displayName;

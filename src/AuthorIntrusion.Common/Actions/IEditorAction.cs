@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using AuthorIntrusion.Common.Commands;
 using MfGames.Enumerations;
 using MfGames.HierarchicalPaths;
 
@@ -44,7 +45,7 @@ namespace AuthorIntrusion.Common.Actions
 		/// <summary>
 		/// Performs the action associated with this editor action.
 		/// </summary>
-		void Do();
+		void Do(BlockCommandContext context);
 
 		#endregion
 	}
