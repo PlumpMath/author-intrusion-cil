@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Commands;
 using C5;
 
 namespace AuthorIntrusion.Common.Plugins
@@ -262,13 +263,14 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <param name="block">The block.</param>
 		/// <param name="textIndex">Index of the text.</param>
 		public void ProcessImmediateEdits(
+			BlockCommandContext context,
 			Block block,
 			int textIndex)
 		{
 			foreach (
 				IImmediateEditorProjectPlugin immediateBlockEditor in ImmediateEditors)
 			{
-				immediateBlockEditor.ProcessImmediateEdits(block, textIndex);
+				immediateBlockEditor.ProcessImmediateEdits(context, block, textIndex);
 			}
 		}
 

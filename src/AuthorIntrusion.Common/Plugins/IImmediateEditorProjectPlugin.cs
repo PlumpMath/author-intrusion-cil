@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Commands;
 
 namespace AuthorIntrusion.Common.Plugins
 {
@@ -17,9 +18,10 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <summary>
 		/// Checks for immediate edits after the user makes a change to the block.
 		/// </summary>
+		/// <param name="context"></param>
 		/// <param name="block">The block.</param>
 		/// <param name="textIndex">Index of the text.</param>
-		void ProcessImmediateEdits(
+		void ProcessImmediateEdits(BlockCommandContext context,
 			Block block,
 			int textIndex);
 

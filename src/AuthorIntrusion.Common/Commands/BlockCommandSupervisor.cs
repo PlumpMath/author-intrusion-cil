@@ -92,7 +92,9 @@ namespace AuthorIntrusion.Common.Commands
 			BlockPosition position,
 			string text)
 		{
-			throw new NotImplementedException();
+			var command = new InsertTextCommand(position, text);
+			var context = new BlockCommandContext(Project);
+			Do(command, context);
 		}
 
 		#endregion
