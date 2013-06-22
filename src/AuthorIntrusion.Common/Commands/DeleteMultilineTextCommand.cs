@@ -3,77 +3,65 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using C5;
+using MfGames.Commands;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
 	/// <summary>
 	/// Command to delete multiple lines of text from the blocks.
 	/// </summary>
-	public class DeleteMultilineTextCommand: IBlockCommand
+	public class DeleteMultilineTextCommand: CompositeCommand<BlockCommandContext>
 	{
-		#region Properties
-
-		public BlockPosition StartBlockPosition { get; set; }
-		public BlockPosition StopBlockPosition { get; set; }
-
-		#endregion
-
-		#region Methods
-
-		public void Do(BlockCommandContext context)
-		{
-			// TODO: Need to fix this.
-			//// We have to clear the undo buffer every time because we'll be creating
-			//// new blocks.
-			//InverseCommand.Commands.Clear();
-			//InverseCommand.LastPosition = StopBlockPosition;
-
-			//// Set up our own position.
-			//LastPosition = StartBlockPosition;
-
-			//// Figure out line ranges we'll be deleting text from.
-			//Block startBlock = project.Blocks[StartBlockPosition.BlockKey];
-			//Block stopBlock = project.Blocks[StopBlockPosition.BlockKey];
-
-			//int startIndex = project.Blocks.IndexOf(startBlock);
-			//int stopIndex = project.Blocks.IndexOf(stopBlock);
-
-			//// Figure out where we'll be replacing lines.
-			//int startLength = startBlock.Text.Length - StartBlockPosition.TextIndex;
-			//string stopText = stopBlock.Text.Substring(StopBlockPosition.TextIndex);
-
-			//var startReplace = new ReplaceTextCommand(
-			//	StartBlockPosition, startLength, stopText);
-			//IBlockCommand startInverse = startReplace.GetInverseCommand(project);
-
-			//InverseCommand.Commands.Add(startInverse);
-			//startReplace.Do(project);
-
-			//// Go through the remaining lines.
-			//for (int i = startIndex + 1;
-			//	i <= stopIndex;
-			//	i++)
-			//{
-			//	var middleDelete =
-			//		new DeleteBlockCommand(project.Blocks[startIndex + 1].BlockKey);
-			//	IBlockCommand middleInverse = middleDelete.GetInverseCommand(project);
-
-			//	InverseCommand.Commands.Insert(1, middleInverse);
-			//	middleDelete.Do(project);
-			//}
-		}
-
-		#endregion
+		private LinkedList<Block> removedBlocks;
 
 		#region Constructors
 
 		public DeleteMultilineTextCommand(
+			BlockCollection blocks,
 			BlockPosition startPosition,
 			BlockPosition stopPosition)
+			: base(true, false)
 		{
-			// Save the text for the changes.
-			StartBlockPosition = startPosition;
-			StopBlockPosition = stopPosition;
+			// Start by removing the text to the right of the first line.
+			var deleteTextCommand = new DeleteTextCommand(startPosition, Position.End);
+
+			Commands.Add(deleteTextCommand);
+
+			// Copy the final line text, from beginning to position, into the first
+			// line. This will merge the top and bottom lines.
+			var insertTextCommand = new InsertTextFromBlock(
+				startPosition,
+				stopPosition.BlockKey, Position.Begin, stopPosition.TextIndex);
+
+			Commands.Add(insertTextCommand);
+
+			// Once we have a merged line, then just delete the remaining lines.
+			// Figure out line ranges we'll be deleting text from.
+			removedBlocks = new LinkedList<Block>();
+
+			Block startBlock = blocks[startPosition.BlockKey];
+			Block stopBlock = blocks[stopPosition.BlockKey];
+
+			int startIndex = blocks.IndexOf(startBlock);
+			int stopIndex = blocks.IndexOf(stopBlock);
+
+			// Go through the remaining lines.
+			for (int i = startIndex + 1;
+				i <= stopIndex;
+				i++)
+			{
+				// Get the block we're removing and add it to the list.
+				Block removeBlock = blocks[i];
+
+				removedBlocks.Add(removeBlock);
+
+				// Add in a command to remove the block.
+				var deleteBlockCommand = new DeleteBlockCommand(removeBlock.BlockKey);
+
+				Commands.Add(deleteBlockCommand);
+			}
 		}
 
 		#endregion

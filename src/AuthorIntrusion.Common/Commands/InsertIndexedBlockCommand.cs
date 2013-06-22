@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -26,12 +27,32 @@ namespace AuthorIntrusion.Common.Commands
 
 		public void Do(BlockCommandContext context)
 		{
-			// TODO: Need to fix this.
-			//// We need a write lock since we are making changes to the collection itself.
-			//using (project.Blocks.AcquireLock(RequestLock.Write))
-			//{
-			//	project.Blocks.Insert(BlockIndex, Block);
-			//}
+			// We need a write lock since we are making changes to the collection itself.
+			using (context.Blocks.AcquireLock(RequestLock.Write))
+			{
+				context.Blocks.Insert(BlockIndex, Block);
+			}
+		}
+
+		public void Redo(BlockCommandContext context)
+		{
+			Do(context);
+		}
+
+		public void Undo(BlockCommandContext context)
+		{
+			// We need a write lock since we are making changes to the collection itself.
+			using(context.Blocks.AcquireLock(RequestLock.Write))
+			{
+				context.Blocks.Remove(Block);
+			}
+		}
+
+		public bool CanUndo {
+			get { return true; }
+		}
+		public bool IsTransient {
+			get { return false; }
 		}
 
 		#endregion

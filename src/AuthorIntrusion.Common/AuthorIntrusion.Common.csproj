@@ -118,6 +118,7 @@
     <Compile Include="Commands\InsertMultilineTextCommand.cs" />
     <Compile Include="Commands\InsertTextCommand.cs" />
     <Compile Include="Commands\BlockPositionCommand.cs" />
+    <Compile Include="Commands\InsertTextFromBlock.cs" />
     <Compile Include="Commands\MultipleBlockKeyCommand.cs" />
     <Compile Include="Commands\ReplaceTextCommand.cs" />
     <Compile Include="Commands\SetTextCommand.cs" />

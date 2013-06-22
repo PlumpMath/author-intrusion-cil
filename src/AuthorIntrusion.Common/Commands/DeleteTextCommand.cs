@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -11,9 +12,11 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class DeleteTextCommand: BlockPositionCommand
 	{
+		public Position End { get; set; }
+
 		#region Properties
 
-		public int Length { get; private set; }
+		public Position CharacterEnd { get; private set; }
 
 		#endregion
 
@@ -27,7 +30,7 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			string newText = block.Text.Remove(TextIndex, Length);
+			string newText = block.Text.Remove(TextIndex, End.Index - BlockPosition.TextIndex);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
@@ -46,11 +49,11 @@ namespace AuthorIntrusion.Common.Commands
 		#region Constructors
 
 		public DeleteTextCommand(
-			BlockPosition position,
-			int length)
-			: base(position)
+			BlockPosition begin,
+			Position end)
+			: base(begin)
 		{
-			Length = length;
+			End = end;
 		}
 
 		#endregion

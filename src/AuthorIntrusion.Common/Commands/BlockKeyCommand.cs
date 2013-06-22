@@ -11,6 +11,10 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public abstract class BlockKeyCommand: IBlockCommand
 	{
+		public bool UpdateTextPosition { get; set; }
+
+		public bool UpdateTextSelection { get; set; }
+
 		#region Properties
 
 		/// <summary>

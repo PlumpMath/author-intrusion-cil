@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -15,7 +16,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public BlockKey BlockKey { get; private set; }
 
-		public int TextIndex { get; private set; }
+		public Position TextIndex { get; private set; }
 
 		#endregion
 
@@ -77,7 +78,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public BlockPosition(
 			BlockKey blockKey,
-			int textIndex)
+			Position textIndex)
 			: this()
 		{
 			BlockKey = blockKey;
@@ -86,7 +87,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public BlockPosition(
 			Block block,
-			int textIndex)
+			Position textIndex)
 			: this(block.BlockKey, textIndex)
 		{
 		}
@@ -99,6 +100,18 @@ namespace AuthorIntrusion.Common.Blocks
 		/// Gets the empty block position which points to an all zero key and position.
 		/// </summary>
 		public static readonly BlockPosition Empty;
+
+		public BlockPosition(BlockKey blockKey,
+			int character)
+			:this(blockKey, (Position) character)
+		{
+		}
+
+		public BlockPosition(Block block,
+			int character)
+			:this(block.BlockKey, (Position) character)
+		{
+		}
 
 		#endregion
 	}

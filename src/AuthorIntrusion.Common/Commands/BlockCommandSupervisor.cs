@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
 using MfGames.Commands;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -41,7 +42,7 @@ namespace AuthorIntrusion.Common.Commands
 			int textIndex,
 			string text)
 		{
-			InsertText(new BlockPosition(block.BlockKey, textIndex), text);
+			InsertText(new BlockPosition(block.BlockKey,(Position)textIndex),text);
 		}
 
 		/// <summary>

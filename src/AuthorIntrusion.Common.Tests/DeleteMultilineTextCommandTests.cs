@@ -26,6 +26,7 @@ namespace AuthorIntrusion.Common.Tests
 			// Act
 			var command =
 				new DeleteMultilineTextCommand(
+					blocks,
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);
@@ -50,7 +51,7 @@ namespace AuthorIntrusion.Common.Tests
 			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			var command =
-				new DeleteMultilineTextCommand(
+				new DeleteMultilineTextCommand(blocks,
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);
@@ -91,6 +92,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			var command =
 				new DeleteMultilineTextCommand(
+					blocks,
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);
@@ -120,6 +122,7 @@ namespace AuthorIntrusion.Common.Tests
 
 			var command =
 				new DeleteMultilineTextCommand(
+					blocks,
 					new BlockPosition(blocks[0].BlockKey, 5),
 					new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);

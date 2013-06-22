@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -21,7 +22,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			get
 			{
-				var position = new BlockPosition(BlockKey, TextIndex);
+				var position = new BlockPosition(BlockKey, (Position) TextIndex);
 				return position;
 			}
 		}

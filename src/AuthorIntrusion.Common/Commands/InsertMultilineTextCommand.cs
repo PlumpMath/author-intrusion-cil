@@ -4,6 +4,9 @@
 
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
+using C5;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -29,72 +32,92 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
+		private LinkedList<Block> addedBlocks;
+		private DeleteTextCommand deleteFirstCommand;
+		private InsertTextCommand insertFirstCommand;
+
 		public void Do(BlockCommandContext context)
 		{
-			// TODO: Need to fix this.
-			//// We have to clear the undo buffer every time because we'll be creating
-			//// new blocks.
-			//InverseCommand.Commands.Clear();
+			// We have to clear the undo buffer every time because we'll be creating
+			// new blocks.
+			addedBlocks.Clear();
 
-			//// Start by breaking apart the lines on the newline.
-			//string[] lines = Text.Split('\n');
+			// Start by breaking apart the lines on the newline.
+			string[] lines = Text.Split('\n');
 
-			//// Make changes to the first line by creating a command, adding it to the
-			//// list of commands we need an inverse for, and then performing it.
-			//Block block = project.Blocks[BlockPosition.BlockKey];
-			//string remainingText = block.Text.Substring(BlockPosition.TextIndex);
-			//var deleteFirstCommand = new DeleteTextCommand(
-			//	BlockPosition, block.Text.Length - BlockPosition.TextIndex);
-			//var insertFirstCommand = new InsertTextCommand(BlockPosition, lines[0]);
+			// Make changes to the first line by creating a command, adding it to the
+			// list of commands we need an inverse for, and then performing it.
+			Block block = context.Blocks[BlockPosition.BlockKey];
+			string remainingText = block.Text.Substring(BlockPosition.TextIndex);
+			deleteFirstCommand = new DeleteTextCommand(
+				BlockPosition, (Position) (block.Text.Length - BlockPosition.TextIndex));
+			insertFirstCommand = new InsertTextCommand(BlockPosition, lines[0]);
 
-			//IBlockCommand inverseDeleteFirstCommand =
-			//	deleteFirstCommand.GetInverseCommand(project);
-			//IBlockCommand inverseInsertFirstCommand =
-			//	insertFirstCommand.GetInverseCommand(project);
-			//InverseCommand.Commands.Add(inverseInsertFirstCommand);
-			//InverseCommand.Commands.Add(inverseDeleteFirstCommand);
+			deleteFirstCommand.Do(context);
+			insertFirstCommand.Do(context);
 
-			//// Perform the commands.
-			//deleteFirstCommand.Do(project);
-			//insertFirstCommand.Do(project);
+			// Update the final lines text with the remains of the first line.
+			int lastLineLength = lines[lines.Length - 1].Length;
+			lines[lines.Length - 1] += remainingText;
 
-			//// Update the final lines text with the remains of the first line.
-			//int lastLineLength = lines[lines.Length - 1].Length;
-			//lines[lines.Length - 1] += remainingText;
+			// For the remaining lines, we need to insert each one in turn.
+			LastPosition = BlockPosition.Empty;
 
-			//// For the remaining lines, we need to insert each one in turn.
-			//LastPosition = BlockPosition.Empty;
+			if (lines.Length > 1)
+			{
+				// Go through all the lines in reverse order to insert them.
+				int firstBlockIndex = context.Blocks.IndexOf(block);
 
-			//if (lines.Length > 1)
-			//{
-			//	// Go through all the lines in reverse order to insert them.
-			//	int firstBlockIndex = project.Blocks.IndexOf(block);
+				for (int i = lines.Length - 1;
+					i > 0;
+					i--)
+				{
+					// Insert the line and set its text value.
+					var newBlock = new Block(context.Blocks);
 
-			//	for (int i = lines.Length - 1;
-			//		i > 0;
-			//		i--)
-			//	{
-			//		// Insert the line and set its text value.
-			//		var newBlock = new Block(project.Blocks);
-			//		using (newBlock.AcquireBlockLock(RequestLock.Write))
-			//		{
-			//			newBlock.SetText(lines[i]);
-			//		}
+					addedBlocks.Add(newBlock);
 
-			//		project.Blocks.Insert(firstBlockIndex + 1, newBlock);
+					using (newBlock.AcquireBlockLock(RequestLock.Write))
+					{
+						newBlock.SetText(lines[i]);
+					}
 
-			//		// Update the last position as we go.
-			//		if (LastPosition == BlockPosition.Empty)
-			//		{
-			//			LastPosition = new BlockPosition(newBlock.BlockKey, lastLineLength);
-			//		}
+					context.Blocks.Insert(firstBlockIndex + 1, newBlock);
 
-			//		// Insert in the reverse operation.
-			//		var deleteCommand = new DeleteBlockCommand(newBlock.BlockKey);
+					// Update the last position as we go.
+					if (LastPosition == BlockPosition.Empty)
+					{
+						LastPosition = new BlockPosition(newBlock.BlockKey, (Position)lastLineLength);
+					}
+				}
+			}
+		}
 
-			//		InverseCommand.Commands.Add(deleteCommand);
-			//	}
-			//}
+		public void Redo(BlockCommandContext context)
+		{
+			Do(context);
+		}
+
+		public void Undo(BlockCommandContext context)
+		{
+			// Delete all the added blocks first.
+			foreach (Block block in addedBlocks)
+			{
+				context.Blocks.Remove(block);
+			}
+
+			// Restore the text from the first line.
+			deleteFirstCommand.Undo(context);
+			insertFirstCommand.Undo(context);
+		}
+
+		public bool CanUndo
+		{
+			get { return true; }
+		}
+
+		public bool IsTransient {
+			get { return false; }
 		}
 
 		#endregion

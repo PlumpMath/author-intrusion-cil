@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using C5;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -20,38 +21,43 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
+		private LinkedList<Block> addedBlocks;
+
 		protected override void Do(
 			BlockCommandContext context,
 			Block block)
 		{
-			// TODO: Fix this.
-			//// Pull out some common elements we'll need.
-			//ProjectBlockCollection blocks = block.Blocks;
-			//int blockIndex = blocks.IndexOf(block) + 1;
+			// Pull out some common elements we'll need.
+			ProjectBlockCollection blocks = block.Blocks;
+			int blockIndex = blocks.IndexOf(block) + 1;
 
-			//// Because of how block keys work, the ID is unique very time so we have
-			//// to update our inverse operation.
-			//inverseComposite.Commands.Clear();
-			//inverseComposite.LastPosition = new BlockPosition(
-			//	block.BlockKey, block.Text.Length);
+			// Because of how block keys work, the ID is unique very time so we have
+			// to update our inverse operation.
+			addedBlocks.Clear();
 
-			//// Go through and create each block at a time, adding it to the inverse
-			//// command as we create them.
-			//for (int count = 0;
-			//	count < Count;
-			//	count++)
-			//{
-			//	// Create and insert a new block into the system.
-			//	var newBlock = new Block(blocks);
-			//	blocks.Insert(blockIndex, newBlock);
+			// Go through and create each block at a time, adding it to the inverse
+			// command as we create them.
+			for(int count = 0;
+				count < Count;
+				count++)
+			{
+				// Create and insert a new block into the system.
+				var newBlock = new Block(blocks);
+				blocks.Insert(blockIndex,newBlock);
 
-			//	// Add the corresponding delete block to the inverse command.
-			//	var deleteCommand = new DeleteBlockCommand(newBlock.BlockKey);
-			//	inverseComposite.Commands.Add(deleteCommand);
+				// Keep track of the block so we can remove them later.
+				addedBlocks.Add(newBlock);
+			}
+		}
 
-			//	// Set up the last position for this block.
-			//	LastPosition = new BlockPosition(newBlock.BlockKey, 0);
-			//}
+		protected override void Undo(
+			BlockCommandContext context,
+			Block block)
+		{
+			foreach (Block addedBlock in addedBlocks)
+			{
+				context.Blocks.Remove(addedBlock);
+			}
 		}
 
 		#endregion
