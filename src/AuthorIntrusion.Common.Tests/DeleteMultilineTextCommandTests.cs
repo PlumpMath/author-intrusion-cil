@@ -24,11 +24,10 @@ namespace AuthorIntrusion.Common.Tests
 			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
 			// Act
-			var command =
-				new DeleteMultilineTextCommand(
-					blocks,
-					new BlockPosition(blocks[0].BlockKey, 5),
-					new BlockPosition(blocks[3].BlockKey, 5));
+			var command = new DeleteMultilineTextCommand(
+				blocks,
+				new BlockPosition(blocks[0].BlockKey, 5),
+				new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);
 
 			// Assert
@@ -50,10 +49,10 @@ namespace AuthorIntrusion.Common.Tests
 			BlockCommandContext context;
 			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
-			var command =
-				new DeleteMultilineTextCommand(blocks,
-					new BlockPosition(blocks[0].BlockKey, 5),
-					new BlockPosition(blocks[3].BlockKey, 5));
+			var command = new DeleteMultilineTextCommand(
+				blocks,
+				new BlockPosition(blocks[0].BlockKey, 5),
+				new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);
 
 			// Act
@@ -90,11 +89,10 @@ namespace AuthorIntrusion.Common.Tests
 			BlockCommandContext context;
 			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
-			var command =
-				new DeleteMultilineTextCommand(
-					blocks,
-					new BlockPosition(blocks[0].BlockKey, 5),
-					new BlockPosition(blocks[3].BlockKey, 5));
+			var command = new DeleteMultilineTextCommand(
+				blocks,
+				new BlockPosition(blocks[0].BlockKey, 5),
+				new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);
 			commands.Undo(context);
 
@@ -120,11 +118,10 @@ namespace AuthorIntrusion.Common.Tests
 			BlockCommandContext context;
 			SetupMultilineTest(out context, out blocks, out blockTypes, out commands);
 
-			var command =
-				new DeleteMultilineTextCommand(
-					blocks,
-					new BlockPosition(blocks[0].BlockKey, 5),
-					new BlockPosition(blocks[3].BlockKey, 5));
+			var command = new DeleteMultilineTextCommand(
+				blocks,
+				new BlockPosition(blocks[0].BlockKey, 5),
+				new BlockPosition(blocks[3].BlockKey, 5));
 			commands.Do(command, context);
 			commands.Undo(context);
 			commands.Redo(context);

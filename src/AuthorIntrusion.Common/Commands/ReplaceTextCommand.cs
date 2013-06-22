@@ -28,8 +28,9 @@ namespace AuthorIntrusion.Common.Commands
 			Text = text;
 
 			// Create the commands in this command.
-			var deleteCommand = new DeleteTextCommand(position,(int)position.TextIndex+Length);
-			var insertCommand = new InsertTextCommand(position,Text);
+			var deleteCommand = new DeleteTextCommand(
+				position, (int) position.TextIndex + Length);
+			var insertCommand = new InsertTextCommand(position, Text);
 
 			Commands.Add(deleteCommand);
 			Commands.Add(insertCommand);

@@ -44,7 +44,7 @@ namespace AuthorIntrusion.Common.Commands
 			block.Project.Plugins.ProcessImmediateEdits(block, TextIndex + Text.Length);
 
 			// Set the new position in the buffer.
-			context.Position = new BlockPosition(BlockKey, TextIndex+Text.Length);
+			context.Position = new BlockPosition(BlockKey, TextIndex + Text.Length);
 		}
 
 		protected override void Undo(

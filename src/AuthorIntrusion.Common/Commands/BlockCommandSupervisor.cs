@@ -17,41 +17,6 @@ namespace AuthorIntrusion.Common.Commands
 	public class BlockCommandSupervisor:
 		UndoRedoCommandController<BlockCommandContext>
 	{
-		public override void Do(ICommand<BlockCommandContext> command,BlockCommandContext state)
-		{
-			// Call the base implementation first.
-			base.Do(command,state);
-
-			// If we have a position, set it.
-			if (state.Position.HasValue)
-			{
-				LastPosition = state.Position.Value;
-			}
-		}
-
-		public override void Redo(BlockCommandContext state)
-		{
-			// Call the base implementation first.
-			base.Redo(state);
-
-			// If we have a position, set it.
-			if(state.Position.HasValue)
-			{
-				LastPosition = state.Position.Value;
-			}
-		}
-
-		public override void Undo(BlockCommandContext state)
-		{
-			// Call the base implementation first.
-			base.Undo(state);
-
-			// If we have a position, set it.
-			if(state.Position.HasValue)
-			{
-				LastPosition = state.Position.Value;
-			}
-		}
 		#region Properties
 
 		/// <summary>
@@ -66,6 +31,20 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
+		public override void Do(
+			ICommand<BlockCommandContext> command,
+			BlockCommandContext state)
+		{
+			// Call the base implementation first.
+			base.Do(command, state);
+
+			// If we have a position, set it.
+			if (state.Position.HasValue)
+			{
+				LastPosition = state.Position.Value;
+			}
+		}
+
 		/// <summary>
 		/// Helper method to create and perform the InsertText command.
 		/// </summary>
@@ -77,7 +56,31 @@ namespace AuthorIntrusion.Common.Commands
 			int textIndex,
 			string text)
 		{
-			InsertText(new BlockPosition(block.BlockKey,(Position)textIndex),text);
+			InsertText(new BlockPosition(block.BlockKey, (Position) textIndex), text);
+		}
+
+		public override void Redo(BlockCommandContext state)
+		{
+			// Call the base implementation first.
+			base.Redo(state);
+
+			// If we have a position, set it.
+			if (state.Position.HasValue)
+			{
+				LastPosition = state.Position.Value;
+			}
+		}
+
+		public override void Undo(BlockCommandContext state)
+		{
+			// Call the base implementation first.
+			base.Undo(state);
+
+			// If we have a position, set it.
+			if (state.Position.HasValue)
+			{
+				LastPosition = state.Position.Value;
+			}
 		}
 
 		/// <summary>

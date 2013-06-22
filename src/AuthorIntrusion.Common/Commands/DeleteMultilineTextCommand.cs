@@ -14,7 +14,21 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class DeleteMultilineTextCommand: CompositeCommand<BlockCommandContext>
 	{
-		private LinkedList<Block> removedBlocks;
+		#region Methods
+
+		protected override void PostDo(BlockCommandContext context)
+		{
+			context.Position = startPosition;
+			base.PostDo(context);
+		}
+
+		protected override void PostUndo(BlockCommandContext context)
+		{
+			context.Position = stopPosition;
+			base.PostUndo(context);
+		}
+
+		#endregion
 
 		#region Constructors
 
@@ -24,6 +38,21 @@ namespace AuthorIntrusion.Common.Commands
 			BlockPosition stopPosition)
 			: base(true, false)
 		{
+			// Save the variables so we can set the position.
+			this.startPosition = startPosition;
+			this.stopPosition = stopPosition;
+
+			// If we are in the same line, we have a modified command.
+			if (startPosition.BlockKey == stopPosition.BlockKey)
+			{
+				// We have a single-line delete.
+				var singleDeleteCommand = new DeleteTextCommand(
+					startPosition, stopPosition.TextIndex);
+
+				Commands.Add(singleDeleteCommand);
+				return;
+			}
+
 			// Start by removing the text to the right of the first line.
 			var deleteTextCommand = new DeleteTextCommand(startPosition, Position.End);
 
@@ -32,8 +61,7 @@ namespace AuthorIntrusion.Common.Commands
 			// Copy the final line text, from beginning to position, into the first
 			// line. This will merge the top and bottom lines.
 			var insertTextCommand = new InsertTextFromBlock(
-				startPosition,
-				stopPosition.BlockKey, Position.Begin, stopPosition.TextIndex);
+				startPosition, stopPosition.BlockKey, stopPosition.TextIndex, Position.End);
 
 			Commands.Add(insertTextCommand);
 
@@ -63,6 +91,14 @@ namespace AuthorIntrusion.Common.Commands
 				Commands.Add(deleteBlockCommand);
 			}
 		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly LinkedList<Block> removedBlocks;
+		private readonly BlockPosition startPosition;
+		private readonly BlockPosition stopPosition;
 
 		#endregion
 	}

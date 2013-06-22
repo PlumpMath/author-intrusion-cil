@@ -19,22 +19,26 @@ namespace AuthorIntrusion.Common.Commands
 
 		public BlockPosition BlockPosition { get; set; }
 
-		public bool IsUndoable
+		public bool CanUndo
 		{
 			get { return true; }
 		}
 
-		public BlockPosition LastPosition { get; private set; }
+		public bool IsTransient
+		{
+			get { return false; }
+		}
+
+		public bool IsUndoable
+		{
+			get { return true; }
+		}
 
 		public string Text { get; private set; }
 
 		#endregion
 
 		#region Methods
-
-		private LinkedList<Block> addedBlocks;
-		private DeleteTextCommand deleteFirstCommand;
-		private InsertTextCommand insertFirstCommand;
 
 		public void Do(BlockCommandContext context)
 		{
@@ -48,9 +52,8 @@ namespace AuthorIntrusion.Common.Commands
 			// Make changes to the first line by creating a command, adding it to the
 			// list of commands we need an inverse for, and then performing it.
 			Block block = context.Blocks[BlockPosition.BlockKey];
-			string remainingText = block.Text.Substring((int)BlockPosition.TextIndex);
-			deleteFirstCommand = new DeleteTextCommand(
-				BlockPosition, block.Text.Length);
+			string remainingText = block.Text.Substring((int) BlockPosition.TextIndex);
+			deleteFirstCommand = new DeleteTextCommand(BlockPosition, block.Text.Length);
 			insertFirstCommand = new InsertTextCommand(BlockPosition, lines[0]);
 
 			deleteFirstCommand.Do(context);
@@ -61,7 +64,7 @@ namespace AuthorIntrusion.Common.Commands
 			lines[lines.Length - 1] += remainingText;
 
 			// For the remaining lines, we need to insert each one in turn.
-			LastPosition = BlockPosition.Empty;
+			context.Position = BlockPosition.Empty;
 
 			if (lines.Length > 1)
 			{
@@ -85,9 +88,10 @@ namespace AuthorIntrusion.Common.Commands
 					context.Blocks.Insert(firstBlockIndex + 1, newBlock);
 
 					// Update the last position as we go.
-					if (LastPosition == BlockPosition.Empty)
+					if (context.Position == BlockPosition.Empty)
 					{
-						LastPosition = new BlockPosition(newBlock.BlockKey, (Position)lastLineLength);
+						context.Position = new BlockPosition(
+							newBlock.BlockKey, (Position) lastLineLength);
 					}
 				}
 			}
@@ -107,17 +111,11 @@ namespace AuthorIntrusion.Common.Commands
 			}
 
 			// Restore the text from the first line.
-			deleteFirstCommand.Undo(context);
 			insertFirstCommand.Undo(context);
-		}
+			deleteFirstCommand.Undo(context);
 
-		public bool CanUndo
-		{
-			get { return true; }
-		}
-
-		public bool IsTransient {
-			get { return false; }
+			// Update the last position to where we started.
+			context.Position = BlockPosition;
 		}
 
 		#endregion
@@ -138,6 +136,14 @@ namespace AuthorIntrusion.Common.Commands
 			// Set up our collection.
 			addedBlocks = new LinkedList<Block>();
 		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly LinkedList<Block> addedBlocks;
+		private DeleteTextCommand deleteFirstCommand;
+		private InsertTextCommand insertFirstCommand;
 
 		#endregion
 	}

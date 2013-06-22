@@ -8,8 +8,6 @@ namespace AuthorIntrusion.Common.Commands
 {
 	public class BlockCommandContext
 	{
-		public BlockPosition? Position { get; set; }
-
 		#region Properties
 
 		/// <summary>
@@ -19,6 +17,8 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			get { return Project.Blocks; }
 		}
+
+		public BlockPosition? Position { get; set; }
 
 		/// <summary>
 		/// Contains the project associated with this context.

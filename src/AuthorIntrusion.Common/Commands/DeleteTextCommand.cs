@@ -12,11 +12,10 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class DeleteTextCommand: BlockPositionCommand
 	{
-		public Position End { get; set; }
-
 		#region Properties
 
 		public Position CharacterEnd { get; private set; }
+		public Position End { get; set; }
 
 		#endregion
 
@@ -30,7 +29,9 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			string newText = block.Text.Remove(TextIndex, End.Index - (int)BlockPosition.TextIndex);
+			int endIndex = End.Normalize(block.Text, TextIndex, false);
+			string newText = block.Text.Remove(
+				TextIndex, endIndex - (int) BlockPosition.TextIndex);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
@@ -47,9 +48,7 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(previousText);
 
 			// Set the position after the next text.
-			context.Position = new BlockPosition(
-				BlockKey,
-				End);
+			context.Position = new BlockPosition(BlockKey, End);
 		}
 
 		#endregion

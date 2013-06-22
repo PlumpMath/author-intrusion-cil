@@ -14,7 +14,9 @@ namespace AuthorIntrusion.Common.Commands
 		/// Initializes a new instance of the <see cref="SplitBlockCommand"/> class.
 		/// </summary>
 		/// <param name="position">The position to break the paragraph.</param>
-		public SplitBlockCommand(BlockPosition position)
+		public SplitBlockCommand(
+			ProjectBlockCollection blocks,
+			BlockPosition position)
 			: base(position, "\n")
 		{
 		}

@@ -5,7 +5,6 @@
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
-using MfGames.Commands.TextEditing;
 using NUnit.Framework;
 
 namespace AuthorIntrusion.Common.Tests
@@ -59,7 +58,7 @@ namespace AuthorIntrusion.Common.Tests
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
-			var command = new DeleteTextCommand(new BlockPosition(blockKey,2),3);
+			var command = new DeleteTextCommand(new BlockPosition(blockKey, 2), 3);
 			project.Commands.Do(command, context);
 
 			// Act

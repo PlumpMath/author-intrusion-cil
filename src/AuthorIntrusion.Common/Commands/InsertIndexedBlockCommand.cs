@@ -14,6 +14,16 @@ namespace AuthorIntrusion.Common.Commands
 		public Block Block { get; private set; }
 		public int BlockIndex { get; private set; }
 
+		public bool CanUndo
+		{
+			get { return true; }
+		}
+
+		public bool IsTransient
+		{
+			get { return false; }
+		}
+
 		public bool IsUndoable
 		{
 			get { return true; }
@@ -42,17 +52,10 @@ namespace AuthorIntrusion.Common.Commands
 		public void Undo(BlockCommandContext context)
 		{
 			// We need a write lock since we are making changes to the collection itself.
-			using(context.Blocks.AcquireLock(RequestLock.Write))
+			using (context.Blocks.AcquireLock(RequestLock.Write))
 			{
 				context.Blocks.Remove(Block);
 			}
-		}
-
-		public bool CanUndo {
-			get { return true; }
-		}
-		public bool IsTransient {
-			get { return false; }
 		}
 
 		#endregion

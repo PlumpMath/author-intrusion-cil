@@ -24,7 +24,8 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public bool Equals(BlockPosition other)
 		{
-			return BlockKey.Equals(other.BlockKey) && (int)TextIndex == (int)other.TextIndex;
+			return BlockKey.Equals(other.BlockKey)
+				&& (int) TextIndex == (int) other.TextIndex;
 		}
 
 		public override bool Equals(object obj)
@@ -48,7 +49,7 @@ namespace AuthorIntrusion.Common.Blocks
 		public override string ToString()
 		{
 			return string.Format(
-				"BlockPosition ({0}, {1})", BlockKey.Id.ToString("X8"), TextIndex);
+				"BlockPosition ({0}, {1})", BlockKey.Id.ToString("X8"), TextIndex.Index);
 		}
 
 		#endregion
@@ -92,6 +93,20 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 		}
 
+		public BlockPosition(
+			BlockKey blockKey,
+			int character)
+			: this(blockKey, (Position) character)
+		{
+		}
+
+		public BlockPosition(
+			Block block,
+			int character)
+			: this(block.BlockKey, (Position) character)
+		{
+		}
+
 		#endregion
 
 		#region Fields
@@ -100,18 +115,6 @@ namespace AuthorIntrusion.Common.Blocks
 		/// Gets the empty block position which points to an all zero key and position.
 		/// </summary>
 		public static readonly BlockPosition Empty;
-
-		public BlockPosition(BlockKey blockKey,
-			int character)
-			:this(blockKey, (Position) character)
-		{
-		}
-
-		public BlockPosition(Block block,
-			int character)
-			:this(block.BlockKey, (Position) character)
-		{
-		}
 
 		#endregion
 	}

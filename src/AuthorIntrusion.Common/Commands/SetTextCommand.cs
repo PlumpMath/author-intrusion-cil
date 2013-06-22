@@ -34,7 +34,7 @@ namespace AuthorIntrusion.Common.Commands
 			Block block)
 		{
 			block.SetText(previousText);
-			context.Position = new BlockPosition(BlockKey,previousText.Length);
+			context.Position = new BlockPosition(BlockKey, previousText.Length);
 		}
 
 		#endregion

@@ -9,9 +9,12 @@ namespace AuthorIntrusion.Common.Commands
 {
 	public class DeleteBlockCommand: IBlockCommand
 	{
-		private readonly BlockKey blockKey;
-
 		#region Properties
+
+		public bool CanUndo
+		{
+			get { return true; }
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the operation should ensure
@@ -23,12 +26,16 @@ namespace AuthorIntrusion.Common.Commands
 		/// </value>
 		public bool IgnoreMinimumLines { get; set; }
 
+		public bool IsTransient
+		{
+			get { return false; }
+		}
+
 		#endregion
 
 		#region Methods
 
-		public void Do(
-			BlockCommandContext context)
+		public void Do(BlockCommandContext context)
 		{
 			using (context.Blocks.AcquireLock(RequestLock.Write))
 			{
@@ -61,31 +68,12 @@ namespace AuthorIntrusion.Common.Commands
 					// We have to figure out where the cursor would be after this operation.
 					// Ideally, this would be the block in the current position, but if this
 					// is the last line, then use that.
-					context.Position = new BlockPosition(
-						removedBlockIndex < context.Blocks.Count
-							? context.Blocks[removedBlockIndex].BlockKey
-							: context.Blocks[removedBlockIndex - 1].BlockKey,
-						0);
-				}
-			}
-		}
-
-		public void Undo(
-			BlockCommandContext context)
-		{
-			using (context.Blocks.AcquireLock(RequestLock.Write))
-			{
-				// Insert in the old block.
-				context.Blocks.Insert(removedBlockIndex, removedBlock);
-
-				// Set the last text position.
-				context.Position = new BlockPosition(blockKey,removedBlock.Text.Length);
-
-				// Remove the blank block, if we added one.
-				if (addedBlankBlock != null)
-				{
-					context.Blocks.Remove(addedBlankBlock);
-					addedBlankBlock = null;
+					context.Position =
+						new BlockPosition(
+							removedBlockIndex < context.Blocks.Count
+								? context.Blocks[removedBlockIndex].BlockKey
+								: context.Blocks[removedBlockIndex - 1].BlockKey,
+							0);
 				}
 			}
 		}
@@ -95,14 +83,23 @@ namespace AuthorIntrusion.Common.Commands
 			Do(state);
 		}
 
-		public bool CanUndo
+		public void Undo(BlockCommandContext context)
 		{
-			get { return true; }
-		}
+			using (context.Blocks.AcquireLock(RequestLock.Write))
+			{
+				// Insert in the old block.
+				context.Blocks.Insert(removedBlockIndex, removedBlock);
 
-		public bool IsTransient
-		{
-			get { return false; }
+				// Set the last text position.
+				context.Position = new BlockPosition(blockKey, removedBlock.Text.Length);
+
+				// Remove the blank block, if we added one.
+				if (addedBlankBlock != null)
+				{
+					context.Blocks.Remove(addedBlankBlock);
+					addedBlankBlock = null;
+				}
+			}
 		}
 
 		#endregion
@@ -119,6 +116,7 @@ namespace AuthorIntrusion.Common.Commands
 		#region Fields
 
 		private Block addedBlankBlock;
+		private readonly BlockKey blockKey;
 		private Block removedBlock;
 		private int removedBlockIndex;
 

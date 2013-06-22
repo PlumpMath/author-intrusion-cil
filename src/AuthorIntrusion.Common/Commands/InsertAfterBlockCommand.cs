@@ -22,8 +22,6 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		private LinkedList<Block> addedBlocks;
-
 		protected override void Do(
 			BlockCommandContext context,
 			Block block)
@@ -38,13 +36,13 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Go through and create each block at a time, adding it to the inverse
 			// command as we create them.
-			for(int count = 0;
+			for (int count = 0;
 				count < Count;
 				count++)
 			{
 				// Create and insert a new block into the system.
 				var newBlock = new Block(blocks);
-				blocks.Insert(blockIndex,newBlock);
+				blocks.Insert(blockIndex, newBlock);
 
 				// Keep track of the block so we can remove them later.
 				addedBlocks.Add(newBlock);
@@ -84,6 +82,12 @@ namespace AuthorIntrusion.Common.Commands
 			// We have to keep track of the blocks we added.
 			addedBlocks = new LinkedList<Block>();
 		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly LinkedList<Block> addedBlocks;
 
 		#endregion
 	}
