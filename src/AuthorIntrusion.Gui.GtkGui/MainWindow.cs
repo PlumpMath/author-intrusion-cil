@@ -18,6 +18,16 @@ namespace AuthorIntrusion.Gui.GtkGui
 		#region Methods
 
 		/// <summary>
+		/// Opens the given project file.
+		/// </summary>
+		/// <param name="file">A file object to load.</param>
+		public void OpenProject(FileInfo file)
+		{
+			// Load the project into memory.
+			projectManager.OpenProject(file);
+		}
+
+		/// <summary>
 		/// Creates the GUI from code elements.
 		/// </summary>
 		private void CreateGui()
@@ -228,16 +238,6 @@ namespace AuthorIntrusion.Gui.GtkGui
 				// Destroy the dialog the box.
 				dialog.Destroy();
 			}
-		}
-
-		/// <summary>
-		/// Opens the given project file.
-		/// </summary>
-		/// <param name="file">A file object to load.</param>
-		public void OpenProject(FileInfo file)
-		{
-			// Load the project into memory.
-			projectManager.OpenProject(file);
 		}
 
 		private void OnProjectMenuSaveItem(
