@@ -23,24 +23,16 @@ namespace AuthorIntrusion.Common.Commands
 			string text)
 			: base(position, true)
 		{
-			// TODO: Need to fix this.
-			//// Save the text for the changes.
-			//Length = length;
-			//Text = text;
+			// Save the text for the changes.
+			Length = length;
+			Text = text;
 
-			//// Create the commands in this command.
-			//var deleteCommand = new DeleteTextCommand(position, Length);
-			//var insertCommand = new InsertTextCommand(position, Text);
+			// Create the commands in this command.
+			var deleteCommand = new DeleteTextCommand(position,(int)position.TextIndex+Length);
+			var insertCommand = new InsertTextCommand(position,Text);
 
-			//Commands.Add(deleteCommand);
-			//Commands.Add(insertCommand);
-
-			//// Set up the last position equal to the insert.
-			//LastPositionFunc = () => insertCommand.LastPosition;
-
-			//// Calculate the inverse of these operations.
-			//InverseLastPositionFunc =
-			//	() => new BlockPosition(position.BlockKey, position.TextIndex + length);
+			Commands.Add(deleteCommand);
+			Commands.Add(insertCommand);
 		}
 
 		#endregion

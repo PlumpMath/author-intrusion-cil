@@ -50,7 +50,7 @@ namespace AuthorIntrusion.Common.Commands
 			Block block = context.Blocks[BlockPosition.BlockKey];
 			string remainingText = block.Text.Substring((int)BlockPosition.TextIndex);
 			deleteFirstCommand = new DeleteTextCommand(
-				BlockPosition, block.Text.Length - (int)BlockPosition.TextIndex);
+				BlockPosition, block.Text.Length);
 			insertFirstCommand = new InsertTextCommand(BlockPosition, lines[0]);
 
 			deleteFirstCommand.Do(context);
@@ -134,6 +134,9 @@ namespace AuthorIntrusion.Common.Commands
 			// Save the text for the changes.
 			BlockPosition = position;
 			Text = text;
+
+			// Set up our collection.
+			addedBlocks = new LinkedList<Block>();
 		}
 
 		#endregion

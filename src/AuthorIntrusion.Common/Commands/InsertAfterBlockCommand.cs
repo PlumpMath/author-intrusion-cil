@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
 using C5;
 
@@ -47,6 +48,9 @@ namespace AuthorIntrusion.Common.Commands
 
 				// Keep track of the block so we can remove them later.
 				addedBlocks.Add(newBlock);
+
+				// Update the position.
+				context.Position = new BlockPosition(newBlock.BlockKey, 0);
 			}
 		}
 
@@ -58,6 +62,8 @@ namespace AuthorIntrusion.Common.Commands
 			{
 				context.Blocks.Remove(addedBlock);
 			}
+
+			context.Position = new BlockPosition(BlockKey, block.Text.Length);
 		}
 
 		#endregion
@@ -69,16 +75,14 @@ namespace AuthorIntrusion.Common.Commands
 			int count)
 			: base(blockKey)
 		{
-			// TODO: Need to fix this.
-			//// Make sure we have a sane state.
-			//Contract.Assert(count > 0);
+			// Make sure we have a sane state.
+			Contract.Assert(count > 0);
 
-			//// Keep track of the counts.
-			//Count = count;
+			// Keep track of the counts.
+			Count = count;
 
-			//// Create the initial inverse command. This is a composite because we
-			//// have to rebuild it every time we perform a do or redo operation.
-			//inverseComposite = new CompositeCommand();
+			// We have to keep track of the blocks we added.
+			addedBlocks = new LinkedList<Block>();
 		}
 
 		#endregion

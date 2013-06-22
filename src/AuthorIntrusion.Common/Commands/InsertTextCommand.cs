@@ -42,6 +42,9 @@ namespace AuthorIntrusion.Common.Commands
 			// After we insert text, we need to give the immediate editor plugins a
 			// chance to made any alterations to the output.
 			block.Project.Plugins.ProcessImmediateEdits(block, TextIndex + Text.Length);
+
+			// Set the new position in the buffer.
+			context.Position = new BlockPosition(BlockKey, TextIndex+Text.Length);
 		}
 
 		protected override void Undo(
@@ -49,6 +52,7 @@ namespace AuthorIntrusion.Common.Commands
 			Block block)
 		{
 			block.SetText(previousText);
+			context.Position = BlockPosition;
 		}
 
 		#endregion

@@ -26,6 +26,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			previousText = block.Text;
 			block.SetText(Text);
+			context.Position = new BlockPosition(BlockKey, Text.Length);
 		}
 
 		protected override void Undo(
@@ -33,6 +34,7 @@ namespace AuthorIntrusion.Common.Commands
 			Block block)
 		{
 			block.SetText(previousText);
+			context.Position = new BlockPosition(BlockKey,previousText.Length);
 		}
 
 		#endregion
