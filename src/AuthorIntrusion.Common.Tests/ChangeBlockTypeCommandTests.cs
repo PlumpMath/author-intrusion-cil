@@ -100,7 +100,7 @@ namespace AuthorIntrusion.Common.Tests
 			var command = new ChangeBlockTypeCommand(
 				blocks[0].BlockKey, blockTypes.Paragraph);
 			commands.Do(command, context);
-			// DREM	commands.Undo();
+			commands.Undo(context);
 
 			// Act
 			commands.Redo(context);

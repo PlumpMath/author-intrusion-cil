@@ -31,7 +31,7 @@ namespace AuthorIntrusion.Common.Tests
 			BlockKey blockKey = block.BlockKey;
 
 			// Act
-			var command = new DeleteTextCommand(new BlockPosition(blockKey, 2), (Position) 1);
+			var command = new DeleteTextCommand(new BlockPosition(blockKey, 2), 3);
 			project.Commands.Do(command, context);
 
 			// Assert
@@ -59,7 +59,7 @@ namespace AuthorIntrusion.Common.Tests
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
-			var command = new DeleteTextCommand(new BlockPosition(blockKey,2),(Position)1);
+			var command = new DeleteTextCommand(new BlockPosition(blockKey,2),3);
 			project.Commands.Do(command, context);
 
 			// Act
@@ -90,7 +90,7 @@ namespace AuthorIntrusion.Common.Tests
 			int blockVersion = block.Version;
 			BlockKey blockKey = block.BlockKey;
 
-			var command = new DeleteTextCommand(new BlockPosition(blockKey, 2), (Position) 1);
+			var command = new DeleteTextCommand(new BlockPosition(blockKey, 2), 3);
 			project.Commands.Do(command, context);
 			project.Commands.Undo(context);
 

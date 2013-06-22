@@ -3,11 +3,14 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Commands
 {
-	public class DeleteBlockCommand: MultipleBlockKeyCommand
+	public class DeleteBlockCommand: IBlockCommand
 	{
+		private readonly BlockKey blockKey;
+
 		#region Properties
 
 		/// <summary>
@@ -24,58 +27,82 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Methods
 
-		protected override void Do(
-			BlockCommandContext context,
-			Block block)
+		public void Do(
+			BlockCommandContext context)
 		{
-			// We need the index of the block so we can restore it back into
-			// its place.
-			removedBlockIndex = block.Blocks.IndexOf(block);
-			removedBlock = block;
-
-			// Delete the block from the list.
-			block.Blocks.Remove(block);
-
-			// If we have no more blocks, then we need to ensure we have a minimum
-			// number of blocks.
-			addedBlankBlock = null;
-
-			if (!IgnoreMinimumLines
-				&& block.Blocks.Count == 0)
+			using (context.Blocks.AcquireLock(RequestLock.Write))
 			{
-				// Create a new placeholder block, which is blank.
-				addedBlankBlock = new Block(
-					block.Blocks, block.Project.BlockTypes.Paragraph);
+				// We need the index of the block so we can restore it back into
+				// its place.
+				Block block = context.Blocks[blockKey];
+				removedBlockIndex = context.Blocks.IndexOf(blockKey);
+				removedBlock = block;
 
-				block.Blocks.Add(addedBlankBlock);
-			}
-			else if (!IgnoreMinimumLines)
-			{
-				// TODO: Need to fix this.
-				//// We have to figure out where the cursor would be after this operation.
-				//// Ideally, this would be the block in the current position, but if this
-				//// is the last line, then use that.
-				//LastPosition = new BlockPosition(
-				//	blockIndex < block.Blocks.Count
-				//		? block.Blocks[blockIndex].BlockKey
-				//		: block.Blocks[blockIndex - 1].BlockKey,
-				//	0);
+				// Delete the block from the list.
+				context.Blocks.Remove(block);
+
+				// If we have no more blocks, then we need to ensure we have a minimum
+				// number of blocks.
+				addedBlankBlock = null;
+
+				if (!IgnoreMinimumLines
+					&& context.Blocks.Count == 0)
+				{
+					// Create a new placeholder block, which is blank.
+					addedBlankBlock = new Block(
+						context.Blocks, block.Project.BlockTypes.Paragraph);
+
+					context.Blocks.Add(addedBlankBlock);
+
+					context.Position = new BlockPosition(addedBlankBlock.BlockKey, 0);
+				}
+				else if (!IgnoreMinimumLines)
+				{
+					// We have to figure out where the cursor would be after this operation.
+					// Ideally, this would be the block in the current position, but if this
+					// is the last line, then use that.
+					context.Position = new BlockPosition(
+						removedBlockIndex < context.Blocks.Count
+							? context.Blocks[removedBlockIndex].BlockKey
+							: context.Blocks[removedBlockIndex - 1].BlockKey,
+						0);
+				}
 			}
 		}
 
-		protected override void Undo(
-			BlockCommandContext context,
-			Block block)
+		public void Undo(
+			BlockCommandContext context)
 		{
-			// Insert in the old block.
-			context.Blocks.Insert(removedBlockIndex, removedBlock);
-
-			// Remove the blank block, if we added one.
-			if (addedBlankBlock != null)
+			using (context.Blocks.AcquireLock(RequestLock.Write))
 			{
-				context.Blocks.Remove(addedBlankBlock);
-				addedBlankBlock = null;
+				// Insert in the old block.
+				context.Blocks.Insert(removedBlockIndex, removedBlock);
+
+				// Set the last text position.
+				context.Position = new BlockPosition(blockKey,removedBlock.Text.Length);
+
+				// Remove the blank block, if we added one.
+				if (addedBlankBlock != null)
+				{
+					context.Blocks.Remove(addedBlankBlock);
+					addedBlankBlock = null;
+				}
 			}
+		}
+
+		public void Redo(BlockCommandContext state)
+		{
+			Do(state);
+		}
+
+		public bool CanUndo
+		{
+			get { return true; }
+		}
+
+		public bool IsTransient
+		{
+			get { return false; }
 		}
 
 		#endregion
@@ -83,8 +110,8 @@ namespace AuthorIntrusion.Common.Commands
 		#region Constructors
 
 		public DeleteBlockCommand(BlockKey blockKey)
-			: base(blockKey)
 		{
+			this.blockKey = blockKey;
 		}
 
 		#endregion

@@ -24,7 +24,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public bool Equals(BlockPosition other)
 		{
-			return BlockKey.Equals(other.BlockKey) && TextIndex == other.TextIndex;
+			return BlockKey.Equals(other.BlockKey) && (int)TextIndex == (int)other.TextIndex;
 		}
 
 		public override bool Equals(object obj)
@@ -41,7 +41,7 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			unchecked
 			{
-				return (BlockKey.GetHashCode() * 397) ^ TextIndex;
+				return (BlockKey.GetHashCode() * 397) ^ (int) TextIndex;
 			}
 		}
 

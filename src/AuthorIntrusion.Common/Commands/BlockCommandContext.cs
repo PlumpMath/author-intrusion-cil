@@ -8,6 +8,8 @@ namespace AuthorIntrusion.Common.Commands
 {
 	public class BlockCommandContext
 	{
+		public BlockPosition? Position { get; set; }
+
 		#region Properties
 
 		/// <summary>

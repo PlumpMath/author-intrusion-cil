@@ -29,6 +29,9 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Set the block type.
 			block.SetBlockType(BlockType);
+
+			// Save the position from this command.
+			context.Position = new BlockPosition(BlockKey, 0);
 		}
 
 		protected override void Undo(

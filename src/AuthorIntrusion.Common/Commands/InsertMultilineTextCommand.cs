@@ -48,9 +48,9 @@ namespace AuthorIntrusion.Common.Commands
 			// Make changes to the first line by creating a command, adding it to the
 			// list of commands we need an inverse for, and then performing it.
 			Block block = context.Blocks[BlockPosition.BlockKey];
-			string remainingText = block.Text.Substring(BlockPosition.TextIndex);
+			string remainingText = block.Text.Substring((int)BlockPosition.TextIndex);
 			deleteFirstCommand = new DeleteTextCommand(
-				BlockPosition, (Position) (block.Text.Length - BlockPosition.TextIndex));
+				BlockPosition, block.Text.Length - (int)BlockPosition.TextIndex);
 			insertFirstCommand = new InsertTextCommand(BlockPosition, lines[0]);
 
 			deleteFirstCommand.Do(context);

@@ -30,11 +30,14 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			string newText = block.Text.Remove(TextIndex, End.Index - BlockPosition.TextIndex);
+			string newText = block.Text.Remove(TextIndex, End.Index - (int)BlockPosition.TextIndex);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
 			block.SetText(newText);
+
+			// Set the position after the next text.
+			context.Position = BlockPosition;
 		}
 
 		protected override void Undo(
@@ -42,6 +45,11 @@ namespace AuthorIntrusion.Common.Commands
 			Block block)
 		{
 			block.SetText(previousText);
+
+			// Set the position after the next text.
+			context.Position = new BlockPosition(
+				BlockKey,
+				End);
 		}
 
 		#endregion
