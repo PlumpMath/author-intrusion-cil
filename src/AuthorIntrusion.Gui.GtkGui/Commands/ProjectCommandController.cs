@@ -39,39 +39,11 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				// Create the context for the block commands.
 				var blockContext = new BlockCommandContext(Project);
 
-				// Pull out the "real" command from the adapter.
-				var adapter = command as ProjectCommandAdapter;
-				var composite = command as CompositeCommand<OperationContext>;
-				bool updatePosition = true;
+				// Wrap the command with our wrappers.
+				bool updatePosition;
+				IWrappedCommand wrappedCommand = WrapCommand(command, out updatePosition);
 
-				if (adapter != null)
-				{
-					// Implement the commands in the wrapper.
-					var wrappedCommand =
-						new ProjectCommandWrapper(
-							adapter, (IUndoableCommand<BlockCommandContext>) adapter.Command);
-					Commands.Do(wrappedCommand, blockContext);
-					updatePosition = adapter.UpdateTextPosition;
-				}
-				else if (composite != null)
-				{
-					// This is a composite command, so wrap it into a proper one.
-					var unwrappedComposite = new CompositeCommand<BlockCommandContext>(true, false);
-
-					foreach (ProjectCommandAdapter unwrapped in composite.Commands)
-					{
-						var wrappedCommand =
-							new ProjectCommandWrapper(
-								unwrapped,(IUndoableCommand<BlockCommandContext>)unwrapped.Command);
-						unwrappedComposite.Commands.Add(wrappedCommand);
-					}
-
-					Commands.Do(unwrappedComposite, blockContext);
-				}
-				else
-				{
-					throw new InvalidOperationException();
-				}
+				Project.Commands.Do(wrappedCommand, blockContext);
 
 				// Set the operation context from the block context.
 				if(updatePosition && blockContext.Position.HasValue)
@@ -86,19 +58,39 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					context.Results = new LineBufferOperationResults(position);
 				}
 
-				// See if we have any post operations.
-				if (adapter != null)
-				{
-					adapter.PostDo(context);
-				}
-				else
-				{
-					foreach(ProjectCommandAdapter unwrapped in composite.Commands)
-					{
-						unwrapped.PostDo(context);
-					}
-				}
+				// Make sure we process our wrapped command.
+				wrappedCommand.PostDo(context);
 			}
+		}
+
+		public IWrappedCommand WrapCommand(ICommand<OperationContext> command,
+			out bool updatePosition)
+		{
+			// If the command is a ProjectCommandAdapter, then we want to wrap the
+			// individual commands.
+			var adapter = command as ProjectCommandAdapter;
+
+			if (adapter != null)
+			{
+				// Implement the commands in the wrapper.
+				var wrappedCommand = new ProjectCommandWrapper(adapter, adapter.Command);
+				updatePosition = adapter.UpdateTextPosition;
+				return wrappedCommand;
+			}
+
+			// If we have a composite command, we want to wrap it in a custom
+			// composite of our own.
+			var composite = command as CompositeCommand<OperationContext>;
+
+			if (composite != null)
+			{
+				var wrappedCompositeCommand = new ProjectCompositeCommandAdapter(this, composite);
+				updatePosition = true;
+				return wrappedCompositeCommand;
+			}
+
+			// If we got this far, we have an invalid state.
+			throw new InvalidOperationException("Cannot wrap a command " + command);
 		}
 
 		public ICommand<OperationContext> Redo(OperationContext context)
@@ -126,15 +118,15 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				}
 
 				// See if we have a wrapped command, then do the post do.
-				var wrapped = command as ProjectCommandWrapper;
+				var wrapped = command as IWrappedCommand;
 
 				if (wrapped != null)
 				{
-					wrapped.Adapter.PostDo(context);
-					return wrapped.Adapter;
+					wrapped.PostDo(context);
 				}
 			}
 
+			// Always return null for now.
 			return null;
 		}
 
@@ -162,14 +154,12 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					context.Results = new LineBufferOperationResults(position);
 				}
 
-
 				// See if we have a wrapped command, then do the post do.
-				var wrapped = command as ProjectCommandWrapper;
+				var wrapped = command as IWrappedCommand;
 
 				if(wrapped != null)
 				{
-					wrapped.Adapter.PostDo(context);
-					return wrapped.Adapter;
+					wrapped.PostUndo(context);
 				}
 			}
 

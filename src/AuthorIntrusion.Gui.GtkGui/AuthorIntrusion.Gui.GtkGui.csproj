@@ -142,8 +142,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\IWrappedCommand.cs" />
     <Compile Include="Commands\ProjectCommandAdapter.cs" />
     <Compile Include="Commands\ProjectCommandWrapper.cs" />
+    <Compile Include="Commands\ProjectCompositeCommandAdapter.cs" />
     <Compile Include="Commands\ProjectDeleteLineCommand.cs" />
     <Compile Include="Commands\ProjectDeleteTextCommand.cs" />
     <Compile Include="Commands\ProjectInsertLineCommand.cs" />

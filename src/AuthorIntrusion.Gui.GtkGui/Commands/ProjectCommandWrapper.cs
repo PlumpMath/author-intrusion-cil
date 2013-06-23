@@ -5,11 +5,22 @@
 using AuthorIntrusion.Common.Commands;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
+using MfGames.GtkExt.TextEditor.Models;
 
 namespace AuthorIntrusion.Gui.GtkGui.Commands
 {
-	public class ProjectCommandWrapper : IUndoableCommand<BlockCommandContext>
+	public class ProjectCommandWrapper : IWrappedCommand
 	{
+		public void PostDo(OperationContext context)
+		{
+			Adapter.PostDo(context);
+		}
+
+		public void PostUndo(OperationContext context)
+		{
+			Adapter.PostUndo(context);
+		}
+
 		public ProjectCommandAdapter Adapter { get; private set; }
 
 		private readonly IUndoableCommand<BlockCommandContext> command;
