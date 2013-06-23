@@ -29,8 +29,8 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			int startIndex = BlockPosition.TextIndex.Normalize(block.Text, End, true);
-			int endIndex = End.Normalize(block.Text, TextIndex, false);
+			int startIndex = BlockPosition.TextIndex.Normalize(block.Text, End, false);
+			int endIndex = End.Normalize(block.Text, TextIndex, true);
 			string newText = block.Text.Remove(startIndex, endIndex - startIndex);
 
 			// Set the new text into the block. This will fire various events to
