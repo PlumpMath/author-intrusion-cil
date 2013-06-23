@@ -88,7 +88,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 
 				// If we are going to be searching before the string, then this 
 				// search term will never be valid.
-				if (startSearchIndex >= 0)
+				if (startSearchIndex < 0)
 				{
 					continue;
 				}
