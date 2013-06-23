@@ -48,7 +48,13 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(previousText);
 
 			// Set the position after the next text.
-			context.Position = new BlockPosition(BlockKey, End);
+			int startIndex = BlockPosition.TextIndex.Normalize(block.Text,End,false);
+			int endIndex = End.Normalize(block.Text,TextIndex,true);
+
+			if (End.Index < 0)
+				endIndex = startIndex;
+
+			context.Position = new BlockPosition(BlockKey,endIndex);
 		}
 
 		#endregion
