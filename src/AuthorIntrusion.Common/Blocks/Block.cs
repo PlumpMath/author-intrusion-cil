@@ -39,6 +39,11 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		public ProjectBlockCollection Blocks { get; private set; }
 
+		public bool IsWriteLockHeld
+		{
+			get { return accessLock.IsWriteLockHeld; }
+		}
+
 		/// <summary>
 		/// Gets or sets the block that is the organizational parent for this block.
 		/// </summary>
@@ -167,6 +172,11 @@ namespace AuthorIntrusion.Common.Blocks
 
 				blockType = newBlockType;
 
+				// Raise an event that the block type had changed. This is done
+				// before the plugins are called because they may make additional
+				// changes and we want to avoid recursion.
+				Project.Blocks.RaiseBlockTypeChanged(this);
+
 				// Fire the events in the block structure supervisor.
 				Project.BlockStructures.Update();
 				Project.Plugins.ChangeBlockType(this, oldBlockType);
@@ -201,7 +211,7 @@ namespace AuthorIntrusion.Common.Blocks
 		public void SetText(string newText)
 		{
 			// Verify that we have a write lock on this block.
-			Contract.Assert(accessLock.IsWriteLockHeld);
+			Contract.Requires<InvalidOperationException>(IsWriteLockHeld);
 
 			// If nothing changed, then we don't have to do anything.
 			if (newText == Text)
@@ -212,6 +222,11 @@ namespace AuthorIntrusion.Common.Blocks
 			// Update the text and bump up the version of this block.
 			text = newText ?? string.Empty;
 			version++;
+
+			// Raise an event that we changed the text. We do this before processing
+			// the project plugins because the immediate editors may make additional
+			// changes that will also raise change events.
+			Project.Blocks.RaiseBlockTextChanged(this);
 
 			// Trigger the events for any listening plugins.
 			Project.Plugins.ProcessBlockAnalysis(this);

@@ -29,16 +29,16 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
+			int startIndex = BlockPosition.TextIndex.Normalize(block.Text, End, true);
 			int endIndex = End.Normalize(block.Text, TextIndex, false);
-			string newText = block.Text.Remove(
-				TextIndex, endIndex - (int) BlockPosition.TextIndex);
+			string newText = block.Text.Remove(startIndex, endIndex - startIndex);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
 			block.SetText(newText);
 
 			// Set the position after the next text.
-			context.Position = BlockPosition;
+			context.Position = new BlockPosition(BlockKey, startIndex);
 		}
 
 		protected override void Undo(

@@ -5,6 +5,7 @@
 using System;
 using System.Threading;
 using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Events;
 using MfGames.Locking;
 
 namespace AuthorIntrusion.Common.Blocks
@@ -22,6 +23,13 @@ namespace AuthorIntrusion.Common.Blocks
 		/// Gets the project associated with this collection.
 		/// </summary>
 		public Project Project { get; private set; }
+
+		#endregion
+
+		#region Events
+
+		public event EventHandler<BlockEventArgs> BlockTextChanged;
+		public event EventHandler<BlockEventArgs> BlockTypeChanged;
 
 		#endregion
 
@@ -150,6 +158,36 @@ namespace AuthorIntrusion.Common.Blocks
 
 			// Return the resulting lock.
 			return acquiredLock;
+		}
+
+		/// <summary>
+		/// Raises an event that a block's text had changed.
+		/// </summary>
+		/// <param name="block"></param>
+		public void RaiseBlockTextChanged(Block block)
+		{
+			EventHandler<BlockEventArgs> listeners = BlockTextChanged;
+
+			if (listeners != null)
+			{
+				var args = new BlockEventArgs(block);
+				listeners(this, args);
+			}
+		}
+
+		/// <summary>
+		/// Raises an event that a block's type had changed.
+		/// </summary>
+		/// <param name="block"></param>
+		public void RaiseBlockTypeChanged(Block block)
+		{
+			EventHandler<BlockEventArgs> listeners = BlockTypeChanged;
+
+			if (listeners != null)
+			{
+				var args = new BlockEventArgs(block);
+				listeners(this, args);
+			}
 		}
 
 		/// <summary>

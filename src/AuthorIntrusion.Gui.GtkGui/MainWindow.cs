@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using AuthorIntrusion.Common.Events;
+using AuthorIntrusion.Gui.GtkGui.Commands;
 using Gtk;
 using MfGames.GtkExt.TextEditor;
 
@@ -54,7 +55,10 @@ namespace AuthorIntrusion.Gui.GtkGui
 		private Widget CreateGuiEditor()
 		{
 			// Create the editor for the user.
+			commandController = new ProjectCommandController();
+
 			editorView = new EditorView();
+			editorView.Controller.CommandController = commandController;
 			EditorViewTheme.SetupTheme(editorView.Theme);
 
 			// Wrap the text editor in a scrollbar.
@@ -162,6 +166,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 			// Set up the line buffer for the loaded project.
 			var projectLineBuffer = new ProjectLineBuffer(e.Project, editorView);
 			editorView.SetLineBuffer(projectLineBuffer);
+			commandController.Project = e.Project;
+			commandController.ProjectLineBuffer = projectLineBuffer;
 
 			// Update the GUI element.
 			UpdateGuiState();
@@ -257,6 +263,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 			ProjectEventArgs e)
 		{
 			// Remove the line buffer.
+			commandController.ProjectLineBuffer = null;
+			commandController.Project = null;
 			editorView.ClearLineBuffer();
 
 			// Update the GUI state elements.
@@ -301,6 +309,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 		private AccelGroup accelerators;
 		private ImageMenuItem closeMenuItem;
+		private ProjectCommandController commandController;
 		private EditorView editorView;
 
 		private MenuItem exitMenuItem;

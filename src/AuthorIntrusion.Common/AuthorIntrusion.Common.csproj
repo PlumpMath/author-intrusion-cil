@@ -92,6 +92,7 @@
     <Compile Include="Actions\EditorAction.cs" />
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="Blocks\BlockCollection.cs" />
+    <Compile Include="Events\BlockEventArgs.cs" />
     <Compile Include="Blocks\BlockKey.cs" />
     <Compile Include="Blocks\Locking\RequestLock.cs" />
     <Compile Include="Blocks\Locking\BlockLock.cs" />

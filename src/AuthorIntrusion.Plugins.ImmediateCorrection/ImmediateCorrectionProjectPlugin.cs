@@ -86,6 +86,14 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 				int searchLength = substitution.Search.Length;
 				int startSearchIndex = editText.Length - searchLength;
 
+				// If we are going to be searching before the string, then this 
+				// search term will never be valid.
+				if (startSearchIndex >= 0)
+				{
+					continue;
+				}
+
+				// Do the search based on the whole word or suffix search.
 				if (substitution.IsWholeWord)
 				{
 					// Check to see if we have a valid search term.

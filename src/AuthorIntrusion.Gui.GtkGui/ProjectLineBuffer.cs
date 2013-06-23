@@ -12,6 +12,7 @@ using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
+using AuthorIntrusion.Common.Events;
 using C5;
 using Gtk;
 using MfGames.Commands;
@@ -197,6 +198,18 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 				return GetOperationResults();
 			}
+		}
+
+		public void RaiseLineDeleted(int lineIndex)
+		{
+			var args = new LineRangeEventArgs(lineIndex, lineIndex);
+			base.RaiseLinesDeleted(args);
+		}
+
+		public void RaiseLineInserted(int lineIndex)
+		{
+			var args = new LineRangeEventArgs(lineIndex, lineIndex);
+			base.RaiseLinesInserted(args);
 		}
 
 		protected override LineBufferOperationResults Do(
@@ -407,6 +420,24 @@ namespace AuthorIntrusion.Gui.GtkGui
 			return results;
 		}
 
+		private void OnBlockTextChanged(
+			object sender,
+			BlockEventArgs e)
+		{
+			int blockIndex = blocks.IndexOf(e.Block);
+			var args = new LineChangedArgs(blockIndex);
+			RaiseLineChanged(args);
+		}
+
+		private void OnBlockTypeChanged(
+			object sender,
+			BlockEventArgs e)
+		{
+			int blockIndex = blocks.IndexOf(e.Block);
+			var args = new LineChangedArgs(blockIndex);
+			RaiseLineChanged(args);
+		}
+
 		/// <summary>
 		/// Called when the context menu is being populated.
 		/// </summary>
@@ -489,6 +520,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 			// Hook up the events.
 			editorView.Controller.PopulateContextMenu += OnPopulateContextMenu;
+			blocks.BlockTextChanged += OnBlockTextChanged;
+			blocks.BlockTypeChanged += OnBlockTypeChanged;
 		}
 
 		#endregion
