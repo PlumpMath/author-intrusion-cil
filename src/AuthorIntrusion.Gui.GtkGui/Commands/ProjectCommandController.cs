@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common;
 using MfGames.Commands;
@@ -40,6 +41,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 			// Create the command adapter and return it.
 			var command = new ProjectDeleteLineCommand(ProjectLineBuffer, Project, line);
+			Debug.WriteLine("CreateDeleteLineCommand: " + line);
 			return command;
 		}
 
@@ -51,6 +53,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 			// Create the command adapter and return it.
 			var command = new ProjectDeleteTextCommand(Project, range);
+			Debug.WriteLine("CreateDeleteTextCommand: " + range);
 			return command;
 		}
 
@@ -62,6 +65,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 			// Create the command adapter and return it.
 			var command = new ProjectInsertLineCommand(ProjectLineBuffer, Project, line);
+			Debug.WriteLine("CreateInsertLineCommand: " + line);
 			return command;
 		}
 
@@ -74,6 +78,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 			// Create the command adapter and return it.
 			var command = new ProjectInsertTextCommand(Project, textPosition, text);
+			Debug.WriteLine("CreateInsertTextCommand: " + textPosition + ", " + text);
 			return command;
 		}
 
@@ -88,6 +93,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			// Create the command adapter and return it.
 			var command = new ProjectInsertTextFromTextRangeCommand(
 				Project, destinationPosition, sourceRange);
+			Debug.WriteLine("CreateInsertTextFromTextRangeCommand: " + destinationPosition+ ", " + sourceRange);
 			return command;
 		}
 
