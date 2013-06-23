@@ -6,9 +6,13 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common;
+using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Commands;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 using MfGames.GtkExt.TextEditor.Models;
+using MfGames.GtkExt.TextEditor.Models.Buffers;
 
 namespace AuthorIntrusion.Gui.GtkGui.Commands
 {
@@ -17,15 +21,119 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 	/// the Author Intrusion command elements.
 	/// </summary>
 	public class ProjectCommandController:
-		UndoRedoCommandController<OperationContext>,
+		ICommandController<OperationContext>,
 		ITextEditingCommandController<OperationContext>
 	{
+		public void DeferDo(ICommand<OperationContext> command)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Do(
+			ICommand<OperationContext> command,
+			OperationContext context)
+		{
+			// Establish our code contracts.
+			Contract.Requires<InvalidOperationException>(command is ProjectCommandAdapter);
+
+			// Pull out the "real" command from the adapter.
+			var adapter = command as ProjectCommandAdapter;
+
+			// Every command needs a full write lock on the blocks.
+			using(Project.Blocks.AcquireLock(RequestLock.Write))
+			{
+				// Create the context for the block commands.
+				var blockContext = new BlockCommandContext(Project);
+
+				// Execute the internal command.
+				Commands.Do(adapter.Command, blockContext);
+
+				// Set the operation context from the block context.
+				if(((ITextEditingCommand<OperationContext>) adapter).UpdateTextPosition && blockContext.Position.HasValue)
+				{
+					// Grab the block position and figure out the index.
+					BlockPosition blockPosition = blockContext.Position.Value;
+					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
+
+					var position = new BufferPosition(blockIndex,blockPosition.TextIndex);
+
+					// Set the context results.
+					context.Results = new LineBufferOperationResults(position);
+				}
+			}
+		}
+
+		public void Redo(OperationContext context)
+		{
+			// Every command needs a full write lock on the blocks.
+			using(Project.Blocks.AcquireLock(RequestLock.Write))
+			{
+				// Create the context for the block commands.
+				var blockContext = new BlockCommandContext(Project);
+
+				// Execute the internal command.
+				Commands.Redo(blockContext);
+
+				// Set the operation context from the block context.
+				// DREM if(((ITextEditingCommand<OperationContext>) adapter).UpdateTextPosition && blockContext.Position.HasValue)
+				{
+					// Grab the block position and figure out the index.
+					BlockPosition blockPosition = blockContext.Position.Value;
+					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
+
+					var position = new BufferPosition(blockIndex,blockPosition.TextIndex);
+
+					// Set the context results.
+					context.Results = new LineBufferOperationResults(position);
+				}
+			}
+		}
+
+		public void Undo(OperationContext context)
+		{
+			// Every command needs a full write lock on the blocks.
+			using(Project.Blocks.AcquireLock(RequestLock.Write))
+			{
+				// Create the context for the block commands.
+				var blockContext = new BlockCommandContext(Project);
+
+				// Execute the internal command.
+				Commands.Undo(blockContext);
+
+				// Set the operation context from the block context.
+				// DREM if(((ITextEditingCommand<OperationContext>) adapter).UpdateTextPosition && blockContext.Position.HasValue)
+				{
+					// Grab the block position and figure out the index.
+					BlockPosition blockPosition = blockContext.Position.Value;
+					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
+
+					var position = new BufferPosition(blockIndex,blockPosition.TextIndex);
+
+					// Set the context results.
+					context.Results = new LineBufferOperationResults(position);
+				}
+			}
+		}
+
+		public bool CanRedo {
+			get { return Commands.CanRedo; }
+		}
+		public bool CanUndo {
+			get { return Commands.CanUndo; }
+		}
+		public OperationContext State { get; private set; }
+
 		#region Properties
 
 		/// <summary>
 		/// Contains the currently loaded project for the controller.
 		/// </summary>
 		public Project Project { get; set; }
+
+		public BlockCommandSupervisor Commands
+		{
+			get { return Project.Commands; }
+		}
 
 		public ProjectLineBuffer ProjectLineBuffer { get; set; }
 
