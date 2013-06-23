@@ -59,28 +59,34 @@ namespace AuthorIntrusion.Common.Commands
 			InsertText(new BlockPosition(block.BlockKey, (Position) textIndex), text);
 		}
 
-		public override void Redo(BlockCommandContext state)
+		public override ICommand<BlockCommandContext> Redo(BlockCommandContext state)
 		{
 			// Call the base implementation first.
-			base.Redo(state);
+			var command = base.Redo(state);
 
 			// If we have a position, set it.
 			if (state.Position.HasValue)
 			{
 				LastPosition = state.Position.Value;
 			}
+
+			// Return the redone command.
+			return command;
 		}
 
-		public override void Undo(BlockCommandContext state)
+		public override ICommand<BlockCommandContext> Undo(BlockCommandContext state)
 		{
 			// Call the base implementation first.
-			base.Undo(state);
+			var command = base.Undo(state);
 
 			// If we have a position, set it.
 			if (state.Position.HasValue)
 			{
 				LastPosition = state.Position.Value;
 			}
+
+			// Return the undone command.
+			return command;
 		}
 
 		/// <summary>

@@ -33,23 +33,48 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			ICommand<OperationContext> command,
 			OperationContext context)
 		{
-			// Establish our code contracts.
-			Contract.Requires<InvalidOperationException>(command is ProjectCommandAdapter);
-
-			// Pull out the "real" command from the adapter.
-			var adapter = command as ProjectCommandAdapter;
-
 			// Every command needs a full write lock on the blocks.
 			using(Project.Blocks.AcquireLock(RequestLock.Write))
 			{
 				// Create the context for the block commands.
 				var blockContext = new BlockCommandContext(Project);
 
-				// Execute the internal command.
-				Commands.Do(adapter.Command, blockContext);
+				// Pull out the "real" command from the adapter.
+				var adapter = command as ProjectCommandAdapter;
+				var composite = command as CompositeCommand<OperationContext>;
+				bool updatePosition = true;
+
+				if (adapter != null)
+				{
+					// Implement the commands in the wrapper.
+					var wrappedCommand =
+						new ProjectCommandWrapper(
+							adapter, (IUndoableCommand<BlockCommandContext>) adapter.Command);
+					Commands.Do(wrappedCommand, blockContext);
+					updatePosition = adapter.UpdateTextPosition;
+				}
+				else if (composite != null)
+				{
+					// This is a composite command, so wrap it into a proper one.
+					var unwrappedComposite = new CompositeCommand<BlockCommandContext>(true, false);
+
+					foreach (ProjectCommandAdapter unwrapped in composite.Commands)
+					{
+						var wrappedCommand =
+							new ProjectCommandWrapper(
+								unwrapped,(IUndoableCommand<BlockCommandContext>)unwrapped.Command);
+						unwrappedComposite.Commands.Add(wrappedCommand);
+					}
+
+					Commands.Do(unwrappedComposite, blockContext);
+				}
+				else
+				{
+					throw new InvalidOperationException();
+				}
 
 				// Set the operation context from the block context.
-				if(((ITextEditingCommand<OperationContext>) adapter).UpdateTextPosition && blockContext.Position.HasValue)
+				if(updatePosition && blockContext.Position.HasValue)
 				{
 					// Grab the block position and figure out the index.
 					BlockPosition blockPosition = blockContext.Position.Value;
@@ -60,10 +85,60 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
 				}
+
+				// See if we have any post operations.
+				if (adapter != null)
+				{
+					adapter.PostDo(context);
+				}
+				else
+				{
+					foreach(ProjectCommandAdapter unwrapped in composite.Commands)
+					{
+						unwrapped.PostDo(context);
+					}
+				}
 			}
 		}
 
-		public void Redo(OperationContext context)
+		public ICommand<OperationContext> Redo(OperationContext context)
+		{
+			// Every command needs a full write lock on the blocks.
+			using (Project.Blocks.AcquireLock(RequestLock.Write))
+			{
+				// Create the context for the block commands.
+				var blockContext = new BlockCommandContext(Project);
+
+				// Execute the internal command.
+				var command = Commands.Redo(blockContext);
+
+				// Set the operation context from the block context.
+				if (blockContext.Position.HasValue)
+				{
+					// Grab the block position and figure out the index.
+					BlockPosition blockPosition = blockContext.Position.Value;
+					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
+
+					var position = new BufferPosition(blockIndex, blockPosition.TextIndex);
+
+					// Set the context results.
+					context.Results = new LineBufferOperationResults(position);
+				}
+
+				// See if we have a wrapped command, then do the post do.
+				var wrapped = command as ProjectCommandWrapper;
+
+				if (wrapped != null)
+				{
+					wrapped.Adapter.PostDo(context);
+					return wrapped.Adapter;
+				}
+			}
+
+			return null;
+		}
+
+		public ICommand<OperationContext> Undo(OperationContext context)
 		{
 			// Every command needs a full write lock on the blocks.
 			using(Project.Blocks.AcquireLock(RequestLock.Write))
@@ -72,10 +147,10 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				var blockContext = new BlockCommandContext(Project);
 
 				// Execute the internal command.
-				Commands.Redo(blockContext);
+				var command = Commands.Undo(blockContext);
 
 				// Set the operation context from the block context.
-				// DREM if(((ITextEditingCommand<OperationContext>) adapter).UpdateTextPosition && blockContext.Position.HasValue)
+				if(blockContext.Position.HasValue)
 				{
 					// Grab the block position and figure out the index.
 					BlockPosition blockPosition = blockContext.Position.Value;
@@ -86,33 +161,19 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
 				}
-			}
-		}
 
-		public void Undo(OperationContext context)
-		{
-			// Every command needs a full write lock on the blocks.
-			using(Project.Blocks.AcquireLock(RequestLock.Write))
-			{
-				// Create the context for the block commands.
-				var blockContext = new BlockCommandContext(Project);
 
-				// Execute the internal command.
-				Commands.Undo(blockContext);
+				// See if we have a wrapped command, then do the post do.
+				var wrapped = command as ProjectCommandWrapper;
 
-				// Set the operation context from the block context.
-				// DREM if(((ITextEditingCommand<OperationContext>) adapter).UpdateTextPosition && blockContext.Position.HasValue)
+				if(wrapped != null)
 				{
-					// Grab the block position and figure out the index.
-					BlockPosition blockPosition = blockContext.Position.Value;
-					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
-
-					var position = new BufferPosition(blockIndex,blockPosition.TextIndex);
-
-					// Set the context results.
-					context.Results = new LineBufferOperationResults(position);
+					wrapped.Adapter.PostDo(context);
+					return wrapped.Adapter;
 				}
 			}
+
+			return null;
 		}
 
 		public bool CanRedo {

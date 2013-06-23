@@ -38,19 +38,58 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 		#region Methods
 
+		public virtual void PostDo(OperationContext context)
+		{
+		}
+
+		public virtual void PostUndo(OperationContext context)
+		{
+		}
+
 		public virtual void Do(OperationContext context)
 		{
-			throw new InvalidOperationException();
+			Action<BlockCommandContext> action = Command.Do;
+			PerformCommandAction(context, action);
 		}
 
 		public void Redo(OperationContext context)
 		{
-			throw new InvalidOperationException();
+			Action<BlockCommandContext> action = Command.Redo;
+			PerformCommandAction(context, action);
 		}
 
 		public virtual void Undo(OperationContext context)
 		{
-			throw new InvalidOperationException();
+			Action<BlockCommandContext> action = Command.Undo;
+			PerformCommandAction(context, action);
+		}
+
+		private void PerformCommandAction(
+			OperationContext context,
+			Action<BlockCommandContext> action)
+		{
+			// Every command needs a full write lock on the blocks.
+			using (Project.Blocks.AcquireLock(RequestLock.Write))
+			{
+				// Create the context for the block commands.
+				var blockContext = new BlockCommandContext(Project);
+
+				// Execute the internal command.
+				action(blockContext);
+
+				// Set the operation context from the block context.
+				if (UpdateTextPosition && blockContext.Position.HasValue)
+				{
+					// Grab the block position and figure out the index.
+					BlockPosition blockPosition = blockContext.Position.Value;
+					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
+
+					var position = new BufferPosition(blockIndex, blockPosition.TextIndex);
+
+					// Set the context results.
+					context.Results = new LineBufferOperationResults(position);
+				}
+			}
 		}
 
 		#endregion

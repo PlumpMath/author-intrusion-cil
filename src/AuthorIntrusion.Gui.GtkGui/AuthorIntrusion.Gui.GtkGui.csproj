@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ProjectCommandAdapter.cs" />
+    <Compile Include="Commands\ProjectCommandWrapper.cs" />
     <Compile Include="Commands\ProjectDeleteLineCommand.cs" />
     <Compile Include="Commands\ProjectDeleteTextCommand.cs" />
     <Compile Include="Commands\ProjectInsertLineCommand.cs" />
