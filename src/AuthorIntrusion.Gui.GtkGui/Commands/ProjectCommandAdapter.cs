@@ -69,7 +69,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				action(blockContext);
 
 				// Set the operation context from the block context.
-				if (blockContext.Position.HasValue)
+				if (UpdateTextPosition && blockContext.Position.HasValue)
 				{
 					// Grab the block position and figure out the index.
 					BlockPosition blockPosition = blockContext.Position.Value;

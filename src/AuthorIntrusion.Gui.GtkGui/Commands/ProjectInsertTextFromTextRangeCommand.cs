@@ -8,12 +8,55 @@ using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using MfGames.Commands.TextEditing;
 using MfGames.GtkExt.TextEditor.Models;
+using MfGames.GtkExt.TextEditor.Models.Buffers;
 
 namespace AuthorIntrusion.Gui.GtkGui.Commands
 {
 	public class ProjectInsertTextFromTextRangeCommand: ProjectCommandAdapter,
 		IInsertTextFromTextRangeCommand<OperationContext>
 	{
+		#region Methods
+
+		public override void Do(OperationContext context)
+		{
+			base.Do(context);
+
+			// We need a read lock on the block so we can retrieve information.
+			Block block;
+			var blockIndex = (int) destinationPosition.Line;
+
+			using (
+				Project.Blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
+			{
+				int characterIndex = destinationPosition.Character.Normalize(block.Text);
+
+				var bufferPosition = new BufferPosition(
+					destinationPosition.Line, (Position) (characterIndex + block.Text.Length));
+				context.Results = new LineBufferOperationResults(bufferPosition);
+			}
+		}
+
+		public override void Undo(OperationContext context)
+		{
+			base.Undo(context);
+
+			// We need a read lock on the block so we can retrieve information.
+			Block block;
+			var blockIndex = (int) destinationPosition.Line;
+
+			using (
+				Project.Blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
+			{
+				int characterIndex = destinationPosition.Character.Normalize(block.Text);
+
+				var bufferPosition = new BufferPosition(
+					destinationPosition.Line, (Position) (characterIndex + block.Text.Length));
+				context.Results = new LineBufferOperationResults(bufferPosition);
+			}
+		}
+
+		#endregion
+
 		#region Constructors
 
 		public ProjectInsertTextFromTextRangeCommand(
@@ -22,6 +65,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			SingleLineTextRange sourceRange)
 			: base(project)
 		{
+			this.destinationPosition = destinationPosition;
 			// We need a specific block for this operation.
 			Block destinationBlock;
 
@@ -29,16 +73,10 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				project.Blocks.AcquireBlockLock(
 					RequestLock.Read, destinationPosition.Line.Index, out destinationBlock))
 			{
-				// We also need the source block.
-				Block sourceBlock = project.Blocks[(int) sourceRange.Line];
-				BlockKey sourceBlockKey = sourceBlock.BlockKey;
-
 				// Create the project command wrapper.
-				var destinationBlockPosition = new BlockPosition(
-					destinationBlock.BlockKey, destinationPosition.Character);
-				var command = new InsertTextFromBlock(
-					destinationBlockPosition,
-					sourceBlockKey,
+				var command = new InsertTextFromIndexedBlock(
+					destinationPosition,
+					(int) sourceRange.Line,
 					sourceRange.CharacterBegin,
 					sourceRange.CharacterEnd);
 
@@ -46,6 +84,12 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				Command = command;
 			}
 		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly TextPosition destinationPosition;
 
 		#endregion
 	}

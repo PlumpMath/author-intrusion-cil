@@ -93,7 +93,9 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			// Create the command adapter and return it.
 			var command = new ProjectInsertTextFromTextRangeCommand(
 				Project, destinationPosition, sourceRange);
-			Debug.WriteLine("CreateInsertTextFromTextRangeCommand: " + destinationPosition+ ", " + sourceRange);
+			Debug.WriteLine(
+				"CreateInsertTextFromTextRangeCommand: " + destinationPosition + ", "
+					+ sourceRange);
 			return command;
 		}
 

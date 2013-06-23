@@ -213,11 +213,12 @@ namespace AuthorIntrusion.Common.Blocks
 			// Verify that we have a write lock on this block.
 			Contract.Requires<InvalidOperationException>(IsWriteLockHeld);
 
-			// If nothing changed, then we don't have to do anything.
-			if (newText == Text)
-			{
-				return;
-			}
+			// TODO: This is disabled because inserting new lines doesn't properly cause events to be fired.
+			//// If nothing changed, then we don't have to do anything.
+			//if (newText == Text)
+			//{
+			//	return;
+			//}
 
 			// Update the text and bump up the version of this block.
 			text = newText ?? string.Empty;
