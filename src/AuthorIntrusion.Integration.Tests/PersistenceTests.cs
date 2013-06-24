@@ -268,6 +268,8 @@ namespace AuthorIntrusion.Integration.Tests
 				"Grey", "Gray", SubstitutionOptions.WholeWord);
 			immediateCorrectionProjectPlugin.AddSubstitution(
 				"GWG","Great Waryoni Garèo",SubstitutionOptions.None);
+			immediateCorrectionProjectPlugin.AddSubstitution(
+				"GWB","Great Waryoni Bob",SubstitutionOptions.None);
 
 			// Set up the immediate block types.
 			var immediateBlockTypesProjectPlugin =
