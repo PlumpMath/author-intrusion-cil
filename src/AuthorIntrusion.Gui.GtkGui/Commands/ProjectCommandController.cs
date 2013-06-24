@@ -134,13 +134,12 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				var blockContext = new BlockCommandContext(Project);
 
 				// Wrap the command with our wrappers.
-				bool updatePosition;
-				IWrappedCommand wrappedCommand = WrapCommand(command, out updatePosition);
+				IWrappedCommand wrappedCommand = WrapCommand(command);
 
 				Project.Commands.Do(wrappedCommand, blockContext);
 
 				// Set the operation context from the block context.
-				if (updatePosition && blockContext.Position.HasValue)
+				if (blockContext.Position.HasValue)
 				{
 					// Grab the block position and figure out the index.
 					BlockPosition blockPosition = blockContext.Position.Value;
@@ -231,8 +230,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		}
 
 		public IWrappedCommand WrapCommand(
-			ICommand<OperationContext> command,
-			out bool updatePosition)
+			ICommand<OperationContext> command)
 		{
 			// If the command is a ProjectCommandAdapter, then we want to wrap the
 			// individual commands.
@@ -242,7 +240,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			{
 				// Implement the commands in the wrapper.
 				var wrappedCommand = new ProjectCommandWrapper(adapter, adapter.Command);
-				updatePosition = adapter.UpdateTextPosition;
 				return wrappedCommand;
 			}
 
@@ -254,7 +251,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			{
 				var wrappedCompositeCommand = new ProjectCompositeCommandAdapter(
 					this, composite);
-				updatePosition = true;
 				return wrappedCompositeCommand;
 			}
 

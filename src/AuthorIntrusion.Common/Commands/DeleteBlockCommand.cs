@@ -4,11 +4,14 @@
 
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
+using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
 {
 	public class DeleteBlockCommand: IBlockCommand
 	{
+		public DoTypes UpdateTextPosition { get; set; }
+
 		#region Properties
 
 		public bool CanUndo
@@ -61,14 +64,16 @@ namespace AuthorIntrusion.Common.Commands
 
 					context.Blocks.Add(addedBlankBlock);
 
-					context.Position = new BlockPosition(addedBlankBlock.BlockKey, 0);
+					if(UpdateTextPosition.HasFlag(DoTypes.Do))
+						context.Position = new BlockPosition(addedBlankBlock.BlockKey,0);
 				}
 				else if (!IgnoreMinimumLines)
 				{
 					// We have to figure out where the cursor would be after this operation.
 					// Ideally, this would be the block in the current position, but if this
 					// is the last line, then use that.
-					context.Position =
+					if(UpdateTextPosition.HasFlag(DoTypes.Do))
+						context.Position =
 						new BlockPosition(
 							removedBlockIndex < context.Blocks.Count
 								? context.Blocks[removedBlockIndex].BlockKey
@@ -91,7 +96,8 @@ namespace AuthorIntrusion.Common.Commands
 				context.Blocks.Insert(removedBlockIndex, removedBlock);
 
 				// Set the last text position.
-				context.Position = new BlockPosition(blockKey, removedBlock.Text.Length);
+				if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+					context.Position = new BlockPosition(blockKey,removedBlock.Text.Length);
 
 				// Remove the blank block, if we added one.
 				if (addedBlankBlock != null)
@@ -109,6 +115,7 @@ namespace AuthorIntrusion.Common.Commands
 		public DeleteBlockCommand(BlockKey blockKey)
 		{
 			this.blockKey = blockKey;
+			UpdateTextPosition = DoTypes.All;
 		}
 
 		#endregion

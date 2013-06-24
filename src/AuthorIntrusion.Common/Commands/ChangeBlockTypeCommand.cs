@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -31,6 +32,7 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetBlockType(BlockType);
 
 			// Save the position from this command.
+			if (UpdateTextPosition.HasFlag(DoTypes.Do))
 			context.Position = new BlockPosition(BlockKey, 0);
 		}
 

@@ -17,6 +17,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 	public abstract class ProjectCommandAdapter:
 		ITextEditingCommand<OperationContext>
 	{
+		private IBlockCommand command;
+
 		#region Properties
 
 		public bool CanUndo
@@ -24,15 +26,34 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			get { return true; }
 		}
 
-		public IUndoableCommand<BlockCommandContext> Command { get; set; }
+		public IBlockCommand Command
+		{
+			get { return command; }
+			set { command = value; 
+
+				// Wrapped commands default to not updating themselves.
+			command.UpdateTextPosition = DoTypes.None;}
+		}
 
 		public bool IsTransient
 		{
 			get { return false; }
 		}
 
-		public bool UpdateTextPosition { get; set; }
-		public bool UpdateTextSelection { get; set; }
+		public DoTypes UpdateTextPosition
+		{
+			get { return Command.UpdateTextPosition; }
+			set
+			{
+				System.Diagnostics.Debug.WriteLine(
+					this + ": Changeing UpdateTextPosition from " + Command.UpdateTextPosition
+						+ " to " + value);
+				Command.UpdateTextPosition = value; }
+		}
+		public DoTypes UpdateTextSelection
+		{
+			get;set;
+		}
 
 		protected Project Project { get; private set; }
 
@@ -80,7 +101,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 				action(blockContext);
 
 				// Set the operation context from the block context.
-				if (UpdateTextPosition && blockContext.Position.HasValue)
+				if (blockContext.Position.HasValue)
 				{
 					// Grab the block position and figure out the index.
 					BlockPosition blockPosition = blockContext.Position.Value;

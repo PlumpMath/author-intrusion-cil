@@ -4,11 +4,15 @@
 
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
+using MfGames.Commands;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
 	public class InsertIndexedBlockCommand: IBlockCommand
 	{
+		public DoTypes UpdateTextPosition { get; set; }
+
 		#region Properties
 
 		public Block Block { get; private set; }
@@ -40,9 +44,22 @@ namespace AuthorIntrusion.Common.Commands
 			// We need a write lock since we are making changes to the collection itself.
 			using (context.Blocks.AcquireLock(RequestLock.Write))
 			{
-				context.Blocks.Insert(BlockIndex, Block);
+				if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+				{
+					previousPosition = context.Position;
+				}
+
+				context.Blocks.Insert(BlockIndex,Block);
+
+				// Set the position after the command.
+				if(UpdateTextPosition.HasFlag(DoTypes.Do))
+				{
+					context.Position = new BlockPosition(Block.BlockKey,Position.Begin);
+				}
 			}
 		}
+
+		private BlockPosition? previousPosition;
 
 		public void Redo(BlockCommandContext context)
 		{
@@ -55,6 +72,13 @@ namespace AuthorIntrusion.Common.Commands
 			using (context.Blocks.AcquireLock(RequestLock.Write))
 			{
 				context.Blocks.Remove(Block);
+
+				// Set the position after the command.
+				if(UpdateTextPosition.HasFlag(DoTypes.Undo) &&
+					previousPosition.HasValue)
+				{
+					context.Position = previousPosition.Value;
+				}
 			}
 		}
 
@@ -68,6 +92,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			BlockIndex = blockIndex;
 			Block = block;
+			UpdateTextPosition = DoTypes.All;
 		}
 
 		#endregion

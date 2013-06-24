@@ -6,6 +6,7 @@ using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
+using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
@@ -15,6 +16,8 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class InsertMultilineTextCommand: IBlockCommand
 	{
+		public DoTypes UpdateTextPosition { get; set; }
+
 		#region Properties
 
 		public BlockPosition BlockPosition { get; set; }
@@ -64,7 +67,8 @@ namespace AuthorIntrusion.Common.Commands
 			lines[lines.Length - 1] += remainingText;
 
 			// For the remaining lines, we need to insert each one in turn.
-			context.Position = BlockPosition.Empty;
+			if(UpdateTextPosition.HasFlag(DoTypes.Do))
+				context.Position = BlockPosition.Empty;
 
 			if (lines.Length > 1)
 			{
@@ -90,7 +94,8 @@ namespace AuthorIntrusion.Common.Commands
 					// Update the last position as we go.
 					if (context.Position == BlockPosition.Empty)
 					{
-						context.Position = new BlockPosition(
+						if(UpdateTextPosition.HasFlag(DoTypes.Do))
+							context.Position = new BlockPosition(
 							newBlock.BlockKey, (Position) lastLineLength);
 					}
 				}
@@ -115,7 +120,8 @@ namespace AuthorIntrusion.Common.Commands
 			deleteFirstCommand.Undo(context);
 
 			// Update the last position to where we started.
-			context.Position = BlockPosition;
+			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+				context.Position = BlockPosition;
 		}
 
 		#endregion
@@ -132,6 +138,7 @@ namespace AuthorIntrusion.Common.Commands
 			// Save the text for the changes.
 			BlockPosition = position;
 			Text = text;
+			UpdateTextPosition = DoTypes.All;
 
 			// Set up our collection.
 			addedBlocks = new LinkedList<Block>();

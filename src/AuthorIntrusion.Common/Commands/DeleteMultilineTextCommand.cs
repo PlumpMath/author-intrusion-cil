@@ -14,22 +14,6 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class DeleteMultilineTextCommand: CompositeCommand<BlockCommandContext>
 	{
-		#region Methods
-
-		protected override void PostDo(BlockCommandContext context)
-		{
-			context.Position = startPosition;
-			base.PostDo(context);
-		}
-
-		protected override void PostUndo(BlockCommandContext context)
-		{
-			context.Position = stopPosition;
-			base.PostUndo(context);
-		}
-
-		#endregion
-
 		#region Constructors
 
 		public DeleteMultilineTextCommand(

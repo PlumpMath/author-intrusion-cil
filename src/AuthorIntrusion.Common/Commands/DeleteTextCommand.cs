@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
@@ -38,7 +39,8 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(newText);
 
 			// Set the position after the next text.
-			context.Position = new BlockPosition(BlockKey, startIndex);
+			if(UpdateTextPosition.HasFlag(DoTypes.Do))
+				context.Position = new BlockPosition(BlockKey,startIndex);
 		}
 
 		protected override void Undo(
@@ -56,7 +58,8 @@ namespace AuthorIntrusion.Common.Commands
 				endIndex = startIndex;
 			}
 
-			context.Position = new BlockPosition(BlockKey, endIndex);
+			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+				context.Position = new BlockPosition(BlockKey,endIndex);
 		}
 
 		#endregion

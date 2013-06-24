@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
@@ -47,7 +48,8 @@ namespace AuthorIntrusion.Common.Commands
 				context, block, textIndex + Text.Length);
 
 			// Set the new position in the buffer.
-			context.Position = new BlockPosition(BlockKey, textIndex + Text.Length);
+			if(UpdateTextPosition.HasFlag(DoTypes.Do))
+				context.Position = new BlockPosition(BlockKey,textIndex + Text.Length);
 		}
 
 		protected override void Undo(
@@ -58,7 +60,9 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Set the new cursor position.
 			int textIndex = BlockPosition.TextIndex.Normalize(previousText);
-			context.Position = new BlockPosition(BlockPosition.BlockKey, textIndex);
+
+			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+				context.Position = new BlockPosition(BlockPosition.BlockKey,textIndex);
 		}
 
 		#endregion

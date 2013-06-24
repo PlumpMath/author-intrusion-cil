@@ -5,6 +5,7 @@
 using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
 using C5;
+using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -48,7 +49,8 @@ namespace AuthorIntrusion.Common.Commands
 				addedBlocks.Add(newBlock);
 
 				// Update the position.
-				context.Position = new BlockPosition(newBlock.BlockKey, 0);
+				if(UpdateTextPosition.HasFlag(DoTypes.Do))
+					context.Position = new BlockPosition(newBlock.BlockKey,0);
 			}
 		}
 
@@ -61,7 +63,8 @@ namespace AuthorIntrusion.Common.Commands
 				context.Blocks.Remove(addedBlock);
 			}
 
-			context.Position = new BlockPosition(BlockKey, block.Text.Length);
+			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+				context.Position = new BlockPosition(BlockKey,block.Text.Length);
 		}
 
 		#endregion

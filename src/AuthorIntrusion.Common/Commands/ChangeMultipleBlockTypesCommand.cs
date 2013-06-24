@@ -5,6 +5,7 @@
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
+using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -14,6 +15,8 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class ChangeMultipleBlockTypesCommand: IBlockCommand
 	{
+		public DoTypes UpdateTextPosition { get; set; }
+
 		#region Properties
 
 		public bool CanUndo
@@ -94,6 +97,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			Changes = new HashDictionary<BlockKey, BlockType>();
 			previousBlockTypes = new HashDictionary<BlockKey, BlockType>();
+			UpdateTextPosition = DoTypes.All;
 		}
 
 		#endregion

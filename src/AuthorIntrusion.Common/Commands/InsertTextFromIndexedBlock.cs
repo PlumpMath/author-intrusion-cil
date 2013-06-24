@@ -5,11 +5,12 @@
 using System.Text;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
+using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
-	public class InsertTextFromIndexedBlock:
+	public class InsertTextFromIndexedBlock: IBlockCommand,
 		IInsertTextFromTextRangeCommand<BlockCommandContext>
 	{
 		#region Properties
@@ -28,8 +29,8 @@ namespace AuthorIntrusion.Common.Commands
 			get { return false; }
 		}
 
-		public bool UpdateTextPosition { get; set; }
-		public bool UpdateTextSelection { get; set; }
+		public DoTypes UpdateTextPosition { get; set; }
+		public DoTypes UpdateTextSelection { get; set; }
 
 		protected int SourceBlockIndex { get; private set; }
 
@@ -71,6 +72,10 @@ namespace AuthorIntrusion.Common.Commands
 				// Set the line in the buffer.
 				destinationLine = buffer.ToString();
 				block.SetText(destinationLine);
+
+				// Set the position of this command.
+				if(UpdateTextPosition.HasFlag(DoTypes.Do))
+					context.Position = new BlockPosition(block.BlockKey,(int) DestinationPosition.Character+sourceText.Length);
 			}
 		}
 
@@ -101,6 +106,10 @@ namespace AuthorIntrusion.Common.Commands
 				// Set the line in the buffer.
 				lineText = buffer.ToString();
 				block.SetText(lineText);
+
+				// Set the position of this command.
+				if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+					context.Position = new BlockPosition(block.BlockKey,DestinationPosition.Character);
 			}
 		}
 

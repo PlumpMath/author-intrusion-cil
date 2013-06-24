@@ -40,12 +40,9 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			: base(true, false)
 		{
 			// Go through the commands and wrap each one.
-			bool updatePosition;
-
 			foreach (ICommand<OperationContext> command in composite.Commands)
 			{
-				IWrappedCommand wrappedCommand =
-					projectCommandController.WrapCommand(command, out updatePosition);
+				IWrappedCommand wrappedCommand = projectCommandController.WrapCommand(command);
 				Commands.Add(wrappedCommand);
 			}
 		}
