@@ -4,6 +4,7 @@
 
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -16,23 +17,60 @@ namespace AuthorIntrusion.Common.Commands
 
 		public override void Do(BlockCommandContext context)
 		{
+			// If we have a block key, we use that first.
 			ProjectBlockCollection blocks = context.Blocks;
-			Block block;
 
-			using (blocks.AcquireBlockLock(RequestLock.Write, BlockKey, out block))
+			if (UseBlockKey)
 			{
-				Do(context, block);
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Write, RequestLock.Write, BlockKey, out block))
+				{
+					Do(context, block);
+				}
+			}
+			else
+			{
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Write, RequestLock.Write, (int) Line, out block))
+				{
+					BlockKey = block.BlockKey;
+					Do(context, block);
+				}
 			}
 		}
 
 		public override void Undo(BlockCommandContext context)
 		{
+			// If we have a block key, we use that first.
 			ProjectBlockCollection blocks = context.Blocks;
-			Block block;
 
-			using (blocks.AcquireBlockLock(RequestLock.Write, BlockKey, out block))
+			if (UseBlockKey)
 			{
-				Undo(context, block);
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Read, RequestLock.Write, BlockKey, out block))
+				{
+					Undo(context, block);
+				}
+			}
+			else
+			{
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Read, RequestLock.Write, (int) Line, out block))
+				{
+					Undo(context, block);
+				}
 			}
 		}
 
@@ -42,6 +80,11 @@ namespace AuthorIntrusion.Common.Commands
 
 		protected SingleBlockKeyCommand(BlockKey blockKey)
 			: base(blockKey)
+		{
+		}
+
+		protected SingleBlockKeyCommand(Position line)
+			: base(line)
 		{
 		}
 

@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common.Blocks;
+using MfGames.Commands.TextEditing;
 
 namespace AuthorIntrusion.Common.Commands
 {
@@ -16,7 +17,7 @@ namespace AuthorIntrusion.Common.Commands
 		/// <summary>
 		/// Gets the key that identifies the block this command operates on.
 		/// </summary>
-		public BlockKey BlockKey { get; private set; }
+		public BlockKey BlockKey { get; protected set; }
 
 		public virtual bool CanUndo
 		{
@@ -28,9 +29,12 @@ namespace AuthorIntrusion.Common.Commands
 			get { return false; }
 		}
 
+		public Position Line { get; private set; }
+
 		public bool UpdateTextPosition { get; set; }
 
 		public bool UpdateTextSelection { get; set; }
+		protected bool UseBlockKey { get; private set; }
 
 		#endregion
 
@@ -69,6 +73,13 @@ namespace AuthorIntrusion.Common.Commands
 		protected BlockKeyCommand(BlockKey blockKey)
 		{
 			BlockKey = blockKey;
+			UseBlockKey = true;
+		}
+
+		protected BlockKeyCommand(Position line)
+		{
+			Line = line;
+			UseBlockKey = false;
 		}
 
 		#endregion

@@ -15,15 +15,13 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 	{
 		#region Methods
 
-		public override void Do(OperationContext context)
+		public override void PostDo(OperationContext context)
 		{
-			base.Do(context);
 			lineBuffer.RaiseLineInserted(line.Index);
 		}
 
-		public override void Undo(OperationContext context)
+		public override void PostUndo(OperationContext context)
 		{
-			base.Undo(context);
 			lineBuffer.RaiseLineDeleted(line.Index);
 		}
 

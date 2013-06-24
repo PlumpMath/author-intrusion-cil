@@ -17,25 +17,60 @@ namespace AuthorIntrusion.Common.Commands
 
 		public override void Do(BlockCommandContext context)
 		{
-			Block block;
+			// If we have a block key, we use that first.
+			ProjectBlockCollection blocks = context.Blocks;
 
-			using (
-				context.Blocks.AcquireBlockLock(
-					RequestLock.Write, RequestLock.Write, BlockKey, out block))
+			if (UseBlockKey)
 			{
-				Do(context, block);
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Write, RequestLock.Write, BlockKey, out block))
+				{
+					Do(context, block);
+				}
+			}
+			else
+			{
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Write, RequestLock.Write, (int) Line, out block))
+				{
+					BlockKey = block.BlockKey;
+					Do(context, block);
+				}
 			}
 		}
 
 		public override void Undo(BlockCommandContext context)
 		{
-			Block block;
+			// If we have a block key, we use that first.
+			ProjectBlockCollection blocks = context.Blocks;
 
-			using (
-				context.Blocks.AcquireBlockLock(
-					RequestLock.Write, RequestLock.Write, BlockKey, out block))
+			if (UseBlockKey)
 			{
-				Undo(context, block);
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Write, RequestLock.Write, BlockKey, out block))
+				{
+					Undo(context, block);
+				}
+			}
+			else
+			{
+				Block block;
+
+				using (
+					blocks.AcquireBlockLock(
+						RequestLock.Write, RequestLock.Write, (int) Line, out block))
+				{
+					Undo(context, block);
+				}
 			}
 		}
 

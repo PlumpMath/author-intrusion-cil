@@ -42,6 +42,12 @@ namespace AuthorIntrusion.Common.Commands
 			TextIndex = (int) position.TextIndex;
 		}
 
+		protected BlockPositionCommand(TextPosition position)
+			: base(position.Line)
+		{
+			TextIndex = (int) position.Character;
+		}
+
 		#endregion
 	}
 }

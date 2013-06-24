@@ -62,7 +62,7 @@ namespace AuthorIntrusion.Common.Commands
 		public override ICommand<BlockCommandContext> Redo(BlockCommandContext state)
 		{
 			// Call the base implementation first.
-			var command = base.Redo(state);
+			ICommand<BlockCommandContext> command = base.Redo(state);
 
 			// If we have a position, set it.
 			if (state.Position.HasValue)
@@ -77,7 +77,7 @@ namespace AuthorIntrusion.Common.Commands
 		public override ICommand<BlockCommandContext> Undo(BlockCommandContext state)
 		{
 			// Call the base implementation first.
-			var command = base.Undo(state);
+			ICommand<BlockCommandContext> command = base.Undo(state);
 
 			// If we have a position, set it.
 			if (state.Position.HasValue)

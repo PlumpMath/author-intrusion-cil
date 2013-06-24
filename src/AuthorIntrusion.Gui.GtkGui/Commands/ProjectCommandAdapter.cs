@@ -14,7 +14,8 @@ using MfGames.GtkExt.TextEditor.Models.Buffers;
 
 namespace AuthorIntrusion.Gui.GtkGui.Commands
 {
-	public abstract class ProjectCommandAdapter:ITextEditingCommand<OperationContext>
+	public abstract class ProjectCommandAdapter:
+		ITextEditingCommand<OperationContext>
 	{
 		#region Properties
 
@@ -22,6 +23,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		{
 			get { return true; }
 		}
+
+		public IUndoableCommand<BlockCommandContext> Command { get; set; }
 
 		public bool IsTransient
 		{
@@ -31,12 +34,17 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		public bool UpdateTextPosition { get; set; }
 		public bool UpdateTextSelection { get; set; }
 
-		public IUndoableCommand<BlockCommandContext> Command { get; set; }
 		protected Project Project { get; private set; }
 
 		#endregion
 
 		#region Methods
+
+		public virtual void Do(OperationContext context)
+		{
+			Action<BlockCommandContext> action = Command.Do;
+			PerformCommandAction(context, action);
+		}
 
 		public virtual void PostDo(OperationContext context)
 		{
@@ -44,12 +52,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 		public virtual void PostUndo(OperationContext context)
 		{
-		}
-
-		public virtual void Do(OperationContext context)
-		{
-			Action<BlockCommandContext> action = Command.Do;
-			PerformCommandAction(context, action);
 		}
 
 		public void Redo(OperationContext context)

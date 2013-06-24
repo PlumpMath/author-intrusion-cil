@@ -4,13 +4,35 @@
 
 using AuthorIntrusion.Common.Commands;
 using MfGames.Commands;
-using MfGames.Commands.TextEditing;
 using MfGames.GtkExt.TextEditor.Models;
 
 namespace AuthorIntrusion.Gui.GtkGui.Commands
 {
-	public class ProjectCommandWrapper : IWrappedCommand
+	public class ProjectCommandWrapper: IWrappedCommand
 	{
+		#region Properties
+
+		public ProjectCommandAdapter Adapter { get; private set; }
+
+		public bool CanUndo
+		{
+			get { return command.CanUndo; }
+		}
+
+		public bool IsTransient
+		{
+			get { return command.IsTransient; }
+		}
+
+		#endregion
+
+		#region Methods
+
+		public void Do(BlockCommandContext context)
+		{
+			command.Do(context);
+		}
+
 		public void PostDo(OperationContext context)
 		{
 			Adapter.PostDo(context);
@@ -19,23 +41,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		public void PostUndo(OperationContext context)
 		{
 			Adapter.PostUndo(context);
-		}
-
-		public ProjectCommandAdapter Adapter { get; private set; }
-
-		private readonly IUndoableCommand<BlockCommandContext> command;
-
-		public ProjectCommandWrapper(
-			ProjectCommandAdapter adapter,
-			IUndoableCommand<BlockCommandContext> command)
-		{
-			this.Adapter = adapter;
-			this.command = command;
-		}
-
-		public void Do(BlockCommandContext context)
-		{
-			command.Do(context);
 		}
 
 		public void Redo(BlockCommandContext context)
@@ -48,11 +53,24 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			command.Undo(context);
 		}
 
-		public bool CanUndo {
-			get { return command.CanUndo; }
+		#endregion
+
+		#region Constructors
+
+		public ProjectCommandWrapper(
+			ProjectCommandAdapter adapter,
+			IUndoableCommand<BlockCommandContext> command)
+		{
+			Adapter = adapter;
+			this.command = command;
 		}
-		public bool IsTransient {
-			get { return command.IsTransient; }
-		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly IUndoableCommand<BlockCommandContext> command;
+
+		#endregion
 	}
 }

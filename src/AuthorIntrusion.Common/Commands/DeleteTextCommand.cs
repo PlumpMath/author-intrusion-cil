@@ -48,13 +48,15 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(previousText);
 
 			// Set the position after the next text.
-			int startIndex = BlockPosition.TextIndex.Normalize(block.Text,End,false);
-			int endIndex = End.Normalize(block.Text,TextIndex,true);
+			int startIndex = BlockPosition.TextIndex.Normalize(block.Text, End, false);
+			int endIndex = End.Normalize(block.Text, TextIndex, true);
 
 			if (End.Index < 0)
+			{
 				endIndex = startIndex;
+			}
 
-			context.Position = new BlockPosition(BlockKey,endIndex);
+			context.Position = new BlockPosition(BlockKey, endIndex);
 		}
 
 		#endregion
@@ -67,6 +69,13 @@ namespace AuthorIntrusion.Common.Commands
 			: base(begin)
 		{
 			End = end;
+		}
+
+		public DeleteTextCommand(SingleLineTextRange range)
+			: base(new TextPosition(range.Line, range.CharacterBegin))
+		{
+			// DREM ToTextPosition
+			End = range.CharacterEnd;
 		}
 
 		#endregion

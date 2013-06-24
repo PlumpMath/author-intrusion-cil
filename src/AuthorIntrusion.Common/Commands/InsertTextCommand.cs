@@ -73,6 +73,14 @@ namespace AuthorIntrusion.Common.Commands
 			Text = text;
 		}
 
+		public InsertTextCommand(
+			TextPosition textPosition,
+			string text)
+			: base(textPosition)
+		{
+			Text = text;
+		}
+
 		#endregion
 
 		#region Fields

@@ -74,8 +74,7 @@ namespace AuthorIntrusion.Common.Blocks
 			block = this[blockIndex];
 
 			// Get a read lock on the block and then return it.
-			IDisposable blockLock = block.AcquireLock(
-				collectionLock, requestedCollectionLock);
+			IDisposable blockLock = block.AcquireLock(collectionLock, requestedBlockLock);
 			return blockLock;
 		}
 

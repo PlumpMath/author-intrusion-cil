@@ -3,8 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using AuthorIntrusion.Common;
-using AuthorIntrusion.Common.Blocks;
-using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using MfGames.Commands.TextEditing;
 using MfGames.GtkExt.TextEditor.Models;
@@ -22,20 +20,11 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			string text)
 			: base(project)
 		{
-			// We need a specific block for this operation.
-			Block block;
+			// Create the project command wrapper.
+			var command = new InsertTextCommand(textPosition, text);
 
-			using (
-				project.Blocks.AcquireBlockLock(
-					RequestLock.Read, textPosition.Line.Index, out block))
-			{
-				// Create the project command wrapper.
-				var position = new BlockPosition(block.BlockKey, textPosition.Character);
-				var command = new InsertTextCommand(position, text);
-
-				// Set the command into the adapter.
-				Command = command;
-			}
+			// Set the command into the adapter.
+			Command = command;
 		}
 
 		#endregion
