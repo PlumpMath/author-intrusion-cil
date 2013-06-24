@@ -6,6 +6,7 @@ using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
+using MfGames.Commands;
 
 namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 {
@@ -41,6 +42,7 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 		#region Methods
 
 		public void ProcessImmediateEdits(
+			BlockCommandContext context,
 			Block block,
 			int textIndex)
 		{
@@ -74,14 +76,14 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 			var changeCommand = new ChangeBlockTypeCommand(block.BlockKey, blockType);
 
 			// Create a composite command that binds everything together.
-			var compositeCommand = new CompositeCommand();
+			var compositeCommand = new CompositeCommand<BlockCommandContext>(true, false);
 
 			compositeCommand.Commands.Add(replaceCommand);
 			compositeCommand.Commands.Add(changeCommand);
 
 			// Add the command to the deferred execution so the command could
 			// be properly handled via the undo/redo management.
-			block.Project.Commands.DeferredDo(compositeCommand);
+			block.Project.Commands.DeferDo(compositeCommand);
 		}
 
 		#endregion
