@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
-using System.Diagnostics.Contracts;
 using System.Threading;
 using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
@@ -132,9 +131,13 @@ namespace AuthorIntrusion.Common.Blocks
 		public bool IsStale(int blockVersion)
 		{
 			// Ensure we have a lock in effect.
-			Contract.Assert(
-				accessLock.IsReadLockHeld || accessLock.IsUpgradeableReadLockHeld
-					|| accessLock.IsWriteLockHeld);
+			if (!accessLock.IsReadLockHeld
+				&& !accessLock.IsUpgradeableReadLockHeld
+				&& !accessLock.IsWriteLockHeld)
+			{
+				throw new InvalidOperationException(
+					"Cannot check block status without a read, upgradable read, or write lock on the block.");
+			}
 
 			// Determine if we have the same version.
 			return version != blockVersion;
@@ -167,8 +170,16 @@ namespace AuthorIntrusion.Common.Blocks
 		public void SetBlockType(BlockType newBlockType)
 		{
 			// Make sure we have a sane state.
-			Contract.Assert(newBlockType != null);
-			Contract.Assert(Blocks.Project == newBlockType.Supervisor.Project);
+			if (newBlockType == null)
+			{
+				throw new ArgumentNullException("newBlockType");
+			}
+
+			if (Blocks.Project != newBlockType.Supervisor.Project)
+			{
+				throw new InvalidOperationException(
+					"Cannot assign a block type with a different Project than the block's Project.");
+			}
 
 			// We only do things if we are changing the block type.
 			bool changed = blockType != newBlockType;
@@ -219,7 +230,11 @@ namespace AuthorIntrusion.Common.Blocks
 		public void SetText(string newText)
 		{
 			// Verify that we have a write lock on this block.
-			Contract.Requires<InvalidOperationException>(IsWriteLockHeld);
+			if (!IsWriteLockHeld)
+			{
+				throw new InvalidOperationException(
+					"Cannot use SetText without having a write lock on the block.");
+			}
 
 			// TODO: This is disabled because inserting new lines doesn't properly cause events to be fired.
 			//// If nothing changed, then we don't have to do anything.

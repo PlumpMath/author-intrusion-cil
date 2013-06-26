@@ -2,7 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System.Diagnostics.Contracts;
+using System;
 using AuthorIntrusion.Common.Blocks;
 using C5;
 using MfGames.Commands;
@@ -81,7 +81,11 @@ namespace AuthorIntrusion.Common.Commands
 			: base(blockKey)
 		{
 			// Make sure we have a sane state.
-			Contract.Assert(count > 0);
+			if (count <= 0)
+			{
+				throw new ArgumentOutOfRangeException(
+					"count", "Cannot insert or zero or less blocks.");
+			}
 
 			// Keep track of the counts.
 			Count = count;

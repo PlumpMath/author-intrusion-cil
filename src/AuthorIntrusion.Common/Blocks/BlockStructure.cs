@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using C5;
 
@@ -81,9 +80,6 @@ namespace AuthorIntrusion.Common.Blocks
 			object sender,
 			ItemAtEventArgs<BlockStructure> e)
 		{
-			// Make sure we have a sane state.
-			Contract.Assert(e.Item.ParentStructure == null);
-
 			// Clear out the parent relationship.
 			BlockStructure blockStructure = e.Item;
 
@@ -94,9 +90,6 @@ namespace AuthorIntrusion.Common.Blocks
 			object sender,
 			ItemAtEventArgs<BlockStructure> e)
 		{
-			// Make sure we have a sane state.
-			Contract.Assert(e.Item.ParentStructure == this);
-
 			// Clear out the parent relationship.
 			BlockStructure blockStructure = e.Item;
 

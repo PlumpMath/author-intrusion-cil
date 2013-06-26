@@ -2,7 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System.Diagnostics.Contracts;
+using System;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using C5;
@@ -138,7 +138,11 @@ namespace AuthorIntrusion.Common.Commands
 			string text)
 		{
 			// Make sure we have a sane state.
-			Contract.Assert(!text.Contains("\r"));
+			if (text.Contains("\r"))
+			{
+				throw new ArgumentException(
+					"text cannot have a return (\\r) character in it.", "text");
+			}
 
 			// Save the text for the changes.
 			BlockPosition = position;

@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
-using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks.Locking;
 
 namespace AuthorIntrusion.Common.Blocks
@@ -117,10 +116,6 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public BlockStructureSupervisor(Project project)
 		{
-			// Make sure the current state is sane.
-			Contract.Assert(project.Blocks != null);
-			Contract.Assert(project.BlockTypes != null);
-
 			// Save the members we need for later referencing.
 			Project = project;
 
