@@ -32,7 +32,7 @@ namespace AuthorIntrusion.Common.Commands
 			get { return false; }
 		}
 
-		public Position Line { get; private set; }
+		public LinePosition Line { get; private set; }
 
 		public DoTypes UpdateTextSelection { get; set; }
 		protected bool UseBlockKey { get; private set; }
@@ -78,7 +78,7 @@ namespace AuthorIntrusion.Common.Commands
 			UpdateTextPosition = DoTypes.All;
 		}
 
-		protected BlockKeyCommand(Position line)
+		protected BlockKeyCommand(LinePosition line)
 		{
 			Line = line;
 			UseBlockKey = false;

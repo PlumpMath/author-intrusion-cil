@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Common.Commands
 			int textIndex,
 			string text)
 		{
-			InsertText(new BlockPosition(block.BlockKey, (Position) textIndex), text);
+			InsertText(new BlockPosition(block.BlockKey, (CharacterPosition) textIndex), text);
 		}
 
 		public override ICommand<BlockCommandContext> Redo(BlockCommandContext state)

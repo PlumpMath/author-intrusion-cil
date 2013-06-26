@@ -16,7 +16,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public BlockKey BlockKey { get; private set; }
 
-		public Position TextIndex { get; private set; }
+		public CharacterPosition TextIndex { get; private set; }
 
 		#endregion
 
@@ -79,7 +79,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public BlockPosition(
 			BlockKey blockKey,
-			Position textIndex)
+			CharacterPosition textIndex)
 			: this()
 		{
 			BlockKey = blockKey;
@@ -88,7 +88,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public BlockPosition(
 			Block block,
-			Position textIndex)
+			CharacterPosition textIndex)
 			: this(block.BlockKey, textIndex)
 		{
 		}
@@ -96,14 +96,14 @@ namespace AuthorIntrusion.Common.Blocks
 		public BlockPosition(
 			BlockKey blockKey,
 			int character)
-			: this(blockKey, (Position) character)
+			: this(blockKey, (CharacterPosition) character)
 		{
 		}
 
 		public BlockPosition(
 			Block block,
 			int character)
-			: this(block.BlockKey, (Position) character)
+			: this(block.BlockKey, (CharacterPosition) character)
 		{
 		}
 

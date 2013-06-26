@@ -35,7 +35,7 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			int textIndex = new Position(TextIndex).Normalize(block.Text);
+			int textIndex = new CharacterPosition(TextIndex).NormalizeIndex(block.Text);
 			string newText = block.Text.Insert(textIndex, Text);
 
 			// Set the new text into the block. This will fire various events to
@@ -59,7 +59,7 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(previousText);
 
 			// Set the new cursor position.
-			int textIndex = BlockPosition.TextIndex.Normalize(previousText);
+			int textIndex = BlockPosition.TextIndex.NormalizeIndex(previousText);
 
 			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
 				context.Position = new BlockPosition(BlockPosition.BlockKey,textIndex);

@@ -53,11 +53,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		#region Methods
 
 		public IDeleteLineCommand<OperationContext> CreateDeleteLineCommand(
-			Position line)
+			LinePosition line)
 		{
-			// Establish our code contracts.
-			Contract.Requires<ArgumentNullException>(Project != null);
-
 			// Create the command adapter and return it.
 			var command = new ProjectDeleteLineCommand(ProjectLineBuffer, Project, line);
 			Debug.WriteLine("CreateDeleteLineCommand: " + line);
@@ -67,9 +64,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		public IDeleteTextCommand<OperationContext> CreateDeleteTextCommand(
 			SingleLineTextRange range)
 		{
-			// Establish our code contracts.
-			Contract.Requires<ArgumentNullException>(Project != null);
-
 			// Create the command adapter and return it.
 			var command = new ProjectDeleteTextCommand(Project, range);
 			Debug.WriteLine("CreateDeleteTextCommand: " + range);
@@ -77,11 +71,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		}
 
 		public IInsertLineCommand<OperationContext> CreateInsertLineCommand(
-			Position line)
+			LinePosition line)
 		{
-			// Establish our code contracts.
-			Contract.Requires<ArgumentNullException>(Project != null);
-
 			// Create the command adapter and return it.
 			var command = new ProjectInsertLineCommand(ProjectLineBuffer, Project, line);
 			Debug.WriteLine("CreateInsertLineCommand: " + line);
@@ -92,9 +83,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			TextPosition textPosition,
 			string text)
 		{
-			// Establish our code contracts.
-			Contract.Requires<ArgumentNullException>(Project != null);
-
 			// Create the command adapter and return it.
 			var command = new ProjectInsertTextCommand(Project, textPosition, text);
 			Debug.WriteLine("CreateInsertTextCommand: " + textPosition + ", " + text);
@@ -106,9 +94,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			TextPosition destinationPosition,
 			SingleLineTextRange sourceRange)
 		{
-			// Establish our code contracts.
-			Contract.Requires<ArgumentNullException>(Project != null);
-
 			// Create the command adapter and return it.
 			var command = new ProjectInsertTextFromTextRangeCommand(
 				Project, destinationPosition, sourceRange);
@@ -145,7 +130,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(blockIndex, blockPosition.TextIndex);
+					var position = new BufferPosition(blockIndex, (int) blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
@@ -174,7 +159,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(blockIndex, blockPosition.TextIndex);
+					var position = new BufferPosition(blockIndex, (int) blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
@@ -211,7 +196,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(blockIndex, blockPosition.TextIndex);
+					var position = new BufferPosition(blockIndex, (int) blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);

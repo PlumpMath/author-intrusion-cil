@@ -22,7 +22,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			get
 			{
-				var position = new BlockPosition(BlockKey, (Position) TextIndex);
+				var position = new BlockPosition(BlockKey, (CharacterPosition) TextIndex);
 				return position;
 			}
 		}

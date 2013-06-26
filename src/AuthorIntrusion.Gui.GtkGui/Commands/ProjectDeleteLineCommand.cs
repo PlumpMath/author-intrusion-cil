@@ -33,7 +33,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		public ProjectDeleteLineCommand(
 			ProjectLineBuffer lineBuffer,
 			Project project,
-			Position line)
+			LinePosition line)
 			: base(project)
 		{
 			// Save the line for later events.
@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 		#region Fields
 
-		private readonly Position line;
+		private readonly LinePosition line;
 		private readonly ProjectLineBuffer lineBuffer;
 
 		#endregion

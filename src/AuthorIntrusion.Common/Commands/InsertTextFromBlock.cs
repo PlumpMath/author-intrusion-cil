@@ -13,8 +13,8 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
-		public Position CharacterBegin { get; private set; }
-		public Position CharacterEnd { get; private set; }
+		public CharacterPosition CharacterBegin { get; private set; }
+		public CharacterPosition CharacterEnd { get; private set; }
 		public BlockPosition DestinationPosition { get; private set; }
 		public BlockKey SourceBlockKey { get; private set; }
 
@@ -28,15 +28,15 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			// Grab the text from the source line.
 			string sourceLine = context.Blocks[SourceBlockKey].Text;
-			int sourceBegin = CharacterBegin.Normalize(sourceLine, CharacterEnd, false);
-			int sourceEnd = CharacterEnd.Normalize(sourceLine, CharacterBegin, true);
+			int sourceBegin = CharacterBegin.NormalizeIndex(sourceLine, CharacterEnd, WordSearchDirection.Left);
+			int sourceEnd = CharacterEnd.NormalizeIndex(sourceLine, CharacterBegin, WordSearchDirection.Right);
 			string sourceText = sourceLine.Substring(
 				sourceBegin, sourceEnd - sourceBegin);
 
 			// Insert the text from the source line into the destination.
 			string destinationLine = block.Text;
 			var buffer = new StringBuilder(destinationLine);
-			int characterIndex = DestinationPosition.TextIndex.Normalize(destinationLine);
+			int characterIndex = DestinationPosition.TextIndex.NormalizeIndex(destinationLine);
 
 			buffer.Insert(characterIndex, sourceText);
 
@@ -72,8 +72,8 @@ namespace AuthorIntrusion.Common.Commands
 		public InsertTextFromBlock(
 			BlockPosition destinationPosition,
 			BlockKey sourceBlockKey,
-			Position characterBegin,
-			Position characterEnd)
+			CharacterPosition characterBegin,
+			CharacterPosition characterEnd)
 			: base(destinationPosition.BlockKey)
 		{
 			DestinationPosition = destinationPosition;

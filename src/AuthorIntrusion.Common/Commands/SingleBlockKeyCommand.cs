@@ -83,7 +83,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 		}
 
-		protected SingleBlockKeyCommand(Position line)
+		protected SingleBlockKeyCommand(LinePosition line)
 			: base(line)
 		{
 		}

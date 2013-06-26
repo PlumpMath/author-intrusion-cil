@@ -54,7 +54,7 @@ namespace AuthorIntrusion.Common.Commands
 				// Set the position after the command.
 				if(UpdateTextPosition.HasFlag(DoTypes.Do))
 				{
-					context.Position = new BlockPosition(Block.BlockKey,Position.Begin);
+					context.Position = new BlockPosition(Block.BlockKey,CharacterPosition.Begin);
 				}
 			}
 		}

@@ -15,8 +15,7 @@ namespace AuthorIntrusion.Common.Commands
 	{
 		#region Properties
 
-		public Position CharacterEnd { get; private set; }
-		public Position End { get; set; }
+		public CharacterPosition End { get; set; }
 
 		#endregion
 
@@ -30,8 +29,8 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			int startIndex = BlockPosition.TextIndex.Normalize(block.Text, End, false);
-			int endIndex = End.Normalize(block.Text, TextIndex, true);
+			int startIndex = BlockPosition.TextIndex.NormalizeIndex(block.Text, End, WordSearchDirection.Left);
+			int endIndex = End.NormalizeIndex(block.Text, TextIndex, WordSearchDirection.Right);
 			string newText = block.Text.Remove(startIndex, endIndex - startIndex);
 
 			// Set the new text into the block. This will fire various events to
@@ -50,8 +49,8 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(previousText);
 
 			// Set the position after the next text.
-			int startIndex = BlockPosition.TextIndex.Normalize(block.Text, End, false);
-			int endIndex = End.Normalize(block.Text, TextIndex, true);
+			int startIndex = BlockPosition.TextIndex.NormalizeIndex(block.Text, End, WordSearchDirection.Left);
+			int endIndex = End.NormalizeIndex(block.Text, TextIndex, WordSearchDirection.Right);
 
 			if (End.Index < 0)
 			{
@@ -68,7 +67,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		public DeleteTextCommand(
 			BlockPosition begin,
-			Position end)
+			CharacterPosition end)
 			: base(begin)
 		{
 			End = end;

@@ -32,7 +32,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		public ProjectInsertLineCommand(
 			ProjectLineBuffer lineBuffer,
 			Project project,
-			Position line)
+			LinePosition line)
 			: base(project)
 		{
 			// Save the line buffer for later.
@@ -51,7 +51,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 		#region Fields
 
-		private readonly Position line;
+		private readonly LinePosition line;
 		private readonly ProjectLineBuffer lineBuffer;
 
 		#endregion

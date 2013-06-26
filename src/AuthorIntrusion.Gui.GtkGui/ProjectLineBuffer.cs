@@ -416,7 +416,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 				project.Blocks.IndexOf(project.Commands.LastPosition.BlockKey);
 			var results =
 				new LineBufferOperationResults(
-					new BufferPosition(blockIndex, project.Commands.LastPosition.TextIndex));
+					new BufferPosition(blockIndex, (int)project.Commands.LastPosition.TextIndex));
 			return results;
 		}
 

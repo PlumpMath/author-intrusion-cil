@@ -107,7 +107,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(blockIndex, blockPosition.TextIndex);
+					var position = new BufferPosition(blockIndex, (int)blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);

@@ -28,10 +28,10 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			using (
 				Project.Blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
 			{
-				int characterIndex = destinationPosition.Character.Normalize(block.Text);
+				int characterIndex = destinationPosition.Character.NormalizeIndex(block.Text);
 
 				var bufferPosition = new BufferPosition(
-					destinationPosition.Line, (Position) (characterIndex + block.Text.Length));
+					(int)destinationPosition.Line, (int) (characterIndex + block.Text.Length));
 				context.Results = new LineBufferOperationResults(bufferPosition);
 			}
 		}
@@ -47,10 +47,10 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			using (
 				Project.Blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
 			{
-				int characterIndex = destinationPosition.Character.Normalize(block.Text);
+				int characterIndex = destinationPosition.Character.NormalizeIndex(block.Text);
 
 				var bufferPosition = new BufferPosition(
-					destinationPosition.Line, (Position) (characterIndex + block.Text.Length));
+					(int)destinationPosition.Line, (int) (characterIndex + block.Text.Length));
 				context.Results = new LineBufferOperationResults(bufferPosition);
 			}
 		}
