@@ -13,9 +13,13 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public interface IBlockCommand: IUndoableCommand<BlockCommandContext>
 	{
+		#region Properties
+
 		/// <summary>
 		/// Gets where the position should be updated when the command executes.
 		/// </summary>
 		DoTypes UpdateTextPosition { get; set; }
+
+		#endregion
 	}
 }

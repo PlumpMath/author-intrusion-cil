@@ -34,11 +34,6 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 
 		#endregion
 
-		public ImmediateBlockTypesProjectPlugin(Project project)
-		{
-			Project = project;
-		}
-
 		#region Methods
 
 		public void ProcessImmediateEdits(
@@ -84,6 +79,15 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 			// Add the command to the deferred execution so the command could
 			// be properly handled via the undo/redo management.
 			block.Project.Commands.DeferDo(compositeCommand);
+		}
+
+		#endregion
+
+		#region Constructors
+
+		public ImmediateBlockTypesProjectPlugin(Project project)
+		{
+			Project = project;
 		}
 
 		#endregion

@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Diagnostics;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
@@ -17,8 +18,6 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 	public abstract class ProjectCommandAdapter:
 		ITextEditingCommand<OperationContext>
 	{
-		private IBlockCommand command;
-
 		#region Properties
 
 		public bool CanUndo
@@ -29,10 +28,13 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		public IBlockCommand Command
 		{
 			get { return command; }
-			set { command = value; 
+			set
+			{
+				command = value;
 
 				// Wrapped commands default to not updating themselves.
-			command.UpdateTextPosition = DoTypes.None;}
+				command.UpdateTextPosition = DoTypes.None;
+			}
 		}
 
 		public bool IsTransient
@@ -45,15 +47,14 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			get { return Command.UpdateTextPosition; }
 			set
 			{
-				System.Diagnostics.Debug.WriteLine(
+				Debug.WriteLine(
 					this + ": Changeing UpdateTextPosition from " + Command.UpdateTextPosition
 						+ " to " + value);
-				Command.UpdateTextPosition = value; }
+				Command.UpdateTextPosition = value;
+			}
 		}
-		public DoTypes UpdateTextSelection
-		{
-			get;set;
-		}
+
+		public DoTypes UpdateTextSelection { get; set; }
 
 		protected Project Project { get; private set; }
 
@@ -107,7 +108,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(blockIndex, (int)blockPosition.TextIndex);
+					var position = new BufferPosition(
+						blockIndex, (int) blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
@@ -123,6 +125,12 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 		{
 			Project = project;
 		}
+
+		#endregion
+
+		#region Fields
+
+		private IBlockCommand command;
 
 		#endregion
 	}

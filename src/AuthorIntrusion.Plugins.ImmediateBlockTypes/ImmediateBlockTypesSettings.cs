@@ -16,8 +16,17 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 	/// text prefixes will alter the block types.
 	/// </summary>
 	[XmlRoot("immediate-block-types", Namespace = XmlConstants.ProjectNamespace)]
-	public class ImmediateBlockTypesSettings:IXmlSerializable
+	public class ImmediateBlockTypesSettings: IXmlSerializable
 	{
+		#region Properties
+
+		public IDictionary<string, string> Replacements { get; private set; }
+		public static HierarchicalPath SettingsPath { get; private set; }
+
+		#endregion
+
+		#region Methods
+
 		public XmlSchema GetSchema()
 		{
 			return null;
@@ -30,22 +39,23 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 			string elementName = reader.LocalName;
 
 			// Read until we get to the end element.
-			while(reader.Read())
+			while (reader.Read())
 			{
 				// If we aren't in our namespace, we don't need to bother.
-				if(reader.NamespaceURI != XmlConstants.ProjectNamespace)
+				if (reader.NamespaceURI != XmlConstants.ProjectNamespace)
 				{
 					continue;
 				}
 
 				// If we got to the end of the node, then stop reading.
-				if(reader.LocalName == elementName)
+				if (reader.LocalName == elementName)
 				{
 					return;
 				}
 
 				// Look for a key, if we have it, set that value.
-				if(reader.NodeType == XmlNodeType.Element && reader.LocalName=="replacement")
+				if (reader.NodeType == XmlNodeType.Element
+					&& reader.LocalName == "replacement")
 				{
 					// Pull out the elements from the attribute string.
 					string prefix = reader["prefix"];
@@ -60,7 +70,7 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 		public void WriteXml(XmlWriter writer)
 		{
 			// Write out a version field.
-			writer.WriteElementString("version","1");
+			writer.WriteElementString("version", "1");
 
 			// Sort the list of words.
 			var prefixes = new ArrayList<string>();
@@ -68,27 +78,29 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 			prefixes.Sort();
 
 			// Write out the records.
-			foreach(string prefix in prefixes)
+			foreach (string prefix in prefixes)
 			{
-				writer.WriteStartElement("replacement",XmlConstants.ProjectNamespace);
+				writer.WriteStartElement("replacement", XmlConstants.ProjectNamespace);
 				writer.WriteAttributeString("prefix", prefix);
 				writer.WriteAttributeString("block-type", Replacements[prefix]);
 				writer.WriteEndElement();
 			}
 		}
 
-		public IDictionary<string, string> Replacements { get; private set; }
+		#endregion
 
-		public ImmediateBlockTypesSettings()
-		{
-			Replacements = new HashDictionary<string, string>();
-		}
+		#region Constructors
 
 		static ImmediateBlockTypesSettings()
 		{
 			SettingsPath = new HierarchicalPath("/Plugins/Immediate Block Types");
 		}
 
-		public static HierarchicalPath SettingsPath { get; private set; }
+		public ImmediateBlockTypesSettings()
+		{
+			Replacements = new HashDictionary<string, string>();
+		}
+
+		#endregion
 	}
 }

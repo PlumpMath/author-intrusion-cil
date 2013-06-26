@@ -267,13 +267,13 @@ namespace AuthorIntrusion.Integration.Tests
 			immediateCorrectionProjectPlugin.AddSubstitution(
 				"Grey", "Gray", SubstitutionOptions.WholeWord);
 			immediateCorrectionProjectPlugin.AddSubstitution(
-				"GWG","Great Waryoni Garèo",SubstitutionOptions.None);
+				"GWG", "Great Waryoni Garèo", SubstitutionOptions.None);
 			immediateCorrectionProjectPlugin.AddSubstitution(
-				"GWB","Great Waryoni Bob",SubstitutionOptions.None);
+				"GWB", "Great Waryoni Bob", SubstitutionOptions.None);
 
 			// Set up the immediate block types.
 			var immediateBlockTypesProjectPlugin =
-				(ImmediateBlockTypesProjectPlugin)plugins["Immediate Block Types"];
+				(ImmediateBlockTypesProjectPlugin) plugins["Immediate Block Types"];
 
 			foreach (BlockType blockType in project.BlockTypes.BlockTypes.Values)
 			{

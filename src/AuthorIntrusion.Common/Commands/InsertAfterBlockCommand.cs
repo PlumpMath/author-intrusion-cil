@@ -49,8 +49,10 @@ namespace AuthorIntrusion.Common.Commands
 				addedBlocks.Add(newBlock);
 
 				// Update the position.
-				if(UpdateTextPosition.HasFlag(DoTypes.Do))
-					context.Position = new BlockPosition(newBlock.BlockKey,0);
+				if (UpdateTextPosition.HasFlag(DoTypes.Do))
+				{
+					context.Position = new BlockPosition(newBlock.BlockKey, 0);
+				}
 			}
 		}
 
@@ -63,8 +65,10 @@ namespace AuthorIntrusion.Common.Commands
 				context.Blocks.Remove(addedBlock);
 			}
 
-			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
-				context.Position = new BlockPosition(BlockKey,block.Text.Length);
+			if (UpdateTextPosition.HasFlag(DoTypes.Undo))
+			{
+				context.Position = new BlockPosition(BlockKey, block.Text.Length);
+			}
 		}
 
 		#endregion

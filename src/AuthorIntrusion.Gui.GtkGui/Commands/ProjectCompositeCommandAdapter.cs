@@ -42,7 +42,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			// Go through the commands and wrap each one.
 			foreach (ICommand<OperationContext> command in composite.Commands)
 			{
-				IWrappedCommand wrappedCommand = projectCommandController.WrapCommand(command);
+				IWrappedCommand wrappedCommand =
+					projectCommandController.WrapCommand(command);
 				Commands.Add(wrappedCommand);
 			}
 		}

@@ -29,8 +29,10 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			int startIndex = BlockPosition.TextIndex.NormalizeIndex(block.Text, End, WordSearchDirection.Left);
-			int endIndex = End.NormalizeIndex(block.Text, TextIndex, WordSearchDirection.Right);
+			int startIndex = BlockPosition.TextIndex.NormalizeIndex(
+				block.Text, End, WordSearchDirection.Left);
+			int endIndex = End.NormalizeIndex(
+				block.Text, TextIndex, WordSearchDirection.Right);
 			string newText = block.Text.Remove(startIndex, endIndex - startIndex);
 
 			// Set the new text into the block. This will fire various events to
@@ -38,8 +40,10 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(newText);
 
 			// Set the position after the next text.
-			if(UpdateTextPosition.HasFlag(DoTypes.Do))
-				context.Position = new BlockPosition(BlockKey,startIndex);
+			if (UpdateTextPosition.HasFlag(DoTypes.Do))
+			{
+				context.Position = new BlockPosition(BlockKey, startIndex);
+			}
 		}
 
 		protected override void Undo(
@@ -49,16 +53,20 @@ namespace AuthorIntrusion.Common.Commands
 			block.SetText(previousText);
 
 			// Set the position after the next text.
-			int startIndex = BlockPosition.TextIndex.NormalizeIndex(block.Text, End, WordSearchDirection.Left);
-			int endIndex = End.NormalizeIndex(block.Text, TextIndex, WordSearchDirection.Right);
+			int startIndex = BlockPosition.TextIndex.NormalizeIndex(
+				block.Text, End, WordSearchDirection.Left);
+			int endIndex = End.NormalizeIndex(
+				block.Text, TextIndex, WordSearchDirection.Right);
 
 			if (End.Index < 0)
 			{
 				endIndex = startIndex;
 			}
 
-			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
-				context.Position = new BlockPosition(BlockKey,endIndex);
+			if (UpdateTextPosition.HasFlag(DoTypes.Undo))
+			{
+				context.Position = new BlockPosition(BlockKey, endIndex);
+			}
 		}
 
 		#endregion

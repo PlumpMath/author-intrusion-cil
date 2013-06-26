@@ -52,16 +52,18 @@ namespace AuthorIntrusion.Common.Commands
 			{
 				// Grab the text from the source line.
 				string sourceLine = context.Blocks[SourceBlockIndex].Text;
-				int sourceBegin = CharacterBegin.NormalizeIndex(sourceLine, CharacterEnd, WordSearchDirection.Left);
-				int sourceEnd = CharacterEnd.NormalizeIndex(sourceLine, CharacterBegin, WordSearchDirection.Right);
+				int sourceBegin = CharacterBegin.NormalizeIndex(
+					sourceLine, CharacterEnd, WordSearchDirection.Left);
+				int sourceEnd = CharacterEnd.NormalizeIndex(
+					sourceLine, CharacterBegin, WordSearchDirection.Right);
 				string sourceText = sourceLine.Substring(
 					sourceBegin, sourceEnd - sourceBegin);
 
 				// Insert the text from the source line into the destination.
 				string destinationLine = block.Text;
 				var buffer = new StringBuilder(destinationLine);
-				int characterIndex = DestinationPosition.Character.NormalizeIndex(
-					destinationLine);
+				int characterIndex =
+					DestinationPosition.Character.NormalizeIndex(destinationLine);
 
 				buffer.Insert(characterIndex, sourceText);
 
@@ -74,8 +76,11 @@ namespace AuthorIntrusion.Common.Commands
 				block.SetText(destinationLine);
 
 				// Set the position of this command.
-				if(UpdateTextPosition.HasFlag(DoTypes.Do))
-					context.Position = new BlockPosition(block.BlockKey,(int) DestinationPosition.Character+sourceText.Length);
+				if (UpdateTextPosition.HasFlag(DoTypes.Do))
+				{
+					context.Position = new BlockPosition(
+						block.BlockKey, (int) DestinationPosition.Character + sourceText.Length);
+				}
 			}
 		}
 
@@ -108,8 +113,11 @@ namespace AuthorIntrusion.Common.Commands
 				block.SetText(lineText);
 
 				// Set the position of this command.
-				if(UpdateTextPosition.HasFlag(DoTypes.Undo))
-					context.Position = new BlockPosition(block.BlockKey,DestinationPosition.Character);
+				if (UpdateTextPosition.HasFlag(DoTypes.Undo))
+				{
+					context.Position = new BlockPosition(
+						block.BlockKey, DestinationPosition.Character);
+				}
 			}
 		}
 

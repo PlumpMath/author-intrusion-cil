@@ -38,14 +38,18 @@ namespace AuthorIntrusion.Common.Commands
 			}
 
 			// Start by removing the text to the right of the first line.
-			var deleteTextCommand = new DeleteTextCommand(startPosition, CharacterPosition.End);
+			var deleteTextCommand = new DeleteTextCommand(
+				startPosition, CharacterPosition.End);
 
 			Commands.Add(deleteTextCommand);
 
 			// Copy the final line text, from beginning to position, into the first
 			// line. This will merge the top and bottom lines.
 			var insertTextCommand = new InsertTextFromBlock(
-				startPosition, stopPosition.BlockKey, stopPosition.TextIndex, CharacterPosition.End);
+				startPosition,
+				stopPosition.BlockKey,
+				stopPosition.TextIndex,
+				CharacterPosition.End);
 
 			Commands.Add(insertTextCommand);
 

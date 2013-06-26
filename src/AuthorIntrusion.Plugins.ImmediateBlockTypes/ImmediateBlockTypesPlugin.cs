@@ -11,7 +11,7 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 	/// The plugin for an immediate editor that changes the block type as the author
 	/// is writing.
 	/// </summary>
-	public class ImmediateBlockTypesPlugin:IProjectPluginProviderPlugin
+	public class ImmediateBlockTypesPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 

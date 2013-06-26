@@ -33,7 +33,9 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Save the position from this command.
 			if (UpdateTextPosition.HasFlag(DoTypes.Do))
-			context.Position = new BlockPosition(BlockKey, 0);
+			{
+				context.Position = new BlockPosition(BlockKey, 0);
+			}
 		}
 
 		protected override void Undo(

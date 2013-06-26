@@ -28,15 +28,18 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			// Grab the text from the source line.
 			string sourceLine = context.Blocks[SourceBlockKey].Text;
-			int sourceBegin = CharacterBegin.NormalizeIndex(sourceLine, CharacterEnd, WordSearchDirection.Left);
-			int sourceEnd = CharacterEnd.NormalizeIndex(sourceLine, CharacterBegin, WordSearchDirection.Right);
+			int sourceBegin = CharacterBegin.NormalizeIndex(
+				sourceLine, CharacterEnd, WordSearchDirection.Left);
+			int sourceEnd = CharacterEnd.NormalizeIndex(
+				sourceLine, CharacterBegin, WordSearchDirection.Right);
 			string sourceText = sourceLine.Substring(
 				sourceBegin, sourceEnd - sourceBegin);
 
 			// Insert the text from the source line into the destination.
 			string destinationLine = block.Text;
 			var buffer = new StringBuilder(destinationLine);
-			int characterIndex = DestinationPosition.TextIndex.NormalizeIndex(destinationLine);
+			int characterIndex =
+				DestinationPosition.TextIndex.NormalizeIndex(destinationLine);
 
 			buffer.Insert(characterIndex, sourceText);
 

@@ -83,6 +83,15 @@ namespace AuthorIntrusion.Common.Blocks
 			return AcquireBlockLock(RequestLock.Read, requestedBlockLock);
 		}
 
+		public IDisposable AcquireBlockLock(
+			RequestLock requestedCollectionLock,
+			RequestLock requestedBlockLock)
+		{
+			IDisposable acquiredLock = Blocks.AcquireBlockLock(
+				requestedCollectionLock, requestedBlockLock, this);
+			return acquiredLock;
+		}
+
 		/// <summary>
 		/// Acquires a lock on a block while using the given opaque lock object for
 		/// the collection lock. When the block's lock is disposed, so will the
@@ -283,12 +292,5 @@ namespace AuthorIntrusion.Common.Blocks
 		private volatile int version;
 
 		#endregion
-
-		public IDisposable AcquireBlockLock(RequestLock requestedCollectionLock,
-			RequestLock requestedBlockLock)
-		{
-			IDisposable acquiredLock = Blocks.AcquireBlockLock(requestedCollectionLock, requestedBlockLock,this);
-			return acquiredLock;
-		}
 	}
 }

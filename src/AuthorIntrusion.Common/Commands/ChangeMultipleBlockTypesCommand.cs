@@ -15,8 +15,6 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class ChangeMultipleBlockTypesCommand: IBlockCommand
 	{
-		public DoTypes UpdateTextPosition { get; set; }
-
 		#region Properties
 
 		public bool CanUndo
@@ -33,6 +31,8 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			get { return false; }
 		}
+
+		public DoTypes UpdateTextPosition { get; set; }
 
 		#endregion
 

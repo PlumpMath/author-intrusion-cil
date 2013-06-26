@@ -48,8 +48,10 @@ namespace AuthorIntrusion.Common.Commands
 				context, block, textIndex + Text.Length);
 
 			// Set the new position in the buffer.
-			if(UpdateTextPosition.HasFlag(DoTypes.Do))
-				context.Position = new BlockPosition(BlockKey,textIndex + Text.Length);
+			if (UpdateTextPosition.HasFlag(DoTypes.Do))
+			{
+				context.Position = new BlockPosition(BlockKey, textIndex + Text.Length);
+			}
 		}
 
 		protected override void Undo(
@@ -61,8 +63,10 @@ namespace AuthorIntrusion.Common.Commands
 			// Set the new cursor position.
 			int textIndex = BlockPosition.TextIndex.NormalizeIndex(previousText);
 
-			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
-				context.Position = new BlockPosition(BlockPosition.BlockKey,textIndex);
+			if (UpdateTextPosition.HasFlag(DoTypes.Undo))
+			{
+				context.Position = new BlockPosition(BlockPosition.BlockKey, textIndex);
+			}
 		}
 
 		#endregion

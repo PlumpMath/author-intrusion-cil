@@ -13,8 +13,6 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public abstract class BlockKeyCommand: IBlockCommand
 	{
-		public DoTypes UpdateTextPosition { get; set; }
-
 		#region Properties
 
 		/// <summary>
@@ -33,6 +31,7 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		public LinePosition Line { get; private set; }
+		public DoTypes UpdateTextPosition { get; set; }
 
 		public DoTypes UpdateTextSelection { get; set; }
 		protected bool UseBlockKey { get; private set; }

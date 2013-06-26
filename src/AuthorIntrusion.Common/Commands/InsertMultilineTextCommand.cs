@@ -16,8 +16,6 @@ namespace AuthorIntrusion.Common.Commands
 	/// </summary>
 	public class InsertMultilineTextCommand: IBlockCommand
 	{
-		public DoTypes UpdateTextPosition { get; set; }
-
 		#region Properties
 
 		public BlockPosition BlockPosition { get; set; }
@@ -38,6 +36,7 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		public string Text { get; private set; }
+		public DoTypes UpdateTextPosition { get; set; }
 
 		#endregion
 
@@ -67,8 +66,10 @@ namespace AuthorIntrusion.Common.Commands
 			lines[lines.Length - 1] += remainingText;
 
 			// For the remaining lines, we need to insert each one in turn.
-			if(UpdateTextPosition.HasFlag(DoTypes.Do))
+			if (UpdateTextPosition.HasFlag(DoTypes.Do))
+			{
 				context.Position = BlockPosition.Empty;
+			}
 
 			if (lines.Length > 1)
 			{
@@ -94,9 +95,11 @@ namespace AuthorIntrusion.Common.Commands
 					// Update the last position as we go.
 					if (context.Position == BlockPosition.Empty)
 					{
-						if(UpdateTextPosition.HasFlag(DoTypes.Do))
+						if (UpdateTextPosition.HasFlag(DoTypes.Do))
+						{
 							context.Position = new BlockPosition(
-							newBlock.BlockKey, (CharacterPosition) lastLineLength);
+								newBlock.BlockKey, (CharacterPosition) lastLineLength);
+						}
 					}
 				}
 			}
@@ -120,8 +123,10 @@ namespace AuthorIntrusion.Common.Commands
 			deleteFirstCommand.Undo(context);
 
 			// Update the last position to where we started.
-			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+			if (UpdateTextPosition.HasFlag(DoTypes.Undo))
+			{
 				context.Position = BlockPosition;
+			}
 		}
 
 		#endregion

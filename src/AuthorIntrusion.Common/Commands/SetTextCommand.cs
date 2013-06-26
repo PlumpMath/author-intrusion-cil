@@ -28,8 +28,10 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 			block.SetText(Text);
 
-			if(UpdateTextPosition.HasFlag(DoTypes.Do))
-				context.Position = new BlockPosition(BlockKey,Text.Length);
+			if (UpdateTextPosition.HasFlag(DoTypes.Do))
+			{
+				context.Position = new BlockPosition(BlockKey, Text.Length);
+			}
 		}
 
 		protected override void Undo(
@@ -37,8 +39,10 @@ namespace AuthorIntrusion.Common.Commands
 			Block block)
 		{
 			block.SetText(previousText);
-			if(UpdateTextPosition.HasFlag(DoTypes.Undo))
-				context.Position = new BlockPosition(BlockKey,previousText.Length);
+			if (UpdateTextPosition.HasFlag(DoTypes.Undo))
+			{
+				context.Position = new BlockPosition(BlockKey, previousText.Length);
+			}
 		}
 
 		#endregion

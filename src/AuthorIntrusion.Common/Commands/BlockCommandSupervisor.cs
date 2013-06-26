@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
-using System.Diagnostics.Contracts;
 using AuthorIntrusion.Common.Blocks;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
@@ -56,7 +55,8 @@ namespace AuthorIntrusion.Common.Commands
 			int textIndex,
 			string text)
 		{
-			InsertText(new BlockPosition(block.BlockKey, (CharacterPosition) textIndex), text);
+			InsertText(
+				new BlockPosition(block.BlockKey, (CharacterPosition) textIndex), text);
 		}
 
 		public override ICommand<BlockCommandContext> Redo(BlockCommandContext state)
@@ -110,7 +110,10 @@ namespace AuthorIntrusion.Common.Commands
 		public BlockCommandSupervisor(Project project)
 		{
 			// Make sure we have a sane state.
-			Contract.Requires<ArgumentNullException>(project != null);
+			if (project == null)
+			{
+				throw new ArgumentNullException("project");
+			}
 
 			// Save the member variables so we can use them to perform actions.
 			Project = project;

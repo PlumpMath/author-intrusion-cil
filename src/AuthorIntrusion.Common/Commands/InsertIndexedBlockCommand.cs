@@ -11,8 +11,6 @@ namespace AuthorIntrusion.Common.Commands
 {
 	public class InsertIndexedBlockCommand: IBlockCommand
 	{
-		public DoTypes UpdateTextPosition { get; set; }
-
 		#region Properties
 
 		public Block Block { get; private set; }
@@ -34,6 +32,7 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		public BlockPosition LastPosition { get; private set; }
+		public DoTypes UpdateTextPosition { get; set; }
 
 		#endregion
 
@@ -44,22 +43,21 @@ namespace AuthorIntrusion.Common.Commands
 			// We need a write lock since we are making changes to the collection itself.
 			using (context.Blocks.AcquireLock(RequestLock.Write))
 			{
-				if(UpdateTextPosition.HasFlag(DoTypes.Undo))
+				if (UpdateTextPosition.HasFlag(DoTypes.Undo))
 				{
 					previousPosition = context.Position;
 				}
 
-				context.Blocks.Insert(BlockIndex,Block);
+				context.Blocks.Insert(BlockIndex, Block);
 
 				// Set the position after the command.
-				if(UpdateTextPosition.HasFlag(DoTypes.Do))
+				if (UpdateTextPosition.HasFlag(DoTypes.Do))
 				{
-					context.Position = new BlockPosition(Block.BlockKey,CharacterPosition.Begin);
+					context.Position = new BlockPosition(
+						Block.BlockKey, CharacterPosition.Begin);
 				}
 			}
 		}
-
-		private BlockPosition? previousPosition;
 
 		public void Redo(BlockCommandContext context)
 		{
@@ -74,8 +72,8 @@ namespace AuthorIntrusion.Common.Commands
 				context.Blocks.Remove(Block);
 
 				// Set the position after the command.
-				if(UpdateTextPosition.HasFlag(DoTypes.Undo) &&
-					previousPosition.HasValue)
+				if (UpdateTextPosition.HasFlag(DoTypes.Undo)
+					&& previousPosition.HasValue)
 				{
 					context.Position = previousPosition.Value;
 				}
@@ -94,6 +92,12 @@ namespace AuthorIntrusion.Common.Commands
 			Block = block;
 			UpdateTextPosition = DoTypes.All;
 		}
+
+		#endregion
+
+		#region Fields
+
+		private BlockPosition? previousPosition;
 
 		#endregion
 	}
