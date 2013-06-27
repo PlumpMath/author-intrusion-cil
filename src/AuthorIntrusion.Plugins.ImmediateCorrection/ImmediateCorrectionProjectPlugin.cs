@@ -115,6 +115,11 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 						continue;
 					}
 
+					if (startSearchIndex - 1 < 0)
+					{
+						continue;
+					}
+
 					// Make sure the string we're looking at actually is the same.
 					string editSubstring = editText.Substring(
 						startSearchIndex - 1, substitution.Search.Length);

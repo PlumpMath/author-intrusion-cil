@@ -240,6 +240,98 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection.Tests
 			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
 		}
 
+		[Test]
+		public void TooShortExactLenthWholeWordTest()
+		{
+			// Arrange
+			ProjectBlockCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			BlockCommandContext context;
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
+
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			// Act
+			commands.InsertText(blocks[0], 0, "teg.");
+
+			// Assert
+			Assert.AreEqual("teg.", blocks[0].Text);
+			Assert.IsFalse(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 4), commands.LastPosition);
+		}
+
+		[Test]
+		public void TooShortExactLenthWholeWordTest2()
+		{
+			// Arrange
+			ProjectBlockCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			BlockCommandContext context;
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
+
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			// Act
+			commands.InsertText(blocks[0], 0, "te.");
+
+			// Assert
+			Assert.AreEqual("te.", blocks[0].Text);
+			Assert.IsFalse(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 3), commands.LastPosition);
+		}
+
+		[Test]
+		public void TooShortInlineTest()
+		{
+			// Arrange
+			ProjectBlockCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			BlockCommandContext context;
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
+
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.None);
+
+			// Act
+			commands.InsertText(blocks[0], 0, "t");
+
+			// Assert
+			Assert.AreEqual("t", blocks[0].Text);
+			Assert.IsFalse(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 1), commands.LastPosition);
+		}
+
+		[Test]
+		public void TooShortWholeWordTest()
+		{
+			// Arrange
+			ProjectBlockCollection blocks;
+			BlockCommandSupervisor commands;
+			ImmediateCorrectionProjectPlugin projectPlugin;
+			BlockCommandContext context;
+			SetupCorrectionPlugin(
+				out context, out blocks, out commands, out projectPlugin);
+
+			projectPlugin.AddSubstitution("teh", "the", SubstitutionOptions.WholeWord);
+
+			// Act
+			commands.InsertText(blocks[0], 0, "t.");
+
+			// Assert
+			Assert.AreEqual("t.", blocks[0].Text);
+			Assert.IsFalse(commands.CanRedo);
+			Assert.IsTrue(commands.CanUndo);
+			Assert.AreEqual(new BlockPosition(blocks[0], 2), commands.LastPosition);
+		}
+
 		/// <summary>
 		/// Configures the environment to load the plugin manager and verify we
 		/// have access to the ImmediateCorrectionPlugin.
