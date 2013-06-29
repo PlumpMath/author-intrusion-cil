@@ -27,6 +27,7 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			// Save the previous text so we can restore it.
 			previousText = block.Text;
+			originalPosition = context.Position;
 
 			// Figure out what the new text string would be.
 			startIndex = BlockPosition.TextIndex.NormalizeIndex(
@@ -42,7 +43,6 @@ namespace AuthorIntrusion.Common.Commands
 			// Set the position after the next text.
 			if (UpdateTextPosition.HasFlag(DoTypes.Do))
 			{
-				originalPosition = context.Position;
 				context.Position = new BlockPosition(BlockKey, startIndex);
 			}
 		}

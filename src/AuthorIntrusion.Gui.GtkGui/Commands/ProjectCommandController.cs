@@ -116,6 +116,9 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			{
 				// Create the context for the block commands.
 				var blockContext = new BlockCommandContext(Project);
+				Block currentBlock = Project.Blocks[(int) context.Position.Line];
+				blockContext.Position = new BlockPosition(
+					currentBlock, context.Position.Character);
 
 				// Wrap the command with our wrappers.
 				IWrappedCommand wrappedCommand = WrapCommand(command);
