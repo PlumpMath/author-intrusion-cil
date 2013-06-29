@@ -115,6 +115,9 @@ namespace AuthorIntrusion.Gui.GtkGui
 			exitMenuItem = new ImageMenuItem(Stock.Quit, accelerators);
 			exitMenuItem.Activated += OnProjectMenuExitItem;
 
+			aboutMenuItem = new ImageMenuItem(Stock.About, accelerators);
+			aboutMenuItem.Activated += OnHelpMenuAboutItem;
+
 			// Create the project menu.
 			var projectMenu = new Menu
 			{
@@ -132,10 +135,22 @@ namespace AuthorIntrusion.Gui.GtkGui
 				Submenu = projectMenu
 			};
 
+			// Create the about menu.
+			var helpMenu = new Menu
+			{
+				aboutMenuItem,
+			};
+
+			var helpMenuItem = new MenuItem("_Help")
+			{
+				Submenu = helpMenu
+			};
+
 			// Create the menu bar and reutrn it.
 			var menuBar = new MenuBar
 			{
-				projectMenuItem
+				projectMenuItem,
+				helpMenuItem,
 			};
 
 			return menuBar;
@@ -152,6 +167,15 @@ namespace AuthorIntrusion.Gui.GtkGui
 			DeleteEventArgs args)
 		{
 			Application.Quit();
+		}
+
+		private void OnHelpMenuAboutItem(
+			object sender,
+			EventArgs e)
+		{
+			var about = new AboutWindow();
+			about.Run();
+			about.Destroy();
 		}
 
 		/// <summary>
@@ -306,6 +330,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 		#endregion
 
 		#region Fields
+
+		private ImageMenuItem aboutMenuItem;
 
 		private AccelGroup accelerators;
 		private ImageMenuItem closeMenuItem;

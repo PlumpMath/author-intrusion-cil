@@ -110,6 +110,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutWindow.cs" />
     <Compile Include="Commands\IWrappedCommand.cs" />
     <Compile Include="Commands\ProjectCommandAdapter.cs" />
     <Compile Include="Commands\ProjectCommandWrapper.cs" />
