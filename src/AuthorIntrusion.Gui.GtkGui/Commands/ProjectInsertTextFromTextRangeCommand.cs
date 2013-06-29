@@ -67,24 +67,18 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			SingleLineTextRange sourceRange)
 			: base(project)
 		{
+			// Save the position for later.
 			this.destinationPosition = destinationPosition;
-			// We need a specific block for this operation.
-			Block destinationBlock;
 
-			using (
-				project.Blocks.AcquireBlockLock(
-					RequestLock.Read, destinationPosition.Line.Index, out destinationBlock))
-			{
-				// Create the project command wrapper.
-				var command = new InsertTextFromIndexedBlock(
-					destinationPosition,
-					(int) sourceRange.Line,
-					sourceRange.CharacterBegin,
-					sourceRange.CharacterEnd);
+			// Create the project command wrapper.
+			var command = new InsertTextFromIndexedBlock(
+				destinationPosition,
+				(int) sourceRange.Line,
+				sourceRange.CharacterBegin,
+				sourceRange.CharacterEnd);
 
-				// Set the command into the adapter.
-				Command = command;
-			}
+			// Set the command into the adapter.
+			Command = command;
 		}
 
 		#endregion
