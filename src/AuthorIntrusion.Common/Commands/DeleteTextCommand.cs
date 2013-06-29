@@ -29,7 +29,7 @@ namespace AuthorIntrusion.Common.Commands
 			previousText = block.Text;
 
 			// Figure out what the new text string would be.
-			int startIndex = BlockPosition.TextIndex.NormalizeIndex(
+			startIndex = BlockPosition.TextIndex.NormalizeIndex(
 				block.Text, End, WordSearchDirection.Left);
 			int endIndex = End.NormalizeIndex(
 				block.Text, TextIndex, WordSearchDirection.Right);
@@ -42,6 +42,7 @@ namespace AuthorIntrusion.Common.Commands
 			// Set the position after the next text.
 			if (UpdateTextPosition.HasFlag(DoTypes.Do))
 			{
+				originalPosition = context.Position;
 				context.Position = new BlockPosition(BlockKey, startIndex);
 			}
 		}
@@ -52,20 +53,9 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			block.SetText(previousText);
 
-			// Set the position after the next text.
-			int startIndex = BlockPosition.TextIndex.NormalizeIndex(
-				block.Text, End, WordSearchDirection.Left);
-			int endIndex = End.NormalizeIndex(
-				block.Text, TextIndex, WordSearchDirection.Right);
-
-			if (End.Index < 0)
-			{
-				endIndex = startIndex;
-			}
-
 			if (UpdateTextPosition.HasFlag(DoTypes.Undo))
 			{
-				context.Position = new BlockPosition(BlockKey, endIndex);
+				context.Position = originalPosition;
 			}
 		}
 
@@ -92,7 +82,10 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Fields
 
+		private BlockPosition? originalPosition;
+
 		private string previousText;
+		private int startIndex;
 
 		#endregion
 	}
