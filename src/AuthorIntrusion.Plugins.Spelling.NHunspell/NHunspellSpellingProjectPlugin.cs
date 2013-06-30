@@ -34,6 +34,14 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 
 		public IEnumerable<SpellingSuggestion> GetSuggestions(string word)
 		{
+			// If the plugin is disabled, then don't do anything.
+			if (Plugin.Disabled)
+			{
+				return new SpellingSuggestion[]
+				{
+				};
+			}
+
 			// Get the checker and then get the suggestions.
 			SpellFactory checker = Plugin.SpellEngine["en_US"];
 			IStringList suggestedWords = checker.Suggest(word);
@@ -52,6 +60,13 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 
 		public bool IsCorrect(string word)
 		{
+			// If the plugin is disabled, then don't do anything.
+			if (Plugin.Disabled)
+			{
+				return false;
+			}
+
+			// Check the spelling.
 			SpellFactory checker = Plugin.SpellEngine["en_US"];
 			bool isCorrect = checker.Spell(word);
 			return isCorrect;

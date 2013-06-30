@@ -17,6 +17,11 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			get { return false; }
 		}
 
+		/// <summary>
+		/// Gets the disabled state for the plugin.
+		/// </summary>
+		public bool Disabled { get; private set; }
+
 		public string Key
 		{
 			get { return "NHunspell"; }
@@ -46,15 +51,23 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			SpellEngine = new SpellEngine();
 
 			// For the time being, we are going to assume a en_US dictionary.
-			var englishUnitedStates = new LanguageConfig
+			try
 			{
-				LanguageCode = "en_US",
-				HunspellAffFile = "en_US.aff",
-				HunspellDictFile = "en_US.dic",
-				HunspellKey = string.Empty
-			};
+				var englishUnitedStates = new LanguageConfig
+				{
+					LanguageCode = "en_US",
+					HunspellAffFile = "en_US.aff",
+					HunspellDictFile = "en_US.dic",
+					HunspellKey = string.Empty
+				};
 
-			SpellEngine.AddLanguage(englishUnitedStates);
+				SpellEngine.AddLanguage(englishUnitedStates);
+			}
+			catch
+			{
+				// Disable the spell-checking for now.
+				Disabled = true;
+			}
 		}
 
 		#endregion
