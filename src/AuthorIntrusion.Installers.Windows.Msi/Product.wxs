@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Author Intrusion" Language="1033"
+			Version="0.1.0.0" Manufacturer="Moonfire Games"
+			UpgradeCode="afd1c53f-ad93-4496-82ab-f2ae208322e2">
+		<Package InstallerVersion="200" Compressed="yes"
+				InstallScope="perMachine" Keywords="Installer"
+				Description="Moonfire Games' Author Intrusion (0.1.0.0)"
+				Manufacturer="Moonfire Games" />
+
+		<MajorUpgrade
+				DowngradeErrorMessage="A newer version of Author Intrusion is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="Complete" Title="Author Intrusion Complete" Level="1">
+			<ComponentGroupRef Id="CoreComponents" />
+			<ComponentGroupRef Id="GtkComponents" />
+			<ComponentGroupRef Id="PluginsComponents" />
+			<ComponentGroupRef Id="HunspellComponents" />
+			<ComponentGroupRef Id="ProgramMenuShortcuts" />
+		</Feature>
+
+		<Icon Id="AuthorIntrusionGtk.exe"
+				SourceFile="..\..\bin\$(var.Configuration)\AuthorIntrusionGtk.exe" />
+		<Property Id="ARPPRODUCTICON" Value="AuthorIntrusionGtk.exe" />
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="MFGAMESDIR" Name="Moonfire Games">
+					<Directory Id="INSTALLDIR" Name="Author Intrusion" />
+				</Directory>
+			</Directory>
+
+			<Directory Id="ProgramMenuFolder" Name="Programs">
+				<Directory Id="ProgramMenuDir" Name="Author Intrusion" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="CoreComponents" Directory="INSTALLDIR">
+			<Component Id="AuthorIntrusion.dll">
+				<File Id="AuthorIntrusion.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="AuthorIntrusion.Common.dll">
+				<File Id="AuthorIntrusion.Common.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Common.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="Antlr4.StringTemplate.dll">
+				<File Id="Antlr4.StringTemplate.dll"
+						Source="..\..\bin\$(var.Configuration)\Antlr4.StringTemplate.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="C5.dll">
+				<File Id="C5.dll" Source="..\..\bin\$(var.Configuration)\C5.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="Ninject.dll">
+				<File Id="Ninject.dll"
+						Source="..\..\bin\$(var.Configuration)\Ninject.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Ninject.Extensions.Conventions.dll">
+				<File Id="Ninject.Extensions.Conventions.dll"
+						Source="..\..\bin\$(var.Configuration)\Ninject.Extensions.Conventions.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="MfGames.Commands.dll">
+				<File Id="MfGames.Commands.dll"
+						Source="..\..\bin\$(var.Configuration)\MfGames.Commands.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="MfGames.Commands.TextEditing.dll">
+				<File Id="MfGames.Commands.TextEditing.dll"
+						Source="..\..\bin\$(var.Configuration)\MfGames.Commands.TextEditing.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="MfGames.dll">
+				<File Id="MfGames.dll"
+						Source="..\..\bin\$(var.Configuration)\MfGames.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MfGames.Languages.dll">
+				<File Id="MfGames.Languages.dll"
+						Source="..\..\bin\$(var.Configuration)\MfGames.Languages.dll"
+						KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="GtkComponents" Directory="INSTALLDIR">
+			<Component Id="AuthorIntrusionGtk.exe">
+				<File Id="AuthorIntrusionGtk.exe" Name="Author Intrusion Gtk.exe"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusionGtk.exe"
+						KeyPath="yes">
+					<Shortcut Id="AuthorIntrusionGtk.exe.ProgramMenuShortcut"
+							Directory="ProgramMenuDir" Name="Author Intrusion"
+							WorkingDirectory='INSTALLDIR' Icon="AuthorIntrusionGtk.exe"
+							IconIndex="0" Advertise="yes" />
+				</File>
+			</Component>
+			<Component Id="MfGames.GtkExt.dll">
+				<File Id="MfGames.GtkExt.dll"
+						Source="..\..\bin\$(var.Configuration)\MfGames.GtkExt.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="MfGames.GtkExt.TextEditor.dll">
+				<File Id="MfGames.GtkExt.TextEditor.dll"
+						Source="..\..\bin\$(var.Configuration)\MfGames.GtkExt.TextEditor.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="MfGames.GtkExt.TextEditor.Models.dll">
+				<File Id="MfGames.GtkExt.TextEditor.Models.dll"
+						Source="..\..\bin\$(var.Configuration)\MfGames.GtkExt.TextEditor.Models.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="Mono.Cairo.dll">
+				<File Id="Mono.Cairo.dll"
+						Source="..\..\bin\$(var.Configuration)\Mono.Cairo.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="pangosharp.dll">
+				<File Id="pangosharp.dll"
+						Source="..\..\bin\$(var.Configuration)\pango-sharp.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="gdksharp.dll">
+				<File Id="gdksharp.dll"
+						Source="..\..\bin\$(var.Configuration)\gdk-sharp.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="glibsharp.dll">
+				<File Id="glibsharp.dll"
+						Source="..\..\bin\$(var.Configuration)\glib-sharp.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="gtksharp.dll">
+				<File Id="gtksharp.dll"
+						Source="..\..\bin\$(var.Configuration)\gtk-sharp.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="atksharp.dll">
+				<File Id="atksharp.dll"
+						Source="..\..\bin\$(var.Configuration)\atk-sharp.dll"
+						KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="PluginsComponents" Directory="INSTALLDIR">
+			<Component Id="AuthorIntrusion.Plugins.ImmediateBlockTypes.dll">
+				<File Id="AuthorIntrusion.Plugins.ImmediateBlockTypes.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.ImmediateBlockTypes.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="AuthorIntrusion.Plugins.ImmediateCorrection.dll">
+				<File Id="AuthorIntrusion.Plugins.ImmediateCorrection.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.ImmediateCorrection.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="AuthorIntrusion.Plugins.Spelling.Common.dll">
+				<File Id="AuthorIntrusion.Plugins.Spelling.Common.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.Spelling.Common.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="AuthorIntrusion.Plugins.Spelling.dll">
+				<File Id="AuthorIntrusion.Plugins.Spelling.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.Spelling.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="AuthorIntrusion.Plugins.Spelling.LocalWords.dll">
+				<File Id="AuthorIntrusion.Plugins.Spelling.LocalWords.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.Spelling.LocalWords.dll"
+						KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="HunspellComponents" Directory="INSTALLDIR">
+			<Component Id="Hunspellx64.dll">
+				<File Id="Hunspellx64.dll"
+						Source="..\..\bin\$(var.Configuration)\Hunspellx64.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="Hunspellx86.dll">
+				<File Id="Hunspellx86.dll"
+						Source="..\..\bin\$(var.Configuration)\Hunspellx86.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="NHunspell.dll">
+				<File Id="NHunspell.dll"
+						Source="..\..\bin\$(var.Configuration)\NHunspell.dll"
+						KeyPath="yes" />
+			</Component>
+			<Component Id="AuthorIntrusion.Plugins.Spelling.NHunspell.dll">
+				<File Id="AuthorIntrusion.Plugins.Spelling.NHunspell.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.Spelling.NHunspell.dll"
+						KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="ProgramMenuShortcuts" Directory="ProgramMenuDir">
+			<Component Id="ProgramMenuDir"
+					Guid="0be73c85-48b3-4178-9958-ff36df27703f">
+				<RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+				<RegistryValue Root='HKCU'
+						Key='Software\Moonfire Games\Author Intrusion' Type='string'
+						Value='' KeyPath='yes' />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
+
+<!--
+<PropertyRef Id="NETFRAMEWORK40FULL"/>
+		<Condition Message='This setup requires the .NET Framework 4.5 installed.'>
+			<![CDATA[Installed OR NETFRAMEWORK45]]>
+		</Condition>
+-->
