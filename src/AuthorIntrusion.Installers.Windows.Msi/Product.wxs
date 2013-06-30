@@ -60,14 +60,9 @@
 				<File Id="C5.dll" Source="..\..\bin\$(var.Configuration)\C5.dll"
 						KeyPath="yes" />
 			</Component>
-			<Component Id="Ninject.dll">
-				<File Id="Ninject.dll"
-						Source="..\..\bin\$(var.Configuration)\Ninject.dll" KeyPath="yes" />
-			</Component>
-			<Component Id="Ninject.Extensions.Conventions.dll">
-				<File Id="Ninject.Extensions.Conventions.dll"
-						Source="..\..\bin\$(var.Configuration)\Ninject.Extensions.Conventions.dll"
-						KeyPath="yes" />
+			<Component Id="StructureMap.dll">
+				<File Id="StructureMap.dll"
+						Source="..\..\bin\$(var.Configuration)\StructureMap.dll" KeyPath="yes" />
 			</Component>
 			<Component Id="MfGames.Commands.dll">
 				<File Id="MfGames.Commands.dll"
