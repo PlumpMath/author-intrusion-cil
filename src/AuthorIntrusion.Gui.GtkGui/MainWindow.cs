@@ -4,7 +4,10 @@
 
 using System;
 using System.IO;
+using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Events;
+using AuthorIntrusion.Common.Persistence;
+using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Gui.GtkGui.Commands;
 using Gtk;
 using MfGames.GtkExt.TextEditor;
@@ -215,6 +218,66 @@ namespace AuthorIntrusion.Gui.GtkGui
 			object sender,
 			EventArgs e)
 		{
+			// We need an open file dialog box and use that to select the project.
+			var dialog = new FileChooserDialog(
+				"Choose Author Intrusion Project",
+				this,
+				FileChooserAction.Save,
+				"Cancel",
+				ResponseType.Cancel,
+				"Save",
+				ResponseType.Accept);
+
+			// Set up the filter on the dialog.
+			var filter = new FileFilter
+			{
+				Name = "Project Files"
+			};
+			filter.AddMimeType("binary/x-author-intrusion");
+			filter.AddPattern("*.aiproj");
+			dialog.AddFilter(filter);
+
+			// Show the dialog and process the results.
+			try
+			{
+				// Show the dialog and get the button the user selected.
+				int results = dialog.Run();
+
+				// If the user accepted a file, then use that to open the file.
+				if (results != (int) ResponseType.Accept)
+				{
+					return;
+				}
+
+				// Create a project and (for now) add in every plugin.
+				var project = new Project();
+
+				foreach (IPlugin plugin in project.Plugins.PluginManager.Plugins)
+				{
+					project.Plugins.Add(plugin.Key);
+				}
+
+				// Save the project to the given file.
+				var file = new FileInfo(dialog.Filename);
+				var savePlugin =
+					(FilesystemPersistenceProjectPlugin)
+						project.Plugins["Filesystem Persistence"];
+
+				savePlugin.Settings.SetIndividualDirectoryLayout();
+				savePlugin.Settings.ProjectDirectory = file.Directory.FullName;
+				savePlugin.Save(file.Directory);
+
+				// Set the project to the new plugin.
+				string newProjectFilename = System.IO.Path.Combine(
+					file.Directory.FullName, "Project.aiproj");
+				var projectFile = new FileInfo(newProjectFilename);
+				projectManager.OpenProject(projectFile);
+			}
+			finally
+			{
+				// Destroy the dialog the box.
+				dialog.Destroy();
+			}
 		}
 
 		private void OnProjectMenuOpenItem(
