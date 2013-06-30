@@ -36,11 +36,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MfGames.4.0.1.0\lib\net40\MfGames.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\packages\ninject.extensions.conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
