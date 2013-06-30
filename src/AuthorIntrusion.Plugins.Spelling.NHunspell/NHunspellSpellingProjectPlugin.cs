@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Plugins.Spelling.Common;
-using C5;
 using MfGames.Enumerations;
 using NHunspell;
 using IStringList = System.Collections.Generic.IList<string>;
@@ -47,7 +46,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			IStringList suggestedWords = checker.Suggest(word);
 
 			// Wrap the list in suggestions.
-			var suggestions = new ArrayList<SpellingSuggestion>(suggestedWords.Count);
+			var suggestions = new List<SpellingSuggestion>(suggestedWords.Count);
 
 			foreach (string suggestedWord in suggestedWords)
 			{

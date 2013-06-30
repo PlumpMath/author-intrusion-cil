@@ -3,8 +3,8 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
@@ -91,14 +91,14 @@ namespace AuthorIntrusion.Common.Commands
 			Count = count;
 
 			// We have to keep track of the blocks we added.
-			addedBlocks = new LinkedList<Block>();
+			addedBlocks = new List<Block>();
 		}
 
 		#endregion
 
 		#region Fields
 
-		private readonly LinkedList<Block> addedBlocks;
+		private readonly List<Block> addedBlocks;
 
 		#endregion
 	}

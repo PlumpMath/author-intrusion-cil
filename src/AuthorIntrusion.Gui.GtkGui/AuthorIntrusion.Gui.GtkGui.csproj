@@ -78,14 +78,12 @@
     <Reference Include="MfGames.GtkExt">
       <HintPath>..\packages\MfGames.GtkExt.0.1.0.0\lib\net45\MfGames.GtkExt.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.Actions, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MfGames.GtkExt.TextEditor, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.Actions.0.0.4.0\lib\net45\MfGames.GtkExt.Actions.dll</HintPath>
-    </Reference>
-    <Reference Include="MfGames.GtkExt.TextEditor">
       <HintPath>..\packages\MfGames.GtkExt.TextEditor.0.1.0.0\lib\net45\MfGames.GtkExt.TextEditor.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.TextEditor.Models">
+    <Reference Include="MfGames.GtkExt.TextEditor.Models, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MfGames.GtkExt.TextEditor.Models.0.1.0.0\lib\net45\MfGames.GtkExt.TextEditor.Models.dll</HintPath>
     </Reference>
     <Reference Include="MfGames.Languages">

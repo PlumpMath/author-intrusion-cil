@@ -3,8 +3,9 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using C5;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -27,7 +28,10 @@ namespace AuthorIntrusion.Common.Blocks
 		/// Gets the nested structures underneath this block. This structure is
 		/// ignored if the BlockType.IsStructural is false.
 		/// </summary>
-		public IList<BlockStructure> ChildStructures { get; private set; }
+		public IList<BlockStructure> ChildStructures
+		{
+			get { return new ReadOnlyCollection<BlockStructure>(childStructures); }
+		}
 
 		/// <summary>
 		/// Gets or sets the maximum occurances for this block structure.
@@ -44,6 +48,16 @@ namespace AuthorIntrusion.Common.Blocks
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Adds a child block structure to the structure's children.
+		/// </summary>
+		/// <param name="blockStructure"></param>
+		public void AddChild(BlockStructure blockStructure)
+		{
+			blockStructure.ParentStructure = this;
+			childStructures.Add(blockStructure);
+		}
 
 		/// <summary>
 		/// Determines whether this instance contains a child structure of the given block type.
@@ -76,26 +90,6 @@ namespace AuthorIntrusion.Common.Blocks
 				"Cannot find child block type: " + blockType);
 		}
 
-		private void OnChildInserted(
-			object sender,
-			ItemAtEventArgs<BlockStructure> e)
-		{
-			// Clear out the parent relationship.
-			BlockStructure blockStructure = e.Item;
-
-			blockStructure.ParentStructure = this;
-		}
-
-		private void OnChildRemoveAt(
-			object sender,
-			ItemAtEventArgs<BlockStructure> e)
-		{
-			// Clear out the parent relationship.
-			BlockStructure blockStructure = e.Item;
-
-			blockStructure.ParentStructure = null;
-		}
-
 		#endregion
 
 		#region Constructors
@@ -107,10 +101,14 @@ namespace AuthorIntrusion.Common.Blocks
 			MaximumOccurances = Int32.MaxValue;
 
 			// Set up the inner collections.
-			ChildStructures = new ArrayList<BlockStructure>();
-			ChildStructures.ItemInserted += OnChildInserted;
-			ChildStructures.ItemRemovedAt += OnChildRemoveAt;
+			childStructures = new List<BlockStructure>();
 		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly IList<BlockStructure> childStructures;
 
 		#endregion
 	}

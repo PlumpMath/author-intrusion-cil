@@ -2,7 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using C5;
+using System.Collections.Generic;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -153,7 +153,7 @@ namespace AuthorIntrusion.Common.Blocks
 			};
 
 			// Initialize the collection of block types.
-			BlockTypes = new HashDictionary<string, BlockType>();
+			BlockTypes = new Dictionary<string, BlockType>();
 			BlockTypes[ParagraphName] = paragraph;
 			BlockTypes[StoryName] = story;
 			BlockTypes[BookName] = book;

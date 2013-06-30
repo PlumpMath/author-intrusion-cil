@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5, Version=2.2.4881.16939, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\C5.2.2.4881.16939\lib\portable-win+net40+sl40+wp+Xbox40\C5.dll</HintPath>
-    </Reference>
     <Reference Include="MfGames, Version=4.0.1.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MfGames.4.0.1.0\lib\net40\MfGames.dll</HintPath>

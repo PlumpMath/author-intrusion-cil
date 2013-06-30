@@ -2,9 +2,9 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
-using C5;
 using MfGames.Commands;
 
 namespace AuthorIntrusion.Common.Commands
@@ -25,7 +25,7 @@ namespace AuthorIntrusion.Common.Commands
 		/// <summary>
 		/// Gets the list of changes to block keys and their new types.
 		/// </summary>
-		public HashDictionary<BlockKey, BlockType> Changes { get; private set; }
+		public Dictionary<BlockKey, BlockType> Changes { get; private set; }
 
 		public bool IsTransient
 		{
@@ -51,7 +51,7 @@ namespace AuthorIntrusion.Common.Commands
 				// Go through all the blocks in the project.
 				foreach (Block block in blocks)
 				{
-					if (Changes.Contains(block.BlockKey))
+					if (Changes.ContainsKey(block.BlockKey))
 					{
 						BlockType blockType = Changes[block.BlockKey];
 						BlockType existingType = block.BlockType;
@@ -78,7 +78,7 @@ namespace AuthorIntrusion.Common.Commands
 				// Go through all the blocks in the project.
 				foreach (Block block in blocks)
 				{
-					if (Changes.Contains(block.BlockKey))
+					if (Changes.ContainsKey(block.BlockKey))
 					{
 						// Revert the type of this block.
 						BlockType blockType = previousBlockTypes[block.BlockKey];
@@ -95,8 +95,8 @@ namespace AuthorIntrusion.Common.Commands
 
 		public ChangeMultipleBlockTypesCommand()
 		{
-			Changes = new HashDictionary<BlockKey, BlockType>();
-			previousBlockTypes = new HashDictionary<BlockKey, BlockType>();
+			Changes = new Dictionary<BlockKey, BlockType>();
+			previousBlockTypes = new Dictionary<BlockKey, BlockType>();
 			UpdateTextPosition = DoTypes.All;
 		}
 
@@ -104,7 +104,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Fields
 
-		private readonly HashDictionary<BlockKey, BlockType> previousBlockTypes;
+		private readonly Dictionary<BlockKey, BlockType> previousBlockTypes;
 
 		#endregion
 	}

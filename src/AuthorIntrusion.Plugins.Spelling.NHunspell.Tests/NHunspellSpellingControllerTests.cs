@@ -3,12 +3,12 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
-using C5;
 using NUnit.Framework;
 
 namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests

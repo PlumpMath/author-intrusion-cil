@@ -5,14 +5,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using AuthorIntrusion.Common.Plugins;
-using C5;
 
 namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// A specialized collection for TextSpans.
 	/// </summary>
-	public class TextSpanCollection: ArrayList<TextSpan>
+	public class TextSpanCollection: List<TextSpan>
 	{
 		#region Methods
 
@@ -51,7 +50,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// <param name="controller">The controller to remove the spans for.</param>
 		public void Remove(IProjectPlugin controller)
 		{
-			var removeSpans = new C5.HashSet<TextSpan>();
+			var removeSpans = new HashSet<TextSpan>();
 
 			foreach (TextSpan textSpan in
 				this.Where(textSpan => textSpan.Controller == controller))

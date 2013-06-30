@@ -2,8 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 
@@ -55,7 +55,7 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Once we have a merged line, then just delete the remaining lines.
 			// Figure out line ranges we'll be deleting text from.
-			removedBlocks = new LinkedList<Block>();
+			removedBlocks = new List<Block>();
 
 			Block startBlock = blocks[startPosition.BlockKey];
 			Block stopBlock = blocks[stopPosition.BlockKey];
@@ -84,7 +84,7 @@ namespace AuthorIntrusion.Common.Commands
 
 		#region Fields
 
-		private readonly LinkedList<Block> removedBlocks;
+		private readonly List<Block> removedBlocks;
 		private readonly BlockPosition startPosition;
 		private readonly BlockPosition stopPosition;
 

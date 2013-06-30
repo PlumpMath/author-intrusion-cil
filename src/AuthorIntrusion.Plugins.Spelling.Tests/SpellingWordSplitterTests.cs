@@ -2,8 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 using NUnit.Framework;
 
 namespace AuthorIntrusion.Plugins.Spelling.Tests

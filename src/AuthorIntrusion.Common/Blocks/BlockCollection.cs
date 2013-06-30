@@ -2,15 +2,16 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using C5;
 
 namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
 	/// A specialized collection to manage Block objects in memory.
 	/// </summary>
-	public class BlockCollection: LinkedList<Block>
+	public class BlockCollection: List<Block>
 	{
 		#region Properties
 
@@ -23,13 +24,32 @@ namespace AuthorIntrusion.Common.Blocks
 					return block;
 				}
 
-				throw new NoSuchItemException("Cannot find block " + blockKey);
+				throw new IndexOutOfRangeException("Cannot find block " + blockKey);
 			}
 		}
 
 		#endregion
 
+		#region Events
+
+		/// <summary>
+		/// Occurs when the collection changes.
+		/// </summary>
+		public event EventHandler<EventArgs> CollectionChanged;
+
+		#endregion
+
 		#region Methods
+
+		/// <summary>
+		/// Adds the specified block to the collection.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		public new void Add(Block block)
+		{
+			base.Add(block);
+			RaiseCollectionChanged();
+		}
 
 		/// <summary>
 		/// Finds the index of a given block key.
@@ -41,6 +61,36 @@ namespace AuthorIntrusion.Common.Blocks
 			Block block = this[blockKey];
 			int index = IndexOf(block);
 			return index;
+		}
+
+		public new void Insert(
+			int index,
+			Block block)
+		{
+			base.Insert(index, block);
+			RaiseCollectionChanged();
+		}
+
+		public new void Remove(Block block)
+		{
+			base.Remove(block);
+			RaiseCollectionChanged();
+		}
+
+		public new void RemoveAt(int index)
+		{
+			base.RemoveAt(index);
+			RaiseCollectionChanged();
+		}
+
+		private void RaiseCollectionChanged()
+		{
+			EventHandler<EventArgs> listeners = CollectionChanged;
+
+			if (listeners != null)
+			{
+				listeners(this, EventArgs.Empty);
+			}
 		}
 
 		#endregion

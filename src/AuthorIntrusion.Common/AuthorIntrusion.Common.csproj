@@ -35,9 +35,6 @@
     <Reference Include="Antlr4.StringTemplate">
       <HintPath>..\packages\Antlr4.StringTemplate.4.0.6.9004\lib\net35\Antlr4.StringTemplate.dll</HintPath>
     </Reference>
-    <Reference Include="C5">
-      <HintPath>..\packages\C5.2.2.4881.16939\lib\portable-win+net40+sl40+wp+Xbox40\C5.dll</HintPath>
-    </Reference>
     <Reference Include="MfGames, Version=4.0.1.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MfGames.4.0.1.0\lib\net40\MfGames.dll</HintPath>

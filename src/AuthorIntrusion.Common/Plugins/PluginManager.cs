@@ -2,9 +2,9 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using C5;
 
 namespace AuthorIntrusion.Common.Plugins
 {
@@ -35,7 +35,7 @@ namespace AuthorIntrusion.Common.Plugins
 		/// </summary>
 		/// <param name="pluginName">Name of the plugin.</param>
 		/// <returns></returns>
-		/// <exception cref="C5.NoSuchItemException">Cannot find plugin:  + pluginName</exception>
+		/// <exception cref="System.IndexOutOfRangeException">Cannot find plugin:  + pluginName</exception>
 		public IPlugin Get(string pluginName)
 		{
 			IEnumerable<IPlugin> namedPlugins = Plugins.Where(p => p.Key == pluginName);
@@ -45,7 +45,7 @@ namespace AuthorIntrusion.Common.Plugins
 				return plugin;
 			}
 
-			throw new NoSuchItemException("Cannot find plugin: " + pluginName);
+			throw new IndexOutOfRangeException("Cannot find plugin: " + pluginName);
 		}
 
 		/// <summary>
@@ -98,8 +98,8 @@ namespace AuthorIntrusion.Common.Plugins
 				}
 
 				// Build a list of plugins that doesn't include the framework plugin.
-				var relatedPlugins = new ArrayList<IPlugin>();
-				relatedPlugins.AddAll(plugins);
+				var relatedPlugins = new List<IPlugin>();
+				relatedPlugins.AddRange(plugins);
 				relatedPlugins.Remove(plugin);
 
 				// Register the plugins with the calling class.

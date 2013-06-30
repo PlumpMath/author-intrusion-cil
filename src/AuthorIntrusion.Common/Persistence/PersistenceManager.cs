@@ -3,9 +3,9 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using C5;
 
 namespace AuthorIntrusion.Common.Persistence
 {
@@ -35,7 +35,7 @@ namespace AuthorIntrusion.Common.Persistence
 
 			// Query the plugins to determine which persistence plugins are capable
 			// of reading this project.
-			var validPlugins = new ArrayList<IPersistencePlugin>();
+			var validPlugins = new List<IPersistencePlugin>();
 
 			foreach (IPersistencePlugin persistencePlugin in
 				plugin.PersistentPlugins.Where(
@@ -45,7 +45,7 @@ namespace AuthorIntrusion.Common.Persistence
 			}
 
 			// If we don't have a plugin, then we have nothing that will open it.
-			if (validPlugins.IsEmpty)
+			if (validPlugins.Count == 0)
 			{
 				throw new FileLoadException("Cannot load the project file: " + projectFile);
 			}

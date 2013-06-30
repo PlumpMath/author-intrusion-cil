@@ -3,11 +3,11 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Plugins;
-using C5;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Plugins.Counter
@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Plugins.Counter
 				- block.Properties.GetOrDefault(CounterPaths.NonWhitespaceCountPath, 0);
 
 			// Build up a dictionary of changes so we can simply setting them.
-			var deltas = new HashDictionary<HierarchicalPath, int>();
+			var deltas = new Dictionary<HierarchicalPath, int>();
 
 			deltas[CounterPaths.WordCountPath] = wordDelta;
 			deltas[CounterPaths.CharacterCountPath] = characterDelta;
@@ -115,10 +115,10 @@ namespace AuthorIntrusion.Plugins.Counter
 
 				// Figure out the lists for the old and new parent.
 				IList<Block> oldParentBlocks = oldParentBlock == null
-					? new ArrayList<Block>()
+					? new List<Block>()
 					: oldParentBlock.GetBlockAndParents();
 				IList<Block> newParentBlocks = block.ParentBlock == null
-					? new ArrayList<Block>()
+					? new List<Block>()
 					: block.ParentBlock.GetBlockAndParents();
 
 				// Get rid of blocks common in both lists.
@@ -170,7 +170,7 @@ namespace AuthorIntrusion.Plugins.Counter
 				Log("ChangeBlockType: {0}: Old Type {1}", block, oldBlockType);
 
 				// Figure out the deltas for this block.
-				var deltas = new HashDictionary<HierarchicalPath, int>();
+				var deltas = new Dictionary<HierarchicalPath, int>();
 				deltas[CounterPaths.GetPath(oldBlockType)] = -1;
 				deltas[CounterPaths.GetPath(block.BlockType)] = 1;
 
@@ -191,7 +191,7 @@ namespace AuthorIntrusion.Plugins.Counter
 		private IDictionary<HierarchicalPath, int> GetCounts(Block block)
 		{
 			// Build up a dictionary of counter paths and counts.
-			var deltas = new HashDictionary<HierarchicalPath, int>();
+			var deltas = new Dictionary<HierarchicalPath, int>();
 
 			// Go through the standard counter paths.
 			foreach (HierarchicalPath path in CounterPaths.StandardCounterPaths)

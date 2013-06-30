@@ -3,11 +3,11 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using AuthorIntrusion.Common;
-using C5;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Plugins.ImmediateCorrection
@@ -22,7 +22,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 		#region Properties
 
 		public static HierarchicalPath SettingsPath { get; private set; }
-		public ArrayList<RegisteredSubstitution> Substitutions { get; set; }
+		public List<RegisteredSubstitution> Substitutions { get; set; }
 
 		#endregion
 
@@ -99,7 +99,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 
 		public ImmediateCorrectionSettings()
 		{
-			Substitutions = new ArrayList<RegisteredSubstitution>();
+			Substitutions = new List<RegisteredSubstitution>();
 		}
 
 		#endregion

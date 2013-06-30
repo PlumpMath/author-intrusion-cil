@@ -3,7 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
-using C5;
+using System.Collections.Generic;
 using MfGames.Conversion;
 using MfGames.HierarchicalPaths;
 
@@ -12,7 +12,7 @@ namespace AuthorIntrusion.Common.Blocks
 	/// <summary>
 	/// Implements a dictionary of properties to be assigned to a block.
 	/// </summary>
-	public class BlockPropertyDictionary: HashDictionary<HierarchicalPath, string>
+	public class BlockPropertyDictionary: Dictionary<HierarchicalPath, string>
 	{
 		#region Methods
 
@@ -26,7 +26,7 @@ namespace AuthorIntrusion.Common.Blocks
 			HierarchicalPath path,
 			int amount)
 		{
-			if (Contains(path))
+			if (ContainsKey(path))
 			{
 				int value = Convert.ToInt32(this[path]);
 				this[path] = Convert.ToString(value + amount);
@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Common.Blocks
 			HierarchicalPath path,
 			TResult defaultValue)
 		{
-			return Contains(path)
+			return ContainsKey(path)
 				? Get<TResult>(path)
 				: defaultValue;
 		}

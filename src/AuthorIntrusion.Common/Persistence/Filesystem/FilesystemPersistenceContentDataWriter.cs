@@ -2,10 +2,10 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Common.Persistence.Filesystem
@@ -45,8 +45,8 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				// If we don't have any data, skip it.
 				Block block = blocks[blockIndex];
 
-				if (block.Properties.IsEmpty
-					&& block.TextSpans.IsEmpty)
+				if (block.Properties.Count == 0
+					&& block.TextSpans.Count == 0)
 				{
 					continue;
 				}
@@ -102,8 +102,8 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			writer.WriteStartElement("properties", ProjectNamespace);
 
 			// Go through all the properties, in order, and write it out.
-			var propertyPaths = new ArrayList<HierarchicalPath>();
-			propertyPaths.AddAll(block.Properties.Keys);
+			var propertyPaths = new List<HierarchicalPath>();
+			propertyPaths.AddRange(block.Properties.Keys);
 			propertyPaths.Sort();
 
 			foreach (HierarchicalPath propertyPath in propertyPaths)

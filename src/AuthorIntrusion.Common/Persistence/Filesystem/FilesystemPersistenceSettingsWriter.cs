@@ -2,9 +2,9 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using System.Xml;
 using AuthorIntrusion.Common.Plugins;
-using C5;
 
 namespace AuthorIntrusion.Common.Persistence.Filesystem
 {
@@ -39,10 +39,10 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			IList<ProjectPluginController> projectControllers =
 				project.Plugins.Controllers;
 
-			if (!projectControllers.IsEmpty)
+			if (projectControllers.Count != 0)
 			{
 				// We always work with sorted plugins to simplify change control.
-				var pluginNames = new ArrayList<string>();
+				var pluginNames = new List<string>();
 
 				foreach (ProjectPluginController controller in projectControllers)
 				{

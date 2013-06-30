@@ -2,11 +2,11 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using AuthorIntrusion.Common;
-using C5;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Plugins.Spelling.LocalWords
@@ -77,12 +77,12 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			writer.WriteElementString("version", "1");
 
 			// Sort the list of words.
-			var sortedInsensitiveWords = new ArrayList<string>();
-			sortedInsensitiveWords.AddAll(CaseInsensitiveDictionary);
+			var sortedInsensitiveWords = new List<string>();
+			sortedInsensitiveWords.AddRange(CaseInsensitiveDictionary);
 			sortedInsensitiveWords.Sort();
 
-			var sortedSensitiveWords = new ArrayList<string>();
-			sortedSensitiveWords.AddAll(CaseSensitiveDictionary);
+			var sortedSensitiveWords = new List<string>();
+			sortedSensitiveWords.AddRange(CaseSensitiveDictionary);
 			sortedSensitiveWords.Sort();
 
 			// Write out the records.

@@ -2,8 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 
 namespace AuthorIntrusion.Plugins.Spelling
 {
@@ -25,7 +25,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 			// Because we need to keep track of the start and stop text indexes,
 			// we loop through the string once and keep track of the last text span
 			// we are populating.
-			var textSpans = new ArrayList<TextSpan>();
+			var textSpans = new List<TextSpan>();
 			TextSpan textSpan = null;
 
 			for (int index = 0;

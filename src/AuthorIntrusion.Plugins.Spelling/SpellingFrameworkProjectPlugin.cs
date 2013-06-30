@@ -13,7 +13,6 @@ using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Plugins.Spelling.Common;
-using C5;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Plugins.Spelling
@@ -32,7 +31,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 			get { return "Spelling Framework"; }
 		}
 
-		private ArrayList<ISpellingProjectPlugin> SpellingControllers { get; set; }
+		private List<ISpellingProjectPlugin> SpellingControllers { get; set; }
 		private SpellingWordSplitter Splitter { get; set; }
 
 		#endregion
@@ -59,8 +58,8 @@ namespace AuthorIntrusion.Plugins.Spelling
 			}
 
 			// Split the word and perform spell-checking.
-			var misspelledWords = new ArrayList<TextSpan>();
-			C5.IList<TextSpan> words = Splitter.SplitAndNormalize(text);
+			var misspelledWords = new List<TextSpan>();
+			IList<TextSpan> words = Splitter.SplitAndNormalize(text);
 			IEnumerable<TextSpan> misspelledSpans =
 				words.Where(span => !IsCorrect(span.GetText(text)));
 
@@ -83,7 +82,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 				// Make the changes to the block's contents.
 				block.TextSpans.Remove(this);
-				block.TextSpans.AddAll(misspelledWords);
+				block.TextSpans.AddRange(misspelledWords);
 			}
 		}
 
@@ -98,7 +97,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 		/// <remarks>
 		/// This will be called within a read-only lock.
 		/// </remarks>
-		public C5.IList<IEditorAction> GetEditorActions(
+		public IList<IEditorAction> GetEditorActions(
 			Block block,
 			TextSpan textSpan)
 		{
@@ -106,13 +105,13 @@ namespace AuthorIntrusion.Plugins.Spelling
 			string word = textSpan.GetText(block.Text);
 
 			// Get the suggestions for the word.
-			C5.IList<SpellingSuggestion> suggestions = GetSuggestions(word);
+			IList<SpellingSuggestion> suggestions = GetSuggestions(word);
 
 			// Go through the suggestions and create an editor action for each one.
 			// These will already be ordered coming out of the GetSuggestions()
 			// method.
 			BlockCommandSupervisor commands = block.Project.Commands;
-			var actions = new ArrayList<IEditorAction>(suggestions.Count);
+			var actions = new List<IEditorAction>(suggestions.Count);
 
 			foreach (SpellingSuggestion suggestion in suggestions)
 			{
@@ -180,10 +179,10 @@ namespace AuthorIntrusion.Plugins.Spelling
 				"Had a request for writing a text span but spelling has no data.");
 		}
 
-		private C5.IList<SpellingSuggestion> GetSuggestions(string word)
+		private IList<SpellingSuggestion> GetSuggestions(string word)
 		{
 			// Gather up all the suggestions from all the controllers.
-			var suggestions = new ArrayList<SpellingSuggestion>();
+			var suggestions = new List<SpellingSuggestion>();
 
 			foreach (ISpellingProjectPlugin controller in SpellingControllers)
 			{
@@ -223,7 +222,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 		public SpellingFrameworkProjectPlugin()
 		{
-			SpellingControllers = new ArrayList<ISpellingProjectPlugin>();
+			SpellingControllers = new List<ISpellingProjectPlugin>();
 			Splitter = new SpellingWordSplitter();
 		}
 

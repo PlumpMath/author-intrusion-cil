@@ -2,8 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using Antlr4.StringTemplate;
-using C5;
 
 namespace AuthorIntrusion.Common.Projects
 {
@@ -18,7 +18,7 @@ namespace AuthorIntrusion.Common.Projects
 		/// <summary>
 		/// Gets the macros and their values.
 		/// </summary>
-		public HashDictionary<string, string> Substitutions { get; private set; }
+		public Dictionary<string, string> Substitutions { get; private set; }
 
 		#endregion
 
@@ -66,7 +66,7 @@ namespace AuthorIntrusion.Common.Projects
 
 		public ProjectMacros()
 		{
-			Substitutions = new HashDictionary<string, string>();
+			Substitutions = new Dictionary<string, string>();
 		}
 
 		#endregion

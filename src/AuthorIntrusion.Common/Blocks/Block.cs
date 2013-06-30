@@ -3,9 +3,9 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using AuthorIntrusion.Common.Blocks.Locking;
-using C5;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -108,7 +108,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public IList<Block> GetBlockAndParents()
 		{
-			var blocks = new ArrayList<Block>();
+			var blocks = new List<Block>();
 			Block block = this;
 
 			while (block != null)

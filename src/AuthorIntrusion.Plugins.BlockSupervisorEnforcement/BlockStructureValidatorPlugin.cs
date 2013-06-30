@@ -18,13 +18,13 @@ namespace AuthorIntrusion.Plugins.BlockSupervisorEnforcement
 				// first block in the list.
 				int blockIndex = 0;
 				BlockStructure blockStructure = RootBlockStructure;
-				var parentBlockTypes = new ArrayList<BlockType>();
+				var parentBlockTypes = new List<BlockType>();
 				var changeBlocksCommand = new ChangeMultipleBlockTypesCommand();
 
 				Update(blockStructure, ref blockIndex, parentBlockTypes, changeBlocksCommand);
 
 				// If we have blocks that changed, add the deferred operation.
-				if (!changeBlocksCommand.Changes.IsEmpty)
+				if (!changeBlocksCommand.Changes.Count == 0)
 				{
 					// Perform the action without adding to the undo/redo system.
 					changeBlocksCommand.Do(Project);
@@ -99,8 +99,8 @@ namespace AuthorIntrusion.Plugins.BlockSupervisorEnforcement
 					// structure. We have to create a new list for this since we
 					// don't want to alter the structure for the containing loop or
 					// any structure above this one.
-					var breakingBlockTypes = new LinkedList<BlockType>();
-					breakingBlockTypes.AddAll(parentBlockTypes);
+					var breakingBlockTypes = new List<BlockType>();
+					breakingBlockTypes.AddRange(parentBlockTypes);
 
 					for (int additionalIndex = childIndex + 1;
 						additionalIndex < childStructures.Count;

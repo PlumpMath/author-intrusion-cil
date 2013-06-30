@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5">
-      <HintPath>..\packages\C5.2.2.4881.16939\lib\portable-win+net40+sl40+wp+Xbox40\C5.dll</HintPath>
-    </Reference>
     <Reference Include="MfGames">
       <HintPath>..\..\bin\Debug\MfGames.dll</HintPath>
     </Reference>

@@ -2,9 +2,9 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
-using C5;
 
 namespace AuthorIntrusion.Common.Plugins
 {

@@ -48,7 +48,7 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 			// in the dictionary.
 			string text = block.Text.Substring(0, textIndex);
 
-			if (!settings.Replacements.Contains(text))
+			if (!settings.Replacements.ContainsKey(text))
 			{
 				// We want to fail as fast as possible.
 				return;

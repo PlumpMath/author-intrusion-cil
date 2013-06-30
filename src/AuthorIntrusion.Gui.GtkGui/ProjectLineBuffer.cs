@@ -12,7 +12,6 @@ using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Events;
-using C5;
 using Gtk;
 using MfGames.Commands;
 using MfGames.GtkExt;
@@ -73,7 +72,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			int endCharacterIndex)
 		{
 			// Create a list of indicators.
-			var indicators = new ArrayList<ILineIndicator>();
+			var indicators = new List<ILineIndicator>();
 
 			// Grab the line and use the block type to figure out the indicator.
 			Block block;
@@ -117,7 +116,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 				// a simple formatted string.
 				string text = block.Text;
 				TextSpanCollection spans = block.TextSpans;
-				string markup = spans.IsEmpty
+				string markup = spans.Count == 0
 					? PangoUtility.Escape(text)
 					: FormatText(text, spans);
 
@@ -464,17 +463,17 @@ namespace AuthorIntrusion.Gui.GtkGui
 				}
 
 				// Gather up all the text spans for the current position in the line.
-				var textSpans = new ArrayList<TextSpan>();
+				var textSpans = new List<TextSpan>();
 
-				textSpans.AddAll(block.TextSpans.GetAll(position.CharacterIndex));
+				textSpans.AddRange(block.TextSpans.GetAll(position.CharacterIndex));
 
 				// Gather up the menu items for this point.
 				bool firstItem = true;
 
 				foreach (TextSpan textSpan in textSpans)
 				{
-					C5.IList<IEditorAction> actions =
-						textSpan.Controller.GetEditorActions(block, textSpan);
+					IList<IEditorAction> actions = textSpan.Controller.GetEditorActions(
+						block, textSpan);
 
 					foreach (IEditorAction action in actions)
 					{

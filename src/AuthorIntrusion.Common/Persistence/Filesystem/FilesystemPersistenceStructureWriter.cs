@@ -2,10 +2,10 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 using AuthorIntrusion.Common.Blocks;
-using C5;
 
 namespace AuthorIntrusion.Common.Persistence.Filesystem
 {
@@ -27,8 +27,8 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				projectWriter, Macros, Settings.StructureFilename, out createdWriter);
 
 			// Create an order list of block types so we have a reliable order.
-			var blockTypeNames = new ArrayList<string>();
-			blockTypeNames.AddAll(Project.BlockTypes.BlockTypes.Keys);
+			var blockTypeNames = new List<string>();
+			blockTypeNames.AddRange(Project.BlockTypes.BlockTypes.Keys);
 			blockTypeNames.Sort();
 
 			// Start by creating the initial element.

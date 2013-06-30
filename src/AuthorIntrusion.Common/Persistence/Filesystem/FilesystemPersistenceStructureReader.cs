@@ -164,7 +164,7 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 
 					case "child-block-structure":
 						BlockStructure childStructure = ReadBlockStructure(reader);
-						blockStructure.ChildStructures.Add(childStructure);
+						blockStructure.AddChild(childStructure);
 						break;
 				}
 			}

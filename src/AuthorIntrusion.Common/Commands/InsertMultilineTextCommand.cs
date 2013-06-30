@@ -3,9 +3,9 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
+using System.Collections.Generic;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
-using C5;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 
@@ -150,14 +150,14 @@ namespace AuthorIntrusion.Common.Commands
 			UpdateTextPosition = DoTypes.All;
 
 			// Set up our collection.
-			addedBlocks = new LinkedList<Block>();
+			addedBlocks = new List<Block>();
 		}
 
 		#endregion
 
 		#region Fields
 
-		private readonly LinkedList<Block> addedBlocks;
+		private readonly List<Block> addedBlocks;
 		private DeleteTextCommand deleteFirstCommand;
 		private InsertTextCommand insertFirstCommand;
 

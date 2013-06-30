@@ -21,8 +21,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 	{
 		#region Properties
 
-		public C5.HashSet<string> CaseInsensitiveDictionary { get; private set; }
-		public C5.HashSet<string> CaseSensitiveDictionary { get; private set; }
+		public HashSet<string> CaseInsensitiveDictionary { get; private set; }
+		public HashSet<string> CaseSensitiveDictionary { get; private set; }
 
 		public string Key
 		{
@@ -79,8 +79,15 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			foreach (LocalWordsSettings settings in settingsList)
 			{
 				// Add the two dictionaries.
-				CaseInsensitiveDictionary.AddAll(settings.CaseInsensitiveDictionary);
-				CaseSensitiveDictionary.AddAll(settings.CaseSensitiveDictionary);
+				foreach (string word in settings.CaseInsensitiveDictionary)
+				{
+					CaseInsensitiveDictionary.Add(word);
+				}
+
+				foreach (string word in settings.CaseSensitiveDictionary)
+				{
+					CaseSensitiveDictionary.Add(word);
+				}
 			}
 		}
 
@@ -118,8 +125,8 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			Project = project;
 
 			// Create the collections we'll use.
-			CaseInsensitiveDictionary = new C5.HashSet<string>();
-			CaseSensitiveDictionary = new C5.HashSet<string>();
+			CaseInsensitiveDictionary = new HashSet<string>();
+			CaseSensitiveDictionary = new HashSet<string>();
 
 			// Load in the initial settings.
 			ReadSettings();

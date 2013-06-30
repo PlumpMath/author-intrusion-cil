@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AuthorIntrusion.Common.Plugins;
-using C5;
 
 namespace AuthorIntrusion.Common.Persistence
 {
@@ -31,7 +30,7 @@ namespace AuthorIntrusion.Common.Persistence
 		/// <summary>
 		/// Gets the list of persistent plugins registered with the framework.
 		/// </summary>
-		public ArrayList<IPersistencePlugin> PersistentPlugins
+		public List<IPersistencePlugin> PersistentPlugins
 		{
 			get { return plugins; }
 		}
@@ -65,14 +64,14 @@ namespace AuthorIntrusion.Common.Persistence
 
 		public PersistenceFrameworkPlugin()
 		{
-			plugins = new ArrayList<IPersistencePlugin>();
+			plugins = new List<IPersistencePlugin>();
 		}
 
 		#endregion
 
 		#region Fields
 
-		private readonly ArrayList<IPersistencePlugin> plugins;
+		private readonly List<IPersistencePlugin> plugins;
 
 		#endregion
 	}

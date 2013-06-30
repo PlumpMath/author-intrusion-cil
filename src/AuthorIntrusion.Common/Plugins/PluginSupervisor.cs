@@ -10,7 +10,6 @@ using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
-using C5;
 
 namespace AuthorIntrusion.Common.Plugins
 {
@@ -48,9 +47,9 @@ namespace AuthorIntrusion.Common.Plugins
 			}
 		}
 
-		public C5.IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; private set; }
-		public C5.IList<ProjectPluginController> Controllers { get; private set; }
-		public C5.IList<IImmediateEditorProjectPlugin> ImmediateEditors { get; private set; }
+		public IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; private set; }
+		public IList<ProjectPluginController> Controllers { get; private set; }
+		public IList<IImmediateEditorProjectPlugin> ImmediateEditors { get; private set; }
 
 		/// <summary>
 		/// Gets the PluginManager associated with the environment.
@@ -103,7 +102,7 @@ namespace AuthorIntrusion.Common.Plugins
 
 			if (frameworkController != null)
 			{
-				var pluginControllers = new ArrayList<IProjectPlugin>();
+				var pluginControllers = new List<IProjectPlugin>();
 
 				foreach (ProjectPluginController currentPlugin in Controllers)
 				{
@@ -188,7 +187,7 @@ namespace AuthorIntrusion.Common.Plugins
 		/// <param name="block">The block.</param>
 		/// <param name="textSpan">The text span.</param>
 		/// <returns></returns>
-		public C5.IList<IEditorAction> GetEditorActions(
+		public IList<IEditorAction> GetEditorActions(
 			Block block,
 			TextSpan textSpan)
 		{
@@ -197,16 +196,16 @@ namespace AuthorIntrusion.Common.Plugins
 			IEnumerable<ProjectPluginController> controllers =
 				Controllers.Where(
 					controller => controller.ProjectPlugin is ITextControllerProjectPlugin);
-			var actions = new ArrayList<IEditorAction>();
+			var actions = new List<IEditorAction>();
 
 			foreach (ProjectPluginController controller in controllers)
 			{
 				var textSpanController =
 					(ITextControllerProjectPlugin) controller.ProjectPlugin;
-				C5.IList<IEditorAction> controllerActions =
+				IList<IEditorAction> controllerActions =
 					textSpanController.GetEditorActions(block, textSpan);
 
-				actions.AddAll(controllerActions);
+				actions.AddRange(controllerActions);
 			}
 
 			// Return the resulting list of actions.
@@ -220,7 +219,7 @@ namespace AuthorIntrusion.Common.Plugins
 		public async void ProcessBlockAnalysis(Block block)
 		{
 			// If we don't have any analysis controllers, we don't have to do anything.
-			if (BlockAnalyzers.IsEmpty)
+			if (BlockAnalyzers.Count == 0)
 			{
 				return;
 			}
@@ -295,7 +294,8 @@ namespace AuthorIntrusion.Common.Plugins
 			foreach (ProjectPluginController controller in
 				Controllers.Where(controller => controller.IsImmediateEditor))
 			{
-				ImmediateEditors.Add(controller.ProjectPlugin);
+				ImmediateEditors.Add(
+					(IImmediateEditorProjectPlugin) controller.ProjectPlugin);
 			}
 
 			// Determine the block analzyers and put them into their own list.
@@ -304,7 +304,7 @@ namespace AuthorIntrusion.Common.Plugins
 			foreach (ProjectPluginController controller in
 				Controllers.Where(controller => controller.IsBlockAnalyzer))
 			{
-				BlockAnalyzers.Add(controller.ProjectPlugin);
+				BlockAnalyzers.Add((IBlockAnalyzerProjectPlugin) controller.ProjectPlugin);
 			}
 		}
 
@@ -315,9 +315,9 @@ namespace AuthorIntrusion.Common.Plugins
 		public PluginSupervisor(Project project)
 		{
 			Project = project;
-			Controllers = new ArrayList<ProjectPluginController>();
-			ImmediateEditors = new ArrayList<IImmediateEditorProjectPlugin>();
-			BlockAnalyzers = new ArrayList<IBlockAnalyzerProjectPlugin>();
+			Controllers = new List<ProjectPluginController>();
+			ImmediateEditors = new List<IImmediateEditorProjectPlugin>();
+			BlockAnalyzers = new List<IBlockAnalyzerProjectPlugin>();
 		}
 
 		#endregion

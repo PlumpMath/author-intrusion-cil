@@ -2,11 +2,11 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using AuthorIntrusion.Common;
-using C5;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
@@ -73,8 +73,8 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 			writer.WriteElementString("version", "1");
 
 			// Sort the list of words.
-			var prefixes = new ArrayList<string>();
-			prefixes.AddAll(Replacements.Keys);
+			var prefixes = new List<string>();
+			prefixes.AddRange(Replacements.Keys);
 			prefixes.Sort();
 
 			// Write out the records.
@@ -98,7 +98,7 @@ namespace AuthorIntrusion.Plugins.ImmediateBlockTypes
 
 		public ImmediateBlockTypesSettings()
 		{
-			Replacements = new HashDictionary<string, string>();
+			Replacements = new Dictionary<string, string>();
 		}
 
 		#endregion

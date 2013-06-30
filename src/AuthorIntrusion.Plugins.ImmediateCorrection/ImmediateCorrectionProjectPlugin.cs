@@ -2,11 +2,11 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System.Collections.Generic;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
-using C5;
 using MfGames.Settings;
 
 namespace AuthorIntrusion.Plugins.ImmediateCorrection
@@ -22,7 +22,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 
 		public ImmediateCorrectionPlugin Plugin { get; set; }
 		public Project Project { get; set; }
-		public ArrayList<RegisteredSubstitution> Substitutions { get; private set; }
+		public List<RegisteredSubstitution> Substitutions { get; private set; }
 
 		#endregion
 
@@ -168,7 +168,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			Substitutions.Clear();
 
 			// Go through all of the settings in the various projects.
-			System.Collections.Generic.IList<ImmediateCorrectionSettings> settingsList =
+			IList<ImmediateCorrectionSettings> settingsList =
 				Project.Settings.GetAll<ImmediateCorrectionSettings>(
 					ImmediateCorrectionSettings.SettingsPath);
 
@@ -205,7 +205,7 @@ namespace AuthorIntrusion.Plugins.ImmediateCorrection
 			Project = project;
 
 			// Set up the substitions from the configuration settings.
-			Substitutions = new ArrayList<RegisteredSubstitution>();
+			Substitutions = new List<RegisteredSubstitution>();
 			RetrieveSettings();
 		}
 
