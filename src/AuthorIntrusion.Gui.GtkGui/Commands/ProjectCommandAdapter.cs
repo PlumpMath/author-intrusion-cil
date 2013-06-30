@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System;
-using System.Diagnostics;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
@@ -47,9 +46,9 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			get { return Command.UpdateTextPosition; }
 			set
 			{
-				Debug.WriteLine(
-					this + ": Changeing UpdateTextPosition from " + Command.UpdateTextPosition
-						+ " to " + value);
+				//Debug.WriteLine(
+				//	this + ": Changeing UpdateTextPosition from " + Command.UpdateTextPosition
+				//		+ " to " + value);
 				Command.UpdateTextPosition = value;
 			}
 		}

@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using AuthorIntrusion.Common;
@@ -406,7 +405,6 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 			// Return the resulting buffer.
 			string markup = buffer.ToString();
-			Debug.WriteLine("M: " + markup);
 			return markup;
 		}
 

@@ -117,6 +117,9 @@ namespace AuthorIntrusion.Common.Commands
 
 			// Save the member variables so we can use them to perform actions.
 			Project = project;
+
+			// Set up our internal maximums.
+			MaximumUndoCommands = 101;
 		}
 
 		#endregion
