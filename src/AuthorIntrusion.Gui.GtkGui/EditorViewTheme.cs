@@ -23,6 +23,12 @@ namespace AuthorIntrusion.Gui.GtkGui
 			// Set up the indicator elements.
 			SetupThemeIndicators(theme);
 
+			// Use slightly more muted colors for the current line.
+			theme.RegionStyles["EditorViewCurrentLine"].BackgroundColor = new Color(
+				1, 1, 1);
+			theme.RegionStyles["EditorViewCurrentWrappedLine"].BackgroundColor =
+				new Color(245 / 255.0, 245 / 255.0, 220 / 255.0);
+
 			// Set up the paragraph style.
 			var paragraphyStyle = new LineBlockStyle(theme.TextLineStyle)
 			{
