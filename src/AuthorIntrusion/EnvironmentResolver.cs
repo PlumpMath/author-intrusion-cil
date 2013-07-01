@@ -2,10 +2,9 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
+using System.Diagnostics;
 using AuthorIntrusion.Common.Plugins;
-using Ninject;
-using Ninject.Extensions.Conventions;
+using StructureMap;
 
 namespace AuthorIntrusion
 {
@@ -26,7 +25,7 @@ namespace AuthorIntrusion
 		/// <returns>The TResult item.</returns>
 		public TResult Get<TResult>()
 		{
-			var result = kernel.Get<TResult>();
+			var result = ObjectFactory.GetInstance<TResult>();
 			return result;
 		}
 
@@ -36,7 +35,28 @@ namespace AuthorIntrusion
 		/// </summary>
 		public void LoadPluginManager()
 		{
-			PluginManager.Instance = kernel.Get<PluginManager>();
+			PluginManager.Instance = ObjectFactory.GetInstance<PluginManager>();
+		}
+
+		/// <summary>
+		/// Initializes StructureMap to scan the assemblies and setup all the
+		/// needed elements.
+		/// </summary>
+		/// <param name="init"></param>
+		private static void InitializeStructureMap(IInitializationExpression init)
+		{
+			init.Scan(
+				s =>
+				{
+					// Determine which assemblies contain types we need.
+					s.AssembliesFromApplicationBaseDirectory(
+						a => a.FullName.Contains("AuthorIntrusion"));
+
+					// List all the assemblies we need. Since most of the
+					// plugins are required to register IPlugin, we can just 
+					// add those types.
+					s.AddAllTypesOf<IPlugin>();
+				});
 		}
 
 		#endregion
@@ -48,24 +68,13 @@ namespace AuthorIntrusion
 		/// </summary>
 		public EnvironmentResolver()
 		{
-			// Figure out the standard and plugins path.
-			string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
-
-			// Set up Ninject with the standard configuration from the current assembly.
-			kernel = new StandardKernel();
-			kernel.Bind(
-				x =>
-					x.FromAssembliesInPath(applicationPath)
-					 .SelectAllClasses()
-					 .BindAllInterfaces()
-					 .Configure(b => b.InSingletonScope()));
+			// Set up StructureMap and loading all the plugins from the
+			// main directory.
+			ObjectFactory.Initialize(InitializeStructureMap);
+			string results = ObjectFactory.WhatDoIHave();
+			Debug.WriteLine(results);
+			ObjectFactory.AssertConfigurationIsValid();
 		}
-
-		#endregion
-
-		#region Fields
-
-		private readonly IKernel kernel;
 
 		#endregion
 	}
