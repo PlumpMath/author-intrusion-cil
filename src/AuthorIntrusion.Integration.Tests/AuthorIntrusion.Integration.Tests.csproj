@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{91D7AC38-160D-46A9-B50E-FFD1DE40C8C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AuthorIntrusion.Integration.Tests</RootNamespace>
+    <AssemblyName>AuthorIntrusion.Integration.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MfGames, Version=4.0.1.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MfGames.4.0.1.0\lib\net40\MfGames.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.Commands, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MfGames.Commands.0.1.0.0\lib\net45\MfGames.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PersistenceTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AuthorIntrusion.Common.Tests\AuthorIntrusion.Common.Tests.csproj">
+      <Project>{F88381C5-D664-43FF-B1FE-290A22B1B558}</Project>
+      <Name>AuthorIntrusion.Common.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Common\AuthorIntrusion.Common.csproj">
+      <Project>{00EBF5AB-EFBA-49DD-9B50-C588CED63A89}</Project>
+      <Name>AuthorIntrusion.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.ImmediateBlockTypes\AuthorIntrusion.Plugins.ImmediateBlockTypes.csproj">
+      <Project>{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50}</Project>
+      <Name>AuthorIntrusion.Plugins.ImmediateBlockTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.ImmediateCorrection\AuthorIntrusion.Plugins.ImmediateCorrection.csproj">
+      <Project>{20F7DC72-BFD0-4568-9C4B-BC26F312990B}</Project>
+      <Name>AuthorIntrusion.Plugins.ImmediateCorrection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling.Common\AuthorIntrusion.Plugins.Spelling.Common.csproj">
+      <Project>{69A53342-73A3-48F2-9C87-493CC82289B2}</Project>
+      <Name>AuthorIntrusion.Plugins.Spelling.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling.LocalWords\AuthorIntrusion.Plugins.Spelling.LocalWords.csproj">
+      <Project>{D338F511-6F3A-453D-B144-F6A5532495C5}</Project>
+      <Name>AuthorIntrusion.Plugins.Spelling.LocalWords</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling.NHunspell\AuthorIntrusion.Plugins.Spelling.NHunspell.csproj">
+      <Project>{4B25BA0F-00CE-48A7-951E-EECBCCD4B8B0}</Project>
+      <Name>AuthorIntrusion.Plugins.Spelling.NHunspell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling\AuthorIntrusion.Plugins.Spelling.csproj">
+      <Project>{E4C7B6ED-20B5-4932-9140-CFA854977D02}</Project>
+      <Name>AuthorIntrusion.Plugins.Spelling</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

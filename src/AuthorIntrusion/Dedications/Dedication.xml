@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dedications>
+	<dedication>
+		<version>0.1.0.0</version>
+		<author>James White</author>
+		<dedicator>D. Moonfire</dedicator>
+		<p>
+			Author Intrusion was inspired by a single story: Fast Trip by James
+			White. It was something I read almost a decade ago, but the story
+			stuck with me not because of the starvation themes or the
+			dead-panned logic needed to survive a month-long trip following a
+			spaceship accident, but how they survived. In that setting, every
+			ship was psychologically tailored to the pilot: things painted in
+			the right colors, controls set in the correct place, and even the
+			sounds were personalized to the pilot. They were comfortable in
+			their cockpit, at ease enough to land a ship. The protagonist,
+			Herdman, wasn’t the pilot of the ship about to crash into Mars, but
+			he was the only pilot capable of landing it. The story talks about
+			his struggles to prepare for a landing, but the crux of the story
+			came when he realized he had to change his environment. In the last
+			days of their trip, he painted and arranged the cockpit to be closer
+			to what he needed, to make him fast enough and capable enough to
+			land the ship without killing everyone on board.
+		</p>
+		<p>
+			This program is my attempt to alter my environment. Word processors
+			work for a lot of people, but I’m a programmer and a writer. There
+			are things that exist in development environments that don’t exist
+			in writing programs: a strong preference for keyboard shortcuts,
+			introspection and analysis, and navigation. I also want something
+			that I can tailor to my own personal flaws, frequently using the
+			wrong tense or an overuse of gerunds, that most writing programs
+			don’t have. I needed a flexibility to check for one grammar rule
+			outside of quotes verses another inside. Or to customize the grammar
+			and style guidelines to fit my style instead of a one-size-fits-all
+			program that tries to make me conform to one (potentially bland)
+			style.
+		</p>
+		<p>
+			In the end, this is an attempt to make my own cockpit. But, I’m also
+			going to make it generic enough that it will be a cockpit for other
+			writers who have the same physiological quirks as me. It won’t be
+			perfect and it won’t work for everyone, but there are others who may
+			find that this is a better environment for writing than what they
+			had before.
+		</p>
+	</dedication>
+</dedications>

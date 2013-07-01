@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F75C57D2-9954-4E2E-AF3F-57C5770B0E19}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AuthorIntrusion.Gui.GtkGui</RootNamespace>
+    <AssemblyName>AuthorIntrusionGtk</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>True</Private>
+      <HintPath>..\packages\Gtk.2.12.0.0\lib\atk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>True</Private>
+      <HintPath>..\packages\Gtk.2.12.0.0\lib\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>True</Private>
+      <HintPath>..\packages\Gtk.2.12.0.0\lib\glade-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>True</Private>
+      <HintPath>..\packages\Gtk.2.12.0.0\lib\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-dotnet, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>True</Private>
+      <HintPath>..\packages\Gtk.2.12.0.0\lib\gtk-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>True</Private>
+      <HintPath>..\packages\Gtk.2.12.0.0\lib\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames, Version=4.0.1.0, Culture=neutral, PublicKeyToken=f4b9b04ed1870f79, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MfGames.4.0.1.0\lib\net40\MfGames.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.Commands">
+      <HintPath>..\packages\MfGames.Commands.0.1.0.0\lib\net45\MfGames.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.Commands.TextEditing">
+      <HintPath>..\packages\MfGames.Commands.TextEditing.0.1.0.0\lib\net45\MfGames.Commands.TextEditing.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.GtkExt">
+      <HintPath>..\packages\MfGames.GtkExt.0.1.0.0\lib\net45\MfGames.GtkExt.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.GtkExt.TextEditor, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MfGames.GtkExt.TextEditor.0.1.0.0\lib\net45\MfGames.GtkExt.TextEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.GtkExt.TextEditor.Models, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MfGames.GtkExt.TextEditor.Models.0.1.0.0\lib\net45\MfGames.GtkExt.TextEditor.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.Languages">
+      <HintPath>..\packages\MfGames.Languages.0.1.0.0\lib\net45\MfGames.Languages.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cairo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Mono.Cairo.2.0.0\lib\Mono.Cairo.dll</HintPath>
+    </Reference>
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>True</Private>
+      <HintPath>..\packages\Gtk.2.12.0.0\lib\pango-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutWindow.cs" />
+    <Compile Include="Commands\IWrappedCommand.cs" />
+    <Compile Include="Commands\ProjectCommandAdapter.cs" />
+    <Compile Include="Commands\ProjectCommandWrapper.cs" />
+    <Compile Include="Commands\ProjectCompositeCommandAdapter.cs" />
+    <Compile Include="Commands\ProjectDeleteLineCommand.cs" />
+    <Compile Include="Commands\ProjectDeleteTextCommand.cs" />
+    <Compile Include="Commands\ProjectInsertLineCommand.cs" />
+    <Compile Include="Commands\ProjectInsertTextCommand.cs" />
+    <Compile Include="Commands\ProjectInsertTextFromTextRangeCommand.cs" />
+    <Compile Include="EditorViewTheme.cs" />
+    <Compile Include="GtkProgram.cs" />
+    <Compile Include="MainWindow.cs" />
+    <Compile Include="Commands\ProjectCommandController.cs" />
+    <Compile Include="ProjectLineBuffer.cs" />
+    <Compile Include="ProjectLineIndicator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AuthorIntrusion.Common\AuthorIntrusion.Common.csproj">
+      <Project>{00EBF5AB-EFBA-49DD-9B50-C588CED63A89}</Project>
+      <Name>AuthorIntrusion.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion\AuthorIntrusion.csproj">
+      <Project>{D6565C98-F476-4538-B8E0-D0F1234C8D14}</Project>
+      <Name>AuthorIntrusion</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
