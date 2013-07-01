@@ -51,14 +51,15 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 		{
 			// Set up the spell engine for multi-threaded access.
 			SpellEngine = new SpellEngine();
+			Disabled = false;
 
 			// For the time being, we are going to assume a en_US dictionary.
 			try
 			{
 				// Get the application directory for the dictionaries.
-				string location = GetType().Assembly.Location;
-				string affFilename = Path.Combine(location,"en_US.aff");
-				string dicFilename = Path.Combine(location,"en_US.dic");
+				string location = Directory.GetParent(GetType().Assembly.Location).FullName;
+				string affFilename = Path.Combine(location, "en_US.aff");
+				string dicFilename = Path.Combine(location, "en_US.dic");
 
 				var englishUnitedStates = new LanguageConfig
 				{
@@ -73,6 +74,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			catch (Exception exception)
 			{
 				// Report what we can't do.
+				Console.WriteLine("Cannot load dictionary: " + exception);
 
 				// Disable the spell-checking for now.
 				Disabled = true;
