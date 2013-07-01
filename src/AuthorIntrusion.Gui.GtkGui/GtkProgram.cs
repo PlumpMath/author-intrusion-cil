@@ -33,19 +33,38 @@ namespace AuthorIntrusion.Gui.GtkGui
 			resolver.LoadPluginManager();
 
 			// Create the main window, show its contents, and start the Gtk loop.
-			var mainWindow = resolver.Get<MainWindow>();
-
-			mainWindow.ShowAll();
-
-			// If we have some arguments, try to load the file as project.
-			if (args.Length > 0)
+			try
 			{
-				var projectFile = new FileInfo(args[0]);
-				mainWindow.OpenProject(projectFile);
-			}
+				var projectManager = new ProjectManager();
+				var mainWindow = new MainWindow(projectManager);
 
-			// Start running the application.
-			Application.Run();
+				mainWindow.ShowAll();
+
+				// If we have some arguments, try to load the file as project.
+				if (args.Length > 0)
+				{
+					var projectFile = new FileInfo(args[0]);
+					mainWindow.OpenProject(projectFile);
+				}
+
+				// Start running the application.
+				Application.Run();
+			}
+			catch (Exception exception)
+			{
+				Console.WriteLine("There was an exception");
+
+				Exception e = exception;
+
+				while (e != null)
+				{
+					Console.WriteLine("=== EXCEPTION");
+					Console.WriteLine(e);
+					e = e.InnerException;
+				}
+
+				throw;
+			}
 		}
 
 		#endregion
