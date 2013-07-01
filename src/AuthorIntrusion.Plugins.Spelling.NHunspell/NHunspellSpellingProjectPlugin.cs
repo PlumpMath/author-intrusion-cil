@@ -59,10 +59,11 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 
 		public bool IsCorrect(string word)
 		{
-			// If the plugin is disabled, then don't do anything.
+			// If the plugin is disabled, then treat everything as spelled
+			// correctly.
 			if (Plugin.Disabled)
 			{
-				return false;
+				return true;
 			}
 
 			// Check the spelling.

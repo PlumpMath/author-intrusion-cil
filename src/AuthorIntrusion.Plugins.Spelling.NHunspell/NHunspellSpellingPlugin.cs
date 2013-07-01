@@ -2,6 +2,8 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
+using System.IO;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Plugins;
 using NHunspell;
@@ -53,18 +55,25 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			// For the time being, we are going to assume a en_US dictionary.
 			try
 			{
+				// Get the application directory for the dictionaries.
+				string location = GetType().Assembly.Location;
+				string affFilename = Path.Combine(location,"en_US.aff");
+				string dicFilename = Path.Combine(location,"en_US.dic");
+
 				var englishUnitedStates = new LanguageConfig
 				{
 					LanguageCode = "en_US",
-					HunspellAffFile = "en_US.aff",
-					HunspellDictFile = "en_US.dic",
+					HunspellAffFile = affFilename,
+					HunspellDictFile = dicFilename,
 					HunspellKey = string.Empty
 				};
 
 				SpellEngine.AddLanguage(englishUnitedStates);
 			}
-			catch
+			catch (Exception exception)
 			{
+				// Report what we can't do.
+
 				// Disable the spell-checking for now.
 				Disabled = true;
 			}
