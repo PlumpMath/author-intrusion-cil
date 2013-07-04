@@ -11,7 +11,7 @@ using NHunspell;
 
 namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 {
-	public class NHunspellSpellingPlugin: IProjectPluginProviderPlugin
+	public class HunspellSpellingPlugin: IProjectPluginProviderPlugin
 	{
 		#region Properties
 
@@ -102,10 +102,10 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 
 		#region Constructors
 
-		static NHunspellSpellingPlugin()
+		static HunspellSpellingPlugin()
 		{
 			// Build up an array of locations we'll look for the dictionaries.
-			string assemblyFilename = typeof (NHunspellSpellingPlugin).Assembly.Location;
+			string assemblyFilename = typeof (HunspellSpellingPlugin).Assembly.Location;
 			string assemblyPath = Directory.GetParent(assemblyFilename).FullName;
 			string assemblyDictPath = Path.Combine(assemblyPath, "dicts");
 
@@ -127,7 +127,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			searchPaths = paths.ToArray();
 		}
 
-		public NHunspellSpellingPlugin()
+		public HunspellSpellingPlugin()
 		{
 			// Set up the spell engine for multi-threaded access.
 			SpellEngine = new SpellEngine();

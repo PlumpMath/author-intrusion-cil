@@ -17,7 +17,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 	{
 		#region Properties
 
-		private NHunspellSpellingPlugin Plugin { get; set; }
+		private HunspellSpellingPlugin Plugin { get; set; }
 
 		#endregion
 
@@ -54,7 +54,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 
 		#region Constructors
 
-		public SpellEngineSpellingProjectPlugin(NHunspellSpellingPlugin plugin)
+		public SpellEngineSpellingProjectPlugin(HunspellSpellingPlugin plugin)
 		{
 			Plugin = plugin;
 		}

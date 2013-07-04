@@ -217,7 +217,7 @@ namespace AuthorIntrusion.Integration.Tests
 			var persistencePlugin = new PersistenceFrameworkPlugin();
 			var filesystemPlugin = new FilesystemPersistencePlugin();
 			var spellingPlugin = new SpellingFrameworkPlugin();
-			var nhunspellPlugin = new NHunspellSpellingPlugin();
+			var nhunspellPlugin = new HunspellSpellingPlugin();
 			var localWordsPlugin = new LocalWordsPlugin();
 			var immediateCorrectionPlugin = new ImmediateCorrectionPlugin();
 			var immediateBlockTypesPlugin = new ImmediateBlockTypesPlugin();

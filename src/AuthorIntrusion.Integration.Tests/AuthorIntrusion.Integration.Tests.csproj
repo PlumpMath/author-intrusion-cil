@@ -79,13 +79,13 @@
       <Project>{69A53342-73A3-48F2-9C87-493CC82289B2}</Project>
       <Name>AuthorIntrusion.Plugins.Spelling.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling.Hunspell\AuthorIntrusion.Plugins.Spelling.Hunspell.csproj">
+      <Project>{DE5C83BC-17F6-4E76-883D-17F0D9C47131}</Project>
+      <Name>AuthorIntrusion.Plugins.Spelling.Hunspell</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling.LocalWords\AuthorIntrusion.Plugins.Spelling.LocalWords.csproj">
       <Project>{D338F511-6F3A-453D-B144-F6A5532495C5}</Project>
       <Name>AuthorIntrusion.Plugins.Spelling.LocalWords</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling.NHunspell\AuthorIntrusion.Plugins.Spelling.NHunspell.csproj">
-      <Project>{4B25BA0F-00CE-48A7-951E-EECBCCD4B8B0}</Project>
-      <Name>AuthorIntrusion.Plugins.Spelling.NHunspell</Name>
     </ProjectReference>
     <ProjectReference Include="..\AuthorIntrusion.Plugins.Spelling\AuthorIntrusion.Plugins.Spelling.csproj">
       <Project>{E4C7B6ED-20B5-4932-9140-CFA854977D02}</Project>
