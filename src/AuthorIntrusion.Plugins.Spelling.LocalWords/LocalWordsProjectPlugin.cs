@@ -4,9 +4,12 @@
 
 using System.Collections.Generic;
 using AuthorIntrusion.Common;
+using AuthorIntrusion.Common.Actions;
+using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Plugins.Spelling.Common;
 using MfGames.Enumerations;
+using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 {
@@ -35,6 +38,28 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 		#endregion
 
 		#region Methods
+
+		public IEnumerable<IEditorAction> GetAdditionalEditorActions(string word)
+		{
+			// We have two additional editor actions.
+			var addSensitiveAction = new EditorAction(
+				"Add case-sensitive local words",
+				new HierarchicalPath("/Plugins/Local Words/Add to Sensitive"),
+				context => AddToSensitiveList(context, word));
+			var addInsensitiveAction =
+				new EditorAction(
+					"Add case-insensitive local words",
+					new HierarchicalPath("/Plugins/Local Words/Add to Insensitive"),
+					context => AddToInsensitiveList(context, word));
+
+			// Return the resutling list.
+			var results = new IEditorAction[]
+			{
+				addSensitiveAction, addInsensitiveAction
+			};
+
+			return results;
+		}
 
 		public IEnumerable<SpellingSuggestion> GetSuggestions(string word)
 		{
@@ -118,6 +143,29 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			{
 				settings.CaseSensitiveDictionary.Add(word);
 			}
+		}
+
+		private void AddToInsensitiveList(
+			BlockCommandContext context,
+			string word)
+		{
+			// Update the internal dictionaries.
+			CaseInsensitiveDictionary.Add(word.ToLowerInvariant());
+
+			// Make sure the settings are written out.
+			WriteSettings();
+		}
+
+		private void AddToSensitiveList(
+			BlockCommandContext context,
+			string word)
+		{
+			// Update the internal dictionaries.
+			CaseInsensitiveDictionary.Remove(word.ToLowerInvariant());
+			CaseSensitiveDictionary.Add(word);
+
+			// Make sure the settings are written out.
+			WriteSettings();
 		}
 
 		#endregion

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Plugins.Spelling.Common;
 using MfGames.Enumerations;
@@ -22,7 +23,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 
 		public string Key
 		{
-			get { return "NHunspell"; }
+			get { return "Hunspell"; }
 		}
 
 		public Importance Weight { get; set; }
@@ -30,6 +31,13 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 		#endregion
 
 		#region Methods
+
+		public IEnumerable<IEditorAction> GetAdditionalEditorActions(string word)
+		{
+			return new IEditorAction[]
+			{
+			};
+		}
 
 		public virtual IEnumerable<SpellingSuggestion> GetSuggestions(string word)
 		{

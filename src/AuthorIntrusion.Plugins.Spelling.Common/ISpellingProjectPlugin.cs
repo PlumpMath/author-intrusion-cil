@@ -3,6 +3,7 @@
 // http://mfgames.com/author-intrusion/license
 
 using System.Collections.Generic;
+using AuthorIntrusion.Common.Actions;
 using MfGames.Enumerations;
 
 namespace AuthorIntrusion.Plugins.Spelling.Common
@@ -24,6 +25,13 @@ namespace AuthorIntrusion.Plugins.Spelling.Common
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the additional editor actions for the spelling.
+		/// </summary>
+		/// <param name="word">The word that is being processed.</param>
+		/// <returns>An enumerable of editor actions.</returns>
+		IEnumerable<IEditorAction> GetAdditionalEditorActions(string word);
 
 		/// <summary>
 		/// Gets a list of suggestions for the given word.

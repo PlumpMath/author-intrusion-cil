@@ -132,6 +132,13 @@ namespace AuthorIntrusion.Plugins.Spelling
 				actions.Add(action);
 			}
 
+			// Add the additional editor actions from the plugins.
+			foreach (ISpellingProjectPlugin controller in SpellingControllers)
+			{
+				var additionalActions = controller.GetAdditionalEditorActions(word);
+				actions.AddRange(additionalActions);
+			}
+
 			// Return all the change actions.
 			return actions;
 		}
