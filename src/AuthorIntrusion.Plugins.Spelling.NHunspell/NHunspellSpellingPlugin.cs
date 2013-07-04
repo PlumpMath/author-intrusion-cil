@@ -179,12 +179,15 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			// Attempt to load in the PInvoke implementation instead.
 			try
 			{
-
+				// Create a new Hunspell P/Invoke loader.
+				var pinvokePlugin = new PInvokeSpellingProjectPlugin(
+					affixFilename, dictionaryFilename);
+				projectPlugin = pinvokePlugin;
 			}
 			catch (Exception exception)
 			{
 				// Report that we can't load the first attempt.
-				Console.WriteLine("Cannot load NHunspell: " + exception);
+				Console.WriteLine("Cannot load NHunspell via P/Invoke: " + exception);
 			}
 		}
 

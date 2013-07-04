@@ -50,6 +50,10 @@
   <ItemGroup>
     <Compile Include="CommonSpellingProjectPlugin.cs" />
     <Compile Include="DisabledSpellingProjectPlugin.cs" />
+    <Compile Include="Interop\Hunspell.cs" />
+    <Compile Include="Interop\HunspellHandle.cs" />
+    <Compile Include="Interop\HunspellInterop.cs" />
+    <Compile Include="PInvokeSpellingProjectPlugin.cs" />
     <Compile Include="SpellEngineSpellingProjectPlugin.cs" />
     <Compile Include="NHunspellSpellingPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

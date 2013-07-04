@@ -10,6 +10,11 @@ using MfGames.Enumerations;
 
 namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 {
+	/// <summary>
+	/// Contains the common project plugin settings for the Hunspell spelling.
+	/// There are multiple versions of this, based on how and if it can be
+	/// loaded.
+	/// </summary>
 	public abstract class CommonSpellingProjectPlugin: IProjectPlugin,
 		ISpellingProjectPlugin
 	{

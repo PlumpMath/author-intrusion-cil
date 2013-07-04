@@ -60,9 +60,12 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 
 			bool isCaseInsensitiveCorrect = CaseInsensitiveDictionary.Contains(word);
 
+			// The return value is either correct or indeterminate since this
+			// plugin is intended to be a supplemental spell-checking instead of
+			// a conclusive one.
 			return isCaseInsensitiveCorrect
 				? WordCorrectness.Correct
-				: WordCorrectness.Incorrect;
+				: WordCorrectness.Indeterminate;
 		}
 
 		/// <summary>
