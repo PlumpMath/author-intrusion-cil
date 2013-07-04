@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NHunspellSpellingProjectPlugin.cs" />
+    <Compile Include="CommonSpellingProjectPlugin.cs" />
+    <Compile Include="DisabledSpellingProjectPlugin.cs" />
+    <Compile Include="SpellEngineSpellingProjectPlugin.cs" />
     <Compile Include="NHunspellSpellingPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

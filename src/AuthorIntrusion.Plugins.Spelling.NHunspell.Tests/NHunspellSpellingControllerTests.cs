@@ -24,7 +24,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -42,7 +42,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -64,7 +64,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -92,7 +92,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -123,7 +123,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -157,7 +157,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -183,7 +183,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -207,7 +207,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,
-			out NHunspellSpellingProjectPlugin projectPlugin)
+			out SpellEngineSpellingProjectPlugin projectPlugin)
 		{
 			// Start getting us a simple plugin manager.
 			var spelling = new SpellingFrameworkPlugin();
@@ -242,7 +242,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			// what type it is).
 			ProjectPluginController pluginController = plugins.Controllers[1];
 			projectPlugin =
-				(NHunspellSpellingProjectPlugin) pluginController.ProjectPlugin;
+				(SpellEngineSpellingProjectPlugin) pluginController.ProjectPlugin;
 		}
 
 		#endregion
