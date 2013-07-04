@@ -57,19 +57,21 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 			return suggestions;
 		}
 
-		public bool IsCorrect(string word)
+		public WordCorrectness IsCorrect(string word)
 		{
 			// If the plugin is disabled, then treat everything as spelled
 			// correctly.
 			if (Plugin.Disabled)
 			{
-				return true;
+				return WordCorrectness.Indeterminate;
 			}
 
 			// Check the spelling.
 			SpellFactory checker = Plugin.SpellEngine["en_US"];
 			bool isCorrect = checker.Spell(word);
-			return isCorrect;
+			return isCorrect
+				? WordCorrectness.Correct
+				: WordCorrectness.Incorrect;
 		}
 
 		#endregion

@@ -44,14 +44,14 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			};
 		}
 
-		public bool IsCorrect(string word)
+		public WordCorrectness IsCorrect(string word)
 		{
 			// First check the case-sensitive dictionary.
 			bool isCaseSensitiveCorrect = CaseSensitiveDictionary.Contains(word);
 
 			if (isCaseSensitiveCorrect)
 			{
-				return true;
+				return WordCorrectness.Correct;
 			}
 
 			// Check the case-insensitive version by making it lowercase and trying
@@ -60,7 +60,9 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 
 			bool isCaseInsensitiveCorrect = CaseInsensitiveDictionary.Contains(word);
 
-			return isCaseInsensitiveCorrect;
+			return isCaseInsensitiveCorrect
+				? WordCorrectness.Correct
+				: WordCorrectness.Incorrect;
 		}
 
 		/// <summary>

@@ -127,7 +127,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 					new EditorAction(
 						string.Format("Change to \"{0}\"", suggestion.Suggestion),
 						new HierarchicalPath("/Plugins/Spelling/Change"),
-						(context) => commands.Do(command, context));
+						context => commands.Do(command, context));
 
 				actions.Add(action);
 			}
@@ -213,7 +213,30 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 		private bool IsCorrect(string word)
 		{
-			return SpellingControllers.Any(controller => controller.IsCorrect(word));
+			// Go through the plugins and look for a determine answer.
+			var correctness = WordCorrectness.Indeterminate;
+
+			foreach (ISpellingProjectPlugin controller in SpellingControllers)
+			{
+				// Get the correctness of this word.
+				correctness = controller.IsCorrect(word);
+
+				// If we have a non-determinate answer, then break out.
+				if (correctness != WordCorrectness.Indeterminate)
+				{
+					break;
+				}
+			}
+
+			// If we finished through all the controllers and we still have
+			// an indeterminate result, we assume it is correctly spelled.
+			if (correctness == WordCorrectness.Indeterminate)
+			{
+				correctness = WordCorrectness.Correct;
+			}
+
+			// Return if we are correct or not.
+			return correctness == WordCorrectness.Correct;
 		}
 
 		#endregion

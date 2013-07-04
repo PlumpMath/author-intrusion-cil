@@ -39,7 +39,7 @@ namespace AuthorIntrusion.Plugins.Spelling.Common
 		/// <returns>
 		///   <c>true</c> if the specified word is correct; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsCorrect(string word);
+		WordCorrectness IsCorrect(string word);
 
 		#endregion
 	}
