@@ -9,11 +9,12 @@ using AuthorIntrusion.Common.Actions;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Plugins;
+using AuthorIntrusion.Plugins.Spelling.NHunspell;
 using NUnit.Framework;
 
-namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
+namespace AuthorIntrusion.Plugins.Spelling.Hunspell.Tests
 {
-	public class NHunspellSpellingControllerTests
+	public class HunspellSpellingControllerTests
 	{
 		#region Methods
 
@@ -24,7 +25,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -42,7 +43,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -64,7 +65,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -92,7 +93,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -123,7 +124,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -157,7 +158,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -183,7 +184,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			ProjectBlockCollection blocks;
 			BlockCommandSupervisor commands;
 			PluginSupervisor plugins;
-			NHunspellSpellingProjectPlugin projectPlugin;
+			SpellEngineSpellingProjectPlugin projectPlugin;
 			BlockCommandContext context;
 			SetupPlugin(
 				out context, out blocks, out commands, out plugins, out projectPlugin);
@@ -207,11 +208,11 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			out ProjectBlockCollection blocks,
 			out BlockCommandSupervisor commands,
 			out PluginSupervisor plugins,
-			out NHunspellSpellingProjectPlugin projectPlugin)
+			out SpellEngineSpellingProjectPlugin projectPlugin)
 		{
 			// Start getting us a simple plugin manager.
 			var spelling = new SpellingFrameworkPlugin();
-			var nhunspell = new NHunspellSpellingPlugin();
+			var nhunspell = new HunspellSpellingPlugin();
 			var pluginManager = new PluginManager(spelling, nhunspell);
 
 			PluginManager.Instance = pluginManager;
@@ -242,7 +243,7 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell.Tests
 			// what type it is).
 			ProjectPluginController pluginController = plugins.Controllers[1];
 			projectPlugin =
-				(NHunspellSpellingProjectPlugin) pluginController.ProjectPlugin;
+				(SpellEngineSpellingProjectPlugin) pluginController.ProjectPlugin;
 		}
 
 		#endregion

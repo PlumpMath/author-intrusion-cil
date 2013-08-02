@@ -58,7 +58,8 @@
 			</Component>
 			<Component Id="StructureMap.dll">
 				<File Id="StructureMap.dll"
-						Source="..\..\bin\$(var.Configuration)\StructureMap.dll" KeyPath="yes" />
+						Source="..\..\bin\$(var.Configuration)\StructureMap.dll"
+						KeyPath="yes" />
 			</Component>
 			<Component Id="MfGames.Commands.dll">
 				<File Id="MfGames.Commands.dll"
@@ -183,9 +184,9 @@
 						Source="..\..\bin\$(var.Configuration)\NHunspell.dll"
 						KeyPath="yes" />
 			</Component>
-			<Component Id="AuthorIntrusion.Plugins.Spelling.NHunspell.dll">
-				<File Id="AuthorIntrusion.Plugins.Spelling.NHunspell.dll"
-						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.Spelling.NHunspell.dll"
+			<Component Id="AuthorIntrusion.Plugins.Spelling.Hunspell.dll">
+				<File Id="AuthorIntrusion.Plugins.Spelling.Hunspell.dll"
+						Source="..\..\bin\$(var.Configuration)\AuthorIntrusion.Plugins.Spelling.Hunspell.dll"
 						KeyPath="yes" />
 			</Component>
 		</ComponentGroup>

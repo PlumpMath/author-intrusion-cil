@@ -34,7 +34,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			{
 				FontDescription =
 					FontDescriptionCache.GetFontDescription("Source Code Pro 16"),
-				Padding =
+				Margins =
 				{
 					Top = 8,
 					Bottom = 8

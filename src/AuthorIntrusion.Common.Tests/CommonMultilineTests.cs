@@ -53,10 +53,10 @@ namespace AuthorIntrusion.Common.Tests
 				MinimumOccurances = 1,
 			};
 
-			sceneStructure.ChildStructures.Add(epigraphStructure);
-			sceneStructure.ChildStructures.Add(epigraphAttributationStructure);
-			sceneStructure.ChildStructures.Add(paragraphStructure);
-			chapterStructure.ChildStructures.Add(sceneStructure);
+			sceneStructure.AddChild(epigraphStructure);
+			sceneStructure.AddChild(epigraphAttributationStructure);
+			sceneStructure.AddChild(paragraphStructure);
+			chapterStructure.AddChild(sceneStructure);
 			project.BlockStructures.RootBlockStructure = chapterStructure;
 
 			// Insert the bulk of the lines.
