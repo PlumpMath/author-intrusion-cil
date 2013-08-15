@@ -4,6 +4,7 @@
 
 using System;
 using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Projects;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -48,6 +49,13 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		public void Update()
 		{
+			// If we are inside interactive processing, we need to skip updates
+			// since this can be an expensive operation.
+			if (Project.ProcessingState == ProjectProcessingState.Batch)
+			{
+				return;
+			}
+
 			// We need to get a write lock on the block since we'll be making changes
 			// to all the blocks and their relationships. This will, in effect, also
 			// ensure no block is being modified.

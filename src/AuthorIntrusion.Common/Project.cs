@@ -50,9 +50,39 @@ namespace AuthorIntrusion.Common
 		public PluginSupervisor Plugins { get; private set; }
 
 		/// <summary>
+		/// Gets the current state of the processing inside the project.
+		/// </summary>
+		public ProjectProcessingState ProcessingState { get; private set; }
+
+		/// <summary>
 		/// Gets the settings associated with this project.
 		/// </summary>
 		public ProjectSettings Settings { get; private set; }
+
+		#endregion
+
+		#region Methods
+
+		/// <summary>
+		/// Updates the current processing state for the project.
+		/// </summary>
+		/// <param name="processingState">New processing state for the project.</param>
+		public void SetProcessingState(ProjectProcessingState processingState)
+		{
+			// If we are the same, we don't do anything.
+			if (processingState == ProcessingState)
+			{
+				return;
+			}
+
+			// Update the internal state so when we call the update method
+			// on the various supervisors, they'll be able to make the
+			// appropriate updates.
+			ProcessingState = processingState;
+
+			// Update thes supervisors.
+			BlockStructures.Update();
+		}
 
 		#endregion
 
@@ -61,8 +91,13 @@ namespace AuthorIntrusion.Common
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Project"/> class.
 		/// </summary>
-		public Project()
+		public Project(
+			ProjectProcessingState initialProcessingState =
+				ProjectProcessingState.Interactive)
 		{
+			// Set up the initial states.
+			ProcessingState = initialProcessingState;
+
 			// We need the settings set up first since it may contribute
 			// to the loading of other components of the project.
 			Settings = new ProjectSettings();

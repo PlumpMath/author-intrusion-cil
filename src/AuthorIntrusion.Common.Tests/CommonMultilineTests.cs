@@ -150,7 +150,7 @@ namespace AuthorIntrusion.Common.Tests
 				MinimumOccurances = 1,
 			};
 
-			chapterStructure.ChildStructures.Add(sceneStructure);
+			chapterStructure.AddChild(sceneStructure);
 			project.BlockStructures.RootBlockStructure = chapterStructure;
 
 			// Insert the bulk of the lines.

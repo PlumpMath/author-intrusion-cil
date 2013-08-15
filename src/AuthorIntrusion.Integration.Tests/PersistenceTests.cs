@@ -10,6 +10,7 @@ using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
+using AuthorIntrusion.Common.Projects;
 using AuthorIntrusion.Common.Tests;
 using AuthorIntrusion.Plugins.ImmediateBlockTypes;
 using AuthorIntrusion.Plugins.ImmediateCorrection;
@@ -107,6 +108,9 @@ namespace AuthorIntrusion.Integration.Tests
 			var projectFile =
 				new FileInfo(Path.Combine(testDirectory.FullName, "Project.aiproj"));
 			Project project = persistenceManager.ReadProject(projectFile);
+
+			// Assert: Project
+			Assert.AreEqual(ProjectProcessingState.Interactive, project.ProcessingState);
 
 			// Assert: Block Types
 			block = project.Blocks[0];

@@ -133,6 +133,7 @@
     <Compile Include="Project.cs" />
     <Compile Include="Projects\ProjectMacros.cs" />
     <Compile Include="Projects\ProjectSettings.cs" />
+    <Compile Include="Projects\ProjectProcessingState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonServiceAttribute.cs" />
     <Compile Include="XmlConstants.cs" />
