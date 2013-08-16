@@ -79,9 +79,6 @@ namespace AuthorIntrusion.Common
 			// on the various supervisors, they'll be able to make the
 			// appropriate updates.
 			ProcessingState = processingState;
-
-			// Update thes supervisors.
-			BlockStructures.Update();
 		}
 
 		#endregion

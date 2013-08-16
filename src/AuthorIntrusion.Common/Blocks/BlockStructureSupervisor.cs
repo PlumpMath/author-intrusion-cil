@@ -127,10 +127,6 @@ namespace AuthorIntrusion.Common.Blocks
 			// Save the members we need for later referencing.
 			Project = project;
 
-			// Hook up to events we need to ensure the structure of the document.
-			project.Blocks.CollectionChanged += (sender,
-				args) => Update();
-
 			// Set up the default structure which is just one or more paragraphs
 			// and no structural elements.
 			rootBlockStructure = new BlockStructure
