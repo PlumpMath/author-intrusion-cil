@@ -13,7 +13,8 @@ namespace AuthorIntrusion.Common.Plugins
 		#region Properties
 
 		public Block Block { get; private set; }
-		public IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; set; }
+		public IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; private set; }
+		public HashSet<IBlockAnalyzerProjectPlugin> Analysis { get; private set; }
 		public int BlockVersion { get; private set; }
 
 		#endregion
@@ -22,10 +23,21 @@ namespace AuthorIntrusion.Common.Plugins
 
 		public void Run()
 		{
+			// Figure out which analyzers we need to actually run on the block.
+			var neededAnalyzers = new List<IBlockAnalyzerProjectPlugin>();
+
+			foreach (IBlockAnalyzerProjectPlugin blockAnalyzer in BlockAnalyzers)
+			{
+				if (!Analysis.Contains(blockAnalyzer))
+				{
+					neededAnalyzers.Add(blockAnalyzer);
+				}
+			}
+
 			// Loop through all the analyzers in the list and perform each one in turn.
 			ProjectBlockCollection blocks = Block.Project.Blocks;
 
-			foreach (IBlockAnalyzerProjectPlugin blockAnalyzer in BlockAnalyzers)
+			foreach (IBlockAnalyzerProjectPlugin blockAnalyzer in neededAnalyzers)
 			{
 				// Check to see if the block had gone stale.
 				using (blocks.AcquireBlockLock(RequestLock.Read, Block))
@@ -40,6 +52,7 @@ namespace AuthorIntrusion.Common.Plugins
 
 				// Perform the analysis on the given block.
 				blockAnalyzer.AnalyzeBlock(Block, BlockVersion);
+				Block.AddAnalysis(blockAnalyzer);
 			}
 		}
 
@@ -55,14 +68,15 @@ namespace AuthorIntrusion.Common.Plugins
 
 		#region Constructors
 
-		public BlockAnalyzer(
-			Block block,
+		public BlockAnalyzer(Block block,
 			int blockVersion,
-			IList<IBlockAnalyzerProjectPlugin> blockAnalyzers)
+			IList<IBlockAnalyzerProjectPlugin> blockAnalyzers,
+			HashSet<IBlockAnalyzerProjectPlugin> analysis)
 		{
 			Block = block;
 			BlockVersion = blockVersion;
 			BlockAnalyzers = blockAnalyzers;
+			Analysis = analysis;
 		}
 
 		#endregion

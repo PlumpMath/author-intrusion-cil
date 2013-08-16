@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Plugins;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -104,6 +105,56 @@ namespace AuthorIntrusion.Common.Blocks
 			RequestLock requestedLock)
 		{
 			return new BlockLock(collectionLock, accessLock, requestedLock);
+		}
+
+		/// <summary>
+		/// Adds a flag that a plugin has performed its analysis on the block.
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		public void AddAnalysis(IBlockAnalyzerProjectPlugin plugin)
+		{
+			using (AcquireBlockLock(RequestLock.Write))
+			{
+				previouslyAnalyzedPlugins.Add(plugin);
+			}
+		}
+
+		/// <summary>
+		/// Clears the analysis state of a block to indicate that all analysis
+		/// needs to be completed on the task.
+		/// </summary>
+		public void ClearAnalysis()
+		{
+			using (AcquireBlockLock(RequestLock.Write))
+			{
+				previouslyAnalyzedPlugins.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Clears the analysis for a single plugin.
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		public void ClearAnalysis(IBlockAnalyzerProjectPlugin plugin)
+		{
+			using (AcquireBlockLock(RequestLock.Write))
+			{
+				previouslyAnalyzedPlugins.Remove(plugin);
+			}
+		}
+
+		/// <summary>
+		/// Retrieves a snapshot of the current block analysis on the block.
+		/// </summary>
+		/// <returns></returns>
+		public HashSet<IBlockAnalyzerProjectPlugin> GetAnalysis()
+		{
+			using (AcquireBlockLock(RequestLock.Read))
+			{
+				var results =
+					new HashSet<IBlockAnalyzerProjectPlugin>(previouslyAnalyzedPlugins);
+				return results;
+			}
 		}
 
 		public IList<Block> GetBlockAndParents()
@@ -249,6 +300,7 @@ namespace AuthorIntrusion.Common.Blocks
 			Project.Blocks.RaiseBlockTextChanged(this);
 
 			// Trigger the events for any listening plugins.
+			ClearAnalysis();
 			Project.Plugins.ProcessBlockAnalysis(this);
 		}
 
@@ -290,6 +342,7 @@ namespace AuthorIntrusion.Common.Blocks
 			Properties = new BlockPropertyDictionary();
 			TextSpans = new TextSpanCollection();
 			accessLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+			previouslyAnalyzedPlugins = new HashSet<IBlockAnalyzerProjectPlugin>();
 		}
 
 		#endregion
@@ -299,6 +352,14 @@ namespace AuthorIntrusion.Common.Blocks
 		private readonly ReaderWriterLockSlim accessLock;
 
 		private BlockType blockType;
+
+		/// <summary>
+		/// Contains the set of block analyzers that have previously processed
+		/// this block.
+		/// </summary>
+		private readonly HashSet<IBlockAnalyzerProjectPlugin>
+			previouslyAnalyzedPlugins;
+
 		private string text;
 		private volatile int version;
 

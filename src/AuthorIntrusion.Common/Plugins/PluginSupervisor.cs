@@ -193,16 +193,19 @@ namespace AuthorIntrusion.Common.Plugins
 			{
 				// Grab information about the block inside a read lock.
 				int blockVersion;
+				HashSet<IBlockAnalyzerProjectPlugin> analysis;
 
 				using (block.AcquireBlockLock(RequestLock.Read))
 				{
 					blockVersion = block.Version;
+					analysis = block.GetAnalysis();
 				}
 
 				// Create a background task that will analyze the block. This will return
 				// false if the block had changed in the process of analysis (which would
 				// have triggered another background task).
-				var analyzer = new BlockAnalyzer(block, blockVersion, BlockAnalyzers);
+				var analyzer = new BlockAnalyzer(
+					block, blockVersion, BlockAnalyzers, analysis);
 				Task task = Task.Factory.StartNew(analyzer.Run);
 
 				// Wait for the task to complete in the background so we can then
