@@ -96,7 +96,8 @@ namespace AuthorIntrusion.Common.Plugins
 			// plugin and add it to the ordered list of project-specific plugins.
 			var projectPlugin = new ProjectPluginController(this, plugin);
 
-			// See if this is a plugin framework controller.
+			// See if this is a plugin framework controller. If it is, we all
+			// it to connect to any existing plugins.
 			IProjectPlugin pluginController = projectPlugin.ProjectPlugin;
 			var frameworkController = pluginController as IFrameworkProjectPlugin;
 
@@ -134,46 +135,6 @@ namespace AuthorIntrusion.Common.Plugins
 
 			// We were successful in adding the plugin.
 			return true;
-		}
-
-		/// <summary>
-		/// Called after a block changes it's parent from the oldParentBlock to the
-		/// currently assigned block.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="oldParentBlock">The old parent block.</param>
-		public void ChangeBlockParent(
-			Block block,
-			Block oldParentBlock)
-		{
-			IEnumerable<ProjectPluginController> controllers =
-				Controllers.Where(
-					controller => controller is IBlockRelationshipProjectPlugin);
-
-			foreach (ProjectPluginController controller in controllers)
-			{
-				var relationshipController = (IBlockRelationshipProjectPlugin) controller;
-				relationshipController.ChangeBlockParent(block, oldParentBlock);
-			}
-		}
-
-		/// <summary>
-		/// Called after a block changes its type.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="oldBlockType">Old type of the block.</param>
-		public void ChangeBlockType(
-			Block block,
-			BlockType oldBlockType)
-		{
-			IEnumerable<ProjectPluginController> controllers =
-				Controllers.Where(controller => controller is IBlockTypeProjectPlugin);
-
-			foreach (ProjectPluginController controller in controllers)
-			{
-				var blockTypeController = (IBlockTypeProjectPlugin) controller;
-				blockTypeController.ChangeBlockType(block, oldBlockType);
-			}
 		}
 
 		public bool Contains(string pluginName)
@@ -259,8 +220,9 @@ namespace AuthorIntrusion.Common.Plugins
 		/// Checks for immediate edits on a block. This is intended to be a blocking
 		/// editing that will always happen within a write lock.
 		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="textIndex">Index of the text.</param>
+		/// <param name="context">The context of the edit just performed.</param>
+		/// <param name="block">The block associated with the current changes.</param>
+		/// <param name="textIndex">Index of the text inside the block.</param>
 		public void ProcessImmediateEdits(
 			BlockCommandContext context,
 			Block block,
@@ -284,10 +246,13 @@ namespace AuthorIntrusion.Common.Plugins
 			}
 		}
 
+		/// <summary>
+		/// Sorts and prepares the plugins for use, along with putting various
+		/// plugins in the specialized lists for processing immediate edits and
+		/// block analysis.
+		/// </summary>
 		private void UpdatePlugins()
 		{
-			// Sort the plugins so they are in execution order.
-
 			// Determine the immediate plugins and pull them into separate list.
 			ImmediateEditors.Clear();
 

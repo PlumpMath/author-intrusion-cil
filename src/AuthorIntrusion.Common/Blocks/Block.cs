@@ -194,11 +194,7 @@ namespace AuthorIntrusion.Common.Blocks
 				// Raise an event that the block type had changed. This is done
 				// before the plugins are called because they may make additional
 				// changes and we want to avoid recursion.
-				Project.Blocks.RaiseBlockTypeChanged(this);
-
-				// Fire the events in the block structure supervisor.
-				Project.BlockStructures.Update();
-				Project.Plugins.ChangeBlockType(this, oldBlockType);
+				Project.Blocks.RaiseBlockTypeChanged(this, oldBlockType);
 			}
 		}
 
@@ -223,7 +219,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 				// Allow the plugin manager to handle any alterations for block
 				// parents.
-				Project.Plugins.ChangeBlockParent(this, oldParentBlock);
+				Blocks.RaiseBlockParentChanged(this, oldParentBlock);
 			}
 		}
 
