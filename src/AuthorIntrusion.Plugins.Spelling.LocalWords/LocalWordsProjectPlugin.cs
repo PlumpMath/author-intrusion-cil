@@ -24,6 +24,7 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 	{
 		#region Properties
 
+		public IBlockAnalyzerProjectPlugin BlockAnalyzer { get; set; }
 		public HashSet<string> CaseInsensitiveDictionary { get; private set; }
 		public HashSet<string> CaseSensitiveDictionary { get; private set; }
 
@@ -151,6 +152,10 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 		{
 			// Update the internal dictionaries.
 			CaseInsensitiveDictionary.Add(word.ToLowerInvariant());
+
+			// Clear the spell-checking on the entire document and reparse it.
+			Project.Plugins.ClearAnalysis(BlockAnalyzer);
+			Project.Plugins.ProcessBlockAnalysis();
 
 			// Make sure the settings are written out.
 			WriteSettings();

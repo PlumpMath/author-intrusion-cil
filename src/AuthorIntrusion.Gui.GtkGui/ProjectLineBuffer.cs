@@ -500,6 +500,15 @@ namespace AuthorIntrusion.Gui.GtkGui
 			}
 		}
 
+		private void OnTextSpansChanged(
+			object sender,
+			BlockEventArgs e)
+		{
+			int blockIndex = blocks.IndexOf(e.Block);
+			var args = new LineChangedArgs(blockIndex);
+			RaiseLineChanged(args);
+		}
+
 		#endregion
 
 		#region Constructors
@@ -519,6 +528,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			// Hook up the events.
 			editorView.Controller.PopulateContextMenu += OnPopulateContextMenu;
 			blocks.BlockTextChanged += OnBlockTextChanged;
+			blocks.TextSpansChanged += OnTextSpansChanged;
 			blocks.BlockTypeChanged += OnBlockTypeChanged;
 		}
 

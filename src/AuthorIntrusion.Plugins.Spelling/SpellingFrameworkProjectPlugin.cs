@@ -44,6 +44,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 		{
 			// Grab the information about the block.
 			string text;
+			TextSpanCollection textSpans;
 
 			using (block.AcquireBlockLock(RequestLock.Read))
 			{
@@ -55,6 +56,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 				// Grab the information from the block.
 				text = block.Text;
+				textSpans = block.TextSpans;
 			}
 
 			// Split the word and perform spell-checking.
@@ -84,6 +86,9 @@ namespace AuthorIntrusion.Plugins.Spelling
 				block.TextSpans.Remove(this);
 				block.TextSpans.AddRange(misspelledWords);
 			}
+
+			// Raise that we changed the spelling on the block.
+			block.RaiseTextSpansChanged();
 		}
 
 		/// <summary>
@@ -135,7 +140,8 @@ namespace AuthorIntrusion.Plugins.Spelling
 			// Add the additional editor actions from the plugins.
 			foreach (ISpellingProjectPlugin controller in SpellingControllers)
 			{
-				var additionalActions = controller.GetAdditionalEditorActions(word);
+				IEnumerable<IEditorAction> additionalActions =
+					controller.GetAdditionalEditorActions(word);
 				actions.AddRange(additionalActions);
 			}
 
@@ -151,8 +157,12 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 			if (spellingController != null)
 			{
+				// Update the collections.
 				SpellingControllers.Remove(spellingController);
 				SpellingControllers.Add(spellingController);
+
+				// Inject some additional linkage into the controller.
+				spellingController.BlockAnalyzer = this;
 			}
 		}
 
@@ -164,7 +174,11 @@ namespace AuthorIntrusion.Plugins.Spelling
 
 			if (spellingController != null)
 			{
+				// Update the collections.
 				SpellingControllers.Remove(spellingController);
+
+				// Inject some additional linkage into the controller.
+				spellingController.BlockAnalyzer = null;
 			}
 		}
 

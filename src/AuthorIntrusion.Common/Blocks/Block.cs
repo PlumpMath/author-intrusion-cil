@@ -195,6 +195,14 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
+		/// Indicates that the text spans of a block have changed significantly.
+		/// </summary>
+		public void RaiseTextSpansChanged()
+		{
+			Project.Blocks.RaiseTextSpansChanged(this);
+		}
+
+		/// <summary>
 		/// Sets the block structure and fire the appropriate events to listeners.
 		/// If the block structure has not changed, then no events will be fired.
 		/// </summary>

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using AuthorIntrusion.Common.Actions;
+using AuthorIntrusion.Common.Plugins;
 using MfGames.Enumerations;
 
 namespace AuthorIntrusion.Plugins.Spelling.Common
@@ -15,6 +16,11 @@ namespace AuthorIntrusion.Plugins.Spelling.Common
 	public interface ISpellingProjectPlugin
 	{
 		#region Properties
+
+		/// <summary>
+		/// Gets or sets the block analyzer used for updating analysis.
+		/// </summary>
+		IBlockAnalyzerProjectPlugin BlockAnalyzer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the overall weight of the spelling control and its

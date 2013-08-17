@@ -12,9 +12,9 @@ namespace AuthorIntrusion.Common.Plugins
 	{
 		#region Properties
 
+		public HashSet<IBlockAnalyzerProjectPlugin> Analysis { get; private set; }
 		public Block Block { get; private set; }
 		public IList<IBlockAnalyzerProjectPlugin> BlockAnalyzers { get; private set; }
-		public HashSet<IBlockAnalyzerProjectPlugin> Analysis { get; private set; }
 		public int BlockVersion { get; private set; }
 
 		#endregion
@@ -52,6 +52,9 @@ namespace AuthorIntrusion.Common.Plugins
 
 				// Perform the analysis on the given block.
 				blockAnalyzer.AnalyzeBlock(Block, BlockVersion);
+
+				// Once we're done analyzing the block, we need to add this
+				// analyzer to the list so we don't attempt to run it again.
 				Block.AddAnalysis(blockAnalyzer);
 			}
 		}
@@ -68,7 +71,8 @@ namespace AuthorIntrusion.Common.Plugins
 
 		#region Constructors
 
-		public BlockAnalyzer(Block block,
+		public BlockAnalyzer(
+			Block block,
 			int blockVersion,
 			IList<IBlockAnalyzerProjectPlugin> blockAnalyzers,
 			HashSet<IBlockAnalyzerProjectPlugin> analysis)

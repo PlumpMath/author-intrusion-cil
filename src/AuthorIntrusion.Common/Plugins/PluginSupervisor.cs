@@ -137,6 +137,36 @@ namespace AuthorIntrusion.Common.Plugins
 			return true;
 		}
 
+		/// <summary>
+		/// Clears the analysis state of a block to indicate that all analysis
+		/// needs to be completed on the task.
+		/// </summary>
+		public void ClearAnalysis()
+		{
+			using (Project.Blocks.AcquireLock(RequestLock.Read))
+			{
+				foreach (Block block in Project.Blocks)
+				{
+					block.ClearAnalysis();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Clears the analysis for a single plugin.
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		public void ClearAnalysis(IBlockAnalyzerProjectPlugin plugin)
+		{
+			using (Project.Blocks.AcquireLock(RequestLock.Read))
+			{
+				foreach (Block block in Project.Blocks)
+				{
+					block.ClearAnalysis(plugin);
+				}
+			}
+		}
+
 		public bool Contains(string pluginName)
 		{
 			return Controllers.Any(plugin => plugin.Name == pluginName);
@@ -171,6 +201,20 @@ namespace AuthorIntrusion.Common.Plugins
 
 			// Return the resulting list of actions.
 			return actions;
+		}
+
+		/// <summary>
+		/// Processes the block analysis on all the blocks in the collection.
+		/// </summary>
+		public void ProcessBlockAnalysis()
+		{
+			using (Project.Blocks.AcquireLock(RequestLock.Read))
+			{
+				foreach (Block block in Project.Blocks)
+				{
+					ProcessBlockAnalysis(block);
+				}
+			}
 		}
 
 		/// <summary>

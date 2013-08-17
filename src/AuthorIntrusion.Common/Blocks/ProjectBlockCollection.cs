@@ -30,6 +30,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 		public event EventHandler<BlockEventArgs> BlockTextChanged;
 		public event EventHandler<BlockEventArgs> BlockTypeChanged;
+		public event EventHandler<BlockEventArgs> TextSpansChanged;
 
 		#endregion
 
@@ -160,6 +161,24 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
+		/// Raises an event that a block's type had changed.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="oldParent">The old parent.</param>
+		public void RaiseBlockParentChanged(
+			Block block,
+			Block oldParent)
+		{
+			EventHandler<BlockEventArgs> listeners = BlockTypeChanged;
+
+			if (listeners != null)
+			{
+				var args = new BlockEventArgs(block);
+				listeners(this, args);
+			}
+		}
+
+		/// <summary>
 		/// Raises an event that a block's text had changed.
 		/// </summary>
 		/// <param name="block"></param>
@@ -179,7 +198,8 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		/// <param name="block"></param>
 		/// <param name="oldBlockType"></param>
-		public void RaiseBlockTypeChanged(Block block,
+		public void RaiseBlockTypeChanged(
+			Block block,
 			BlockType oldBlockType)
 		{
 			EventHandler<BlockEventArgs> listeners = BlockTypeChanged;
@@ -192,18 +212,17 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
-		/// Raises an event that a block's type had changed.
+		/// Raises an event that a block's text spans had changed.
 		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="oldParent">The old parent.</param>
-		public void RaiseBlockParentChanged(Block block, Block oldParent)
+		/// <param name="block"></param>
+		public void RaiseTextSpansChanged(Block block)
 		{
-			EventHandler<BlockEventArgs> listeners = BlockTypeChanged;
+			EventHandler<BlockEventArgs> listeners = TextSpansChanged;
 
-			if(listeners != null)
+			if (listeners != null)
 			{
 				var args = new BlockEventArgs(block);
-				listeners(this,args);
+				listeners(this, args);
 			}
 		}
 

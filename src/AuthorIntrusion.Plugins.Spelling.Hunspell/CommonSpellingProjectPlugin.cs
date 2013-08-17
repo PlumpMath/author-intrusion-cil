@@ -21,6 +21,8 @@ namespace AuthorIntrusion.Plugins.Spelling.NHunspell
 	{
 		#region Properties
 
+		public IBlockAnalyzerProjectPlugin BlockAnalyzer { get; set; }
+
 		public string Key
 		{
 			get { return "Hunspell"; }
