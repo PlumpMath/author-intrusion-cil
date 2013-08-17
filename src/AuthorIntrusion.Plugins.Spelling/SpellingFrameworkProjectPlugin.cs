@@ -85,10 +85,10 @@ namespace AuthorIntrusion.Plugins.Spelling
 				// Make the changes to the block's contents.
 				block.TextSpans.Remove(this);
 				block.TextSpans.AddRange(misspelledWords);
-			}
 
-			// Raise that we changed the spelling on the block.
-			block.RaiseTextSpansChanged();
+				// Raise that we changed the spelling on the block.
+				block.RaiseTextSpansChanged();
+			}
 		}
 
 		/// <summary>
