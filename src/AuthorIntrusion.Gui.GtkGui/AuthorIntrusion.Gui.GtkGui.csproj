@@ -71,12 +71,13 @@
     <Reference Include="MfGames.Commands.TextEditing">
       <HintPath>..\packages\MfGames.Commands.TextEditing.0.1.0.0\lib\net45\MfGames.Commands.TextEditing.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt">
-      <HintPath>..\packages\MfGames.GtkExt.0.1.0.0\lib\net45\MfGames.GtkExt.dll</HintPath>
-    </Reference>
-    <Reference Include="MfGames.GtkExt.TextEditor, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MfGames.GtkExt, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.TextEditor.0.2.0.0\lib\net45\MfGames.GtkExt.TextEditor.dll</HintPath>
+      <HintPath>..\packages\MfGames.GtkExt.0.2.0.0\lib\net45\MfGames.GtkExt.dll</HintPath>
+    </Reference>
+    <Reference Include="MfGames.GtkExt.TextEditor, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MfGames.GtkExt.TextEditor.0.3.0.0\lib\net45\MfGames.GtkExt.TextEditor.dll</HintPath>
     </Reference>
     <Reference Include="MfGames.GtkExt.TextEditor.Models, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

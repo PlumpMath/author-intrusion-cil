@@ -7,4 +7,5 @@ Reworking the plugin infrastructure to allow for faster editing and performance.
 
 # Dependencies
 
-- None
+- MfGames.GtkExt 0.2.0
+- MfGames.GtkExt.TextEditor 0.3.0
