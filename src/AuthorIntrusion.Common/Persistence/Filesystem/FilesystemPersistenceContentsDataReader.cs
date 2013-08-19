@@ -94,6 +94,22 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				// We process the remaining elements based on their local name.
 				switch (reader.LocalName)
 				{
+					case "analyzer":
+						// Grab the analyzer name and find the associated plugin.
+						string key = reader.ReadInnerXml();
+
+						if (Project.Plugins.Contains(key))
+						{
+							var analyzer = Project.Plugins[key] as IBlockAnalyzerProjectPlugin;
+
+							if (analyzer != null)
+							{
+								blocks[blockIndex].AddAnalysis(analyzer);
+							}
+						}
+
+						break;
+
 					case "block-key":
 						// Grab the information to identify the block. We can't use
 						// block key directly so we have an index into the original

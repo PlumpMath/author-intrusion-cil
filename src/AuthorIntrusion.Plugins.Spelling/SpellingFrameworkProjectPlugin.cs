@@ -44,7 +44,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 		{
 			// Grab the information about the block.
 			string text;
-			TextSpanCollection originalMispelledWords = new TextSpanCollection();
+			var originalMispelledWords = new TextSpanCollection();
 
 			using (block.AcquireBlockLock(RequestLock.Read))
 			{
@@ -58,7 +58,8 @@ namespace AuthorIntrusion.Plugins.Spelling
 				// alow the current spelling areas.
 				text = block.Text;
 
-				originalMispelledWords.AddRange(block.TextSpans.Where(span => span.Controller == this));
+				originalMispelledWords.AddRange(
+					block.TextSpans.Where(span => span.Controller == this));
 			}
 
 			// Split the word and perform spell-checking.

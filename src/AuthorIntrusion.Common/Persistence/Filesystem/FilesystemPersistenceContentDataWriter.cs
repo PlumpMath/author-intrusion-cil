@@ -4,8 +4,10 @@
 
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Plugins;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Common.Persistence.Filesystem
@@ -42,16 +44,9 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				blockIndex < blocks.Count;
 				blockIndex++)
 			{
-				// If we don't have any data, skip it.
+				// Write out this block.
 				Block block = blocks[blockIndex];
 
-				if (block.Properties.Count == 0
-					&& block.TextSpans.Count == 0)
-				{
-					continue;
-				}
-
-				// Write out this block.
 				writer.WriteStartElement("block-data", ProjectNamespace);
 
 				// Write out the text of the block so we can identify it later. It
@@ -67,6 +62,7 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				// For this pass, we write out the data generates by the plugins
 				// and internal state.
 				WriteBlockProperties(writer, block);
+				WriteAnalysisState(writer, block);
 				WriteTextSpans(writer, block);
 
 				// Finish up the block.
@@ -81,6 +77,42 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			{
 				writer.Dispose();
 			}
+		}
+
+		/// <summary>
+		/// Writes the state of the analyzer plugins for this block. This will
+		/// prevent the block from being being re-analyzed once it is read in.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		/// <param name="block">The block.</param>
+		private void WriteAnalysisState(
+			XmlWriter writer,
+			Block block)
+		{
+			// If we don't have properties, then don't write out anything.
+			HashSet<IBlockAnalyzerProjectPlugin> analyzers = block.GetAnalysis();
+
+			if (analyzers.Count <= 0)
+			{
+				return;
+			}
+
+			// We always have to produce a consistent order for the list.
+			List<string> analyzerKeys = analyzers.Select(plugin => plugin.Key).ToList();
+
+			analyzerKeys.Sort();
+
+			// Write out the start element for the analyzers list.
+			writer.WriteStartElement("analyzers", ProjectNamespace);
+
+			// Write out each element.
+			foreach (string key in analyzerKeys)
+			{
+				writer.WriteElementString("analyzer", ProjectNamespace, key);
+			}
+
+			// Finish up the analyzers element.
+			writer.WriteEndElement();
 		}
 
 		/// <summary>
