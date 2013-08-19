@@ -44,7 +44,7 @@ namespace AuthorIntrusion.Plugins.Spelling
 		{
 			// Grab the information about the block.
 			string text;
-			TextSpanCollection textSpans;
+			TextSpanCollection originalMispelledWords = new TextSpanCollection();
 
 			using (block.AcquireBlockLock(RequestLock.Read))
 			{
@@ -54,9 +54,11 @@ namespace AuthorIntrusion.Plugins.Spelling
 					return;
 				}
 
-				// Grab the information from the block.
+				// Grab the information from the block. We need the text and
+				// alow the current spelling areas.
 				text = block.Text;
-				textSpans = block.TextSpans;
+
+				originalMispelledWords.AddRange(block.TextSpans.Where(span => span.Controller == this));
 			}
 
 			// Split the word and perform spell-checking.
@@ -71,6 +73,21 @@ namespace AuthorIntrusion.Plugins.Spelling
 				span.Controller = this;
 
 				misspelledWords.Add(span);
+			}
+
+			// Look to see if we have any change from the original spelling
+			// errors and this one. This will only happen if the count is
+			// identical and every one in the original list is in the new list.
+			if (originalMispelledWords.Count == misspelledWords.Count)
+			{
+				bool isMatch = originalMispelledWords.All(misspelledWords.Contains);
+
+				if (isMatch)
+				{
+					// There are no new changes, so we don't have anything to
+					// update.
+					return;
+				}
 			}
 
 			// Inside a write lock, we need to make modifications to the block's list.

@@ -165,9 +165,14 @@ namespace AuthorIntrusion.Plugins.Spelling.LocalWords
 			BlockCommandContext context,
 			string word)
 		{
-			// Update the internal dictionaries.
+			// Update the internal dictionaries by removing it from the
+			// insensitive list and adding it to the sensitive list.
 			CaseInsensitiveDictionary.Remove(word.ToLowerInvariant());
 			CaseSensitiveDictionary.Add(word);
+
+			// Clear the spell-checking on the entire document and reparse it.
+			Project.Plugins.ClearAnalysis(BlockAnalyzer);
+			Project.Plugins.ProcessBlockAnalysis();
 
 			// Make sure the settings are written out.
 			WriteSettings();

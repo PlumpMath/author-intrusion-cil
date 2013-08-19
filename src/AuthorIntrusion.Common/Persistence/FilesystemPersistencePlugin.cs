@@ -100,6 +100,9 @@ namespace AuthorIntrusion.Common.Persistence
 			// back to interactive mode.
 			project.SetProcessingState(ProjectProcessingState.Interactive);
 
+			// Trigger any missing block analysis.
+			project.Plugins.ProcessBlockAnalysis();
+
 			// Return the resulting project.
 			return project;
 		}

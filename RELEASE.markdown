@@ -1,9 +1,16 @@
 Reworking the plugin infrastructure to allow for faster editing and performance.
 
+# Blocks
+
+- Changing text spans through block analysis will cause the line to update on screen. +New
+
 # Plugins
 
 - Reworking the block analyzers so they can be selectively re-run against the blocks in a collection. +New
-- Updated the spelling framework to update blocks as spelling corrections are made +New
+- Block analysis is automatically performed when a document is loaded. +New
+- Local Word Spelling:
+	- Updated the Local Words spelling plugin to update the entire document when words are added to either dictionaries. +New
+	- Text spans are not updated if the spelling errors haven't changed. +New
 
 # Dependencies
 
