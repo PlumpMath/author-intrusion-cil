@@ -16,18 +16,36 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 		public void PostDo(OperationContext context)
 		{
-			foreach (IWrappedCommand wrappedCommand in Commands)
-			{
-				wrappedCommand.PostDo(context);
-			}
 		}
 
 		public void PostUndo(OperationContext context)
 		{
-			foreach (IWrappedCommand wrappedCommand in Commands)
-			{
-				wrappedCommand.PostUndo(context);
-			}
+		}
+
+		protected override void Do(
+			IUndoableCommand<BlockCommandContext> command,
+			BlockCommandContext context)
+		{
+			// Perform the base command.
+			base.Do(command, context);
+
+			// Handle the post operation for the wrapped command.
+			var wrappedCommand = (IWrappedCommand) command;
+
+			wrappedCommand.PostDo(operationContext);
+		}
+
+		protected override void Undo(
+			IUndoableCommand<BlockCommandContext> command,
+			BlockCommandContext context)
+		{
+			// Handle the base operation.
+			base.Undo(command, context);
+
+			// Handle the post operation for the wrapped command.
+			var wrappedCommand = (IWrappedCommand) command;
+
+			wrappedCommand.PostUndo(operationContext);
 		}
 
 		#endregion
@@ -36,17 +54,27 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 		public ProjectCompositeCommandAdapter(
 			ProjectCommandController projectCommandController,
-			CompositeCommand<OperationContext> composite)
+			CompositeCommand<OperationContext> composite,
+			OperationContext operationContext)
 			: base(true, false)
 		{
+			// Save the operation context so we can call back into the editor.
+			this.operationContext = operationContext;
+
 			// Go through the commands and wrap each one.
 			foreach (ICommand<OperationContext> command in composite.Commands)
 			{
 				IWrappedCommand wrappedCommand =
-					projectCommandController.WrapCommand(command);
+					projectCommandController.WrapCommand(command, operationContext);
 				Commands.Add(wrappedCommand);
 			}
 		}
+
+		#endregion
+
+		#region Fields
+
+		private readonly OperationContext operationContext;
 
 		#endregion
 	}

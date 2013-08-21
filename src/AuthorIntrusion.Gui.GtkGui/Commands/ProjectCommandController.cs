@@ -120,7 +120,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					currentBlock, context.Position.Character);
 
 				// Wrap the command with our wrappers.
-				IWrappedCommand wrappedCommand = WrapCommand(command);
+				IWrappedCommand wrappedCommand = WrapCommand(command, context);
 
 				Project.Commands.Do(wrappedCommand, blockContext);
 
@@ -218,7 +218,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			return null;
 		}
 
-		public IWrappedCommand WrapCommand(ICommand<OperationContext> command)
+		public IWrappedCommand WrapCommand(ICommand<OperationContext> command,
+			OperationContext operationContext)
 		{
 			// If the command is a ProjectCommandAdapter, then we want to wrap the
 			// individual commands.
@@ -238,7 +239,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			if (composite != null)
 			{
 				var wrappedCompositeCommand = new ProjectCompositeCommandAdapter(
-					this, composite);
+					this, composite, operationContext);
 				return wrappedCompositeCommand;
 			}
 
