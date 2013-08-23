@@ -4,6 +4,8 @@ Reworking the plugin infrastructure to allow for faster editing and performance.
 
 - Removed the margins from the default editor because it was slowing down the system with large documents. +Changed
 - Fixed a bug where the project line buffer was not disconnecting from events properly. +Changed
+- Context menu doesn't have Copy, Cut, and Paste (and no automatic separator). +Changed
+- Context menu automatically selects first item in menu. +Changed
 
 # Blocks
 
