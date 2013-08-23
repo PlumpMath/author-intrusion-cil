@@ -353,6 +353,13 @@ namespace AuthorIntrusion.Gui.GtkGui
 			object sender,
 			ProjectEventArgs e)
 		{
+			// Dispose of the project because we need to disconnect from
+			// events.
+			if (commandController.ProjectLineBuffer != null)
+			{
+				commandController.ProjectLineBuffer.Dispose();
+			}
+
 			// Remove the line buffer.
 			commandController.ProjectLineBuffer = null;
 			commandController.Project = null;

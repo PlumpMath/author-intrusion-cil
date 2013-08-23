@@ -26,7 +26,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 	/// Encapsulates an adapter class between the text editor's line buffer and
 	/// the project information.
 	/// </summary>
-	public class ProjectLineBuffer: MultiplexedOperationLineBuffer
+	public class ProjectLineBuffer: MultiplexedOperationLineBuffer,
+		IDisposable
 	{
 		#region Properties
 
@@ -530,6 +531,27 @@ namespace AuthorIntrusion.Gui.GtkGui
 			blocks.BlockTextChanged += OnBlockTextChanged;
 			blocks.TextSpansChanged += OnTextSpansChanged;
 			blocks.BlockTypeChanged += OnBlockTypeChanged;
+		}
+
+		#endregion
+
+		#region Destructors
+
+		public void Dispose()
+		{
+			Dispose(true);
+		}
+
+		protected virtual void Dispose(bool isDisposing)
+		{
+			if (isDisposing)
+			{
+				// Disconnect from events.
+				editorView.Controller.PopulateContextMenu -= OnPopulateContextMenu;
+				blocks.BlockTextChanged -= OnBlockTextChanged;
+				blocks.TextSpansChanged -= OnTextSpansChanged;
+				blocks.BlockTypeChanged -= OnBlockTypeChanged;
+			}
 		}
 
 		#endregion

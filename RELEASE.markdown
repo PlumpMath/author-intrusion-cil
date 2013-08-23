@@ -3,6 +3,8 @@ Reworking the plugin infrastructure to allow for faster editing and performance.
 # Editor
 
 - Removed the margins from the default editor because it was slowing down the system with large documents. +Changed
+- Fixed a bug where the project line buffer was not disconnecting from events properly. +Changed
+
 # Blocks
 
 - Changing text spans through block analysis will cause the line to update on screen. +New
