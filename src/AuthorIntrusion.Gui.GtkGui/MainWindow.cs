@@ -64,6 +64,10 @@ namespace AuthorIntrusion.Gui.GtkGui
 			editorView.Controller.CommandController = commandController;
 			EditorViewTheme.SetupTheme(editorView.Theme);
 
+			// Remove the default margins because they aren't helpful at this
+			// point and whenever they load, it causes the document to reset.
+			editorView.Margins.Clear();
+
 			// Wrap the text editor in a scrollbar.
 			var scrolledWindow = new ScrolledWindow();
 			scrolledWindow.VscrollbarPolicy = PolicyType.Always;
