@@ -19,52 +19,13 @@ namespace AuthorIntrusion.Common.Tests
 			Project project,
 			int lineCount)
 		{
-			// Set up the block structure.
-			BlockTypeSupervisor blockTypes = project.BlockTypes;
-
-			var chapterStructure = new BlockStructure
-			{
-				BlockType = blockTypes.Chapter
-			};
-
-			var sceneStructure = new BlockStructure
-			{
-				BlockType = blockTypes.Scene,
-				MinimumOccurances = 1,
-			};
-
-			var epigraphStructure = new BlockStructure
-			{
-				BlockType = blockTypes.Epigraph,
-				MinimumOccurances = 1,
-				MaximumOccurances = 1,
-			};
-
-			var epigraphAttributationStructure = new BlockStructure
-			{
-				BlockType = blockTypes.EpigraphAttribution,
-				MinimumOccurances = 1,
-				MaximumOccurances = 1,
-			};
-
-			var paragraphStructure = new BlockStructure
-			{
-				BlockType = blockTypes.Paragraph,
-				MinimumOccurances = 1,
-			};
-
-			sceneStructure.AddChild(epigraphStructure);
-			sceneStructure.AddChild(epigraphAttributationStructure);
-			sceneStructure.AddChild(paragraphStructure);
-			chapterStructure.AddChild(sceneStructure);
-			project.BlockStructures.RootBlockStructure = chapterStructure;
-
 			// Insert the bulk of the lines.
 			InsertLines(project, lineCount);
 
 			// Change the block types for the project. This basically builds up a
 			// structure of one chapter with any number of scenes that have one
 			// epigraph, one epigraph attribution, and two paragraphs.
+			BlockTypeSupervisor blockTypes = project.BlockTypes;
 			ProjectBlockCollection blocks = project.Blocks;
 
 			blocks[0].SetBlockType(blockTypes.Chapter);
@@ -137,21 +98,6 @@ namespace AuthorIntrusion.Common.Tests
 			blocks = project.Blocks;
 			commands = project.Commands;
 			blockTypes = project.BlockTypes;
-
-			// Set up the block structure.
-			var chapterStructure = new BlockStructure
-			{
-				BlockType = blockTypes.Chapter
-			};
-
-			var sceneStructure = new BlockStructure
-			{
-				BlockType = blockTypes.Scene,
-				MinimumOccurances = 1,
-			};
-
-			chapterStructure.AddChild(sceneStructure);
-			project.BlockStructures.RootBlockStructure = chapterStructure;
 
 			// Insert the bulk of the lines.
 			InsertLines(project, lineCount);

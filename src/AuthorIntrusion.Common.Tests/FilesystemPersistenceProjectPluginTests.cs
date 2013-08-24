@@ -111,25 +111,6 @@ namespace AuthorIntrusion.Common.Tests
 			Assert.NotNull(blockTypes["Custom Type"]);
 			Assert.IsFalse(blockTypes["Custom Type"].IsStructural);
 
-			// Assert: Block Structure
-			Assert.AreEqual(
-				blockTypes.Chapter, project.BlockStructures.RootBlockStructure.BlockType);
-			Assert.AreEqual(
-				blockTypes.Scene,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0].BlockType);
-			Assert.AreEqual(
-				blockTypes.Epigraph,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0]
-					.ChildStructures[0].BlockType);
-			Assert.AreEqual(
-				blockTypes.EpigraphAttribution,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0]
-					.ChildStructures[1].BlockType);
-			Assert.AreEqual(
-				blockTypes.Paragraph,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0]
-					.ChildStructures[2].BlockType);
-
 			// Assert: Blocks
 			Assert.AreEqual(10, blocks.Count);
 

@@ -95,11 +95,6 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 						bool structuralValue = Convert.ToBoolean(reader.ReadString());
 						lastBlockType.IsStructural = structuralValue;
 						break;
-
-					case "root-block-structure":
-						BlockStructure rootBlockStructure = ReadBlockStructure(reader);
-						Project.BlockStructures.RootBlockStructure = rootBlockStructure;
-						break;
 				}
 			}
 
@@ -109,68 +104,6 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				reader.Close();
 				reader.Dispose();
 			}
-		}
-
-		/// <summary>
-		/// Reads the block structure from the XML stream.
-		/// </summary>
-		/// <param name="reader">The reader.</param>
-		/// <returns></returns>
-		private BlockStructure ReadBlockStructure(XmlReader reader)
-		{
-			// Keep track of the element name since we'll need to stop reading
-			// when we get to the end element.
-			string elementName = reader.LocalName;
-			var blockStructure = new BlockStructure();
-
-			// If we're blank, just skip it.
-			if (reader.IsEmptyElement)
-			{
-				return blockStructure;
-			}
-
-			// Loop through the lines until we get to the end.
-			while (reader.Read())
-			{
-				// Check for the end element.
-				if (reader.NodeType == XmlNodeType.EndElement
-					&& reader.LocalName == elementName)
-				{
-					break;
-				}
-
-				// Ignore anything but start elements at this point.
-				if (reader.NodeType != XmlNodeType.Element)
-				{
-					continue;
-				}
-
-				// Figure out what to do from this element.
-				switch (reader.LocalName)
-				{
-					case "block-type":
-						string blockTypeName = reader.ReadString();
-						blockStructure.BlockType = Project.BlockTypes[blockTypeName];
-						break;
-
-					case "occurances":
-						int minimumValue = Convert.ToInt32(reader["minimum"]);
-						int maximumValue = Convert.ToInt32(reader["maximum"]);
-
-						blockStructure.MinimumOccurances = minimumValue;
-						blockStructure.MaximumOccurances = maximumValue;
-
-						break;
-
-					case "child-block-structure":
-						BlockStructure childStructure = ReadBlockStructure(reader);
-						blockStructure.AddChild(childStructure);
-						break;
-				}
-			}
-
-			// Return the resulting structure.
-			return blockStructure;
 		}
 
 		#endregion

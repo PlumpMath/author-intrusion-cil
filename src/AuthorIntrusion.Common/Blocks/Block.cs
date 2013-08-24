@@ -22,11 +22,6 @@ namespace AuthorIntrusion.Common.Blocks
 		public BlockKey BlockKey { get; private set; }
 
 		/// <summary>
-		/// Gets the block structure associated with this block.
-		/// </summary>
-		public BlockStructure BlockStructure { get; private set; }
-
-		/// <summary>
 		/// Gets or sets the type of the block.
 		/// </summary>
 		public BlockType BlockType
@@ -200,25 +195,6 @@ namespace AuthorIntrusion.Common.Blocks
 		public void RaiseTextSpansChanged()
 		{
 			Project.Blocks.RaiseTextSpansChanged(this);
-		}
-
-		/// <summary>
-		/// Sets the block structure and fire the appropriate events to listeners.
-		/// If the block structure has not changed, then no events will be fired.
-		/// </summary>
-		/// <param name="blockStructure">The block structure.</param>
-		/// <remarks>
-		/// This is typically managed by the BlockStructureSupervisor.
-		/// </remarks>
-		public void SetBlockStructure(BlockStructure blockStructure)
-
-		{
-			bool changed = BlockStructure != blockStructure;
-
-			if (changed)
-			{
-				BlockStructure = blockStructure;
-			}
 		}
 
 		/// <summary>

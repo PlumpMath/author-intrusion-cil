@@ -8,6 +8,7 @@ using AuthorIntrusion.Common.Projects;
 
 namespace AuthorIntrusion.Common.Blocks
 {
+#if REMOVED
 	/// <summary>
 	/// The block type supervisor is a manager class responsible for maintaining
 	/// the relationship between the various blocks based on their types.
@@ -113,7 +114,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 					// Assign the new block structure and parent.
 					block.SetParentBlock(newParentBlock);
-					block.SetBlockStructure(newBlockStructure);
+					//block.SetBlockStructure(newBlockStructure);
 				}
 			}
 		}
@@ -143,4 +144,5 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#endregion
 	}
+#endif
 }

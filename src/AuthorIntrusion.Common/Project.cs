@@ -18,13 +18,6 @@ namespace AuthorIntrusion.Common
 		#region Properties
 
 		/// <summary>
-		/// Gets the block structure supervisor which handles the management of block
-		/// structure which, in effect, assigns the block types during the editing
-		/// processing.
-		/// </summary>
-		public BlockStructureSupervisor BlockStructures { get; private set; }
-
-		/// <summary>
 		/// Gets the block type Supervisor associated with this project.
 		/// </summary>
 		public BlockTypeSupervisor BlockTypes { get; private set; }
@@ -101,10 +94,6 @@ namespace AuthorIntrusion.Common
 
 			BlockTypes = new BlockTypeSupervisor(this);
 			Blocks = new ProjectBlockCollection(this);
-
-			// The block structure needs both block types and blocks to be initialized.
-			BlockStructures = new BlockStructureSupervisor(this);
-
 			Commands = new BlockCommandSupervisor(this);
 			Plugins = new PluginSupervisor(this);
 			Macros = new ProjectMacros();
