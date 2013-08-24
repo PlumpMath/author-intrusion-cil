@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CounterPaths.cs" />
+    <Compile Include="WordCounterPathUtility.cs" />
     <Compile Include="WordCounterProjectPlugin.cs" />
-    <Compile Include="WordCounterHelper.cs" />
+    <Compile Include="WordCounter.cs" />
     <Compile Include="WordCounterPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -39,7 +39,7 @@ namespace AuthorIntrusion.Integration.Tests
 			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
-			Assert.AreEqual(7, plugins.Controllers.Count);
+			Assert.AreEqual(8, plugins.Controllers.Count);
 		}
 
 		[Test]

@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="BlockOperationReporter.cs" />
     <Compile Include="BlockOperationTests.cs" />
-    <Compile Include="BlockStructureSupervisorTests.cs" />
     <Compile Include="BlockTypeManagerTests.cs" />
     <Compile Include="ChangeBlockTypeCommandTests.cs" />
     <Compile Include="CommonMultilineTests.cs" />

@@ -161,24 +161,6 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
-		/// Raises an event that a block's type had changed.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="oldParent">The old parent.</param>
-		public void RaiseBlockParentChanged(
-			Block block,
-			Block oldParent)
-		{
-			EventHandler<BlockEventArgs> listeners = BlockTypeChanged;
-
-			if (listeners != null)
-			{
-				var args = new BlockEventArgs(block);
-				listeners(this, args);
-			}
-		}
-
-		/// <summary>
 		/// Raises an event that a block's text had changed.
 		/// </summary>
 		/// <param name="block"></param>

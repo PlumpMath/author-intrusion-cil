@@ -13,7 +13,7 @@ namespace AuthorIntrusion.Common
 	/// A project encapsulates all of the text, settings, and organization of a
 	/// written document (novel, short story).
 	/// </summary>
-	public class Project
+	public class Project: IPropertiesContainer
 	{
 		#region Properties
 
@@ -51,6 +51,11 @@ namespace AuthorIntrusion.Common
 		/// Gets the settings associated with this project.
 		/// </summary>
 		public ProjectSettings Settings { get; private set; }
+
+		/// <summary>
+		/// Gets the properties associated with the block.
+		/// </summary>
+		public PropertiesDictionary Properties { get; private set; }
 
 		#endregion
 
@@ -91,7 +96,7 @@ namespace AuthorIntrusion.Common
 			// We need the settings set up first since it may contribute
 			// to the loading of other components of the project.
 			Settings = new ProjectSettings();
-
+			Properties = new PropertiesDictionary();
 			BlockTypes = new BlockTypeSupervisor(this);
 			Blocks = new ProjectBlockCollection(this);
 			Commands = new BlockCommandSupervisor(this);

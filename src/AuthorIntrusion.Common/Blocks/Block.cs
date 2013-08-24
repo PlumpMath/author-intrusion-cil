@@ -15,7 +15,7 @@ namespace AuthorIntrusion.Common.Blocks
 	/// represents various paragraphs (normal, epigraphs) as well as some
 	/// organizational units (chapters, scenes).
 	/// </summary>
-	public class Block
+	public class Block: IPropertiesContainer
 	{
 		#region Properties
 
@@ -39,11 +39,6 @@ namespace AuthorIntrusion.Common.Blocks
 			get { return accessLock.IsWriteLockHeld; }
 		}
 
-		/// <summary>
-		/// Gets or sets the block that is the organizational parent for this block.
-		/// </summary>
-		public Block ParentBlock { get; private set; }
-
 		public Project Project
 		{
 			get { return Blocks.Project; }
@@ -52,7 +47,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// <summary>
 		/// Gets the properties associated with the block.
 		/// </summary>
-		public BlockPropertyDictionary Properties { get; private set; }
+		public PropertiesDictionary Properties { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the text associated with the block.
@@ -152,20 +147,6 @@ namespace AuthorIntrusion.Common.Blocks
 			}
 		}
 
-		public IList<Block> GetBlockAndParents()
-		{
-			var blocks = new List<Block>();
-			Block block = this;
-
-			while (block != null)
-			{
-				blocks.Add(block);
-				block = block.ParentBlock;
-			}
-
-			return blocks;
-		}
-
 		/// <summary>
 		/// Determines whether the specified block version is stale (the version had
 		/// changed compared to the supplied version).
@@ -230,31 +211,6 @@ namespace AuthorIntrusion.Common.Blocks
 				// before the plugins are called because they may make additional
 				// changes and we want to avoid recursion.
 				Project.Blocks.RaiseBlockTypeChanged(this, oldBlockType);
-			}
-		}
-
-		/// <summary>
-		/// Sets the parent block and fire the appropriate events to indicate the change.
-		/// If the block is identical, then no events will be fired.
-		/// </summary>
-		/// <param name="parentBlock">The parent block.</param>
-		/// <remarks>
-		/// This is typically managed by the BlockStructureSupervisor.
-		/// </remarks>
-		public void SetParentBlock(Block parentBlock)
-		{
-			bool changed = ParentBlock != parentBlock;
-
-			if (changed)
-			{
-				// Keep track of the old block for later and then change the block's
-				// parent.
-				Block oldParentBlock = ParentBlock;
-				ParentBlock = parentBlock;
-
-				// Allow the plugin manager to handle any alterations for block
-				// parents.
-				Blocks.RaiseBlockParentChanged(this, oldParentBlock);
 			}
 		}
 
@@ -323,7 +279,7 @@ namespace AuthorIntrusion.Common.Blocks
 			Blocks = blocks;
 			blockType = initialBlockType;
 			this.text = text;
-			Properties = new BlockPropertyDictionary();
+			Properties = new PropertiesDictionary();
 			TextSpans = new TextSpanCollection();
 			accessLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 			previouslyAnalyzedPlugins = new HashSet<IBlockAnalyzerProjectPlugin>();
