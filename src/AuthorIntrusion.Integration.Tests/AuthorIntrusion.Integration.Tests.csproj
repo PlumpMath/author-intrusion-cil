@@ -67,6 +67,10 @@
       <Project>{00EBF5AB-EFBA-49DD-9B50-C588CED63A89}</Project>
       <Name>AuthorIntrusion.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AuthorIntrusion.Plugins.BlockStructure\AuthorIntrusion.Plugins.BlockStructure.csproj">
+      <Project>{B9698BFB-8276-4E80-B5F0-3F0C84613EC1}</Project>
+      <Name>AuthorIntrusion.Plugins.BlockStructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AuthorIntrusion.Plugins.ImmediateBlockTypes\AuthorIntrusion.Plugins.ImmediateBlockTypes.csproj">
       <Project>{0321BF8D-5E4D-464B-A4E5-A0E4890DDF50}</Project>
       <Name>AuthorIntrusion.Plugins.ImmediateBlockTypes</Name>

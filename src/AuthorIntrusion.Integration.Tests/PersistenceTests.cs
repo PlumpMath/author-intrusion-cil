@@ -12,6 +12,7 @@ using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
 using AuthorIntrusion.Common.Projects;
 using AuthorIntrusion.Common.Tests;
+using AuthorIntrusion.Plugins.BlockStructure;
 using AuthorIntrusion.Plugins.ImmediateBlockTypes;
 using AuthorIntrusion.Plugins.ImmediateCorrection;
 using AuthorIntrusion.Plugins.Spelling;
@@ -119,7 +120,7 @@ namespace AuthorIntrusion.Integration.Tests
 			blocks = project.Blocks;
 
 			Assert.AreEqual(
-				7, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
+				8, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
 			Assert.NotNull(blockTypes["Custom Type"]);
 			Assert.IsFalse(blockTypes["Custom Type"].IsStructural);
 
@@ -225,6 +226,7 @@ namespace AuthorIntrusion.Integration.Tests
 			var localWordsPlugin = new LocalWordsPlugin();
 			var immediateCorrectionPlugin = new ImmediateCorrectionPlugin();
 			var immediateBlockTypesPlugin = new ImmediateBlockTypesPlugin();
+			var blockStructurePlugin = new BlockStructurePlugin();
 
 			var pluginManager = new PluginManager(
 				persistencePlugin,
@@ -233,7 +235,8 @@ namespace AuthorIntrusion.Integration.Tests
 				nhunspellPlugin,
 				localWordsPlugin,
 				immediateCorrectionPlugin,
-				immediateBlockTypesPlugin);
+				immediateBlockTypesPlugin,
+				blockStructurePlugin);
 
 			PluginManager.Instance = pluginManager;
 			PersistenceManager.Instance = new PersistenceManager(persistencePlugin);
@@ -247,13 +250,10 @@ namespace AuthorIntrusion.Integration.Tests
 			plugins = project.Plugins;
 
 			// Load in the plugins we'll be using in these tests.
-			plugins.Add("Persistence Framework");
-			plugins.Add("Filesystem Persistence");
-			plugins.Add("Spelling Framework");
-			plugins.Add("NHunspell");
-			plugins.Add("Local Words");
-			plugins.Add("Immediate Correction");
-			plugins.Add("Immediate Block Types");
+			foreach (var plugin in pluginManager.Plugins)
+			{
+				plugins.Add(plugin.Key);
+			}
 
 			// Set up the local words lookup.
 			var localWordsProjectPlugin =
