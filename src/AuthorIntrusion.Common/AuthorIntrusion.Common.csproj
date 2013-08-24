@@ -68,10 +68,8 @@
     <Compile Include="Blocks\ProjectBlockCollection.cs" />
     <Compile Include="Blocks\BlockPosition.cs" />
     <Compile Include="Blocks\BlockPropertyDictionary.cs" />
-    <Compile Include="Blocks\BlockStructureSupervisor.cs" />
     <Compile Include="Blocks\BlockType.cs" />
     <Compile Include="Blocks\BlockTypeSupervisor.cs" />
-    <Compile Include="Blocks\BlockStructure.cs" />
     <Compile Include="Blocks\TextSpan.cs" />
     <Compile Include="Blocks\TextSpanCollection.cs" />
     <Compile Include="Commands\BlockCommandContext.cs" />
