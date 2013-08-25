@@ -10,6 +10,7 @@ Reworking the plugin infrastructure to allow for faster editing and performance.
 # Blocks
 
 - Changing text spans through block analysis will cause the line to update on screen. +New
+- Properties for blocks and projects are persisted across savings. +New
 
 # Plugins
 
