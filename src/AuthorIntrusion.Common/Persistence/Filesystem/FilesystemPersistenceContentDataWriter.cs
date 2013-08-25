@@ -37,6 +37,11 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			writer.WriteStartElement("content-data", ProjectNamespace);
 			writer.WriteElementString("version", "1");
 
+			// Write out the project properties.
+			writer.WriteStartElement("project", ProjectNamespace);
+			WriteProperties(writer, Project);
+			writer.WriteEndElement();
+
 			// Go through the blocks in the list.
 			ProjectBlockCollection blocks = Project.Blocks;
 
@@ -61,7 +66,7 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 
 				// For this pass, we write out the data generates by the plugins
 				// and internal state.
-				WriteBlockProperties(writer, block);
+				WriteProperties(writer, block);
 				WriteAnalysisState(writer, block);
 				WriteTextSpans(writer, block);
 
@@ -119,13 +124,13 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 		/// Writes out the block properties of a block.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		/// <param name="block">The block.</param>
-		private static void WriteBlockProperties(
+		/// <param name="propertiesContainer">The block.</param>
+		private static void WriteProperties(
 			XmlWriter writer,
-			Block block)
+			IPropertiesContainer propertiesContainer)
 		{
 			// If we don't have properties, then don't write out anything.
-			if (block.Properties.Count <= 0)
+			if (propertiesContainer.Properties.Count <= 0)
 			{
 				return;
 			}
@@ -135,14 +140,14 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 
 			// Go through all the properties, in order, and write it out.
 			var propertyPaths = new List<HierarchicalPath>();
-			propertyPaths.AddRange(block.Properties.Keys);
+			propertyPaths.AddRange(propertiesContainer.Properties.Keys);
 			propertyPaths.Sort();
 
 			foreach (HierarchicalPath propertyPath in propertyPaths)
 			{
 				writer.WriteStartElement("property");
 				writer.WriteAttributeString("path", propertyPath.ToString());
-				writer.WriteString(block.Properties[propertyPath]);
+				writer.WriteString(propertiesContainer.Properties[propertyPath]);
 				writer.WriteEndElement();
 			}
 
