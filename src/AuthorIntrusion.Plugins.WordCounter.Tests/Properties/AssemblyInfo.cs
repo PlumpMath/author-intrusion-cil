@@ -9,12 +9,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("AuthorIntrusion.Plugins.BlockSupervisorEnforcement")]
+[assembly: AssemblyTitle("AuthorIntrusion.Plugins.Counter.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Moonfire Games")]
-[assembly: AssemblyProduct("AuthorIntrusion.Plugins.BlockSupervisorEnforcement")
-]
+[assembly: AssemblyProduct("AuthorIntrusion.Plugins.Counter.Tests")]
 [assembly: AssemblyCopyright("Copyright © Hewlett-Packard 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -27,7 +26,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("36c2f75a-62a9-47cc-8fc1-23e6373673f0")]
+[assembly: Guid("0b2d345d-260a-4d20-8dbb-fd7b3687679e")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -38,7 +37,7 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("0.2.0.0")]
+// [assembly: AssemblyVersion("0.3.0.0")]
 
-[assembly: AssemblyVersion("0.2.0.0")]
-[assembly: AssemblyFileVersion("0.2.0.0")]
+[assembly: AssemblyVersion("0.3.0.0")]
+[assembly: AssemblyFileVersion("0.3.0.0")]

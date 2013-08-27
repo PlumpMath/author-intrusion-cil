@@ -62,12 +62,6 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 
 			writer.WriteEndElement();
 
-			// Write out the structural elements, which is an ordered tree already.
-			BlockStructure rootBlockStructure =
-				Project.BlockStructures.RootBlockStructure;
-
-			WriteBlockStructure(writer, rootBlockStructure, "root-block-structure");
-
 			// Finish up the tag.
 			writer.WriteEndElement();
 
@@ -76,43 +70,6 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			{
 				writer.Dispose();
 			}
-		}
-
-		private void WriteBlockStructure(
-			XmlWriter writer,
-			BlockStructure blockStructure,
-			string elementName)
-		{
-			// Start by writing out the element.
-			writer.WriteStartElement(elementName, ProjectNamespace);
-
-			// Write out the elements of this structure.
-			writer.WriteElementString(
-				"block-type", ProjectNamespace, blockStructure.BlockType.Name);
-			writer.WriteStartElement("occurances", ProjectNamespace);
-			writer.WriteAttributeString(
-				"minimum",
-				blockStructure.MinimumOccurances.ToString(CultureInfo.InvariantCulture));
-			writer.WriteAttributeString(
-				"maximum",
-				blockStructure.MaximumOccurances.ToString(CultureInfo.InvariantCulture));
-			writer.WriteEndElement();
-
-			// Write out the child elements, if we have one.
-			if (blockStructure.ChildStructures.Count > 0)
-			{
-				writer.WriteStartElement("child-block-structures");
-
-				foreach (BlockStructure child in blockStructure.ChildStructures)
-				{
-					WriteBlockStructure(writer, child, "child-block-structure");
-				}
-
-				writer.WriteEndElement();
-			}
-
-			// Finish up the element.
-			writer.WriteEndElement();
 		}
 
 		#endregion

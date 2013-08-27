@@ -4,8 +4,10 @@
 
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
 using AuthorIntrusion.Common.Blocks;
+using AuthorIntrusion.Common.Plugins;
 using MfGames.HierarchicalPaths;
 
 namespace AuthorIntrusion.Common.Persistence.Filesystem
@@ -35,6 +37,11 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			writer.WriteStartElement("content-data", ProjectNamespace);
 			writer.WriteElementString("version", "1");
 
+			// Write out the project properties.
+			writer.WriteStartElement("project", ProjectNamespace);
+			WriteProperties(writer, Project);
+			writer.WriteEndElement();
+
 			// Go through the blocks in the list.
 			ProjectBlockCollection blocks = Project.Blocks;
 
@@ -42,16 +49,9 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				blockIndex < blocks.Count;
 				blockIndex++)
 			{
-				// If we don't have any data, skip it.
+				// Write out this block.
 				Block block = blocks[blockIndex];
 
-				if (block.Properties.Count == 0
-					&& block.TextSpans.Count == 0)
-				{
-					continue;
-				}
-
-				// Write out this block.
 				writer.WriteStartElement("block-data", ProjectNamespace);
 
 				// Write out the text of the block so we can identify it later. It
@@ -66,7 +66,8 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 
 				// For this pass, we write out the data generates by the plugins
 				// and internal state.
-				WriteBlockProperties(writer, block);
+				WriteProperties(writer, block);
+				WriteAnalysisState(writer, block);
 				WriteTextSpans(writer, block);
 
 				// Finish up the block.
@@ -84,16 +85,52 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 		}
 
 		/// <summary>
-		/// Writes out the block properties of a block.
+		/// Writes the state of the analyzer plugins for this block. This will
+		/// prevent the block from being being re-analyzed once it is read in.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		/// <param name="block">The block.</param>
-		private static void WriteBlockProperties(
+		private void WriteAnalysisState(
 			XmlWriter writer,
 			Block block)
 		{
 			// If we don't have properties, then don't write out anything.
-			if (block.Properties.Count <= 0)
+			HashSet<IBlockAnalyzerProjectPlugin> analyzers = block.GetAnalysis();
+
+			if (analyzers.Count <= 0)
+			{
+				return;
+			}
+
+			// We always have to produce a consistent order for the list.
+			List<string> analyzerKeys = analyzers.Select(plugin => plugin.Key).ToList();
+
+			analyzerKeys.Sort();
+
+			// Write out the start element for the analyzers list.
+			writer.WriteStartElement("analyzers", ProjectNamespace);
+
+			// Write out each element.
+			foreach (string key in analyzerKeys)
+			{
+				writer.WriteElementString("analyzer", ProjectNamespace, key);
+			}
+
+			// Finish up the analyzers element.
+			writer.WriteEndElement();
+		}
+
+		/// <summary>
+		/// Writes out the block properties of a block.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		/// <param name="propertiesContainer">The block.</param>
+		private static void WriteProperties(
+			XmlWriter writer,
+			IPropertiesContainer propertiesContainer)
+		{
+			// If we don't have properties, then don't write out anything.
+			if (propertiesContainer.Properties.Count <= 0)
 			{
 				return;
 			}
@@ -103,14 +140,14 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 
 			// Go through all the properties, in order, and write it out.
 			var propertyPaths = new List<HierarchicalPath>();
-			propertyPaths.AddRange(block.Properties.Keys);
+			propertyPaths.AddRange(propertiesContainer.Properties.Keys);
 			propertyPaths.Sort();
 
 			foreach (HierarchicalPath propertyPath in propertyPaths)
 			{
 				writer.WriteStartElement("property");
 				writer.WriteAttributeString("path", propertyPath.ToString());
-				writer.WriteString(block.Properties[propertyPath]);
+				writer.WriteString(propertiesContainer.Properties[propertyPath]);
 				writer.WriteEndElement();
 			}
 

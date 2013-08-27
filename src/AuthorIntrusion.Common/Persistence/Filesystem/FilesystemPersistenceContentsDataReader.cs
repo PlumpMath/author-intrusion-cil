@@ -41,6 +41,8 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 			int stopTextIndex = 0;
 			ITextControllerProjectPlugin plugin = null;
 			object pluginData = null;
+			bool inProject = false;
+			bool inBlocks = false;
 
 			while (reader.Read())
 			{
@@ -68,6 +70,14 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 							plugin = null;
 							pluginData = null;
 							break;
+
+						case "block-data":
+							inBlocks = false;
+							break;
+
+						case "project":
+							inProject = false;
+							break;
 					}
 				}
 
@@ -94,6 +104,30 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 				// We process the remaining elements based on their local name.
 				switch (reader.LocalName)
 				{
+					case "block-data":
+						inBlocks = true;
+						break;
+
+					case "project":
+						inProject = true;
+						break;
+
+					case "analyzer":
+						// Grab the analyzer name and find the associated plugin.
+						string key = reader.ReadInnerXml();
+
+						if (Project.Plugins.Contains(key))
+						{
+							var analyzer = Project.Plugins[key] as IBlockAnalyzerProjectPlugin;
+
+							if (analyzer != null)
+							{
+								blocks[blockIndex].AddAnalysis(analyzer);
+							}
+						}
+
+						break;
+
 					case "block-key":
 						// Grab the information to identify the block. We can't use
 						// block key directly so we have an index into the original
@@ -113,10 +147,22 @@ namespace AuthorIntrusion.Common.Persistence.Filesystem
 						break;
 
 					case "property":
+					{
 						var path = new HierarchicalPath(reader["path"]);
 						string value = reader.ReadString();
-						blocks[blockIndex].Properties[path] = value;
+
+						if (inBlocks)
+						{
+							blocks[blockIndex].Properties[path] = value;
+						}
+
+						if (inProject)
+						{
+							Project.Properties[path] = value;
+						}
+
 						break;
+					}
 
 					case "index":
 						startTextIndex = Convert.ToInt32(reader["start"]);

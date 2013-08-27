@@ -8,7 +8,7 @@ namespace AuthorIntrusion.Plugins.Counter
 	/// A static class that implements a basic word counter. This is intended to
 	/// duplicate the word counting logic of Microsoft Words 2010.
 	/// </summary>
-	public static class WordCounterHelper
+	public static class WordCounter
 	{
 		#region Methods
 

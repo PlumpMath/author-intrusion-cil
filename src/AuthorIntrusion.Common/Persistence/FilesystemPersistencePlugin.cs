@@ -89,12 +89,21 @@ namespace AuthorIntrusion.Common.Persistence
 			macros.Substitutions["ExternalSettingsDirectory"] =
 				settings.ExternalSettingsDirectory;
 
-			// Load the project starting with the project.
-			var project = new Project();
+			// Load the project starting with the project. We create the project
+			// in batch mode to avoid excessive processing.
+			var project = new Project(ProjectProcessingState.Batch);
 			var projectReaderWriter = new FilesystemPersistenceProjectReader(
 				project, settings, macros);
 			projectReaderWriter.Read(projectFile);
 
+			// Since we created the project in batch mode, we need to change it
+			// back to interactive mode.
+			project.SetProcessingState(ProjectProcessingState.Interactive);
+
+			// Trigger any missing block analysis.
+			project.Plugins.ProcessBlockAnalysis();
+
+			// Return the resulting project.
 			return project;
 		}
 

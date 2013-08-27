@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Plugins;
 
 namespace AuthorIntrusion.Common.Blocks
 {
@@ -14,16 +15,11 @@ namespace AuthorIntrusion.Common.Blocks
 	/// represents various paragraphs (normal, epigraphs) as well as some
 	/// organizational units (chapters, scenes).
 	/// </summary>
-	public class Block
+	public class Block: IPropertiesContainer
 	{
 		#region Properties
 
 		public BlockKey BlockKey { get; private set; }
-
-		/// <summary>
-		/// Gets the block structure associated with this block.
-		/// </summary>
-		public BlockStructure BlockStructure { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the type of the block.
@@ -43,11 +39,6 @@ namespace AuthorIntrusion.Common.Blocks
 			get { return accessLock.IsWriteLockHeld; }
 		}
 
-		/// <summary>
-		/// Gets or sets the block that is the organizational parent for this block.
-		/// </summary>
-		public Block ParentBlock { get; private set; }
-
 		public Project Project
 		{
 			get { return Blocks.Project; }
@@ -56,7 +47,7 @@ namespace AuthorIntrusion.Common.Blocks
 		/// <summary>
 		/// Gets the properties associated with the block.
 		/// </summary>
-		public BlockPropertyDictionary Properties { get; private set; }
+		public PropertiesDictionary Properties { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the text associated with the block.
@@ -106,18 +97,54 @@ namespace AuthorIntrusion.Common.Blocks
 			return new BlockLock(collectionLock, accessLock, requestedLock);
 		}
 
-		public IList<Block> GetBlockAndParents()
+		/// <summary>
+		/// Adds a flag that a plugin has performed its analysis on the block.
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		public void AddAnalysis(IBlockAnalyzerProjectPlugin plugin)
 		{
-			var blocks = new List<Block>();
-			Block block = this;
-
-			while (block != null)
+			using (AcquireBlockLock(RequestLock.Write))
 			{
-				blocks.Add(block);
-				block = block.ParentBlock;
+				previouslyAnalyzedPlugins.Add(plugin);
 			}
+		}
 
-			return blocks;
+		/// <summary>
+		/// Clears the analysis state of a block to indicate that all analysis
+		/// needs to be completed on the task.
+		/// </summary>
+		public void ClearAnalysis()
+		{
+			using (AcquireBlockLock(RequestLock.Write))
+			{
+				previouslyAnalyzedPlugins.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Clears the analysis for a single plugin.
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		public void ClearAnalysis(IBlockAnalyzerProjectPlugin plugin)
+		{
+			using (AcquireBlockLock(RequestLock.Write))
+			{
+				previouslyAnalyzedPlugins.Remove(plugin);
+			}
+		}
+
+		/// <summary>
+		/// Retrieves a snapshot of the current block analysis on the block.
+		/// </summary>
+		/// <returns></returns>
+		public HashSet<IBlockAnalyzerProjectPlugin> GetAnalysis()
+		{
+			using (AcquireBlockLock(RequestLock.Read))
+			{
+				var results =
+					new HashSet<IBlockAnalyzerProjectPlugin>(previouslyAnalyzedPlugins);
+				return results;
+			}
 		}
 
 		/// <summary>
@@ -144,22 +171,11 @@ namespace AuthorIntrusion.Common.Blocks
 		}
 
 		/// <summary>
-		/// Sets the block structure and fire the appropriate events to listeners.
-		/// If the block structure has not changed, then no events will be fired.
+		/// Indicates that the text spans of a block have changed significantly.
 		/// </summary>
-		/// <param name="blockStructure">The block structure.</param>
-		/// <remarks>
-		/// This is typically managed by the BlockStructureSupervisor.
-		/// </remarks>
-		public void SetBlockStructure(BlockStructure blockStructure)
-
+		public void RaiseTextSpansChanged()
 		{
-			bool changed = BlockStructure != blockStructure;
-
-			if (changed)
-			{
-				BlockStructure = blockStructure;
-			}
+			Project.Blocks.RaiseTextSpansChanged(this);
 		}
 
 		/// <summary>
@@ -194,36 +210,7 @@ namespace AuthorIntrusion.Common.Blocks
 				// Raise an event that the block type had changed. This is done
 				// before the plugins are called because they may make additional
 				// changes and we want to avoid recursion.
-				Project.Blocks.RaiseBlockTypeChanged(this);
-
-				// Fire the events in the block structure supervisor.
-				Project.BlockStructures.Update();
-				Project.Plugins.ChangeBlockType(this, oldBlockType);
-			}
-		}
-
-		/// <summary>
-		/// Sets the parent block and fire the appropriate events to indicate the change.
-		/// If the block is identical, then no events will be fired.
-		/// </summary>
-		/// <param name="parentBlock">The parent block.</param>
-		/// <remarks>
-		/// This is typically managed by the BlockStructureSupervisor.
-		/// </remarks>
-		public void SetParentBlock(Block parentBlock)
-		{
-			bool changed = ParentBlock != parentBlock;
-
-			if (changed)
-			{
-				// Keep track of the old block for later and then change the block's
-				// parent.
-				Block oldParentBlock = ParentBlock;
-				ParentBlock = parentBlock;
-
-				// Allow the plugin manager to handle any alterations for block
-				// parents.
-				Project.Plugins.ChangeBlockParent(this, oldParentBlock);
+				Project.Blocks.RaiseBlockTypeChanged(this, oldBlockType);
 			}
 		}
 
@@ -253,6 +240,7 @@ namespace AuthorIntrusion.Common.Blocks
 			Project.Blocks.RaiseBlockTextChanged(this);
 
 			// Trigger the events for any listening plugins.
+			ClearAnalysis();
 			Project.Plugins.ProcessBlockAnalysis(this);
 		}
 
@@ -291,9 +279,10 @@ namespace AuthorIntrusion.Common.Blocks
 			Blocks = blocks;
 			blockType = initialBlockType;
 			this.text = text;
-			Properties = new BlockPropertyDictionary();
+			Properties = new PropertiesDictionary();
 			TextSpans = new TextSpanCollection();
 			accessLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+			previouslyAnalyzedPlugins = new HashSet<IBlockAnalyzerProjectPlugin>();
 		}
 
 		#endregion
@@ -303,6 +292,14 @@ namespace AuthorIntrusion.Common.Blocks
 		private readonly ReaderWriterLockSlim accessLock;
 
 		private BlockType blockType;
+
+		/// <summary>
+		/// Contains the set of block analyzers that have previously processed
+		/// this block.
+		/// </summary>
+		private readonly HashSet<IBlockAnalyzerProjectPlugin>
+			previouslyAnalyzedPlugins;
+
 		private string text;
 		private volatile int version;
 

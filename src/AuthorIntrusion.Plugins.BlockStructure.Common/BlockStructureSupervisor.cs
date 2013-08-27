@@ -4,9 +4,11 @@
 
 using System;
 using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Projects;
 
 namespace AuthorIntrusion.Common.Blocks
 {
+#if REMOVED
 	/// <summary>
 	/// The block type supervisor is a manager class responsible for maintaining
 	/// the relationship between the various blocks based on their types.
@@ -48,6 +50,13 @@ namespace AuthorIntrusion.Common.Blocks
 		/// </summary>
 		public void Update()
 		{
+			// If we are inside interactive processing, we need to skip updates
+			// since this can be an expensive operation.
+			if (Project.ProcessingState == ProjectProcessingState.Batch)
+			{
+				return;
+			}
+
 			// We need to get a write lock on the block since we'll be making changes
 			// to all the blocks and their relationships. This will, in effect, also
 			// ensure no block is being modified.
@@ -105,7 +114,7 @@ namespace AuthorIntrusion.Common.Blocks
 
 					// Assign the new block structure and parent.
 					block.SetParentBlock(newParentBlock);
-					block.SetBlockStructure(newBlockStructure);
+					//block.SetBlockStructure(newBlockStructure);
 				}
 			}
 		}
@@ -118,10 +127,6 @@ namespace AuthorIntrusion.Common.Blocks
 		{
 			// Save the members we need for later referencing.
 			Project = project;
-
-			// Hook up to events we need to ensure the structure of the document.
-			project.Blocks.CollectionChanged += (sender,
-				args) => Update();
 
 			// Set up the default structure which is just one or more paragraphs
 			// and no structural elements.
@@ -139,4 +144,5 @@ namespace AuthorIntrusion.Common.Blocks
 
 		#endregion
 	}
+#endif
 }

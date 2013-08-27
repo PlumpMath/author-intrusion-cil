@@ -10,7 +10,9 @@ using AuthorIntrusion.Common.Blocks.Locking;
 using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Persistence;
 using AuthorIntrusion.Common.Plugins;
+using AuthorIntrusion.Common.Projects;
 using AuthorIntrusion.Common.Tests;
+using AuthorIntrusion.Plugins.BlockStructure;
 using AuthorIntrusion.Plugins.ImmediateBlockTypes;
 using AuthorIntrusion.Plugins.ImmediateCorrection;
 using AuthorIntrusion.Plugins.Spelling;
@@ -37,7 +39,7 @@ namespace AuthorIntrusion.Integration.Tests
 			SetupPlugin(out blocks, out commands, out plugins, out projectPlugin);
 
 			// Assert
-			Assert.AreEqual(7, plugins.Controllers.Count);
+			Assert.AreEqual(8, plugins.Controllers.Count);
 		}
 
 		[Test]
@@ -108,6 +110,9 @@ namespace AuthorIntrusion.Integration.Tests
 				new FileInfo(Path.Combine(testDirectory.FullName, "Project.aiproj"));
 			Project project = persistenceManager.ReadProject(projectFile);
 
+			// Assert: Project
+			Assert.AreEqual(ProjectProcessingState.Interactive, project.ProcessingState);
+
 			// Assert: Block Types
 			block = project.Blocks[0];
 
@@ -115,28 +120,9 @@ namespace AuthorIntrusion.Integration.Tests
 			blocks = project.Blocks;
 
 			Assert.AreEqual(
-				7, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
+				8, project.Plugins.Controllers.Count, "Unexpected number of plugins.");
 			Assert.NotNull(blockTypes["Custom Type"]);
 			Assert.IsFalse(blockTypes["Custom Type"].IsStructural);
-
-			// Assert: Block Structure
-			Assert.AreEqual(
-				blockTypes.Chapter, project.BlockStructures.RootBlockStructure.BlockType);
-			Assert.AreEqual(
-				blockTypes.Scene,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0].BlockType);
-			Assert.AreEqual(
-				blockTypes.Epigraph,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0]
-					.ChildStructures[0].BlockType);
-			Assert.AreEqual(
-				blockTypes.EpigraphAttribution,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0]
-					.ChildStructures[1].BlockType);
-			Assert.AreEqual(
-				blockTypes.Paragraph,
-				project.BlockStructures.RootBlockStructure.ChildStructures[0]
-					.ChildStructures[2].BlockType);
 
 			// Assert: Blocks
 			Assert.AreEqual(10, blocks.Count);
@@ -221,6 +207,7 @@ namespace AuthorIntrusion.Integration.Tests
 			var localWordsPlugin = new LocalWordsPlugin();
 			var immediateCorrectionPlugin = new ImmediateCorrectionPlugin();
 			var immediateBlockTypesPlugin = new ImmediateBlockTypesPlugin();
+			var blockStructurePlugin = new BlockStructurePlugin();
 
 			var pluginManager = new PluginManager(
 				persistencePlugin,
@@ -229,7 +216,8 @@ namespace AuthorIntrusion.Integration.Tests
 				nhunspellPlugin,
 				localWordsPlugin,
 				immediateCorrectionPlugin,
-				immediateBlockTypesPlugin);
+				immediateBlockTypesPlugin,
+				blockStructurePlugin);
 
 			PluginManager.Instance = pluginManager;
 			PersistenceManager.Instance = new PersistenceManager(persistencePlugin);
@@ -243,13 +231,10 @@ namespace AuthorIntrusion.Integration.Tests
 			plugins = project.Plugins;
 
 			// Load in the plugins we'll be using in these tests.
-			plugins.Add("Persistence Framework");
-			plugins.Add("Filesystem Persistence");
-			plugins.Add("Spelling Framework");
-			plugins.Add("NHunspell");
-			plugins.Add("Local Words");
-			plugins.Add("Immediate Correction");
-			plugins.Add("Immediate Block Types");
+			foreach (var plugin in pluginManager.Plugins)
+			{
+				plugins.Add(plugin.Key);
+			}
 
 			// Set up the local words lookup.
 			var localWordsProjectPlugin =

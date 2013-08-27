@@ -10,9 +10,10 @@ using MfGames.HierarchicalPaths;
 namespace AuthorIntrusion.Common.Blocks
 {
 	/// <summary>
-	/// Implements a dictionary of properties to be assigned to a block.
+	/// Implements a dictionary of properties to be assigned to a block or
+	/// project.
 	/// </summary>
-	public class BlockPropertyDictionary: Dictionary<HierarchicalPath, string>
+	public class PropertiesDictionary: Dictionary<HierarchicalPath, string>
 	{
 		#region Methods
 
@@ -42,6 +43,13 @@ namespace AuthorIntrusion.Common.Blocks
 			string value = this[path];
 			TResult result = ExtendableConvert.Instance.Convert<string, TResult>(value);
 			return result;
+		}
+
+		public TResult Get<TResult>(string path, HierarchicalPath rootPath = null)
+		{
+			var key = new HierarchicalPath(path, rootPath);
+			var results = Get<TResult>(key);
+			return results;
 		}
 
 		/// <summary>

@@ -20,7 +20,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			int nonWhitespaceCount;
 
 			// Act
-			WordCounterHelper.CountWords(
+			WordCounter.CountWords(
 				"", out wordCount, out characterCount, out nonWhitespaceCount);
 
 			// Assert
@@ -38,7 +38,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			int nonWhitespaceCount;
 
 			// Act
-			WordCounterHelper.CountWords(
+			WordCounter.CountWords(
 				"cheese", out wordCount, out characterCount, out nonWhitespaceCount);
 
 			// Assert
@@ -56,7 +56,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			int nonWhitespaceCount;
 
 			// Act
-			WordCounterHelper.CountWords(
+			WordCounter.CountWords(
 				"  cheese", out wordCount, out characterCount, out nonWhitespaceCount);
 
 			// Assert
@@ -74,7 +74,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			int nonWhitespaceCount;
 
 			// Act
-			WordCounterHelper.CountWords(
+			WordCounter.CountWords(
 				"cheese  ", out wordCount, out characterCount, out nonWhitespaceCount);
 
 			// Assert
@@ -92,7 +92,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			int nonWhitespaceCount;
 
 			// Act
-			WordCounterHelper.CountWords(
+			WordCounter.CountWords(
 				"cheese-curds", out wordCount, out characterCount, out nonWhitespaceCount);
 
 			// Assert
@@ -110,7 +110,7 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			int nonWhitespaceCount;
 
 			// Act
-			WordCounterHelper.CountWords(
+			WordCounter.CountWords(
 				"cheese curds", out wordCount, out characterCount, out nonWhitespaceCount);
 
 			// Assert

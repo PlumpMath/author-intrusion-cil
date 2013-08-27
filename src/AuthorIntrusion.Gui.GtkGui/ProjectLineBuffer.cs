@@ -26,7 +26,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 	/// Encapsulates an adapter class between the text editor's line buffer and
 	/// the project information.
 	/// </summary>
-	public class ProjectLineBuffer: MultiplexedOperationLineBuffer
+	public class ProjectLineBuffer: MultiplexedOperationLineBuffer,
+		IDisposable
 	{
 		#region Properties
 
@@ -445,6 +446,14 @@ namespace AuthorIntrusion.Gui.GtkGui
 			object sender,
 			PopulateContextMenuArgs args)
 		{
+			// Remove the existing items from the list.
+			var menuItems = new HashSet<Widget>(args.Menu.Children);
+
+			foreach (Widget menuItem in menuItems)
+			{
+				args.Menu.Remove(menuItem);
+			}
+
 			// We need a read lock on both the collection and the specific block
 			// for the given line index.
 			BufferPosition position = editorView.Caret.Position;
@@ -477,27 +486,40 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 					foreach (IEditorAction action in actions)
 					{
-						// Add the separator, if we need it.
-						if (firstItem)
-						{
-							args.Menu.Add(new SeparatorMenuItem());
-							firstItem = false;
-						}
-
-						// Create a menu item and add it.
+						// Create a menu item and hook up events.
 						IEditorAction doAction = action;
 
 						var menuItem = new MenuItem(action.DisplayName);
+
 						menuItem.Activated += delegate
 						{
 							doAction.Do(context);
 							RaiseLineChanged(new LineChangedArgs(blockIndex));
 						};
 
+						// If this is the first item, then make the initial
+						// selection to avoid scrolling.
+						if (firstItem)
+						{
+							menuItem.Select();
+						}
+
+						firstItem = false;
+
+						// Add the item to the popup menu.
 						args.Menu.Add(menuItem);
 					}
 				}
 			}
+		}
+
+		private void OnTextSpansChanged(
+			object sender,
+			BlockEventArgs e)
+		{
+			int blockIndex = blocks.IndexOf(e.Block);
+			var args = new LineChangedArgs(blockIndex);
+			RaiseLineChanged(args);
 		}
 
 		#endregion
@@ -519,7 +541,29 @@ namespace AuthorIntrusion.Gui.GtkGui
 			// Hook up the events.
 			editorView.Controller.PopulateContextMenu += OnPopulateContextMenu;
 			blocks.BlockTextChanged += OnBlockTextChanged;
+			blocks.TextSpansChanged += OnTextSpansChanged;
 			blocks.BlockTypeChanged += OnBlockTypeChanged;
+		}
+
+		#endregion
+
+		#region Destructors
+
+		public void Dispose()
+		{
+			Dispose(true);
+		}
+
+		protected virtual void Dispose(bool isDisposing)
+		{
+			if (isDisposing)
+			{
+				// Disconnect from events.
+				editorView.Controller.PopulateContextMenu -= OnPopulateContextMenu;
+				blocks.BlockTextChanged -= OnBlockTextChanged;
+				blocks.TextSpansChanged -= OnTextSpansChanged;
+				blocks.BlockTypeChanged -= OnBlockTypeChanged;
+			}
 		}
 
 		#endregion

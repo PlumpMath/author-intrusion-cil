@@ -7,8 +7,8 @@
     <ProjectGuid>{2833F47A-335C-468B-89DF-13EAAB33DED6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AuthorIntrusion.Plugins.Counter</RootNamespace>
-    <AssemblyName>AuthorIntrusion.Plugins.Counter</AssemblyName>
+    <RootNamespace>AuthorIntrusion.Plugins.WordCounter</RootNamespace>
+    <AssemblyName>AuthorIntrusion.Plugins.WordCounter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CounterPaths.cs" />
+    <Compile Include="WordCounterPathUtility.cs" />
     <Compile Include="WordCounterProjectPlugin.cs" />
-    <Compile Include="WordCounterHelper.cs" />
+    <Compile Include="WordCounter.cs" />
     <Compile Include="WordCounterPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
