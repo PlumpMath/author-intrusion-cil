@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
 using AuthorIntrusion.Common.Blocks;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
@@ -34,7 +35,10 @@ namespace AuthorIntrusion.Common.Commands
 				block.Text, End, WordSearchDirection.Left);
 			int endIndex = End.GetCharacterIndex(
 				block.Text, TextIndex, WordSearchDirection.Right);
-			string newText = block.Text.Remove(startIndex, endIndex - startIndex);
+
+			int firstIndex = Math.Min(startIndex, endIndex);
+			int lastIndex = Math.Max(startIndex, endIndex);
+			string newText = block.Text.Remove(firstIndex, lastIndex - firstIndex);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
