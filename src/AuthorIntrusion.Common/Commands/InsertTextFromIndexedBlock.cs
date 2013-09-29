@@ -86,7 +86,7 @@ namespace AuthorIntrusion.Common.Commands
 				if (UpdateTextPosition.HasFlag(DoTypes.Do))
 				{
 					context.Position = new BlockPosition(
-						block.BlockKey, characterIndex + sourceText.Length);
+						block.BlockKey, characterIndex);
 				}
 			}
 		}
