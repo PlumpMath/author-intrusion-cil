@@ -85,13 +85,15 @@ namespace AuthorIntrusion.Plugins.Counter
 			// Add in the path for the totals.
 			var totalPath = new HierarchicalPath("Total", rootPath);
 
-			AddDeltas(deltas, totalPath, delta, wordDelta, characterDelta, nonWhitespaceDelta);
+			AddDeltas(
+				deltas, totalPath, delta, wordDelta, characterDelta, nonWhitespaceDelta);
 
 			// Add in a block-type specific path along with a counter.
 			string relativeBlockPath = "Block Types/" + block.BlockType.Name;
 			var blockPath = new HierarchicalPath(relativeBlockPath, rootPath);
 
-			AddDeltas(deltas, blockPath, delta, wordDelta, characterDelta, nonWhitespaceDelta);
+			AddDeltas(
+				deltas, blockPath, delta, wordDelta, characterDelta, nonWhitespaceDelta);
 
 			// Return the resulting delta.
 			return deltas;
@@ -106,7 +108,8 @@ namespace AuthorIntrusion.Plugins.Counter
 		/// <param name="wordDelta">The word delta.</param>
 		/// <param name="characterDelta">The character delta.</param>
 		/// <param name="nonWhitespaceDelta">The non whitespace delta.</param>
-		private static void AddDeltas(IDictionary<HierarchicalPath, int> deltas,
+		private static void AddDeltas(
+			IDictionary<HierarchicalPath, int> deltas,
 			HierarchicalPath rootPath,
 			int delta,
 			int wordDelta,

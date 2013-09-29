@@ -28,9 +28,9 @@ namespace AuthorIntrusion.Common.Commands
 		{
 			// Grab the text from the source line.
 			string sourceLine = context.Blocks[SourceBlockKey].Text;
-			int sourceBegin = CharacterBegin.NormalizeIndex(
+			int sourceBegin = CharacterBegin.GetCharacterIndex(
 				sourceLine, CharacterEnd, WordSearchDirection.Left);
-			int sourceEnd = CharacterEnd.NormalizeIndex(
+			int sourceEnd = CharacterEnd.GetCharacterIndex(
 				sourceLine, CharacterBegin, WordSearchDirection.Right);
 			string sourceText = sourceLine.Substring(
 				sourceBegin, sourceEnd - sourceBegin);
@@ -39,7 +39,7 @@ namespace AuthorIntrusion.Common.Commands
 			string destinationLine = block.Text;
 			var buffer = new StringBuilder(destinationLine);
 			int characterIndex =
-				DestinationPosition.TextIndex.NormalizeIndex(destinationLine);
+				DestinationPosition.TextIndex.GetCharacterIndex(destinationLine);
 
 			buffer.Insert(characterIndex, sourceText);
 

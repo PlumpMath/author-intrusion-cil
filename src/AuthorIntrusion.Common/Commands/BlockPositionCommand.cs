@@ -43,9 +43,9 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		protected BlockPositionCommand(TextPosition position)
-			: base(position.Line)
+			: base(position.LinePosition)
 		{
-			TextIndex = (int) position.Character;
+			TextIndex = (int) position.CharacterPosition;
 		}
 
 		#endregion

@@ -115,9 +115,11 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			{
 				// Create the context for the block commands.
 				var blockContext = new BlockCommandContext(Project);
-				Block currentBlock = Project.Blocks[(int) context.Position.Line];
+				LinePosition linePosition = context.Position.LinePosition;
+				int lineIndex = linePosition.GetLineIndex(Project.Blocks.Count);
+				Block currentBlock = Project.Blocks[lineIndex];
 				blockContext.Position = new BlockPosition(
-					currentBlock, context.Position.Character);
+					currentBlock, context.Position.CharacterPosition);
 
 				// Wrap the command with our wrappers.
 				IWrappedCommand wrappedCommand = WrapCommand(command, context);
@@ -131,8 +133,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(
-						blockIndex, (int) blockPosition.TextIndex);
+					var position = new TextPosition(blockIndex, (int) blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
@@ -161,8 +162,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(
-						blockIndex, (int) blockPosition.TextIndex);
+					var position = new TextPosition(blockIndex, (int) blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
@@ -199,8 +199,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 					BlockPosition blockPosition = blockContext.Position.Value;
 					int blockIndex = Project.Blocks.IndexOf(blockPosition.BlockKey);
 
-					var position = new BufferPosition(
-						blockIndex, (int) blockPosition.TextIndex);
+					var position = new TextPosition(blockIndex, (int) blockPosition.TextIndex);
 
 					// Set the context results.
 					context.Results = new LineBufferOperationResults(position);
@@ -218,7 +217,8 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 			return null;
 		}
 
-		public IWrappedCommand WrapCommand(ICommand<OperationContext> command,
+		public IWrappedCommand WrapCommand(
+			ICommand<OperationContext> command,
 			OperationContext operationContext)
 		{
 			// If the command is a ProjectCommandAdapter, then we want to wrap the

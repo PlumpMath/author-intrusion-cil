@@ -48,14 +48,14 @@ namespace AuthorIntrusion.Common
 		public ProjectProcessingState ProcessingState { get; private set; }
 
 		/// <summary>
-		/// Gets the settings associated with this project.
-		/// </summary>
-		public ProjectSettings Settings { get; private set; }
-
-		/// <summary>
 		/// Gets the properties associated with the block.
 		/// </summary>
 		public PropertiesDictionary Properties { get; private set; }
+
+		/// <summary>
+		/// Gets the settings associated with this project.
+		/// </summary>
+		public ProjectSettings Settings { get; private set; }
 
 		#endregion
 

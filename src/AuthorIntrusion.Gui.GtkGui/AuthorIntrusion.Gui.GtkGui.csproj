@@ -66,22 +66,21 @@
       <HintPath>..\packages\MfGames.4.0.1.0\lib\net40\MfGames.dll</HintPath>
     </Reference>
     <Reference Include="MfGames.Commands">
-      <HintPath>..\packages\MfGames.Commands.0.1.0.0\lib\net45\MfGames.Commands.dll</HintPath>
+      <HintPath>..\packages\MfGames.Commands.0.2.0.0\lib\net45\MfGames.Commands.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.Commands.TextEditing">
-      <HintPath>..\packages\MfGames.Commands.TextEditing.0.1.0.0\lib\net45\MfGames.Commands.TextEditing.dll</HintPath>
+    <Reference Include="MfGames.Commands.TextEditing, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MfGames.Commands.TextEditing.0.2.0.0\lib\net45\MfGames.Commands.TextEditing.dll</HintPath>
     </Reference>
     <Reference Include="MfGames.GtkExt, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MfGames.GtkExt.0.2.0.0\lib\net45\MfGames.GtkExt.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.TextEditor, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.TextEditor.0.3.0.0\lib\net45\MfGames.GtkExt.TextEditor.dll</HintPath>
+    <Reference Include="MfGames.GtkExt.TextEditor">
+      <HintPath>..\packages\MfGames.GtkExt.TextEditor.0.4.0.0\lib\net45\MfGames.GtkExt.TextEditor.dll</HintPath>
     </Reference>
-    <Reference Include="MfGames.GtkExt.TextEditor.Models, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MfGames.GtkExt.TextEditor.Models.0.1.0.0\lib\net45\MfGames.GtkExt.TextEditor.Models.dll</HintPath>
+    <Reference Include="MfGames.GtkExt.TextEditor.Models">
+      <HintPath>..\packages\MfGames.GtkExt.TextEditor.Models.0.2.0.0\lib\net45\MfGames.GtkExt.TextEditor.Models.dll</HintPath>
     </Reference>
     <Reference Include="MfGames.Languages">
       <HintPath>..\packages\MfGames.Languages.0.1.0.0\lib\net45\MfGames.Languages.dll</HintPath>
