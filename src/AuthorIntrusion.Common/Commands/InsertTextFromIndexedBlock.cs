@@ -5,6 +5,7 @@
 using System.Text;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
+using AuthorIntrusion.Common.Extensions;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
 
@@ -20,14 +21,14 @@ namespace AuthorIntrusion.Common.Commands
 			get { return true; }
 		}
 
-		public CharacterPosition CharacterBegin { get; private set; }
-		public CharacterPosition CharacterEnd { get; private set; }
 		public TextPosition DestinationPosition { get; private set; }
 
 		public bool IsTransient
 		{
 			get { return false; }
 		}
+
+		public SingleLineTextRange Range { get; private set; }
 
 		public DoTypes UpdateTextPosition { get; set; }
 		public DoTypes UpdateTextSelection { get; set; }
@@ -47,15 +48,21 @@ namespace AuthorIntrusion.Common.Commands
 				context.Blocks.AcquireBlockLock(
 					RequestLock.Write,
 					RequestLock.Write,
-					(int) DestinationPosition.Line,
+					(int) DestinationPosition.LinePosition,
 					out block))
 			{
 				// Grab the text from the source line.
-				string sourceLine = context.Blocks[SourceBlockIndex].Text;
-				int sourceBegin = CharacterBegin.NormalizeIndex(
-					sourceLine, CharacterEnd, WordSearchDirection.Left);
-				int sourceEnd = CharacterEnd.NormalizeIndex(
-					sourceLine, CharacterBegin, WordSearchDirection.Right);
+				int lineIndex,
+					sourceBegin,
+					sourceEnd;
+				string sourceLine;
+
+				Range.GetBeginAndEndCharacterIndices(
+					context.Blocks,
+					out lineIndex,
+					out sourceBegin,
+					out sourceEnd,
+					out sourceLine);
 				string sourceText = sourceLine.Substring(
 					sourceBegin, sourceEnd - sourceBegin);
 
@@ -63,7 +70,7 @@ namespace AuthorIntrusion.Common.Commands
 				string destinationLine = block.Text;
 				var buffer = new StringBuilder(destinationLine);
 				int characterIndex =
-					DestinationPosition.Character.NormalizeIndex(destinationLine);
+					DestinationPosition.CharacterPosition.GetCharacterIndex(destinationLine);
 
 				buffer.Insert(characterIndex, sourceText);
 
@@ -78,8 +85,7 @@ namespace AuthorIntrusion.Common.Commands
 				// Set the position of this command.
 				if (UpdateTextPosition.HasFlag(DoTypes.Do))
 				{
-					context.Position = new BlockPosition(
-						block.BlockKey, (int) DestinationPosition.Character + sourceText.Length);
+					context.Position = new BlockPosition(block.BlockKey, characterIndex);
 				}
 			}
 		}
@@ -98,7 +104,7 @@ namespace AuthorIntrusion.Common.Commands
 				context.Blocks.AcquireBlockLock(
 					RequestLock.Write,
 					RequestLock.Write,
-					(int) DestinationPosition.Line,
+					(int) DestinationPosition.LinePosition,
 					out block))
 			{
 				// Grab the line from the line buffer.
@@ -116,7 +122,7 @@ namespace AuthorIntrusion.Common.Commands
 				if (UpdateTextPosition.HasFlag(DoTypes.Undo))
 				{
 					context.Position = new BlockPosition(
-						block.BlockKey, DestinationPosition.Character);
+						block.BlockKey, DestinationPosition.CharacterPosition);
 				}
 			}
 		}
@@ -129,19 +135,13 @@ namespace AuthorIntrusion.Common.Commands
 		/// Initializes a new instance of the <see cref="InsertTextFromBlock" /> class.
 		/// </summary>
 		/// <param name="destinationPosition">The position to insert the text into.</param>
-		/// <param name="sourceBlockIndex">Index of the source block.</param>
-		/// <param name="characterBegin">The begin character index in the source block.</param>
-		/// <param name="characterEnd">The end character index in the source block.</param>
+		/// <param name="range">The range.</param>
 		public InsertTextFromIndexedBlock(
 			TextPosition destinationPosition,
-			int sourceBlockIndex,
-			CharacterPosition characterBegin,
-			CharacterPosition characterEnd)
+			SingleLineTextRange range)
 		{
 			DestinationPosition = destinationPosition;
-			SourceBlockIndex = sourceBlockIndex;
-			CharacterBegin = characterBegin;
-			CharacterEnd = characterEnd;
+			Range = range;
 		}
 
 		#endregion

@@ -231,7 +231,7 @@ namespace AuthorIntrusion.Integration.Tests
 			plugins = project.Plugins;
 
 			// Load in the plugins we'll be using in these tests.
-			foreach (var plugin in pluginManager.Plugins)
+			foreach (IPlugin plugin in pluginManager.Plugins)
 			{
 				plugins.Add(plugin.Key);
 			}

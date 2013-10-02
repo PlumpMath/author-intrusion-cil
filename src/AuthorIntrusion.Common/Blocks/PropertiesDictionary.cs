@@ -45,7 +45,9 @@ namespace AuthorIntrusion.Common.Blocks
 			return result;
 		}
 
-		public TResult Get<TResult>(string path, HierarchicalPath rootPath = null)
+		public TResult Get<TResult>(
+			string path,
+			HierarchicalPath rootPath = null)
 		{
 			var key = new HierarchicalPath(path, rootPath);
 			var results = Get<TResult>(key);

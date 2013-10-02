@@ -45,13 +45,24 @@ namespace AuthorIntrusion.Gui.GtkGui
 			var vertical = new VBox(false, 0);
 			Add(vertical);
 
+			// The center part of the area has a horizontal separator with the
+			// bulk of the text editor on the left.
+			var pane = new HPaned
+			{
+				Position = 1024 - 256,
+				BorderWidth = 0,
+			};
+
 			// Create the various components and add them to the vertical box.
 			Widget menuBarWidget = CreateGuiMenubar();
+			Widget panelsWidget = CreatePanelArea();
 			Widget textEditorWidget = CreateGuiEditor();
 			Widget statusBarWidget = CreateGuiStatusbar();
 
+			pane.Pack1(textEditorWidget, true, true);
+			pane.Pack2(panelsWidget, true, true);
 			vertical.PackStart(menuBarWidget, false, false, 0);
-			vertical.PackStart(textEditorWidget, true, true, 0);
+			vertical.PackStart(pane, true, true, 0);
 			vertical.PackStart(statusBarWidget, false, false, 0);
 		}
 
@@ -87,8 +98,8 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 			// Add the editor and bar to the current tab.
 			var editorBand = new HBox(false, 0);
-			editorBand.PackStart(scrolledWindow, true, true, 0);
-			editorBand.PackStart(indicatorFrame, false, false, 4);
+			editorBand.PackStart(indicatorFrame, false, false, 0);
+			editorBand.PackStart(scrolledWindow, true, true, 4);
 
 			// Return the top-most frame.
 			return editorBand;
@@ -167,6 +178,37 @@ namespace AuthorIntrusion.Gui.GtkGui
 		{
 			var statusbar = new Statusbar();
 			return statusbar;
+		}
+
+		/// <summary>
+		/// Creates the hard-coded panel area. This will get replaced with the
+		/// docking widgets at some point, but for the time being, they are set
+		/// as part of code.
+		/// </summary>
+		/// <returns></returns>
+		private Widget CreatePanelArea()
+		{
+			// Create the project pane.
+			var projectTab = new ProjectTabView(projectManager);
+
+			// We have a notepad that contains the the individual elements.
+			var notebook = new Notebook
+			{
+				TabPos = PositionType.Bottom
+			};
+
+			notebook.AppendPage(projectTab, new Label("Project"));
+
+			// Wrap the notebook in a frame for spacing.
+			var frame = new Frame
+			{
+				Child = notebook,
+				BorderWidth = 2,
+				Shadow = ShadowType.None,
+				ShadowType = ShadowType.None,
+			};
+
+			return frame;
 		}
 
 		private void OnDeleteWindow(
@@ -398,7 +440,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			DeleteEvent += OnDeleteWindow;
 
 			// Resize the window to a resonable size.
-			SetSizeRequest(512, 512);
+			SetSizeRequest(1024, 768);
 		}
 
 		#endregion

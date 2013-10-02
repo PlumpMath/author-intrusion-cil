@@ -34,6 +34,54 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 		}
 
 		[Test]
+		public void ChangeSingleBlockTwoWords()
+		{
+			// Arrange
+			ProjectBlockCollection blocks;
+			BlockCommandSupervisor commands;
+			WordCounterProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out projectPlugin);
+
+			// Arrange: Initial insert
+			commands.InsertText(blocks[0], 0, "Line 1");
+			blocks.Project.Plugins.WaitForBlockAnalzyers();
+
+			// Act
+			commands.InsertText(blocks[0], 0, "One ");
+			blocks.Project.Plugins.WaitForBlockAnalzyers();
+
+			// Assert
+			var path = new HierarchicalPath("/Plugins/Word Counter");
+			var total = new HierarchicalPath("Total", path);
+			var paragraph = new HierarchicalPath("Block Types/Paragraph", path);
+			Project project = blocks.Project;
+			PropertiesDictionary blockProperties = blocks[0].Properties;
+			PropertiesDictionary projectProperties = project.Properties;
+
+			Assert.AreEqual(1, project.Plugins.Controllers.Count);
+
+			Assert.AreEqual(3, blockProperties.Get<int>("Words", total));
+			Assert.AreEqual(10, blockProperties.Get<int>("Characters", total));
+			Assert.AreEqual(8, blockProperties.Get<int>("Non-Whitespace", total));
+			Assert.AreEqual(2, blockProperties.Get<int>("Whitespace", total));
+			Assert.AreEqual(1, blockProperties.Get<int>("Count", paragraph));
+			Assert.AreEqual(3, blockProperties.Get<int>("Words", paragraph));
+			Assert.AreEqual(10, blockProperties.Get<int>("Characters", paragraph));
+			Assert.AreEqual(8, blockProperties.Get<int>("Non-Whitespace", paragraph));
+			Assert.AreEqual(2, blockProperties.Get<int>("Whitespace", paragraph));
+
+			Assert.AreEqual(3, projectProperties.Get<int>("Words", total));
+			Assert.AreEqual(10, projectProperties.Get<int>("Characters", total));
+			Assert.AreEqual(8, projectProperties.Get<int>("Non-Whitespace", total));
+			Assert.AreEqual(2, projectProperties.Get<int>("Whitespace", total));
+			Assert.AreEqual(1, projectProperties.Get<int>("Count", paragraph));
+			Assert.AreEqual(3, projectProperties.Get<int>("Words", paragraph));
+			Assert.AreEqual(10, projectProperties.Get<int>("Characters", paragraph));
+			Assert.AreEqual(8, projectProperties.Get<int>("Non-Whitespace", paragraph));
+			Assert.AreEqual(2, projectProperties.Get<int>("Whitespace", paragraph));
+		}
+
+		[Test]
 		public void CountComplexSetup()
 		{
 			// Arrange
@@ -100,6 +148,54 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 		}
 
 		[Test]
+		public void InsertTwoBlocksFourWords()
+		{
+			// Arrange
+			ProjectBlockCollection blocks;
+			BlockCommandSupervisor commands;
+			WordCounterProjectPlugin projectPlugin;
+			SetupPlugin(out blocks, out commands, out projectPlugin);
+
+			// Arrange: Initial insert
+			commands.InsertText(blocks[0], 0, "Line 1");
+			blocks.Project.Plugins.WaitForBlockAnalzyers();
+
+			blocks.Add(new Block(blocks));
+
+			// Act
+			commands.InsertText(blocks[1], 0, "Line 2");
+			blocks.Project.Plugins.WaitForBlockAnalzyers();
+
+			// Assert
+			var path = new HierarchicalPath("/Plugins/Word Counter");
+			var total = new HierarchicalPath("Total", path);
+			var paragraph = new HierarchicalPath("Block Types/Paragraph", path);
+			Project project = blocks.Project;
+			PropertiesDictionary blockProperties = blocks[0].Properties;
+			PropertiesDictionary projectProperties = project.Properties;
+
+			Assert.AreEqual(2, blockProperties.Get<int>("Words", total));
+			Assert.AreEqual(6, blockProperties.Get<int>("Characters", total));
+			Assert.AreEqual(5, blockProperties.Get<int>("Non-Whitespace", total));
+			Assert.AreEqual(1, blockProperties.Get<int>("Whitespace", total));
+			Assert.AreEqual(1, blockProperties.Get<int>("Count", paragraph));
+			Assert.AreEqual(2, blockProperties.Get<int>("Words", paragraph));
+			Assert.AreEqual(6, blockProperties.Get<int>("Characters", paragraph));
+			Assert.AreEqual(5, blockProperties.Get<int>("Non-Whitespace", paragraph));
+			Assert.AreEqual(1, blockProperties.Get<int>("Whitespace", paragraph));
+
+			Assert.AreEqual(4, projectProperties.Get<int>("Words", total));
+			Assert.AreEqual(12, projectProperties.Get<int>("Characters", total));
+			Assert.AreEqual(10, projectProperties.Get<int>("Non-Whitespace", total));
+			Assert.AreEqual(2, projectProperties.Get<int>("Whitespace", total));
+			Assert.AreEqual(2, projectProperties.Get<int>("Count", paragraph));
+			Assert.AreEqual(4, projectProperties.Get<int>("Words", paragraph));
+			Assert.AreEqual(12, projectProperties.Get<int>("Characters", paragraph));
+			Assert.AreEqual(10, projectProperties.Get<int>("Non-Whitespace", paragraph));
+			Assert.AreEqual(2, projectProperties.Get<int>("Whitespace", paragraph));
+		}
+
+		[Test]
 		public void SingleBlockTwoWords()
 		{
 			// Arrange
@@ -140,102 +236,6 @@ namespace AuthorIntrusion.Plugins.Counter.Tests
 			Assert.AreEqual(6, projectProperties.Get<int>("Characters", paragraph));
 			Assert.AreEqual(5, projectProperties.Get<int>("Non-Whitespace", paragraph));
 			Assert.AreEqual(1, projectProperties.Get<int>("Whitespace", paragraph));
-		}
-
-		[Test]
-		public void ChangeSingleBlockTwoWords()
-		{
-			// Arrange
-			ProjectBlockCollection blocks;
-			BlockCommandSupervisor commands;
-			WordCounterProjectPlugin projectPlugin;
-			SetupPlugin(out blocks,out commands,out projectPlugin);
-
-			// Arrange: Initial insert
-			commands.InsertText(blocks[0],0,"Line 1");
-			blocks.Project.Plugins.WaitForBlockAnalzyers();
-
-			// Act
-			commands.InsertText(blocks[0],0,"One ");
-			blocks.Project.Plugins.WaitForBlockAnalzyers();
-
-			// Assert
-			var path = new HierarchicalPath("/Plugins/Word Counter");
-			var total = new HierarchicalPath("Total",path);
-			var paragraph = new HierarchicalPath("Block Types/Paragraph",path);
-			Project project = blocks.Project;
-			PropertiesDictionary blockProperties = blocks[0].Properties;
-			PropertiesDictionary projectProperties = project.Properties;
-
-			Assert.AreEqual(1,project.Plugins.Controllers.Count);
-
-			Assert.AreEqual(3,blockProperties.Get<int>("Words",total));
-			Assert.AreEqual(10,blockProperties.Get<int>("Characters",total));
-			Assert.AreEqual(8,blockProperties.Get<int>("Non-Whitespace",total));
-			Assert.AreEqual(2,blockProperties.Get<int>("Whitespace",total));
-			Assert.AreEqual(1,blockProperties.Get<int>("Count",paragraph));
-			Assert.AreEqual(3,blockProperties.Get<int>("Words",paragraph));
-			Assert.AreEqual(10,blockProperties.Get<int>("Characters",paragraph));
-			Assert.AreEqual(8,blockProperties.Get<int>("Non-Whitespace",paragraph));
-			Assert.AreEqual(2,blockProperties.Get<int>("Whitespace",paragraph));
-
-			Assert.AreEqual(3,projectProperties.Get<int>("Words",total));
-			Assert.AreEqual(10,projectProperties.Get<int>("Characters",total));
-			Assert.AreEqual(8,projectProperties.Get<int>("Non-Whitespace",total));
-			Assert.AreEqual(2,projectProperties.Get<int>("Whitespace",total));
-			Assert.AreEqual(1,projectProperties.Get<int>("Count",paragraph));
-			Assert.AreEqual(3,projectProperties.Get<int>("Words",paragraph));
-			Assert.AreEqual(10,projectProperties.Get<int>("Characters",paragraph));
-			Assert.AreEqual(8,projectProperties.Get<int>("Non-Whitespace",paragraph));
-			Assert.AreEqual(2,projectProperties.Get<int>("Whitespace",paragraph));
-		}
-
-		[Test]
-		public void InsertTwoBlocksFourWords()
-		{
-			// Arrange
-			ProjectBlockCollection blocks;
-			BlockCommandSupervisor commands;
-			WordCounterProjectPlugin projectPlugin;
-			SetupPlugin(out blocks,out commands,out projectPlugin);
-
-			// Arrange: Initial insert
-			commands.InsertText(blocks[0],0,"Line 1");
-			blocks.Project.Plugins.WaitForBlockAnalzyers();
-
-			blocks.Add(new Block(blocks));
-
-			// Act
-			commands.InsertText(blocks[1],0,"Line 2");
-			blocks.Project.Plugins.WaitForBlockAnalzyers();
-
-			// Assert
-			var path = new HierarchicalPath("/Plugins/Word Counter");
-			var total = new HierarchicalPath("Total",path);
-			var paragraph = new HierarchicalPath("Block Types/Paragraph",path);
-			Project project = blocks.Project;
-			PropertiesDictionary blockProperties = blocks[0].Properties;
-			PropertiesDictionary projectProperties = project.Properties;
-
-			Assert.AreEqual(2,blockProperties.Get<int>("Words",total));
-			Assert.AreEqual(6,blockProperties.Get<int>("Characters",total));
-			Assert.AreEqual(5,blockProperties.Get<int>("Non-Whitespace",total));
-			Assert.AreEqual(1,blockProperties.Get<int>("Whitespace",total));
-			Assert.AreEqual(1,blockProperties.Get<int>("Count",paragraph));
-			Assert.AreEqual(2,blockProperties.Get<int>("Words",paragraph));
-			Assert.AreEqual(6,blockProperties.Get<int>("Characters",paragraph));
-			Assert.AreEqual(5,blockProperties.Get<int>("Non-Whitespace",paragraph));
-			Assert.AreEqual(1,blockProperties.Get<int>("Whitespace",paragraph));
-
-			Assert.AreEqual(4,projectProperties.Get<int>("Words",total));
-			Assert.AreEqual(12,projectProperties.Get<int>("Characters",total));
-			Assert.AreEqual(10,projectProperties.Get<int>("Non-Whitespace",total));
-			Assert.AreEqual(2,projectProperties.Get<int>("Whitespace",total));
-			Assert.AreEqual(2,projectProperties.Get<int>("Count",paragraph));
-			Assert.AreEqual(4,projectProperties.Get<int>("Words",paragraph));
-			Assert.AreEqual(12,projectProperties.Get<int>("Characters",paragraph));
-			Assert.AreEqual(10,projectProperties.Get<int>("Non-Whitespace",paragraph));
-			Assert.AreEqual(2,projectProperties.Get<int>("Whitespace",paragraph));
 		}
 
 		/// <summary>

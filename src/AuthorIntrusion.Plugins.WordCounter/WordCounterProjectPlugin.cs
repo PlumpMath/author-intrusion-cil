@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AuthorIntrusion.Common;
 using AuthorIntrusion.Common.Blocks;
 using AuthorIntrusion.Common.Blocks.Locking;
@@ -71,8 +70,9 @@ namespace AuthorIntrusion.Plugins.Counter
 
 			// Build up a dictionary of changes so we can have a simple loop to
 			// set them in the various elements.
-			Dictionary<HierarchicalPath, int> deltas = WordCounterPathUtility.GetDeltas(
-				this, block, delta, wordDelta, characterDelta, nonWhitespaceDelta);
+			Dictionary<HierarchicalPath, int> deltas =
+				WordCounterPathUtility.GetDeltas(
+					this, block, delta, wordDelta, characterDelta, nonWhitespaceDelta);
 
 			// Get a write lock on the blocks list and update that block and all
 			// parent blocks in the document.

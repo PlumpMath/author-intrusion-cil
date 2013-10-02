@@ -3,7 +3,6 @@
 // http://mfgames.com/author-intrusion/license
 
 using System.Collections.Generic;
-using System.Globalization;
 using System.Xml;
 using AuthorIntrusion.Common.Blocks;
 

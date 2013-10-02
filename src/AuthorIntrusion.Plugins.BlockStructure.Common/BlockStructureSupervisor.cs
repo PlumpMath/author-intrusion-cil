@@ -2,10 +2,6 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
-using System;
-using AuthorIntrusion.Common.Blocks.Locking;
-using AuthorIntrusion.Common.Projects;
-
 namespace AuthorIntrusion.Common.Blocks
 {
 #if REMOVED

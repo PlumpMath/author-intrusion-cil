@@ -23,16 +23,17 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 			// We need a read lock on the block so we can retrieve information.
 			Block block;
-			var blockIndex = (int) destinationPosition.Line;
+			var blockIndex = (int) destinationPosition.LinePosition;
 
 			using (
 				Project.Blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
 			{
-				int characterIndex = destinationPosition.Character.NormalizeIndex(
-					block.Text);
+				int characterIndex =
+					destinationPosition.CharacterPosition.GetCharacterIndex(block.Text);
 
-				var bufferPosition = new BufferPosition(
-					(int) destinationPosition.Line, (characterIndex + block.Text.Length));
+				var bufferPosition = new TextPosition(
+					destinationPosition.LinePosition,
+					new CharacterPosition(characterIndex + block.Text.Length));
 				context.Results = new LineBufferOperationResults(bufferPosition);
 			}
 		}
@@ -43,16 +44,17 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 			// We need a read lock on the block so we can retrieve information.
 			Block block;
-			var blockIndex = (int) destinationPosition.Line;
+			var blockIndex = (int) destinationPosition.LinePosition;
 
 			using (
 				Project.Blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
 			{
-				int characterIndex = destinationPosition.Character.NormalizeIndex(
-					block.Text);
+				int characterIndex =
+					destinationPosition.CharacterPosition.GetCharacterIndex(block.Text);
 
-				var bufferPosition = new BufferPosition(
-					(int) destinationPosition.Line, (characterIndex + block.Text.Length));
+				var bufferPosition = new TextPosition(
+					(int) destinationPosition.LinePosition,
+					(characterIndex + block.Text.Length));
 				context.Results = new LineBufferOperationResults(bufferPosition);
 			}
 		}
@@ -72,10 +74,7 @@ namespace AuthorIntrusion.Gui.GtkGui.Commands
 
 			// Create the project command wrapper.
 			var command = new InsertTextFromIndexedBlock(
-				destinationPosition,
-				(int) sourceRange.Line,
-				sourceRange.CharacterBegin,
-				sourceRange.CharacterEnd);
+				destinationPosition, sourceRange);
 
 			// Set the command into the adapter.
 			Command = command;

@@ -2,6 +2,7 @@
 // Released under the MIT license
 // http://mfgames.com/author-intrusion/license
 
+using System;
 using AuthorIntrusion.Common.Blocks;
 using MfGames.Commands;
 using MfGames.Commands.TextEditing;
@@ -30,11 +31,14 @@ namespace AuthorIntrusion.Common.Commands
 			originalPosition = context.Position;
 
 			// Figure out what the new text string would be.
-			startIndex = BlockPosition.TextIndex.NormalizeIndex(
+			startIndex = BlockPosition.TextIndex.GetCharacterIndex(
 				block.Text, End, WordSearchDirection.Left);
-			int endIndex = End.NormalizeIndex(
+			int endIndex = End.GetCharacterIndex(
 				block.Text, TextIndex, WordSearchDirection.Right);
-			string newText = block.Text.Remove(startIndex, endIndex - startIndex);
+
+			int firstIndex = Math.Min(startIndex, endIndex);
+			int lastIndex = Math.Max(startIndex, endIndex);
+			string newText = block.Text.Remove(firstIndex, lastIndex - firstIndex);
 
 			// Set the new text into the block. This will fire various events to
 			// trigger the immediate and background processing.
@@ -72,10 +76,10 @@ namespace AuthorIntrusion.Common.Commands
 		}
 
 		public DeleteTextCommand(SingleLineTextRange range)
-			: base(new TextPosition(range.Line, range.CharacterBegin))
+			: base(new TextPosition(range.LinePosition, range.BeginCharacterPosition))
 		{
 			// DREM ToTextPosition
-			End = range.CharacterEnd;
+			End = range.EndCharacterPosition;
 		}
 
 		#endregion

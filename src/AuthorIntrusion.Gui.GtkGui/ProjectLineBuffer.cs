@@ -14,11 +14,12 @@ using AuthorIntrusion.Common.Commands;
 using AuthorIntrusion.Common.Events;
 using Gtk;
 using MfGames.Commands;
+using MfGames.Commands.TextEditing;
 using MfGames.GtkExt;
 using MfGames.GtkExt.TextEditor;
 using MfGames.GtkExt.TextEditor.Events;
-using MfGames.GtkExt.TextEditor.Models;
 using MfGames.GtkExt.TextEditor.Models.Buffers;
+using MfGames.GtkExt.TextEditor.Models.Extensions;
 
 namespace AuthorIntrusion.Gui.GtkGui
 {
@@ -233,7 +234,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			//	// command manager.
 			//	var results =
 			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+			//			new TextPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
 			//	return results;
 			//}
 			throw new NotImplementedException();
@@ -243,25 +244,25 @@ namespace AuthorIntrusion.Gui.GtkGui
 			InsertTextOperation operation)
 		{
 			//// We need a write lock on the block and a read lock on the blocks.
-			//Block block = blocks[operation.BufferPosition.LineIndex];
+			//Block block = blocks[operation.TextPosition.LineIndex];
 
 			//using (block.AcquireBlockLock(RequestLock.Write))
 			//{
 			//	// Create the command and submit it to the project's command manager.
 			//	var command =
 			//		new InsertTextCommand(
-			//			new BlockPosition(block.BlockKey, operation.BufferPosition.CharacterIndex),
+			//			new BlockPosition(block.BlockKey, operation.TextPosition.CharacterIndex),
 			//			operation.Text);
 			//	commands.Do(command);
 
 			//	// Fire a line changed operation.
-			//	RaiseLineChanged(new LineChangedArgs(operation.BufferPosition.LineIndex));
+			//	RaiseLineChanged(new LineChangedArgs(operation.TextPosition.LineIndex));
 
 			//	// Construct the operation results for the delete from information in the
 			//	// command manager.
 			//	var results =
 			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+			//			new TextPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
 			//	return results;
 			//}
 			throw new NotImplementedException();
@@ -285,7 +286,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			//	// command manager.
 			//	var results =
 			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+			//			new TextPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
 			//	return results;
 			//}
 			throw new NotImplementedException();
@@ -312,7 +313,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			//	// command manager.
 			//	var results =
 			//		new LineBufferOperationResults(
-			//			new BufferPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
+			//			new TextPosition(blocks.IndexOf(block), commands.LastPosition.TextIndex));
 			//	return results;
 			//}
 			throw new NotImplementedException();
@@ -349,7 +350,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			//	// command manager.
 			//	var results =
 			//		new LineBufferOperationResults(
-			//			new BufferPosition(operation.LineIndex, commands.LastPosition.TextIndex));
+			//			new TextPosition(operation.LineIndex, commands.LastPosition.TextIndex));
 			//	return results;
 			//}
 			throw new NotImplementedException();
@@ -414,8 +415,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 				project.Blocks.IndexOf(project.Commands.LastPosition.BlockKey);
 			var results =
 				new LineBufferOperationResults(
-					new BufferPosition(
-						blockIndex, (int) project.Commands.LastPosition.TextIndex));
+					new TextPosition(blockIndex, (int) project.Commands.LastPosition.TextIndex));
 			return results;
 		}
 
@@ -456,8 +456,10 @@ namespace AuthorIntrusion.Gui.GtkGui
 
 			// We need a read lock on both the collection and the specific block
 			// for the given line index.
-			BufferPosition position = editorView.Caret.Position;
-			int blockIndex = position.LineIndex;
+			TextPosition position = editorView.Caret.Position;
+			int blockIndex =
+				position.LinePosition.GetLineIndex(editorView.LineBuffer.LineCount);
+			int characterIndex = position.GetCharacterIndex(editorView.LineBuffer);
 			Block block;
 
 			var context = new BlockCommandContext(project);
@@ -465,7 +467,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 			using (blocks.AcquireBlockLock(RequestLock.Read, blockIndex, out block))
 			{
 				// Figure out if we have any spans for this position.
-				if (!block.TextSpans.Contains(position.CharacterIndex))
+				if (!block.TextSpans.Contains(characterIndex))
 				{
 					// Nothing to add, so we can stop processing.
 					return;
@@ -474,7 +476,7 @@ namespace AuthorIntrusion.Gui.GtkGui
 				// Gather up all the text spans for the current position in the line.
 				var textSpans = new List<TextSpan>();
 
-				textSpans.AddRange(block.TextSpans.GetAll(position.CharacterIndex));
+				textSpans.AddRange(block.TextSpans.GetAll(characterIndex));
 
 				// Gather up the menu items for this point.
 				bool firstItem = true;
