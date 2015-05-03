@@ -5,14 +5,13 @@
 //   MIT License (MIT)
 // </license>
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
 	/// <summary>
 	/// Verifies the result of inserting five lines.
 	/// </summary>
-	[TestFixture]
 	public class InsertFiveLines : MemoryBufferTests
 	{
 		#region Public Methods and Operators
@@ -20,11 +19,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that the buffer has the correct number of lines.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HasCorrectLineCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				5,
 				State.Lines.Count);
 		}
@@ -32,11 +31,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void Line1HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"zero one two three four",
 				State.Lines[0].Tokens.GetVisibleText());
 		}
@@ -44,11 +43,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void Line1HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				9,
 				State.Lines[0].Tokens.Count);
 		}
@@ -56,11 +55,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 2 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void Line2HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"five six seven eight nine",
 				State.Lines[1].Tokens.GetVisibleText());
 		}
@@ -68,11 +67,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 3 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void Line3HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"ten eleven twelve thirteen fourteen",
 				State.Lines[2].Tokens.GetVisibleText());
 		}
@@ -80,11 +79,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 4 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void Line4HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"fifteen sixteen seventeen eighteen nineteen",
 				State.Lines[3].Tokens.GetVisibleText());
 		}
@@ -92,11 +91,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 5 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void Line5HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"twenty twenty-one twenty-two twenty-three twenty-four",
 				State.Lines[4].Tokens.GetVisibleText());
 		}

@@ -8,8 +8,6 @@
 using System;
 using System.Collections.Generic;
 
-using NUnit.Framework;
-
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
 	/// <summary>
@@ -108,7 +106,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			}
 
 			// Fail the test.
-			Assert.Fail("Expected lines did not match.");
+			throw new Exception("Expected lines did not match.");
 		}
 
 		#endregion

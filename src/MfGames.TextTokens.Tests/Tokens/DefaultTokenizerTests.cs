@@ -10,7 +10,7 @@ using System.Linq;
 
 using MfGames.TextTokens.Tokens;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests.Tokens
 {
@@ -18,7 +18,6 @@ namespace MfGames.TextTokens.Tests.Tokens
 	/// Tests the functionality of the default token parser to ensure it produces the
 	/// correct tokens.
 	/// </summary>
-	[TestFixture]
 	public class DefaultTokenizerTests
 	{
 		#region Public Methods and Operators
@@ -26,7 +25,7 @@ namespace MfGames.TextTokens.Tests.Tokens
 		/// <summary>
 		/// Verifies how the splitter handles a blank (empty) string.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleBlankString()
 		{
 			// Arrange
@@ -38,19 +37,17 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				0,
-				results.Count,
-				"The number of tokens is unexpected.");
+				results.Count);
 		}
 
 		/// <summary>
 		/// Verifies how the splitter works with a contraction.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleContraction()
 		{
 			// Arrange
@@ -62,31 +59,26 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				3,
-				results.Count,
-				"The number of tokens is unexpected.");
-			Assert.AreEqual(
+				results.Count);
+			Assert.Equal(
 				"didn",
-				results[0],
-				"1st result is unexpected.");
-			Assert.AreEqual(
+				results[0]);
+			Assert.Equal(
 				"'",
-				results[1],
-				"2nd result is unexpected.");
-			Assert.AreEqual(
+				results[1]);
+			Assert.Equal(
 				"t",
-				results[2],
-				"3rd result is unexpected.");
+				results[2]);
 		}
 
 		/// <summary>
 		/// Verifies how the token handles a leading underscore.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleLeadingUnderscoreTwoWordsString()
 		{
 			// Arrange
@@ -98,36 +90,30 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				4,
-				results.Count,
-				"The number of tokens is unexpected.");
+				results.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				"_",
-				results[0],
-				"1st token is unexpected.");
-			Assert.AreEqual(
+				results[0]);
+			Assert.Equal(
 				"e",
-				results[1],
-				"2nd token is unexpected.");
-			Assert.AreEqual(
+				results[1]);
+			Assert.Equal(
 				" ",
-				results[2],
-				"3rd token is unexpected.");
-			Assert.AreEqual(
+				results[2]);
+			Assert.Equal(
 				"two",
-				results[3],
-				"4th token is unexpected.");
+				results[3]);
 		}
 
 		/// <summary>
 		/// Verifies how the splitter handles a null.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleNullString()
 		{
 			// Arrange
@@ -139,19 +125,17 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				0,
-				results.Count,
-				"The number of tokens is unexpected.");
+				results.Count);
 		}
 
 		/// <summary>
 		/// Verifies how the splitter handles a single word string.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleSingleWordString()
 		{
 			// Arrange
@@ -163,19 +147,17 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				1,
-				results.Count,
-				"The number of tokens is unexpected.");
+				results.Count);
 		}
 
 		/// <summary>
 		/// Verifies how the splitter handles a single space.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleSpaceString()
 		{
 			// Arrange
@@ -187,19 +169,17 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				1,
-				results.Count,
-				"The number of tokens is unexpected.");
+				results.Count);
 		}
 
 		/// <summary>
 		/// Verifies how the splitter handles three, space-separated words.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleThreeWordsString()
 		{
 			// Arrange
@@ -211,40 +191,33 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				5,
-				results.Count,
-				"The number of tokens is unexpected.");
+				results.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				"one",
-				results[0],
-				"1st token is unexpected.");
-			Assert.AreEqual(
+				results[0]);
+			Assert.Equal(
 				" ",
-				results[1],
-				"2nd token is unexpected.");
-			Assert.AreEqual(
+				results[1]);
+			Assert.Equal(
 				"two",
-				results[2],
-				"3rd token is unexpected.");
-			Assert.AreEqual(
+				results[2]);
+			Assert.Equal(
 				" ",
-				results[3],
-				"4th token is unexpected.");
-			Assert.AreEqual(
+				results[3]);
+			Assert.Equal(
 				"three",
-				results[4],
-				"5th token is unexpected.");
+				results[4]);
 		}
 
 		/// <summary>
 		/// Verifies how the splitter handles two sequential spaces.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HandleTwoSpacesString()
 		{
 			// Arrange
@@ -256,13 +229,11 @@ namespace MfGames.TextTokens.Tests.Tokens
 				.ToList();
 
 			// Assert
-			Assert.IsNotNull(
-				results,
-				"The results were null");
-			Assert.AreEqual(
+			Assert.NotNull(
+				results);
+			Assert.Equal(
 				1,
-				results.Count,
-				"The number of tokens is unexpected.");
+				results.Count);
 		}
 
 		#endregion

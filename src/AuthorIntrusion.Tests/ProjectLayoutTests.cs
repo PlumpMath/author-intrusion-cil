@@ -11,14 +11,13 @@ using AuthorIntrusion.Buffers;
 
 using MarkdownLog;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Tests
 {
 	/// <summary>
 	/// Tests functionality for applying layouts and the resulting regions.
 	/// </summary>
-	[TestFixture]
 	public class ProjectLayoutTests
 	{
 		#region Public Methods and Operators
@@ -26,7 +25,7 @@ namespace AuthorIntrusion.Tests
 		/// <summary>
 		/// Tests applying a single region from the default.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void ApplySingleInternalLayout()
 		{
 			// Set up the layout.
@@ -49,26 +48,21 @@ namespace AuthorIntrusion.Tests
 			project.ApplyLayout(projectLayout);
 
 			// Assert the results.
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				project.Regions.Count,
-				"Number of regions is unexpected.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("project"),
-				"Cannot find root project region.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("region-1"),
-				"Cannot find region 1.");
+				project.Regions.Count);
+			Assert.True(
+				project.Regions.ContainsKey("project"));
+			Assert.True(
+				project.Regions.ContainsKey("region-1"));
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				project.Regions["project"].Blocks.Count,
-				"The root region has an unexpected number of blocks.");
+				project.Regions["project"].Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				project.Regions["region-1"].Blocks.Count,
-				"The region-1 region has an unexpected number of blocks.");
+				project.Regions["region-1"].Blocks.Count);
 
 			// Write out the final state.
 			var markdown = new MarkdownContainer();
@@ -82,7 +76,7 @@ namespace AuthorIntrusion.Tests
 		/// <summary>
 		/// Tests applying two serial Internal regions.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void ApplyTwoInternalLayout()
 		{
 			// Set up the layout.
@@ -112,34 +106,27 @@ namespace AuthorIntrusion.Tests
 			project.ApplyLayout(projectLayout);
 
 			// Assert the results.
-			Assert.AreEqual(
+			Assert.Equal(
 				3,
-				project.Regions.Count,
-				"Number of regions is unexpected.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("project"),
-				"Cannot find root project region.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("region-1"),
-				"Cannot find region 1.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("region-2"),
-				"Cannot find region 2.");
+				project.Regions.Count);
+			Assert.True(
+				project.Regions.ContainsKey("project"));
+			Assert.True(
+				project.Regions.ContainsKey("region-1"));
+			Assert.True(
+				project.Regions.ContainsKey("region-2"));
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				project.Regions["project"].Blocks.Count,
-				"The root region has an unexpected number of blocks.");
+				project.Regions["project"].Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				project.Regions["region-1"].Blocks.Count,
-				"The region-1 region has an unexpected number of blocks.");
+				project.Regions["region-1"].Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				project.Regions["region-2"].Blocks.Count,
-				"The region-2 region has an unexpected number of blocks.");
+				project.Regions["region-2"].Blocks.Count);
 
 			// Write out the final state.
 			var markdown = new MarkdownContainer();
@@ -153,7 +140,7 @@ namespace AuthorIntrusion.Tests
 		/// <summary>
 		/// Tests applying two nested Internal regions.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void ApplyTwoNestedInternalLayout()
 		{
 			// Set up the layout.
@@ -183,34 +170,27 @@ namespace AuthorIntrusion.Tests
 			project.ApplyLayout(projectLayout);
 
 			// Assert the results.
-			Assert.AreEqual(
+			Assert.Equal(
 				3,
-				project.Regions.Count,
-				"Number of regions is unexpected.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("project"),
-				"Cannot find root project region.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("region-1"),
-				"Cannot find region 1.");
-			Assert.IsTrue(
-				project.Regions.ContainsKey("region-2"),
-				"Cannot find region 2.");
+				project.Regions.Count);
+			Assert.True(
+				project.Regions.ContainsKey("project"));
+			Assert.True(
+				project.Regions.ContainsKey("region-1"));
+			Assert.True(
+				project.Regions.ContainsKey("region-2"));
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				project.Regions["project"].Blocks.Count,
-				"The root region has an unexpected number of blocks.");
+				project.Regions["project"].Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				project.Regions["region-1"].Blocks.Count,
-				"The region-1 region has an unexpected number of blocks.");
+				project.Regions["region-1"].Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				project.Regions["region-2"].Blocks.Count,
-				"The region-2 region has an unexpected number of blocks.");
+				project.Regions["region-2"].Blocks.Count);
 
 			// Write out the final state.
 			var markdown = new MarkdownContainer();

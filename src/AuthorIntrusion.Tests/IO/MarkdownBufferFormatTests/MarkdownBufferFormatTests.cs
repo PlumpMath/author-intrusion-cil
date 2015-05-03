@@ -11,14 +11,13 @@ using AuthorIntrusion.Metadata;
 
 using MfGames.HierarchicalPaths;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
 	/// <summary>
 	/// Tests various parsing various input into the MarkdownBufferFormat.
 	/// </summary>
-	[TestFixture]
 	public class MarkdownBufferFormatTests
 	{
 		#region Public Methods and Operators
@@ -26,7 +25,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Tests reading a blank-line separated content.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void BlankSeparatedParagraphs()
 		{
 			// Create the test input.
@@ -51,24 +50,21 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			// Verify the contents.
 			BlockCollection contents = project.Blocks;
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				contents.Count,
-				"Number of output lines was unexpected.");
-			Assert.AreEqual(
+				contents.Count);
+			Assert.Equal(
 				"One Two Three.",
-				contents[0].Text,
-				"1st output line was unexpected.");
-			Assert.AreEqual(
+				contents[0].Text);
+			Assert.Equal(
 				"Four Five Six.",
-				contents[1].Text,
-				"2nd output line was unexpected.");
+				contents[1].Text);
 		}
 
 		/// <summary>
 		/// Tests reading contents that have a leading blank line before the text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void LeadingBlankLineYamlMetadata()
 		{
 			// Create the test input.
@@ -96,35 +92,31 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			// Verify the metadata.
 			MetadataKey titleKey = project.MetadataManager["Scalar"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				metadata.Count,
-				"Number of metadata keys is unexpected.");
-			Assert.IsTrue(
+				metadata.Count);
+			Assert.True(
 				metadata.ContainsKey(titleKey),
 				"Could not find Scalar key in metadata.");
-			Assert.AreEqual(
+			Assert.Equal(
 				"Unit Test",
-				metadata[titleKey].Value,
-				"Value of Scalar was unexpected.");
+				metadata[titleKey].Value);
 
 			// Verify the contents.
 			BlockCollection contents = project.Blocks;
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				contents.Count,
-				"Number of output lines was unexpected.");
-			Assert.AreEqual(
+				contents.Count);
+			Assert.Equal(
 				"One Two Three.",
-				contents[0].Text,
-				"1st output line was unexpected.");
+				contents[0].Text);
 		}
 
 		/// <summary>
 		/// Tests reading a single external region.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void LoadExternalSingleRegion()
 		{
 			// Create the test input.
@@ -173,34 +165,29 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			// Verify the contents of the project.
 			Region region1 = project.Regions["region-1"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				project.Blocks.Count,
-				"Number of lines in the project was unexpected.");
-			Assert.AreEqual(
+				project.Blocks.Count);
+			Assert.Equal(
 				BlockType.Region,
-				project.Blocks[0].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				project.Blocks[0].BlockType);
+			Assert.Equal(
 				region1,
-				project.Blocks[0].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				project.Blocks[0].LinkedRegion);
 
 			// Get the second region.
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				region1.Blocks.Count,
-				"Number of lines in region 1 was unexpected.");
-			Assert.AreEqual(
+				region1.Blocks.Count);
+			Assert.Equal(
 				"Text in region 1.",
-				region1.Blocks[0].Text,
-				"The text in region 1 was unexpected.");
+				region1.Blocks[0].Text);
 		}
 
 		/// <summary>
 		/// Tests reading input that has no metadata.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void NoYamlMetadata()
 		{
 			// Create the test input.
@@ -222,28 +209,25 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			format.LoadProject(context);
 
 			// Verify the metadata.
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				metadata.Count,
-				"Number of metadata keys is unexpected.");
+				metadata.Count);
 
 			// Verify the contents.
 			BlockCollection contents = project.Blocks;
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				contents.Count,
-				"Number of output lines was unexpected.");
-			Assert.AreEqual(
+				contents.Count);
+			Assert.Equal(
 				"One Two Three.",
-				contents[0].Text,
-				"1st output line was unexpected.");
+				contents[0].Text);
 		}
 
 		/// <summary>
 		/// Tests reading in a single line Markdown with a single metadata.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void SimpleYamlMetadata()
 		{
 			// Create the test input.
@@ -270,35 +254,30 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			// Verify the metadata.
 			MetadataKey titleKey = project.MetadataManager["Scalar"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				metadata.Count,
-				"Number of metadata keys is unexpected.");
-			Assert.IsTrue(
-				metadata.ContainsKey(titleKey),
-				"Could not find Scalar key in metadata.");
-			Assert.AreEqual(
+				metadata.Count);
+			Assert.True(
+				metadata.ContainsKey(titleKey));
+			Assert.Equal(
 				"Unit Test",
-				metadata[titleKey].Value,
-				"Value of Scalar was unexpected.");
+				metadata[titleKey].Value);
 
 			// Verify the contents.
 			BlockCollection contents = project.Blocks;
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				contents.Count,
-				"Number of output lines was unexpected.");
-			Assert.AreEqual(
+				contents.Count);
+			Assert.Equal(
 				"One Two Three.",
-				contents[0].Text,
-				"1st output line was unexpected.");
+				contents[0].Text);
 		}
 
 		/// <summary>
 		/// Tests reading input with only an author.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void YamlAuthorOnly()
 		{
 			// Create the test input.
@@ -322,22 +301,20 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			format.LoadProject(context);
 
 			// Verify the metadata.
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				metadata.Count,
-				"Number of metadata keys is unexpected.");
+				metadata.Count);
 
 			// Verify the title.
-			Assert.AreEqual(
+			Assert.Equal(
 				"Unit Test",
-				project.Authors.PreferredName,
-				"Primary name was unexpected.");
+				project.Authors.PreferredName);
 		}
 
 		/// <summary>
 		/// Tests reading input with only metadata.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void YamlMetadataOnly()
 		{
 			// Create the test input.
@@ -363,31 +340,27 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			// Verify the metadata.
 			MetadataKey titleKey = project.MetadataManager["Scalar"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				metadata.Count,
-				"Number of metadata keys is unexpected.");
-			Assert.IsTrue(
-				metadata.ContainsKey(titleKey),
-				"Could not find Scalar key in metadata.");
-			Assert.AreEqual(
+				metadata.Count);
+			Assert.True(
+				metadata.ContainsKey(titleKey));
+			Assert.Equal(
 				"Unit Test",
-				metadata[titleKey].Value,
-				"Value of Scalar was unexpected.");
+				metadata[titleKey].Value);
 
 			// Verify the contents.
 			BlockCollection contents = project.Blocks;
 
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				contents.Count,
-				"Number of output lines was unexpected.");
+				contents.Count);
 		}
 
 		/// <summary>
 		/// Tests reading input with only title.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void YamlTitleOnly()
 		{
 			// Create the test input.
@@ -411,16 +384,14 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			format.LoadProject(context);
 
 			// Verify the metadata.
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				metadata.Count,
-				"Number of metadata keys is unexpected.");
+				metadata.Count);
 
 			// Verify the title.
-			Assert.AreEqual(
+			Assert.Equal(
 				"Unit Test",
-				project.Titles.Title,
-				"Title was unexpected.");
+				project.Titles.Title);
 		}
 
 		#endregion

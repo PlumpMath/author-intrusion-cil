@@ -13,14 +13,13 @@ using AuthorIntrusion.IO;
 
 using MfGames.HierarchicalPaths;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
 	/// <summary>
 	/// Tests the loading of a single buffer with with two Internal regions in a sequence.
 	/// </summary>
-	[TestFixture]
 	public class LoadInternalSequenceRegion2Tests
 	{
 		#region Public Methods and Operators
@@ -28,21 +27,20 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies initial state of the project buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyIntialProjectBuffer()
 		{
 			Project project = CreateProject();
 
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				project.Blocks.Count,
-				"The number of blocks is unexpected.");
+				project.Blocks.Count);
 		}
 
 		/// <summary>
 		/// Verifies the identification of sequenced containers within the layout.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyLayout()
 		{
 			Project project = CreateProject();
@@ -51,74 +49,65 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 				project.Layout.GetSequencedRegions()
 					.ToList();
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				sequencedContainers.Count,
-				"The number of sequenced containers is unexpected.");
-			Assert.AreEqual(
+				sequencedContainers.Count);
+			Assert.Equal(
 				"region-$(ContainerIndex:0)",
-				sequencedContainers[0].Slug,
-				"The container slug is unexpected.");
-			Assert.AreEqual(
+				sequencedContainers[0].Slug);
+			Assert.Equal(
 				1,
-				project.Regions.Count,
-				"The number of regions was unexpected.");
+				project.Regions.Count);
 		}
 
 		/// <summary>
 		/// Verifies the state of the project.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyProjectBuffer()
 		{
 			Project project = Setup();
 			Region region1 = project.Regions["region-1"];
 			Region region2 = project.Regions["region-2"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				project.Blocks.Count,
-				"Number of lines in the project was unexpected.");
+				project.Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				project.Blocks[0].BlockType,
-				"The block type of project's 1st link block is unexpected.");
-			Assert.AreEqual(
+				project.Blocks[0].BlockType);
+			Assert.Equal(
 				region1,
-				project.Blocks[0].LinkedRegion,
-				"The linked region of the 1st link type is unexpected.");
+				project.Blocks[0].LinkedRegion);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				project.Blocks[1].BlockType,
-				"The block type of project's 1st link block is unexpected.");
-			Assert.AreEqual(
+				project.Blocks[1].BlockType);
+			Assert.Equal(
 				region2,
-				project.Blocks[1].LinkedRegion,
-				"The linked region of the 1st link type is unexpected.");
+				project.Blocks[1].LinkedRegion);
 		}
 
 		/// <summary>
 		/// Verifies the proper regions exist.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyProjectRegions()
 		{
 			Project project = Setup();
 
-			Assert.AreEqual(
+			Assert.Equal(
 				3,
-				project.Regions.Count,
-				"The number of regions is unexpected.");
+				project.Regions.Count);
 
-			Assert.IsTrue(
+			Assert.True(
 				project.Regions.ContainsKey("project"),
 				"Cannot find the project region.");
-			Assert.IsTrue(
+			Assert.True(
 				project.Regions.ContainsKey("region-1"),
 				"Cannot find the region-1 region.");
-			Assert.IsTrue(
+			Assert.True(
 				project.Regions.ContainsKey("region-2"),
 				"Cannot find the region-2 region.");
 		}
@@ -126,43 +115,38 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the state of region-1.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyRegion1()
 		{
 			Project project = Setup();
 			Region region1 = project.Regions["region-1"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				region1.Blocks.Count,
-				"Number of lines in region 1 was unexpected.");
-			Assert.AreEqual(
+				region1.Blocks.Count);
+			Assert.Equal(
 				"Text in region 1.",
-				region1.Blocks[0].Text,
-				"The text in 1st block was unexpected.");
+				region1.Blocks[0].Text);
 		}
 
 		/// <summary>
 		/// Verifies the state of region-2.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyRegion2()
 		{
 			Project project = Setup();
 			Region region2 = project.Regions["region-2"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				region2.Blocks.Count,
-				"Number of lines in region 1 was unexpected.");
-			Assert.AreEqual(
+				region2.Blocks.Count);
+			Assert.Equal(
 				"Text in region 2.",
-				region2.Blocks[0].Text,
-				"The text in 1st block was unexpected.");
-			Assert.AreEqual(
+				region2.Blocks[0].Text);
+			Assert.Equal(
 				"2nd text in region 2.",
-				region2.Blocks[1].Text,
-				"The text in 2nd block was unexpected.");
+				region2.Blocks[1].Text);
 		}
 
 		#endregion

@@ -11,7 +11,7 @@ using System.Xml;
 
 using AuthorIntrusion.Cli.Transform;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Cli.Tests
 {
@@ -26,7 +26,7 @@ namespace AuthorIntrusion.Cli.Tests
 		/// <summary>
 		/// Tests loading a simple markdown file into memory and then write it out.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void SimpleMarkdownToDocBookArticle()
 		{
 			// Create the options and populate the values.
@@ -53,16 +53,15 @@ namespace AuthorIntrusion.Cli.Tests
 			xml.Load(outputFilename);
 
 			// Assert the output.
-			Assert.AreEqual(
+			Assert.Equal(
 				"article",
-				xml.LastChild.LocalName,
-				"Root local name is not expected.");
+				xml.LastChild.LocalName);
 		}
 
 		/// <summary>
 		/// Tests loading a simple markdown file into memory and then write it out.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void SimpleMarkdownToDocBookChapter()
 		{
 			// Create the options and populate the values.
@@ -93,16 +92,15 @@ namespace AuthorIntrusion.Cli.Tests
 			xml.Load(outputFilename);
 
 			// Assert the output.
-			Assert.AreEqual(
+			Assert.Equal(
 				"chapter",
-				xml.LastChild.LocalName,
-				"Root local name is not expected.");
+				xml.LastChild.LocalName);
 		}
 
 		/// <summary>
 		/// Tests loading a simple markdown file into memory and then write it out.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void SimpleMarkdownToMarkdown()
 		{
 			// Create the options and populate the values.
@@ -127,10 +125,9 @@ namespace AuthorIntrusion.Cli.Tests
 			string[] lines = File.ReadAllLines(outputFilename);
 
 			// Assert the output.
-			Assert.AreEqual(
+			Assert.Equal(
 				17,
-				lines.Length,
-				"The number of lines was unexpected.");
+				lines.Length);
 		}
 
 		#endregion

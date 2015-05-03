@@ -7,7 +7,7 @@
 
 using MfGames.TextTokens.Texts;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
@@ -15,7 +15,6 @@ namespace MfGames.TextTokens.Tests
 	/// Performs a task that deletes one character three times from the middle of
 	/// the buffer. This will merge tokens together and remote the whitespace.
 	/// </summary>
-	[TestFixture]
 	public class DeleteRight1x3FromSingleLineMiddleToken : MemoryBufferTests
 	{
 		#region Public Methods and Operators
@@ -23,11 +22,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void AnchorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					2,
@@ -38,11 +37,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void CursorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					2,
@@ -53,11 +52,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that there is only a single line in the buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HasCorrectLineCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
 				State.Lines.Count);
 		}
@@ -65,11 +64,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"zero onwo",
 				State.Lines[0].Tokens.GetVisibleText());
 		}
@@ -77,11 +76,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct token count.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				3,
 				State.Lines[0].Tokens.Count);
 		}
@@ -114,7 +113,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the task and then an undo.
 		/// </summary>
-		[TestFixture]
 		public class Undo : DeleteRight1x3FromSingleLineMiddleToken
 		{
 			#region Public Methods and Operators
@@ -122,11 +120,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void AnchorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -137,11 +135,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void CursorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -152,11 +150,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectText()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					"zero one two",
 					State.Lines[0].Tokens.GetVisibleText());
 			}
@@ -164,11 +162,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct token count.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectTokenCount()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					5,
 					State.Lines[0].Tokens.Count);
 			}
@@ -194,7 +192,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the task, undo, and then a redo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedo : DeleteRight1x3FromSingleLineMiddleToken
 		{
 			#region Methods
@@ -219,7 +216,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the task, an undo, a redo, and then an undo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedoUndo : Undo
 		{
 			#region Methods

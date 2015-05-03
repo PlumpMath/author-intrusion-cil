@@ -12,14 +12,13 @@ using AuthorIntrusion.IO;
 
 using MfGames.HierarchicalPaths;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
 	/// <summary>
 	/// Tests writing out a series of files.
 	/// </summary>
-	[TestFixture]
 	public class StoreNestedSequencedRegionsTests : MemoryPersistenceTestsBase
 	{
 		#region Fields
@@ -41,7 +40,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the contents of the chapter-01.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter1()
 		{
 			Setup();
@@ -62,7 +61,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the contents of the chapter-01/scene-001.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter1Scene1()
 		{
 			Setup();
@@ -78,7 +77,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the contents of the chapter-01/scene-002.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter1Scene2()
 		{
 			Setup();
@@ -94,7 +93,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the contents of the chapter-02.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter2()
 		{
 			Setup();
@@ -115,7 +114,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the contents of the chapter-02/scene-001.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter2Scene1()
 		{
 			Setup();
@@ -131,7 +130,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the contents of the chapter-02/scene-002.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter2Scene2()
 		{
 			Setup();
@@ -147,21 +146,20 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the resulting output files.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyOutputFiles()
 		{
 			Setup();
 
-			Assert.AreEqual(
+			Assert.Equal(
 				7,
-				outputPersistence.DataCount,
-				"The number of output files was unexpected.");
+				outputPersistence.DataCount);
 		}
 
 		/// <summary>
 		/// Verifies the contents of the project file.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyProjectContents()
 		{
 			Setup();

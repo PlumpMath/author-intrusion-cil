@@ -7,14 +7,13 @@
 
 using MfGames.TextTokens.Texts;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
 	/// <summary>
 	/// Inserts text into a selection inside a single line.
 	/// </summary>
-	[TestFixture]
 	public class InsertTextIntoSingleLineSelection : MemoryBufferTests
 	{
 		#region Public Methods and Operators
@@ -22,11 +21,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that there is only a single line in the buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HasCorrectLineCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
 				State.Lines.Count);
 		}
@@ -34,11 +33,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"zeBo",
 				State.Lines[0].Tokens.GetVisibleText());
 		}
@@ -46,11 +45,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
 				State.Lines[0].Tokens.Count);
 		}
@@ -93,11 +92,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectText()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					"zero one two",
 					State.Lines[0].Tokens.GetVisibleText());
 			}
@@ -105,11 +104,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct number of tokens.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectTokenCount()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					5,
 					State.Lines[0].Tokens.Count);
 			}

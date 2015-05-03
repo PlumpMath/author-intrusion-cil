@@ -5,14 +5,13 @@
 //   MIT License (MIT)
 // </license>
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
 	/// <summary>
 	/// Verifies the state of an empty MemoryBuffer.
 	/// </summary>
-	[TestFixture]
 	public class InitialState : MemoryBufferTests
 	{
 		#region Public Methods and Operators
@@ -20,14 +19,13 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the number of lines in the buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HasCorrectLineCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				0,
-				State.Lines.Count,
-				"Number of lines was unexpected.");
+				State.Lines.Count);
 		}
 
 		#endregion

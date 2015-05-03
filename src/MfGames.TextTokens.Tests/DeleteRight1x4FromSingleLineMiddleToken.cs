@@ -7,7 +7,7 @@
 
 using MfGames.TextTokens.Texts;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
@@ -15,7 +15,6 @@ namespace MfGames.TextTokens.Tests
 	/// Tests deleting one character four times from the middle of the token. This
 	/// verifies deleting two tokens and also merging tokens.
 	/// </summary>
-	[TestFixture]
 	public class DeleteRight1x4FromSingleLineMiddleToken : MemoryBufferTests
 	{
 		#region Public Methods and Operators
@@ -23,11 +22,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void AnchorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					2,
@@ -38,11 +37,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void CursorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					2,
@@ -53,11 +52,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that there is only a single line in the buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HasCorrectLineCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
 				State.Lines.Count);
 		}
@@ -65,11 +64,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"zero ono",
 				State.Lines[0].Tokens.GetVisibleText());
 		}
@@ -77,11 +76,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				3,
 				State.Lines[0].Tokens.Count);
 		}
@@ -115,7 +114,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// performs the contained task and then performs an undo.
 		/// </summary>
-		[TestFixture]
 		public class Undo : DeleteRight1x4FromSingleLineMiddleToken
 		{
 			#region Public Methods and Operators
@@ -123,11 +121,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void AnchorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -138,11 +136,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void CursorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -153,11 +151,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectText()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					"zero one two",
 					State.Lines[0].Tokens.GetVisibleText());
 			}
@@ -165,11 +163,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct number of tokens.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectTokenCount()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					5,
 					State.Lines[0].Tokens.Count);
 			}
@@ -196,7 +194,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Perform the task, then an undo, and then a redo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedo : DeleteRight1x4FromSingleLineMiddleToken
 		{
 			#region Methods
@@ -223,7 +220,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Perform the task, undo, redo, and then an undo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedoUndo : Undo
 		{
 			#region Methods

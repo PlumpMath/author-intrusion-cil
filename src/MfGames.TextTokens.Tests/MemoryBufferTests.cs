@@ -10,14 +10,12 @@ using System;
 using MfGames.TextTokens.Controllers;
 using MfGames.TextTokens.Tokens;
 
-using NUnit.Framework;
-
 namespace MfGames.TextTokens.Tests
 {
 	/// <summary>
 	/// Base class for tests that run against a memory buffer.
 	/// </summary>
-	public class MemoryBufferTests
+	public class MemoryBufferTests : IDisposable
 	{
 		#region Properties
 
@@ -44,8 +42,7 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Tears down the test and show the final state of the buffer.
 		/// </summary>
-		[TearDown]
-		public void TearDown()
+		public void Dispose()
 		{
 			// Report the state of the final buffer.
 			Console.WriteLine();

@@ -12,14 +12,13 @@ using AuthorIntrusion.IO;
 
 using MfGames.HierarchicalPaths;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
 	/// <summary>
 	/// Tests various aspects of storing an external sequence region in Markdown.
 	/// </summary>
-	[TestFixture]
 	public class StoreExternalRegionWithInternalSequenceRegionsTests :
 		MemoryPersistenceTestsBase
 	{
@@ -52,21 +51,20 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the resulting output files.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyOutputFiles()
 		{
 			Setup();
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				outputPersistence.DataCount,
-				"The number of output files was unexpected.");
+				outputPersistence.DataCount);
 		}
 
 		/// <summary>
 		/// Verifies the contents of the project file.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyProjectContents()
 		{
 			Setup();
@@ -85,7 +83,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the contents of the regions file.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyRegions()
 		{
 			Setup();

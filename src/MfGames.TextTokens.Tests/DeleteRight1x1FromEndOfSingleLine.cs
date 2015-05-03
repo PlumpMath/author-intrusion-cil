@@ -7,7 +7,7 @@
 
 using MfGames.TextTokens.Texts;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
@@ -15,7 +15,6 @@ namespace MfGames.TextTokens.Tests
 	/// Tests deleting the last character of a line, which will merge the next
 	/// line with the current one.
 	/// </summary>
-	[TestFixture]
 	public class DeleteRight1x1FromEndOfSingleLine : MemoryBufferTests
 	{
 		#region Public Methods and Operators
@@ -23,11 +22,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void AnchorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					4,
@@ -38,11 +37,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void CursorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					4,
@@ -53,11 +52,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that there is only a single line in the buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void HasCorrectLineCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
 				State.Lines.Count);
 		}
@@ -65,11 +64,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Tests that line 1 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"zero one twothree four five",
 				State.Lines[0].Tokens.GetVisibleText());
 		}
@@ -77,11 +76,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Tests that line 1 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				9,
 				State.Lines[0].Tokens.Count);
 		}
@@ -89,19 +88,17 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Tests that line 2 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line2HasCorrectText()
 		{
-			Assert.Pass();
 		}
 
 		/// <summary>
 		/// Tests that line 2 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line2HasCorrectTokenCount()
 		{
-			Assert.Pass();
 		}
 
 		#endregion
@@ -130,7 +127,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Perform the parent class and then performs an undo.
 		/// </summary>
-		[TestFixture]
 		public class Undo : DeleteRight1x1FromEndOfSingleLine
 		{
 			#region Public Methods and Operators
@@ -138,11 +134,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void AnchorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						4,
@@ -153,11 +149,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void CursorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						4,
@@ -168,11 +164,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that there is only a single line in the buffer.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void HasCorrectLineCount()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					2,
 					State.Lines.Count);
 			}
@@ -180,11 +176,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Tests that line 1 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectText()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					"zero one two",
 					State.Lines[0].Tokens.GetVisibleText());
 			}
@@ -192,11 +188,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Tests that line 1 has the correct number of tokens.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectTokenCount()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					5,
 					State.Lines[0].Tokens.Count);
 			}
@@ -204,11 +200,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Tests that line 2 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line2HasCorrectText()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					"three four five",
 					State.Lines[1].Tokens.GetVisibleText());
 			}
@@ -216,11 +212,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Tests that line 2 has the correct number of tokens.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line2HasCorrectTokenCount()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					5,
 					State.Lines[1].Tokens.Count);
 			}
@@ -244,7 +240,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the parent task, then an undo, and then a redo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedo : DeleteRight1x1FromEndOfSingleLine
 		{
 			#region Methods
@@ -265,7 +260,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the parent task, an undo, a redo, and an undo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedoUndo : Undo
 		{
 			#region Methods

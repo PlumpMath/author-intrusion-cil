@@ -7,14 +7,13 @@
 
 using MfGames.TextTokens.Texts;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
 	/// <summary>
 	/// Inserts text into the middle of a token.
 	/// </summary>
-	[TestFixture]
 	public class InsertTextIntoSingleLineMiddleToken : MemoryBufferTests
 	{
 		#region Public Methods and Operators
@@ -22,11 +21,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void AnchorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					2,
@@ -37,11 +36,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void CursorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					0,
 					2,
@@ -52,11 +51,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that there is only a single line in the buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void HasCorrectLineCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
 				State.Lines.Count);
 		}
@@ -64,11 +63,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"zero onBe two",
 				State.Lines[0].Tokens.GetVisibleText());
 		}
@@ -76,11 +75,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void Line1HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				5,
 				State.Lines[0].Tokens.Count);
 		}
@@ -112,7 +111,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the operation and then an undo.
 		/// </summary>
-		[TestFixture]
 		public class Undo : InsertTextIntoSingleLineMiddleToken
 		{
 			#region Public Methods and Operators
@@ -120,11 +118,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void AnchorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -135,11 +133,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void CursorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -150,11 +148,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectText()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					"zero one two",
 					State.Lines[0].Tokens.GetVisibleText());
 			}
@@ -178,7 +176,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the task, an undo, and then a redo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedo : InsertTextIntoSingleLineMiddleToken
 		{
 			#region Methods
@@ -199,7 +196,6 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Performs the operation, an undo, a redo, and then an undo.
 		/// </summary>
-		[TestFixture]
 		public class UndoRedoUndo : Undo
 		{
 			#region Methods

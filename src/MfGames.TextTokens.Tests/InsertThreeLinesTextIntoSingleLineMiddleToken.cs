@@ -7,14 +7,13 @@
 
 using MfGames.TextTokens.Texts;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace MfGames.TextTokens.Tests
 {
 	/// <summary>
 	/// Verifies the result of pasting three lines into a token.
 	/// </summary>
-	[TestFixture]
 	public class InsertThreeLinesTextIntoSingleLineMiddleToken :
 		MemoryBufferTests
 	{
@@ -23,11 +22,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void AnchorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					2,
 					0,
@@ -38,11 +37,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies the cursor is in the correct location.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void CursorPositionIsRight()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				new TextLocation(
 					2,
 					0,
@@ -53,11 +52,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that there is only a single line in the buffer.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void HasProperNumberOfLines()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				3,
 				State.Lines.Count);
 		}
@@ -65,11 +64,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"zero on_",
 				State.Lines[0].Tokens.GetVisibleText());
 		}
@@ -77,11 +76,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 1 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line1HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				4,
 				State.Lines[0].Tokens.Count);
 		}
@@ -89,11 +88,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 2 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line2HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"|",
 				State.Lines[1].Tokens.GetVisibleText());
 		}
@@ -101,11 +100,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 2 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line2HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
 				State.Lines[1].Tokens.Count);
 		}
@@ -113,11 +112,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies that line 3 has the correct text.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line3HasCorrectText()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				"_e two",
 				State.Lines[2].Tokens.GetVisibleText());
 		}
@@ -125,11 +124,11 @@ namespace MfGames.TextTokens.Tests
 		/// <summary>
 		/// Verifies line 3 has the correct number of tokens.
 		/// </summary>
-		[Test]
+		[Fact]
 		public virtual void Line3HasCorrectTokenCount()
 		{
 			Setup();
-			Assert.AreEqual(
+			Assert.Equal(
 				4,
 				State.Lines[2].Tokens.Count);
 		}
@@ -168,11 +167,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void AnchorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -183,11 +182,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies the cursor is in the correct location.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void CursorPositionIsRight()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					new TextLocation(
 						0,
 						2,
@@ -198,11 +197,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that there is only a single line in the buffer.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void HasProperNumberOfLines()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					1,
 					State.Lines.Count);
 			}
@@ -210,12 +209,12 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectText()
 			{
 				base.Setup();
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					"zero one two",
 					State.Lines[0].Tokens.GetVisibleText());
 			}
@@ -223,11 +222,11 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 1 has the correct number of tokens.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line1HasCorrectTokenCount()
 			{
 				Setup();
-				Assert.AreEqual(
+				Assert.Equal(
 					5,
 					State.Lines[0].Tokens.Count);
 			}
@@ -235,19 +234,17 @@ namespace MfGames.TextTokens.Tests
 			/// <summary>
 			/// Verifies that line 2 has the correct text.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line2HasCorrectText()
 			{
-				Assert.Pass();
 			}
 
 			/// <summary>
 			/// Verifies that line 2 has the correct number of tokens.
 			/// </summary>
-			[Test]
+			[Fact]
 			public override void Line2HasCorrectTokenCount()
 			{
-				Assert.Pass();
 			}
 
 			/// <summary>
@@ -255,7 +252,6 @@ namespace MfGames.TextTokens.Tests
 			/// </summary>
 			public override void Line3HasCorrectText()
 			{
-				Assert.Pass();
 			}
 
 			/// <summary>
@@ -263,7 +259,6 @@ namespace MfGames.TextTokens.Tests
 			/// </summary>
 			public override void Line3HasCorrectTokenCount()
 			{
-				Assert.Pass();
 			}
 
 			#endregion

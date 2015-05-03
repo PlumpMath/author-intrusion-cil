@@ -10,14 +10,13 @@ using AuthorIntrusion.IO;
 
 using MfGames.HierarchicalPaths;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
 	/// <summary>
 	/// Tests loading a series of files that has multiple sequences inside sequences.
 	/// </summary>
-	[TestFixture]
 	public class LoadNestedSequenceRegionsTests
 	{
 		#region Public Methods and Operators
@@ -25,7 +24,7 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the state of chapter 1.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter1Region()
 		{
 			Project project = Setup();
@@ -33,72 +32,63 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			Region sceneRegion1 = project.Regions["chapter-01/scene-001"];
 			Region sceneRegion2 = project.Regions["chapter-01/scene-002"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				chapterRegion.Blocks.Count,
-				"Number of lines in the project was unexpected.");
+				chapterRegion.Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				chapterRegion.Blocks[0].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				chapterRegion.Blocks[0].BlockType);
+			Assert.Equal(
 				sceneRegion1,
-				chapterRegion.Blocks[0].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				chapterRegion.Blocks[0].LinkedRegion);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				chapterRegion.Blocks[1].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				chapterRegion.Blocks[1].BlockType);
+			Assert.Equal(
 				sceneRegion2,
-				chapterRegion.Blocks[1].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				chapterRegion.Blocks[1].LinkedRegion);
 		}
 
 		/// <summary>
 		/// Verifies the state of chapter 1, scene 1.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter1Scene1()
 		{
 			Project project = Setup();
 			Region region1 = project.Regions["chapter-01/scene-001"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				region1.Blocks.Count,
-				"Number of lines was unexpected.");
-			Assert.AreEqual(
+				region1.Blocks.Count);
+			Assert.Equal(
 				"Text in chapter 1, scene 1.",
-				region1.Blocks[0].Text,
-				"The text in block 1 was unexpected.");
+				region1.Blocks[0].Text);
 		}
 
 		/// <summary>
 		/// Verifies the state of chapter 1, scene 2.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter1Scene2()
 		{
 			Project project = Setup();
 			Region region1 = project.Regions["chapter-01/scene-002"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				region1.Blocks.Count,
-				"Number of lines was unexpected.");
-			Assert.AreEqual(
+				region1.Blocks.Count);
+			Assert.Equal(
 				"Text in chapter 1, scene 2.",
-				region1.Blocks[0].Text,
-				"The text in block 1 was unexpected.");
+				region1.Blocks[0].Text);
 		}
 
 		/// <summary>
 		/// Verifies the state of chapter 2.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter2Region()
 		{
 			Project project = Setup();
@@ -106,100 +96,86 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 			Region sceneRegion1 = project.Regions["chapter-02/scene-001"];
 			Region sceneRegion2 = project.Regions["chapter-02/scene-002"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				chapterRegion.Blocks.Count,
-				"Number of lines in the project was unexpected.");
+				chapterRegion.Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				chapterRegion.Blocks[0].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				chapterRegion.Blocks[0].BlockType);
+			Assert.Equal(
 				sceneRegion1,
-				chapterRegion.Blocks[0].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				chapterRegion.Blocks[0].LinkedRegion);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				chapterRegion.Blocks[1].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				chapterRegion.Blocks[1].BlockType);
+			Assert.Equal(
 				sceneRegion2,
-				chapterRegion.Blocks[1].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				chapterRegion.Blocks[1].LinkedRegion);
 		}
 
 		/// <summary>
 		/// Verifies the state of chapter 2, scene 1.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter2Scene1()
 		{
 			Project project = Setup();
 			Region region1 = project.Regions["chapter-02/scene-001"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				region1.Blocks.Count,
-				"Number of lines was unexpected.");
-			Assert.AreEqual(
+				region1.Blocks.Count);
+			Assert.Equal(
 				"Text in chapter 2, scene 1.",
-				region1.Blocks[0].Text,
-				"The text in block 1 was unexpected.");
+				region1.Blocks[0].Text);
 		}
 
 		/// <summary>
 		/// Verifies the state of chapter 2, scene 2.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyChapter2Scene2()
 		{
 			Project project = Setup();
 			Region region1 = project.Regions["chapter-02/scene-002"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				region1.Blocks.Count,
-				"Number of lines was unexpected.");
-			Assert.AreEqual(
+				region1.Blocks.Count);
+			Assert.Equal(
 				"Text in chapter 2, scene 2.",
-				region1.Blocks[0].Text,
-				"The text in block 1 was unexpected.");
+				region1.Blocks[0].Text);
 		}
 
 		/// <summary>
 		/// Verifies the state of the project's region.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyProject()
 		{
 			Project project = Setup();
 			Region chapter1 = project.Regions["chapter-01"];
 			Region chapter2 = project.Regions["chapter-02"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				2,
-				project.Blocks.Count,
-				"Number of lines in the project was unexpected.");
+				project.Blocks.Count);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				project.Blocks[0].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				project.Blocks[0].BlockType);
+			Assert.Equal(
 				chapter1,
-				project.Blocks[0].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				project.Blocks[0].LinkedRegion);
 
-			Assert.AreEqual(
+			Assert.Equal(
 				BlockType.Region,
-				project.Blocks[1].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				project.Blocks[1].BlockType);
+			Assert.Equal(
 				chapter2,
-				project.Blocks[1].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				project.Blocks[1].LinkedRegion);
 		}
 
 		#endregion

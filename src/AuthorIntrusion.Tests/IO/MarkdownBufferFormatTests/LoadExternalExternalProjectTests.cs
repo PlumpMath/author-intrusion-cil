@@ -10,7 +10,7 @@ using AuthorIntrusion.IO;
 
 using MfGames.HierarchicalPaths;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
@@ -18,7 +18,6 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 	/// Tests loading a single file that has an external file leading to an external
 	/// file.
 	/// </summary>
-	[TestFixture]
 	public class LoadExternalExternalProjectTests
 	{
 		#region Public Methods and Operators
@@ -26,67 +25,59 @@ namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 		/// <summary>
 		/// Verifies the state of the project's region.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyNestedRegion()
 		{
 			Project project = Setup();
 			Region nestedRegion = project.Regions["nested"];
 			Region region1 = project.Regions["region-1"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				nestedRegion.Blocks.Count,
-				"Number of lines in the project was unexpected.");
-			Assert.AreEqual(
+				nestedRegion.Blocks.Count);
+			Assert.Equal(
 				BlockType.Region,
-				nestedRegion.Blocks[0].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				nestedRegion.Blocks[0].BlockType);
+			Assert.Equal(
 				region1,
-				nestedRegion.Blocks[0].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				nestedRegion.Blocks[0].LinkedRegion);
 		}
 
 		/// <summary>
 		/// Verifies the state of the project's region.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyProject()
 		{
 			Project project = Setup();
 			Region nestedRegion = project.Regions["nested"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				project.Blocks.Count,
-				"Number of lines in the project was unexpected.");
-			Assert.AreEqual(
+				project.Blocks.Count);
+			Assert.Equal(
 				BlockType.Region,
-				project.Blocks[0].BlockType,
-				"The block type of project's link block is unexpected.");
-			Assert.AreEqual(
+				project.Blocks[0].BlockType);
+			Assert.Equal(
 				nestedRegion,
-				project.Blocks[0].LinkedRegion,
-				"The linked region of the link type is unexpected.");
+				project.Blocks[0].LinkedRegion);
 		}
 
 		/// <summary>
 		/// Verifies the state of the project's region.
 		/// </summary>
-		[Test]
+		[Fact]
 		public void VerifyRegion()
 		{
 			Project project = Setup();
 			Region region1 = project.Regions["region-1"];
 
-			Assert.AreEqual(
+			Assert.Equal(
 				1,
-				region1.Blocks.Count,
-				"Number of lines in region 1 was unexpected.");
-			Assert.AreEqual(
+				region1.Blocks.Count);
+			Assert.Equal(
 				"Text in region 1.",
-				region1.Blocks[0].Text,
-				"The text in region 1 was unexpected.");
+				region1.Blocks[0].Text);
 		}
 
 		#endregion

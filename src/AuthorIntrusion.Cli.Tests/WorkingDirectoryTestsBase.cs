@@ -9,8 +9,6 @@ using System.IO;
 
 using AuthorIntrusion.Plugins;
 
-using NUnit.Framework;
-
 namespace AuthorIntrusion.Cli.Tests
 {
 	/// <summary>
@@ -19,47 +17,12 @@ namespace AuthorIntrusion.Cli.Tests
 	/// </summary>
 	public abstract class WorkingDirectoryTestsBase
 	{
-		#region Properties
-
-		/// <summary>
-		/// Gets the IoC container for plugins.
-		/// </summary>
-		protected PluginContainer Container { get; private set; }
-
-		/// <summary>
-		/// Gets the directory to the sample files in the project.
-		/// </summary>
-		/// <value>
-		/// The samples directory.
-		/// </value>
-		protected DirectoryInfo SamplesDirectory { get; private set; }
-
-		/// <summary>
-		/// Gets the directory which contains test data.
-		/// </summary>
-		/// <value>
-		/// The input directory.
-		/// </value>
-		protected DirectoryInfo TestDirectory { get; private set; }
-
-		/// <summary>
-		/// Gets the working directory for the unit test which has been already cleared
-		/// out and prepared for the unit test.
-		/// </summary>
-		/// <value>
-		/// The working directory.
-		/// </value>
-		protected DirectoryInfo WorkingDirectory { get; private set; }
-
-		#endregion
-
-		#region Public Methods and Operators
+		#region Constructors and Destructors
 
 		/// <summary>
 		/// Sets up the environment for a single test.
 		/// </summary>
-		[SetUp]
-		public void Setup()
+		protected WorkingDirectoryTestsBase()
 		{
 			// Figure out where all the directories are.
 			string className = GetType()
@@ -91,6 +54,40 @@ namespace AuthorIntrusion.Cli.Tests
 			Container = new PluginContainer(new CliRegistry());
 			Container.AssertConfigurationIsValid();
 		}
+
+		#endregion
+
+		#region Properties
+
+		/// <summary>
+		/// Gets the IoC container for plugins.
+		/// </summary>
+		protected PluginContainer Container { get; private set; }
+
+		/// <summary>
+		/// Gets the directory to the sample files in the project.
+		/// </summary>
+		/// <value>
+		/// The samples directory.
+		/// </value>
+		protected DirectoryInfo SamplesDirectory { get; private set; }
+
+		/// <summary>
+		/// Gets the directory which contains test data.
+		/// </summary>
+		/// <value>
+		/// The input directory.
+		/// </value>
+		protected DirectoryInfo TestDirectory { get; private set; }
+
+		/// <summary>
+		/// Gets the working directory for the unit test which has been already cleared
+		/// out and prepared for the unit test.
+		/// </summary>
+		/// <value>
+		/// The working directory.
+		/// </value>
+		protected DirectoryInfo WorkingDirectory { get; private set; }
 
 		#endregion
 	}
