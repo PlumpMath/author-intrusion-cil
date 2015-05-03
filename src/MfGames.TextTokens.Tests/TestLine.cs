@@ -1,109 +1,112 @@
 ﻿// <copyright file="TestLine.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+
+using MfGames.TextTokens.Lines;
+using MfGames.TextTokens.Tokens;
+
 namespace MfGames.TextTokens.Tests
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
+	/// <summary>
+	/// Contains state information about a line in the buffer.
+	/// </summary>
+	public class TestLine
+	{
+		#region Constructors and Destructors
 
-    using MfGames.TextTokens.Lines;
-    using MfGames.TextTokens.Tokens;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestLine"/> class.
+		/// </summary>
+		/// <param name="lineKey">
+		/// The line key.
+		/// </param>
+		public TestLine(LineKey lineKey)
+		{
+			Tokens = new TokenList<TestToken>();
+			LineKey = lineKey;
+		}
 
-    /// <summary>
-    /// Contains state information about a line in the buffer.
-    /// </summary>
-    public class TestLine
-    {
-        #region Constructors and Destructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestLine"/> class.
+		/// </summary>
+		/// <param name="line">
+		/// The line.
+		/// </param>
+		public TestLine(ILine line)
+			: this(line.LineKey)
+		{
+			// Establish our contracts.
+			Contract.Requires(line != null);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestLine"/> class.
-        /// </summary>
-        /// <param name="lineKey">
-        /// The line key.
-        /// </param>
-        public TestLine(LineKey lineKey)
-        {
-            this.Tokens = new TokenList<TestToken>();
-            this.LineKey = lineKey;
-        }
+			// Add in all the tokens already existing on the line.
+			foreach (IToken token in line.Tokens)
+			{
+				var testToken = new TestToken(token);
+				Tokens.Add(testToken);
+			}
+		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestLine"/> class.
-        /// </summary>
-        /// <param name="line">
-        /// The line.
-        /// </param>
-        public TestLine(ILine line)
-            : this(line.LineKey)
-        {
-            // Establish our contracts.
-            Contract.Requires(line != null);
+		#endregion
 
-            // Add in all the tokens already existing on the line.
-            foreach (IToken token in line.Tokens)
-            {
-                var testToken = new TestToken(token);
-                this.Tokens.Add(testToken);
-            }
-        }
+		#region Public Properties
 
-        #endregion
+		/// <summary>
+		/// Gets the line key.
+		/// </summary>
+		/// <value>
+		/// The line key.
+		/// </value>
+		public LineKey LineKey { get; private set; }
 
-        #region Public Properties
+		/// <summary>
+		/// Gets the tokens.
+		/// </summary>
+		/// <value>
+		/// The tokens.
+		/// </value>
+		public TokenList<TestToken> Tokens { get; private set; }
 
-        /// <summary>
-        /// Gets the line key.
-        /// </summary>
-        /// <value>
-        /// The line key.
-        /// </value>
-        public LineKey LineKey { get; private set; }
+		#endregion
 
-        /// <summary>
-        /// Gets the tokens.
-        /// </summary>
-        /// <value>
-        /// The tokens.
-        /// </value>
-        public TokenList<TestToken> Tokens { get; private set; }
+		#region Public Methods and Operators
 
-        #endregion
+		/// <summary>
+		/// Inserts the tokens.
+		/// </summary>
+		/// <param name="tokenIndex">
+		/// Index of the token.
+		/// </param>
+		/// <param name="tokensInserted">
+		/// The tokens inserted.
+		/// </param>
+		public void InsertTokens(
+			TokenIndex tokenIndex,
+			IEnumerable<IToken> tokensInserted)
+		{
+			// Establish our contracts.
+			Contract.Requires(tokensInserted != null);
 
-        #region Public Methods and Operators
+			// First wrap the tokens in a test token layer.
+			var tokens = new List<TestToken>();
 
-        /// <summary>
-        /// Inserts the tokens.
-        /// </summary>
-        /// <param name="tokenIndex">
-        /// Index of the token.
-        /// </param>
-        /// <param name="tokensInserted">
-        /// The tokens inserted.
-        /// </param>
-        public void InsertTokens(
-            TokenIndex tokenIndex, 
-            IEnumerable<IToken> tokensInserted)
-        {
-            // Establish our contracts.
-            Contract.Requires(tokensInserted != null);
+			foreach (IToken token in tokensInserted)
+			{
+				var testToken = new TestToken(token);
+				tokens.Add(testToken);
+			}
 
-            // First wrap the tokens in a test token layer.
-            var tokens = new List<TestToken>();
+			// Insert the tokens into the list.
+			Tokens.InsertRange(
+				tokenIndex.Index,
+				tokens);
+		}
 
-            foreach (IToken token in tokensInserted)
-            {
-                var testToken = new TestToken(token);
-                tokens.Add(testToken);
-            }
-
-            // Insert the tokens into the list.
-            this.Tokens.InsertRange(
-                tokenIndex.Index, 
-                tokens);
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

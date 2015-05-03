@@ -1,73 +1,76 @@
 ﻿// <copyright file="CliProgram.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System;
+
+using AuthorIntrusion.Cli.Transform;
+using AuthorIntrusion.Plugins;
+
+using CommandLine;
+
 namespace AuthorIntrusion.Cli
 {
-    using System;
+	/// <summary>
+	/// Main program for the command-line interface (CLI).
+	/// </summary>
+	public class CliProgram
+	{
+		#region Methods
 
-    using AuthorIntrusion.Cli.Transform;
-    using AuthorIntrusion.Plugins;
+		/// <summary>
+		/// Main entry point for the CLI application.
+		/// </summary>
+		/// <param name="args">
+		/// The arguments from the command line.
+		/// </param>
+		private static void Main(string[] args)
+		{
+			// Parse the arguments into an options object.
+			var options = new CliOptions();
+			string invokedVerb = null;
+			object invokedOptions = null;
+			var parser = new Parser(
+				delegate(ParserSettings settings)
+					{
+						settings.CaseSensitive = true;
+						settings.IgnoreUnknownArguments = false;
+					});
+			bool successful = parser.ParseArguments(
+				args,
+				options,
+				(verb,
+					subOptions) =>
+					{
+						// if parsing succeeds the verb name and correct instance
+						// will be passed to onVerbCommand delegate (string,object)
+						invokedVerb = verb;
+						invokedOptions = subOptions;
+					});
 
-    using CommandLine;
+			if (!successful)
+			{
+				Console.WriteLine("Cannot parse arguments.");
+				Environment.Exit(1);
+			}
 
-    /// <summary>
-    /// Main program for the command-line interface (CLI).
-    /// </summary>
-    public class CliProgram
-    {
-        #region Methods
+			// Set up the plugins.
+			var container = new PluginContainer(new CliRegistry());
+			container.AssertConfigurationIsValid();
 
-        /// <summary>
-        /// Main entry point for the CLI application.
-        /// </summary>
-        /// <param name="args">
-        /// The arguments from the command line.
-        /// </param>
-        private static void Main(string[] args)
-        {
-            // Parse the arguments into an options object.
-            var options = new CliOptions();
-            string invokedVerb = null;
-            object invokedOptions = null;
-            var parser = new Parser(
-                delegate(ParserSettings settings)
-                    {
-                        settings.CaseSensitive = true;
-                        settings.IgnoreUnknownArguments = false;
-                    });
-            bool successful = parser.ParseArguments(
-                args, 
-                options, 
-                (verb, 
-                    subOptions) =>
-                    {
-                        // if parsing succeeds the verb name and correct instance
-                        // will be passed to onVerbCommand delegate (string,object)
-                        invokedVerb = verb;
-                        invokedOptions = subOptions;
-                    });
+			// Determine which command to run.
+			if (invokedVerb == TransformOptions.LongName)
+			{
+				var transformOptions = (TransformOptions)invokedOptions;
+				var transformCommand = container.GetInstance<TransformCommand>();
 
-            if (!successful)
-            {
-                Console.WriteLine("Cannot parse arguments.");
-                Environment.Exit(1);
-            }
+				transformCommand.Run(transformOptions);
+			}
+		}
 
-            // Set up the plugins.
-            var container = new PluginContainer(new CliRegistry());
-            container.AssertConfigurationIsValid();
-
-            // Determine which command to run.
-            if (invokedVerb == TransformOptions.LongName)
-            {
-                var transformOptions = (TransformOptions)invokedOptions;
-                var transformCommand = container.GetInstance<TransformCommand>();
-
-                transformCommand.Run(transformOptions);
-            }
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

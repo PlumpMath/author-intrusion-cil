@@ -1,94 +1,97 @@
 ﻿// <copyright file="WorkingDirectoryTestsBase.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System.IO;
+
+using AuthorIntrusion.Plugins;
+
+using NUnit.Framework;
+
 namespace AuthorIntrusion.Cli.Tests
 {
-    using System.IO;
+	/// <summary>
+	/// Contains the common functionality uses by most file-system-based unit tests
+	/// such as commands and operations.
+	/// </summary>
+	public abstract class WorkingDirectoryTestsBase
+	{
+		#region Properties
 
-    using AuthorIntrusion.Plugins;
+		/// <summary>
+		/// Gets the IoC container for plugins.
+		/// </summary>
+		protected PluginContainer Container { get; private set; }
 
-    using NUnit.Framework;
+		/// <summary>
+		/// Gets the directory to the sample files in the project.
+		/// </summary>
+		/// <value>
+		/// The samples directory.
+		/// </value>
+		protected DirectoryInfo SamplesDirectory { get; private set; }
 
-    /// <summary>
-    /// Contains the common functionality uses by most file-system-based unit tests
-    /// such as commands and operations.
-    /// </summary>
-    public abstract class WorkingDirectoryTestsBase
-    {
-        #region Properties
+		/// <summary>
+		/// Gets the directory which contains test data.
+		/// </summary>
+		/// <value>
+		/// The input directory.
+		/// </value>
+		protected DirectoryInfo TestDirectory { get; private set; }
 
-        /// <summary>
-        /// Gets the IoC container for plugins.
-        /// </summary>
-        protected PluginContainer Container { get; private set; }
+		/// <summary>
+		/// Gets the working directory for the unit test which has been already cleared
+		/// out and prepared for the unit test.
+		/// </summary>
+		/// <value>
+		/// The working directory.
+		/// </value>
+		protected DirectoryInfo WorkingDirectory { get; private set; }
 
-        /// <summary>
-        /// Gets the directory to the sample files in the project.
-        /// </summary>
-        /// <value>
-        /// The samples directory.
-        /// </value>
-        protected DirectoryInfo SamplesDirectory { get; private set; }
+		#endregion
 
-        /// <summary>
-        /// Gets the directory which contains test data.
-        /// </summary>
-        /// <value>
-        /// The input directory.
-        /// </value>
-        protected DirectoryInfo TestDirectory { get; private set; }
+		#region Public Methods and Operators
 
-        /// <summary>
-        /// Gets the working directory for the unit test which has been already cleared
-        /// out and prepared for the unit test.
-        /// </summary>
-        /// <value>
-        /// The working directory.
-        /// </value>
-        protected DirectoryInfo WorkingDirectory { get; private set; }
+		/// <summary>
+		/// Sets up the environment for a single test.
+		/// </summary>
+		[SetUp]
+		public void Setup()
+		{
+			// Figure out where all the directories are.
+			string className = GetType()
+				.FullName;
 
-        #endregion
+			string workingPath = Path.Combine(
+				"Tests",
+				"Working",
+				className);
+			WorkingDirectory = new DirectoryInfo(workingPath);
 
-        #region Public Methods and Operators
+			string testPath = Path.Combine(
+				"Tests",
+				className);
+			TestDirectory = new DirectoryInfo(testPath);
 
-        /// <summary>
-        /// Sets up the environment for a single test.
-        /// </summary>
-        [SetUp]
-        public void Setup()
-        {
-            // Figure out where all the directories are.
-            string className = this.GetType()
-                .FullName;
+			// Get the samples directory.
+			SamplesDirectory = new DirectoryInfo("..\\samples");
 
-            string workingPath = Path.Combine(
-                "Tests", 
-                "Working", 
-                className);
-            this.WorkingDirectory = new DirectoryInfo(workingPath);
+			// Clear out the working directory.
+			if (WorkingDirectory.Exists)
+			{
+				WorkingDirectory.Delete(true);
+			}
 
-            string testPath = Path.Combine(
-                "Tests", 
-                className);
-            this.TestDirectory = new DirectoryInfo(testPath);
+			WorkingDirectory.Create();
 
-            // Get the samples directory.
-            this.SamplesDirectory = new DirectoryInfo("..\\samples");
+			// Set up our plugin container for the CLI.
+			Container = new PluginContainer(new CliRegistry());
+			Container.AssertConfigurationIsValid();
+		}
 
-            // Clear out the working directory.
-            if (this.WorkingDirectory.Exists)
-            {
-                this.WorkingDirectory.Delete(true);
-            }
-
-            this.WorkingDirectory.Create();
-
-            // Set up our plugin container for the CLI.
-            this.Container = new PluginContainer(new CliRegistry());
-            this.Container.AssertConfigurationIsValid();
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

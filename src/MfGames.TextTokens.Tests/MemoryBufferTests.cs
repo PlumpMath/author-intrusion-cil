@@ -1,88 +1,91 @@
 ﻿// <copyright file="MemoryBufferTests.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System;
+
+using MfGames.TextTokens.Controllers;
+using MfGames.TextTokens.Tokens;
+
+using NUnit.Framework;
+
 namespace MfGames.TextTokens.Tests
 {
-    using System;
+	/// <summary>
+	/// Base class for tests that run against a memory buffer.
+	/// </summary>
+	public class MemoryBufferTests
+	{
+		#region Properties
 
-    using MfGames.TextTokens.Controllers;
-    using MfGames.TextTokens.Tokens;
+		/// <summary>
+		/// Gets the in-memory buffer model.
+		/// </summary>
+		protected TestBuffer Buffer { get; private set; }
 
-    using NUnit.Framework;
+		/// <summary>
+		/// Gets the UI controller for the buffer.
+		/// </summary>
+		protected UserBufferController Controller { get; private set; }
 
-    /// <summary>
-    /// Base class for tests that run against a memory buffer.
-    /// </summary>
-    public class MemoryBufferTests
-    {
-        #region Properties
+		/// <summary>
+		/// Gets the listener which reflects the user-visible state of
+		/// the buffer.
+		/// </summary>
+		protected TestBufferState State { get; private set; }
 
-        /// <summary>
-        /// Gets the in-memory buffer model.
-        /// </summary>
-        protected TestBuffer Buffer { get; private set; }
+		#endregion
 
-        /// <summary>
-        /// Gets the UI controller for the buffer.
-        /// </summary>
-        protected UserBufferController Controller { get; private set; }
+		#region Public Methods and Operators
 
-        /// <summary>
-        /// Gets the listener which reflects the user-visible state of
-        /// the buffer.
-        /// </summary>
-        protected TestBufferState State { get; private set; }
+		/// <summary>
+		/// Tears down the test and show the final state of the buffer.
+		/// </summary>
+		[TearDown]
+		public void TearDown()
+		{
+			// Report the state of the final buffer.
+			Console.WriteLine();
+			Console.WriteLine("Buffer State:");
 
-        #endregion
+			for (var index = 0; index < Buffer.Lines.Count; index++)
+			{
+				// For each line, give the line index and each token separated by [] brackets.
+				Console.Write(
+					"{0}: ",
+					index.ToString()
+						.PadLeft(4));
 
-        #region Public Methods and Operators
+				foreach (IToken token in Buffer.Lines[index].Tokens)
+				{
+					Console.Write(
+						"[{0}]",
+						token.Text);
+				}
 
-        /// <summary>
-        /// Tears down the test and show the final state of the buffer.
-        /// </summary>
-        [TearDown]
-        public void TearDown()
-        {
-            // Report the state of the final buffer.
-            Console.WriteLine();
-            Console.WriteLine("Buffer State:");
+				// Finish up the line.
+				Console.WriteLine();
+			}
+		}
 
-            for (int index = 0; index < this.Buffer.Lines.Count; index++)
-            {
-                // For each line, give the line index and each token separated by [] brackets.
-                Console.Write(
-                    "{0}: ", 
-                    index.ToString()
-                        .PadLeft(4));
+		#endregion
 
-                foreach (IToken token in this.Buffer.Lines[index].Tokens)
-                {
-                    Console.Write(
-                        "[{0}]", 
-                        token.Text);
-                }
+		#region Methods
 
-                // Finish up the line.
-                Console.WriteLine();
-            }
-        }
+		/// <summary>
+		/// Generic setup for all memory buffer tests.
+		/// </summary>
+		protected virtual void Setup()
+		{
+			KeyGenerator.Instance = new KeyGenerator();
+			Buffer = new TestBuffer();
+			Controller = new UserBufferController(Buffer);
+			State = new TestBufferState(Buffer);
+		}
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Generic setup for all memory buffer tests.
-        /// </summary>
-        protected virtual void Setup()
-        {
-            KeyGenerator.Instance = new KeyGenerator();
-            this.Buffer = new TestBuffer();
-            this.Controller = new UserBufferController(this.Buffer);
-            this.State = new TestBufferState(this.Buffer);
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

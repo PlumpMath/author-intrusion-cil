@@ -1,121 +1,124 @@
 ﻿// <copyright file="LoadInternalRegionWithWrongTitleTests.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using AuthorIntrusion.Buffers;
+using AuthorIntrusion.IO;
+
+using MfGames.HierarchicalPaths;
+
+using NUnit.Framework;
+
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
-    using AuthorIntrusion.Buffers;
-    using AuthorIntrusion.IO;
+	/// <summary>
+	/// Tests the loading of a single buffer with a single Internal region that has
+	/// an identifier but an unknown title.
+	/// </summary>
+	[TestFixture]
+	public class LoadInternalRegionWithWrongTitleTests
+	{
+		#region Public Methods and Operators
 
-    using MfGames.HierarchicalPaths;
+		/// <summary>
+		/// Verifies the state of the project.
+		/// </summary>
+		[Test]
+		public void VerifyProjectBuffer()
+		{
+			// Prepare the test.
+			Project project = Setup();
+			Region region1 = project.Regions["region-1"];
 
-    using NUnit.Framework;
+			Assert.AreEqual(
+				1,
+				project.Blocks.Count,
+				"Number of lines in the project was unexpected.");
+			Assert.AreEqual(
+				BlockType.Region,
+				project.Blocks[0].BlockType,
+				"The block type of project's link block is unexpected.");
+			Assert.AreEqual(
+				region1,
+				project.Blocks[0].LinkedRegion,
+				"The linked region of the link type is unexpected.");
+		}
 
-    /// <summary>
-    /// Tests the loading of a single buffer with a single Internal region that has
-    /// an identifier but an unknown title.
-    /// </summary>
-    [TestFixture]
-    public class LoadInternalRegionWithWrongTitleTests
-    {
-        #region Public Methods and Operators
+		/// <summary>
+		/// Verifies the state of region-1.
+		/// </summary>
+		[Test]
+		public void VerifyRegion1()
+		{
+			Project project = Setup();
+			Region region1 = project.Regions["region-1"];
 
-        /// <summary>
-        /// Verifies the state of the project.
-        /// </summary>
-        [Test]
-        public void VerifyProjectBuffer()
-        {
-            // Prepare the test.
-            Project project = this.Setup();
-            Region region1 = project.Regions["region-1"];
+			Assert.AreEqual(
+				1,
+				region1.Blocks.Count,
+				"Number of lines in region 1 was unexpected.");
+			Assert.AreEqual(
+				"Text in region 1.",
+				region1.Blocks[0].Text,
+				"The text in region 1 was unexpected.");
+		}
 
-            Assert.AreEqual(
-                1, 
-                project.Blocks.Count, 
-                "Number of lines in the project was unexpected.");
-            Assert.AreEqual(
-                BlockType.Region, 
-                project.Blocks[0].BlockType, 
-                "The block type of project's link block is unexpected.");
-            Assert.AreEqual(
-                region1, 
-                project.Blocks[0].LinkedRegion, 
-                "The linked region of the link type is unexpected.");
-        }
+		#endregion
 
-        /// <summary>
-        /// Verifies the state of region-1.
-        /// </summary>
-        [Test]
-        public void VerifyRegion1()
-        {
-            Project project = this.Setup();
-            Region region1 = project.Regions["region-1"];
+		#region Methods
 
-            Assert.AreEqual(
-                1, 
-                region1.Blocks.Count, 
-                "Number of lines in region 1 was unexpected.");
-            Assert.AreEqual(
-                "Text in region 1.", 
-                region1.Blocks[0].Text, 
-                "The text in region 1 was unexpected.");
-        }
+		/// <summary>
+		/// Sets up the unit test.
+		/// </summary>
+		/// <returns>
+		/// The loaded project.
+		/// </returns>
+		private Project Setup()
+		{
+			// Create the test input.
+			var persistence = new MemoryPersistence();
+			persistence.SetData(
+				new HierarchicalPath("/"),
+				"# Unknown Title [region-1]",
+				string.Empty,
+				"Text in region 1.");
 
-        #endregion
+			// Set up the layout.
+			var projectLayout = new RegionLayout
+			{
+				Name = "Project",
+				Slug = "project",
+				HasContent = false
+			};
+			projectLayout.Add(
+				new RegionLayout
+				{
+					Name = "Region 1",
+					Slug = "region-1",
+					HasContent = true
+				});
 
-        #region Methods
+			// Create a new project with the given layout.
+			var project = new Project();
+			project.ApplyLayout(projectLayout);
 
-        /// <summary>
-        /// Sets up the unit test.
-        /// </summary>
-        /// <returns>
-        /// The loaded project.
-        /// </returns>
-        private Project Setup()
-        {
-            // Create the test input.
-            var persistence = new MemoryPersistence();
-            persistence.SetData(
-                new HierarchicalPath("/"), 
-                "# Unknown Title [region-1]", 
-                string.Empty, 
-                "Text in region 1.");
+			// Create the format.
+			var format = new MarkdownBufferFormat();
 
-            // Set up the layout.
-            var projectLayout = new RegionLayout
-                {
-                    Name = "Project", 
-                    Slug = "project", 
-                    HasContent = false, 
-                };
-            projectLayout.Add(
-                new RegionLayout
-                    {
-                        Name = "Region 1", 
-                        Slug = "region-1", 
-                        HasContent = true, 
-                    });
+			// Parse the buffer lines.
+			var context = new BufferLoadContext(
+				project,
+				persistence);
 
-            // Create a new project with the given layout.
-            var project = new Project();
-            project.ApplyLayout(projectLayout);
+			format.LoadProject(context);
 
-            // Create the format.
-            var format = new MarkdownBufferFormat();
+			// Return the project.
+			return project;
+		}
 
-            // Parse the buffer lines.
-            var context = new BufferLoadContext(
-                project, 
-                persistence);
-
-            format.LoadProject(context);
-
-            // Return the project.
-            return project;
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

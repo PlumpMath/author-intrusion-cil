@@ -1,135 +1,138 @@
 ﻿// <copyright file="TransformCommandTests.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+
+using AuthorIntrusion.Cli.Transform;
+
+using NUnit.Framework;
+
 namespace AuthorIntrusion.Cli.Tests
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Xml;
+	/// <summary>
+	/// Contains the simple commands to exercise the `transform` command from the
+	/// CLI.
+	/// </summary>
+	public class TransformCommandTests : WorkingDirectoryTestsBase
+	{
+		#region Public Methods and Operators
 
-    using AuthorIntrusion.Cli.Transform;
+		/// <summary>
+		/// Tests loading a simple markdown file into memory and then write it out.
+		/// </summary>
+		[Test]
+		public void SimpleMarkdownToDocBookArticle()
+		{
+			// Create the options and populate the values.
+			string outputFilename = Path.Combine(
+				WorkingDirectory.FullName,
+				"output.xml");
+			var options = new TransformOptions
+			{
+				Input = Path.Combine(
+					SamplesDirectory.FullName,
+					"Frankenstein Markdown",
+					"chapter-01.markdown"),
+				Output = outputFilename
+			};
 
-    using NUnit.Framework;
+			// Create the transform command and run the job.
+			var command = Container.GetInstance<TransformCommand>();
 
-    /// <summary>
-    /// Contains the simple commands to exercise the `transform` command from the
-    /// CLI.
-    /// </summary>
-    public class TransformCommandTests : WorkingDirectoryTestsBase
-    {
-        #region Public Methods and Operators
+			command.Run(options);
 
-        /// <summary>
-        /// Tests loading a simple markdown file into memory and then write it out.
-        /// </summary>
-        [Test]
-        public void SimpleMarkdownToDocBookArticle()
-        {
-            // Create the options and populate the values.
-            string outputFilename = Path.Combine(
-                this.WorkingDirectory.FullName, 
-                "output.xml");
-            var options = new TransformOptions
-                {
-                    Input = Path.Combine(
-                        this.SamplesDirectory.FullName, 
-                        "Frankenstein Markdown", 
-                        "chapter-01.markdown"), 
-                    Output = outputFilename, 
-                };
+			// Load the XML back in to verify it.
+			var xml = new XmlDocument();
 
-            // Create the transform command and run the job.
-            var command = this.Container.GetInstance<TransformCommand>();
+			xml.Load(outputFilename);
 
-            command.Run(options);
+			// Assert the output.
+			Assert.AreEqual(
+				"article",
+				xml.LastChild.LocalName,
+				"Root local name is not expected.");
+		}
 
-            // Load the XML back in to verify it.
-            var xml = new XmlDocument();
+		/// <summary>
+		/// Tests loading a simple markdown file into memory and then write it out.
+		/// </summary>
+		[Test]
+		public void SimpleMarkdownToDocBookChapter()
+		{
+			// Create the options and populate the values.
+			string outputFilename = Path.Combine(
+				WorkingDirectory.FullName,
+				"output.xml");
+			var options = new TransformOptions
+			{
+				Input = Path.Combine(
+					SamplesDirectory.FullName,
+					"Frankenstein Markdown",
+					"chapter-01.markdown"),
+				Output = outputFilename,
+				OutputOptions = new List<string>
+				{
+					"RootElement=chapter"
+				}
+			};
 
-            xml.Load(outputFilename);
+			// Create the transform command and run the job.
+			var command = Container.GetInstance<TransformCommand>();
 
-            // Assert the output.
-            Assert.AreEqual(
-                "article", 
-                xml.LastChild.LocalName, 
-                "Root local name is not expected.");
-        }
+			command.Run(options);
 
-        /// <summary>
-        /// Tests loading a simple markdown file into memory and then write it out.
-        /// </summary>
-        [Test]
-        public void SimpleMarkdownToDocBookChapter()
-        {
-            // Create the options and populate the values.
-            string outputFilename = Path.Combine(
-                this.WorkingDirectory.FullName, 
-                "output.xml");
-            var options = new TransformOptions
-                {
-                    Input = Path.Combine(
-                        this.SamplesDirectory.FullName, 
-                        "Frankenstein Markdown", 
-                        "chapter-01.markdown"), 
-                    Output = outputFilename, 
-                    OutputOptions = new List<string>
-                        {
-                            "RootElement=chapter"
-                        }, 
-                };
+			// Load the XML back in to verify it.
+			var xml = new XmlDocument();
 
-            // Create the transform command and run the job.
-            var command = this.Container.GetInstance<TransformCommand>();
+			xml.Load(outputFilename);
 
-            command.Run(options);
+			// Assert the output.
+			Assert.AreEqual(
+				"chapter",
+				xml.LastChild.LocalName,
+				"Root local name is not expected.");
+		}
 
-            // Load the XML back in to verify it.
-            var xml = new XmlDocument();
+		/// <summary>
+		/// Tests loading a simple markdown file into memory and then write it out.
+		/// </summary>
+		[Test]
+		public void SimpleMarkdownToMarkdown()
+		{
+			// Create the options and populate the values.
+			string outputFilename = Path.Combine(
+				WorkingDirectory.FullName,
+				"output.markdown");
+			var options = new TransformOptions
+			{
+				Input = Path.Combine(
+					SamplesDirectory.FullName,
+					"Frankenstein Markdown",
+					"chapter-01.markdown"),
+				Output = outputFilename
+			};
 
-            xml.Load(outputFilename);
+			// Create the transform command and run the job.
+			var command = Container.GetInstance<TransformCommand>();
 
-            // Assert the output.
-            Assert.AreEqual(
-                "chapter", 
-                xml.LastChild.LocalName, 
-                "Root local name is not expected.");
-        }
+			command.Run(options);
 
-        /// <summary>
-        /// Tests loading a simple markdown file into memory and then write it out.
-        /// </summary>
-        [Test]
-        public void SimpleMarkdownToMarkdown()
-        {
-            // Create the options and populate the values.
-            string outputFilename = Path.Combine(
-                this.WorkingDirectory.FullName, 
-                "output.markdown");
-            var options = new TransformOptions
-                {
-                    Input = Path.Combine(
-                        this.SamplesDirectory.FullName, 
-                        "Frankenstein Markdown", 
-                        "chapter-01.markdown"), 
-                    Output = outputFilename, 
-                };
+			// Load the text back into to verify it.
+			string[] lines = File.ReadAllLines(outputFilename);
 
-            // Create the transform command and run the job.
-            var command = this.Container.GetInstance<TransformCommand>();
+			// Assert the output.
+			Assert.AreEqual(
+				17,
+				lines.Length,
+				"The number of lines was unexpected.");
+		}
 
-            command.Run(options);
-
-            // Load the text back into to verify it.
-            string[] lines = File.ReadAllLines(outputFilename);
-
-            // Assert the output.
-            Assert.AreEqual(
-                17, 
-                lines.Length, 
-                "The number of lines was unexpected.");
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

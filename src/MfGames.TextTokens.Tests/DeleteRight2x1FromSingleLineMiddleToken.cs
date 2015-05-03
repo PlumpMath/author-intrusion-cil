@@ -1,230 +1,233 @@
 ﻿// <copyright file="DeleteRight2x1FromSingleLineMiddleToken.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using MfGames.TextTokens.Texts;
+
+using NUnit.Framework;
+
 namespace MfGames.TextTokens.Tests
 {
-    using MfGames.TextTokens.Texts;
+	/// <summary>
+	/// Deletes two characters in a single operation. This is identical to the 1x2
+	/// test to verify that deleting multiple characters at once is identical to
+	/// deleting a single character twice.
+	/// </summary>
+	[TestFixture]
+	public class DeleteRight2x1FromSingleLineMiddleToken : MemoryBufferTests
+	{
+		#region Public Methods and Operators
 
-    using NUnit.Framework;
+		/// <summary>
+		/// Verifies the cursor is in the correct location.
+		/// </summary>
+		[Test]
+		public virtual void AnchorPositionIsRight()
+		{
+			Setup();
+			Assert.AreEqual(
+				new TextLocation(
+					0,
+					2,
+					2),
+				Controller.SelectionAnchor);
+		}
 
-    /// <summary>
-    /// Deletes two characters in a single operation. This is identical to the 1x2
-    /// test to verify that deleting multiple characters at once is identical to
-    /// deleting a single character twice.
-    /// </summary>
-    [TestFixture]
-    public class DeleteRight2x1FromSingleLineMiddleToken : MemoryBufferTests
-    {
-        #region Public Methods and Operators
+		/// <summary>
+		/// Verifies the cursor is in the correct location.
+		/// </summary>
+		[Test]
+		public virtual void CursorPositionIsRight()
+		{
+			Setup();
+			Assert.AreEqual(
+				new TextLocation(
+					0,
+					2,
+					2),
+				Controller.SelectionCursor);
+		}
 
-        /// <summary>
-        /// Verifies the cursor is in the correct location.
-        /// </summary>
-        [Test]
-        public virtual void AnchorPositionIsRight()
-        {
-            this.Setup();
-            Assert.AreEqual(
-                new TextLocation(
-                    0, 
-                    2, 
-                    2), 
-                this.Controller.SelectionAnchor);
-        }
+		/// <summary>
+		/// Verifies that there is only a single line in the buffer.
+		/// </summary>
+		[Test]
+		public void HasCorrectLineCount()
+		{
+			Setup();
+			Assert.AreEqual(
+				1,
+				State.Lines.Count);
+		}
 
-        /// <summary>
-        /// Verifies the cursor is in the correct location.
-        /// </summary>
-        [Test]
-        public virtual void CursorPositionIsRight()
-        {
-            this.Setup();
-            Assert.AreEqual(
-                new TextLocation(
-                    0, 
-                    2, 
-                    2), 
-                this.Controller.SelectionCursor);
-        }
+		/// <summary>
+		/// Verifies that line 1 has the correct text.
+		/// </summary>
+		[Test]
+		public virtual void Line1HasCorrectText()
+		{
+			Setup();
+			Assert.AreEqual(
+				"zero ontwo",
+				State.Lines[0].Tokens.GetVisibleText());
+		}
 
-        /// <summary>
-        /// Verifies that there is only a single line in the buffer.
-        /// </summary>
-        [Test]
-        public void HasCorrectLineCount()
-        {
-            this.Setup();
-            Assert.AreEqual(
-                1, 
-                this.State.Lines.Count);
-        }
+		/// <summary>
+		/// Verifies that line 1 has the correct number of tokens.
+		/// </summary>
+		[Test]
+		public virtual void Line1HasCorrectTokenCount()
+		{
+			Setup();
+			Assert.AreEqual(
+				3,
+				State.Lines[0].Tokens.Count);
+		}
 
-        /// <summary>
-        /// Verifies that line 1 has the correct text.
-        /// </summary>
-        [Test]
-        public virtual void Line1HasCorrectText()
-        {
-            this.Setup();
-            Assert.AreEqual(
-                "zero ontwo", 
-                this.State.Lines[0].Tokens.GetVisibleText());
-        }
+		#endregion
 
-        /// <summary>
-        /// Verifies that line 1 has the correct number of tokens.
-        /// </summary>
-        [Test]
-        public virtual void Line1HasCorrectTokenCount()
-        {
-            this.Setup();
-            Assert.AreEqual(
-                3, 
-                this.State.Lines[0].Tokens.Count);
-        }
+		#region Methods
 
-        #endregion
+		/// <summary>
+		/// Sets up the unit test.
+		/// </summary>
+		protected override void Setup()
+		{
+			base.Setup();
+			Buffer.PopulateRowColumn(
+				1,
+				3);
+			var textLocation = new TextLocation(
+				0,
+				2,
+				2);
+			Controller.SetCursor(textLocation);
+			Controller.DeleteRight(2);
+		}
 
-        #region Methods
+		#endregion
 
-        /// <summary>
-        /// Sets up the unit test.
-        /// </summary>
-        protected override void Setup()
-        {
-            base.Setup();
-            this.Buffer.PopulateRowColumn(
-                1, 
-                3);
-            var textLocation = new TextLocation(
-                0, 
-                2, 
-                2);
-            this.Controller.SetCursor(textLocation);
-            this.Controller.DeleteRight(2);
-        }
+		/// <summary>
+		/// Performs the given task and then an undo.
+		/// </summary>
+		[TestFixture]
+		public class Undo : DeleteRight2x1FromSingleLineMiddleToken
+		{
+			#region Public Methods and Operators
 
-        #endregion
+			/// <summary>
+			/// Verifies the cursor is in the correct location.
+			/// </summary>
+			[Test]
+			public override void AnchorPositionIsRight()
+			{
+				Setup();
+				Assert.AreEqual(
+					new TextLocation(
+						0,
+						2,
+						2),
+					Controller.SelectionAnchor);
+			}
 
-        /// <summary>
-        /// Performs the given task and then an undo.
-        /// </summary>
-        [TestFixture]
-        public class Undo : DeleteRight2x1FromSingleLineMiddleToken
-        {
-            #region Public Methods and Operators
+			/// <summary>
+			/// Verifies the cursor is in the correct location.
+			/// </summary>
+			[Test]
+			public override void CursorPositionIsRight()
+			{
+				Setup();
+				Assert.AreEqual(
+					new TextLocation(
+						0,
+						2,
+						2),
+					Controller.SelectionCursor);
+			}
 
-            /// <summary>
-            /// Verifies the cursor is in the correct location.
-            /// </summary>
-            [Test]
-            public override void AnchorPositionIsRight()
-            {
-                this.Setup();
-                Assert.AreEqual(
-                    new TextLocation(
-                        0, 
-                        2, 
-                        2), 
-                    this.Controller.SelectionAnchor);
-            }
+			/// <summary>
+			/// Verifies that line 1 has the correct text.
+			/// </summary>
+			[Test]
+			public override void Line1HasCorrectText()
+			{
+				Setup();
+				Assert.AreEqual(
+					"zero one two",
+					State.Lines[0].Tokens.GetVisibleText());
+			}
 
-            /// <summary>
-            /// Verifies the cursor is in the correct location.
-            /// </summary>
-            [Test]
-            public override void CursorPositionIsRight()
-            {
-                this.Setup();
-                Assert.AreEqual(
-                    new TextLocation(
-                        0, 
-                        2, 
-                        2), 
-                    this.Controller.SelectionCursor);
-            }
+			/// <summary>
+			/// Verifies that line 1 has the correct number of tokens.
+			/// </summary>
+			[Test]
+			public override void Line1HasCorrectTokenCount()
+			{
+				Setup();
+				Assert.AreEqual(
+					5,
+					State.Lines[0].Tokens.Count);
+			}
 
-            /// <summary>
-            /// Verifies that line 1 has the correct text.
-            /// </summary>
-            [Test]
-            public override void Line1HasCorrectText()
-            {
-                this.Setup();
-                Assert.AreEqual(
-                    "zero one two", 
-                    this.State.Lines[0].Tokens.GetVisibleText());
-            }
+			#endregion
 
-            /// <summary>
-            /// Verifies that line 1 has the correct number of tokens.
-            /// </summary>
-            [Test]
-            public override void Line1HasCorrectTokenCount()
-            {
-                this.Setup();
-                Assert.AreEqual(
-                    5, 
-                    this.State.Lines[0].Tokens.Count);
-            }
+			#region Methods
 
-            #endregion
+			/// <summary>
+			/// Sets up the unit test.
+			/// </summary>
+			protected override void Setup()
+			{
+				base.Setup();
+				Controller.Undo();
+			}
 
-            #region Methods
+			#endregion
+		}
 
-            /// <summary>
-            /// Sets up the unit test.
-            /// </summary>
-            protected override void Setup()
-            {
-                base.Setup();
-                this.Controller.Undo();
-            }
+		/// <summary>
+		/// Perform the task, an undo, an then a redo.
+		/// </summary>
+		[TestFixture]
+		public class UndoRedo : DeleteRight2x1FromSingleLineMiddleToken
+		{
+			#region Methods
 
-            #endregion
-        }
+			/// <summary>
+			/// Sets up the unit test.
+			/// </summary>
+			protected override void Setup()
+			{
+				base.Setup();
+				Controller.Undo();
+				Controller.Redo();
+			}
 
-        /// <summary>
-        /// Perform the task, an undo, an then a redo.
-        /// </summary>
-        [TestFixture]
-        public class UndoRedo : DeleteRight2x1FromSingleLineMiddleToken
-        {
-            #region Methods
+			#endregion
+		}
 
-            /// <summary>
-            /// Sets up the unit test.
-            /// </summary>
-            protected override void Setup()
-            {
-                base.Setup();
-                this.Controller.Undo();
-                this.Controller.Redo();
-            }
+		/// <summary>
+		/// Perform the task, an undo, a redo, and an undo.
+		/// </summary>
+		[TestFixture]
+		public class UndoRedoUndo : Undo
+		{
+			#region Methods
 
-            #endregion
-        }
+			/// <summary>
+			/// Sets up the unit test.
+			/// </summary>
+			protected override void Setup()
+			{
+				base.Setup();
+				Controller.Redo();
+				Controller.Undo();
+			}
 
-        /// <summary>
-        /// Perform the task, an undo, a redo, and an undo.
-        /// </summary>
-        [TestFixture]
-        public class UndoRedoUndo : Undo
-        {
-            #region Methods
-
-            /// <summary>
-            /// Sets up the unit test.
-            /// </summary>
-            protected override void Setup()
-            {
-                base.Setup();
-                this.Controller.Redo();
-                this.Controller.Undo();
-            }
-
-            #endregion
-        }
-    }
+			#endregion
+		}
+	}
 }

@@ -1,51 +1,54 @@
 ﻿// <copyright file="LineIndexLinesInsertedEventArgs.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System.Collections.Generic;
+
+using MfGames.TextTokens.Lines;
+
 namespace MfGames.TextTokens.Events
 {
-    using System.Collections.Generic;
+	/// <summary>
+	/// Represents an event where one or more lines are inserted into a buffer
+	/// after a given index. If the index is 0, then these lines are prepending to
+	/// the buffer. If they equal the count of the buffer's line, it is an append.
+	/// </summary>
+	public class LineIndexLinesInsertedEventArgs : LineIndexEventArgs
+	{
+		#region Constructors and Destructors
 
-    using MfGames.TextTokens.Lines;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LineIndexLinesInsertedEventArgs"/> class.
+		/// </summary>
+		/// <param name="lineIndex">
+		/// Index of the line.
+		/// </param>
+		/// <param name="linesInserted">
+		/// The lines inserted.
+		/// </param>
+		public LineIndexLinesInsertedEventArgs(
+			LineIndex lineIndex,
+			IReadOnlyList<ILine> linesInserted)
+			: base(lineIndex)
+		{
+			LinesInserted = linesInserted;
+		}
 
-    /// <summary>
-    /// Represents an event where one or more lines are inserted into a buffer
-    /// after a given index. If the index is 0, then these lines are prepending to
-    /// the buffer. If they equal the count of the buffer's line, it is an append.
-    /// </summary>
-    public class LineIndexLinesInsertedEventArgs : LineIndexEventArgs
-    {
-        #region Constructors and Destructors
+		#endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LineIndexLinesInsertedEventArgs"/> class.
-        /// </summary>
-        /// <param name="lineIndex">
-        /// Index of the line.
-        /// </param>
-        /// <param name="linesInserted">
-        /// The lines inserted.
-        /// </param>
-        public LineIndexLinesInsertedEventArgs(
-            LineIndex lineIndex, 
-            IReadOnlyList<ILine> linesInserted)
-            : base(lineIndex)
-        {
-            this.LinesInserted = linesInserted;
-        }
+		#region Public Properties
 
-        #endregion
+		/// <summary>
+		/// Gets the lines inserted after the given index.
+		/// </summary>
+		/// <value>
+		/// The lines inserted.
+		/// </value>
+		public IReadOnlyList<ILine> LinesInserted { get; private set; }
 
-        #region Public Properties
-
-        /// <summary>
-        /// Gets the lines inserted after the given index.
-        /// </summary>
-        /// <value>
-        /// The lines inserted.
-        /// </value>
-        public IReadOnlyList<ILine> LinesInserted { get; private set; }
-
-        #endregion
-    }
+		#endregion
+	}
 }

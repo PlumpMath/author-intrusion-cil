@@ -1,161 +1,164 @@
 ﻿// <copyright file="StoreExternalRegionTests.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System.Collections.Generic;
+
+using AuthorIntrusion.Buffers;
+using AuthorIntrusion.IO;
+
+using MfGames.HierarchicalPaths;
+
+using NUnit.Framework;
+
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
-    using System.Collections.Generic;
+	/// <summary>
+	/// Tests various aspects of storing a project with a single External
+	/// region inside a single file.
+	/// </summary>
+	[TestFixture]
+	public class StoreExternalRegionTests : MemoryPersistenceTestsBase
+	{
+		#region Fields
 
-    using AuthorIntrusion.Buffers;
-    using AuthorIntrusion.IO;
+		/// <summary>
+		/// Contains the persistence used to read in the file.
+		/// </summary>
+		private MemoryPersistence inputPersistence;
 
-    using MfGames.HierarchicalPaths;
+		/// <summary>
+		/// Contains the context from the load process.
+		/// </summary>
+		private BufferStoreContext outputContext;
 
-    using NUnit.Framework;
+		/// <summary>
+		/// Contains the persistence used to write out the results.
+		/// </summary>
+		private MemoryPersistence outputPersistence;
 
-    /// <summary>
-    /// Tests various aspects of storing a project with a single External
-    /// region inside a single file.
-    /// </summary>
-    [TestFixture]
-    public class StoreExternalRegionTests : MemoryPersistenceTestsBase
-    {
-        #region Fields
+		/// <summary>
+		/// Contains the loaded project for verification purposes.
+		/// </summary>
+		private Project project;
 
-        /// <summary>
-        /// Contains the persistence used to read in the file.
-        /// </summary>
-        private MemoryPersistence inputPersistence;
+		#endregion
 
-        /// <summary>
-        /// Contains the context from the load process.
-        /// </summary>
-        private BufferStoreContext outputContext;
+		#region Public Methods and Operators
 
-        /// <summary>
-        /// Contains the persistence used to write out the results.
-        /// </summary>
-        private MemoryPersistence outputPersistence;
+		/// <summary>
+		/// Verifies the contents of the fixed file.
+		/// </summary>
+		[Test]
+		public void VerifyFixedContents()
+		{
+			Setup();
 
-        /// <summary>
-        /// Contains the loaded project for verification purposes.
-        /// </summary>
-        private Project project;
+			List<string> lines = outputPersistence.GetDataLines("/fixed");
 
-        #endregion
+			AssertLines(
+				lines,
+				"One Two Three.");
+		}
 
-        #region Public Methods and Operators
+		/// <summary>
+		/// Verifies the resulting output files.
+		/// </summary>
+		[Test]
+		public void VerifyOutputFiles()
+		{
+			Setup();
 
-        /// <summary>
-        /// Verifies the contents of the fixed file.
-        /// </summary>
-        [Test]
-        public void VerifyFixedContents()
-        {
-            this.Setup();
+			Assert.AreEqual(
+				2,
+				outputPersistence.DataCount,
+				"The number of output files was unexpected.");
+		}
 
-            List<string> lines = this.outputPersistence.GetDataLines("/fixed");
+		/// <summary>
+		/// Verifies the contents of the project file.
+		/// </summary>
+		[Test]
+		public void VerifyProjectContents()
+		{
+			Setup();
 
-            this.AssertLines(
-                lines, 
-                "One Two Three.");
-        }
+			List<string> lines = outputPersistence.GetDataLines("/");
 
-        /// <summary>
-        /// Verifies the resulting output files.
-        /// </summary>
-        [Test]
-        public void VerifyOutputFiles()
-        {
-            this.Setup();
+			AssertLines(
+				lines,
+				"---",
+				"title: Testing",
+				"---",
+				string.Empty,
+				"* [Fixed Region](fixed)");
+		}
 
-            Assert.AreEqual(
-                2, 
-                this.outputPersistence.DataCount, 
-                "The number of output files was unexpected.");
-        }
+		#endregion
 
-        /// <summary>
-        /// Verifies the contents of the project file.
-        /// </summary>
-        [Test]
-        public void VerifyProjectContents()
-        {
-            this.Setup();
+		#region Methods
 
-            List<string> lines = this.outputPersistence.GetDataLines("/");
+		/// <summary>
+		/// Sets up this instance.
+		/// </summary>
+		private void Setup()
+		{
+			// Create the test input.
+			inputPersistence = new MemoryPersistence();
+			inputPersistence.SetData(
+				new HierarchicalPath("/"),
+				"---",
+				"title: Testing",
+				"---",
+				"* [Fixed Region](fixed)");
+			inputPersistence.SetData(
+				new HierarchicalPath("/fixed"),
+				"One Two Three.");
 
-            this.AssertLines(
-                lines, 
-                "---", 
-                "title: Testing", 
-                "---", 
-                string.Empty, 
-                "* [Fixed Region](fixed)");
-        }
+			// Set up the layout.
+			var projectLayout = new RegionLayout
+			{
+				Name = "Project",
+				Slug = "project",
+				HasContent = false
+			};
+			var fixedLayout = new RegionLayout
+			{
+				Name = "Fixed Region",
+				Slug = "fixed",
+				HasContent = true,
+				IsExternal = true
+			};
 
-        #endregion
+			projectLayout.Add(fixedLayout);
 
-        #region Methods
+			// Create a new project with the given layout.
+			project = new Project();
+			project.ApplyLayout(projectLayout);
 
-        /// <summary>
-        /// Sets up this instance.
-        /// </summary>
-        private void Setup()
-        {
-            // Create the test input.
-            this.inputPersistence = new MemoryPersistence();
-            this.inputPersistence.SetData(
-                new HierarchicalPath("/"), 
-                "---", 
-                "title: Testing", 
-                "---", 
-                "* [Fixed Region](fixed)");
-            this.inputPersistence.SetData(
-                new HierarchicalPath("/fixed"), 
-                "One Two Three.");
+			// Create the format.
+			var format = new MarkdownBufferFormat();
 
-            // Set up the layout.
-            var projectLayout = new RegionLayout
-                {
-                    Name = "Project", 
-                    Slug = "project", 
-                    HasContent = false, 
-                };
-            var fixedLayout = new RegionLayout
-                {
-                    Name = "Fixed Region", 
-                    Slug = "fixed", 
-                    HasContent = true, 
-                    IsExternal = true, 
-                };
+			// Parse the buffer lines.
+			var inputContext = new BufferLoadContext(
+				project,
+				inputPersistence);
 
-            projectLayout.Add(fixedLayout);
+			format.LoadProject(inputContext);
 
-            // Create a new project with the given layout.
-            this.project = new Project();
-            this.project.ApplyLayout(projectLayout);
+			// Using the same project layout, we create a new persistence and
+			// write out the results.
+			outputPersistence = new MemoryPersistence();
+			outputContext = new BufferStoreContext(
+				project,
+				outputPersistence);
 
-            // Create the format.
-            var format = new MarkdownBufferFormat();
+			format.StoreProject(outputContext);
+		}
 
-            // Parse the buffer lines.
-            var inputContext = new BufferLoadContext(
-                this.project, 
-                this.inputPersistence);
-
-            format.LoadProject(inputContext);
-
-            // Using the same project layout, we create a new persistence and
-            // write out the results.
-            this.outputPersistence = new MemoryPersistence();
-            this.outputContext = new BufferStoreContext(
-                this.project, 
-                this.outputPersistence);
-
-            format.StoreProject(this.outputContext);
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

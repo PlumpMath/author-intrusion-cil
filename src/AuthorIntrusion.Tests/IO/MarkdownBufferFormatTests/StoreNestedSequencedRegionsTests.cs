@@ -1,268 +1,271 @@
 ﻿// <copyright file="StoreNestedSequencedRegionsTests.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System.Collections.Generic;
+
+using AuthorIntrusion.Buffers;
+using AuthorIntrusion.IO;
+
+using MfGames.HierarchicalPaths;
+
+using NUnit.Framework;
+
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
-    using System.Collections.Generic;
+	/// <summary>
+	/// Tests writing out a series of files.
+	/// </summary>
+	[TestFixture]
+	public class StoreNestedSequencedRegionsTests : MemoryPersistenceTestsBase
+	{
+		#region Fields
 
-    using AuthorIntrusion.Buffers;
-    using AuthorIntrusion.IO;
+		/// <summary>
+		/// Contains the output context from storing.
+		/// </summary>
+		private BufferStoreContext outputContext;
 
-    using MfGames.HierarchicalPaths;
+		/// <summary>
+		/// Contains the resulting persistence results after the store.
+		/// </summary>
+		private MemoryPersistence outputPersistence;
 
-    using NUnit.Framework;
+		#endregion
 
-    /// <summary>
-    /// Tests writing out a series of files.
-    /// </summary>
-    [TestFixture]
-    public class StoreNestedSequencedRegionsTests : MemoryPersistenceTestsBase
-    {
-        #region Fields
+		#region Public Methods and Operators
 
-        /// <summary>
-        /// Contains the output context from storing.
-        /// </summary>
-        private BufferStoreContext outputContext;
+		/// <summary>
+		/// Verifies the contents of the chapter-01.
+		/// </summary>
+		[Test]
+		public void VerifyChapter1()
+		{
+			Setup();
 
-        /// <summary>
-        /// Contains the resulting persistence results after the store.
-        /// </summary>
-        private MemoryPersistence outputPersistence;
+			List<string> lines =
+				outputPersistence.GetDataLines("/chapter-01");
 
-        #endregion
+			AssertLines(
+				lines,
+				"---",
+				"title: Chapter 1",
+				"---",
+				string.Empty,
+				"1. [Scenes](chapter-01/scene-001)",
+				"2. [Scenes](chapter-01/scene-002)");
+		}
 
-        #region Public Methods and Operators
+		/// <summary>
+		/// Verifies the contents of the chapter-01/scene-001.
+		/// </summary>
+		[Test]
+		public void VerifyChapter1Scene1()
+		{
+			Setup();
 
-        /// <summary>
-        /// Verifies the contents of the chapter-01.
-        /// </summary>
-        [Test]
-        public void VerifyChapter1()
-        {
-            this.Setup();
+			List<string> lines =
+				outputPersistence.GetDataLines("/chapter-01/scene-001");
 
-            List<string> lines =
-                this.outputPersistence.GetDataLines("/chapter-01");
+			AssertLines(
+				lines,
+				"Text in chapter 1, scene 1.");
+		}
 
-            this.AssertLines(
-                lines, 
-                "---", 
-                "title: Chapter 1", 
-                "---", 
-                string.Empty, 
-                "1. [Scenes](chapter-01/scene-001)", 
-                "2. [Scenes](chapter-01/scene-002)");
-        }
+		/// <summary>
+		/// Verifies the contents of the chapter-01/scene-002.
+		/// </summary>
+		[Test]
+		public void VerifyChapter1Scene2()
+		{
+			Setup();
 
-        /// <summary>
-        /// Verifies the contents of the chapter-01/scene-001.
-        /// </summary>
-        [Test]
-        public void VerifyChapter1Scene1()
-        {
-            this.Setup();
+			List<string> lines =
+				outputPersistence.GetDataLines("/chapter-01/scene-002");
 
-            List<string> lines =
-                this.outputPersistence.GetDataLines("/chapter-01/scene-001");
+			AssertLines(
+				lines,
+				"Text in chapter 1, scene 2.");
+		}
 
-            this.AssertLines(
-                lines, 
-                "Text in chapter 1, scene 1.");
-        }
+		/// <summary>
+		/// Verifies the contents of the chapter-02.
+		/// </summary>
+		[Test]
+		public void VerifyChapter2()
+		{
+			Setup();
 
-        /// <summary>
-        /// Verifies the contents of the chapter-01/scene-002.
-        /// </summary>
-        [Test]
-        public void VerifyChapter1Scene2()
-        {
-            this.Setup();
+			List<string> lines =
+				outputPersistence.GetDataLines("/chapter-02");
 
-            List<string> lines =
-                this.outputPersistence.GetDataLines("/chapter-01/scene-002");
+			AssertLines(
+				lines,
+				"---",
+				"title: Chapter 2",
+				"---",
+				string.Empty,
+				"1. [Scenes](chapter-02/scene-001)",
+				"2. [Scenes](chapter-02/scene-002)");
+		}
 
-            this.AssertLines(
-                lines, 
-                "Text in chapter 1, scene 2.");
-        }
+		/// <summary>
+		/// Verifies the contents of the chapter-02/scene-001.
+		/// </summary>
+		[Test]
+		public void VerifyChapter2Scene1()
+		{
+			Setup();
 
-        /// <summary>
-        /// Verifies the contents of the chapter-02.
-        /// </summary>
-        [Test]
-        public void VerifyChapter2()
-        {
-            this.Setup();
+			List<string> lines =
+				outputPersistence.GetDataLines("/chapter-02/scene-001");
 
-            List<string> lines =
-                this.outputPersistence.GetDataLines("/chapter-02");
+			AssertLines(
+				lines,
+				"Text in chapter 2, scene 1.");
+		}
 
-            this.AssertLines(
-                lines, 
-                "---", 
-                "title: Chapter 2", 
-                "---", 
-                string.Empty, 
-                "1. [Scenes](chapter-02/scene-001)", 
-                "2. [Scenes](chapter-02/scene-002)");
-        }
+		/// <summary>
+		/// Verifies the contents of the chapter-02/scene-002.
+		/// </summary>
+		[Test]
+		public void VerifyChapter2Scene2()
+		{
+			Setup();
 
-        /// <summary>
-        /// Verifies the contents of the chapter-02/scene-001.
-        /// </summary>
-        [Test]
-        public void VerifyChapter2Scene1()
-        {
-            this.Setup();
+			List<string> lines =
+				outputPersistence.GetDataLines("/chapter-02/scene-002");
 
-            List<string> lines =
-                this.outputPersistence.GetDataLines("/chapter-02/scene-001");
+			AssertLines(
+				lines,
+				"Text in chapter 2, scene 2.");
+		}
 
-            this.AssertLines(
-                lines, 
-                "Text in chapter 2, scene 1.");
-        }
+		/// <summary>
+		/// Verifies the resulting output files.
+		/// </summary>
+		[Test]
+		public void VerifyOutputFiles()
+		{
+			Setup();
 
-        /// <summary>
-        /// Verifies the contents of the chapter-02/scene-002.
-        /// </summary>
-        [Test]
-        public void VerifyChapter2Scene2()
-        {
-            this.Setup();
+			Assert.AreEqual(
+				7,
+				outputPersistence.DataCount,
+				"The number of output files was unexpected.");
+		}
 
-            List<string> lines =
-                this.outputPersistence.GetDataLines("/chapter-02/scene-002");
+		/// <summary>
+		/// Verifies the contents of the project file.
+		/// </summary>
+		[Test]
+		public void VerifyProjectContents()
+		{
+			Setup();
 
-            this.AssertLines(
-                lines, 
-                "Text in chapter 2, scene 2.");
-        }
+			List<string> lines = outputPersistence.GetDataLines("/");
 
-        /// <summary>
-        /// Verifies the resulting output files.
-        /// </summary>
-        [Test]
-        public void VerifyOutputFiles()
-        {
-            this.Setup();
+			AssertLines(
+				lines,
+				"1. [Chapter 1](chapter-01)",
+				"2. [Chapter 2](chapter-02)");
+		}
 
-            Assert.AreEqual(
-                7, 
-                this.outputPersistence.DataCount, 
-                "The number of output files was unexpected.");
-        }
+		#endregion
 
-        /// <summary>
-        /// Verifies the contents of the project file.
-        /// </summary>
-        [Test]
-        public void VerifyProjectContents()
-        {
-            this.Setup();
+		#region Methods
 
-            List<string> lines = this.outputPersistence.GetDataLines("/");
+		/// <summary>
+		/// Tests reading a single nested Internal region.
+		/// </summary>
+		private void Setup()
+		{
+			// Create the test input.
+			var persistence = new MemoryPersistence();
+			persistence.SetData(
+				new HierarchicalPath("/"),
+				"* [Chapter 1](chapter-01)",
+				"* [Chapter 2](chapter-02)");
+			persistence.SetData(
+				new HierarchicalPath("/chapter-01"),
+				"---",
+				"title: Chapter 1",
+				"---",
+				"* [Scene 1](chapter-01/scene-001)",
+				"* [Scene 2](chapter-01/scene-002)");
+			persistence.SetData(
+				new HierarchicalPath("/chapter-02"),
+				"---",
+				"title: Chapter 2",
+				"---",
+				"* [Scene 1](chapter-02/scene-001)",
+				"* [Scene 2](chapter-02/scene-002)");
+			persistence.SetData(
+				new HierarchicalPath("/chapter-01/scene-001"),
+				"Text in chapter 1, scene 1.");
+			persistence.SetData(
+				new HierarchicalPath("/chapter-01/scene-002"),
+				"Text in chapter 1, scene 2.");
+			persistence.SetData(
+				new HierarchicalPath("/chapter-02/scene-001"),
+				"Text in chapter 2, scene 1.");
+			persistence.SetData(
+				new HierarchicalPath("/chapter-02/scene-002"),
+				"Text in chapter 2, scene 2.");
 
-            this.AssertLines(
-                lines, 
-                "1. [Chapter 1](chapter-01)", 
-                "2. [Chapter 2](chapter-02)");
-        }
+			// Set up the layout.
+			var projectLayout = new RegionLayout
+			{
+				Name = "Project",
+				Slug = "project",
+				HasContent = false
+			};
+			var chapterLayout = new RegionLayout
+			{
+				Name = "Chapters",
+				Slug = "chapter-$(ContainerIndex:00)",
+				HasContent = false,
+				IsExternal = true,
+				IsSequenced = true
+			};
+			var sceneLayout = new RegionLayout
+			{
+				Name = "Scenes",
+				Slug = "$(ParentSlug)/scene-$(ContainerIndex:000)",
+				HasContent = true,
+				IsExternal = true,
+				IsSequenced = true
+			};
+			projectLayout.Add(chapterLayout);
+			chapterLayout.Add(sceneLayout);
 
-        #endregion
+			// Create a new project with the given layout.
+			var project = new Project();
+			project.ApplyLayout(projectLayout);
 
-        #region Methods
+			// Create the format.
+			var format = new MarkdownBufferFormat();
 
-        /// <summary>
-        /// Tests reading a single nested Internal region.
-        /// </summary>
-        private void Setup()
-        {
-            // Create the test input.
-            var persistence = new MemoryPersistence();
-            persistence.SetData(
-                new HierarchicalPath("/"), 
-                "* [Chapter 1](chapter-01)", 
-                "* [Chapter 2](chapter-02)");
-            persistence.SetData(
-                new HierarchicalPath("/chapter-01"), 
-                "---", 
-                "title: Chapter 1", 
-                "---", 
-                "* [Scene 1](chapter-01/scene-001)", 
-                "* [Scene 2](chapter-01/scene-002)");
-            persistence.SetData(
-                new HierarchicalPath("/chapter-02"), 
-                "---", 
-                "title: Chapter 2", 
-                "---", 
-                "* [Scene 1](chapter-02/scene-001)", 
-                "* [Scene 2](chapter-02/scene-002)");
-            persistence.SetData(
-                new HierarchicalPath("/chapter-01/scene-001"), 
-                "Text in chapter 1, scene 1.");
-            persistence.SetData(
-                new HierarchicalPath("/chapter-01/scene-002"), 
-                "Text in chapter 1, scene 2.");
-            persistence.SetData(
-                new HierarchicalPath("/chapter-02/scene-001"), 
-                "Text in chapter 2, scene 1.");
-            persistence.SetData(
-                new HierarchicalPath("/chapter-02/scene-002"), 
-                "Text in chapter 2, scene 2.");
+			// Parse the buffer lines.
+			var context = new BufferLoadContext(
+				project,
+				persistence);
 
-            // Set up the layout.
-            var projectLayout = new RegionLayout
-                {
-                    Name = "Project", 
-                    Slug = "project", 
-                    HasContent = false, 
-                };
-            var chapterLayout = new RegionLayout
-                {
-                    Name = "Chapters", 
-                    Slug = "chapter-$(ContainerIndex:00)", 
-                    HasContent = false, 
-                    IsExternal = true, 
-                    IsSequenced = true, 
-                };
-            var sceneLayout = new RegionLayout
-                {
-                    Name = "Scenes", 
-                    Slug = "$(ParentSlug)/scene-$(ContainerIndex:000)", 
-                    HasContent = true, 
-                    IsExternal = true, 
-                    IsSequenced = true, 
-                };
-            projectLayout.Add(chapterLayout);
-            chapterLayout.Add(sceneLayout);
+			format.LoadProject(context);
 
-            // Create a new project with the given layout.
-            var project = new Project();
-            project.ApplyLayout(projectLayout);
+			// Using the same project layout, we create a new persistence and
+			// write out the results.
+			outputPersistence = new MemoryPersistence();
+			outputContext = new BufferStoreContext(
+				project,
+				outputPersistence);
 
-            // Create the format.
-            var format = new MarkdownBufferFormat();
+			format.StoreProject(outputContext);
+		}
 
-            // Parse the buffer lines.
-            var context = new BufferLoadContext(
-                project, 
-                persistence);
-
-            format.LoadProject(context);
-
-            // Using the same project layout, we create a new persistence and
-            // write out the results.
-            this.outputPersistence = new MemoryPersistence();
-            this.outputContext = new BufferStoreContext(
-                project, 
-                this.outputPersistence);
-
-            format.StoreProject(this.outputContext);
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

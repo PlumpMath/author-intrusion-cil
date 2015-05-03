@@ -1,121 +1,124 @@
 ﻿// <copyright file="SingletonManager.cs" company="Moonfire Games">
-//     Copyright (c) Moonfire Games. Some Rights Reserved.
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
-// MIT Licensed (http://opensource.org/licenses/MIT)
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+
+using AuthorIntrusion.Css;
+using AuthorIntrusion.Metadata;
+
 namespace AuthorIntrusion
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
+	/// <summary>
+	/// A basic implementation of a singleton manager which 
+	/// </summary>
+	public class SingletonManager
+	{
+		#region Fields
 
-    using AuthorIntrusion.Css;
-    using AuthorIntrusion.Metadata;
+		/// <summary>
+		/// Contains the singleton instances of CSS class names for the project.
+		/// </summary>
+		private readonly Dictionary<string, CssClassKey> cssClassKeys;
 
-    /// <summary>
-    /// A basic implementation of a singleton manager which 
-    /// </summary>
-    public class SingletonManager
-    {
-        #region Fields
+		/// <summary>
+		/// Contains the singleton instances of metadata keys for the project.
+		/// </summary>
+		private readonly Dictionary<string, MetadataKey> metadataKeys;
 
-        /// <summary>
-        /// Contains the singleton instances of CSS class names for the project.
-        /// </summary>
-        private readonly Dictionary<string, CssClassKey> cssClassKeys;
+		#endregion
 
-        /// <summary>
-        /// Contains the singleton instances of metadata keys for the project.
-        /// </summary>
-        private readonly Dictionary<string, MetadataKey> metadataKeys;
+		#region Constructors and Destructors
 
-        #endregion
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SingletonManager"/> class.
+		/// </summary>
+		public SingletonManager()
+		{
+			cssClassKeys = new Dictionary<string, CssClassKey>();
+			metadataKeys = new Dictionary<string, MetadataKey>();
+		}
 
-        #region Constructors and Destructors
+		#endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonManager"/> class.
-        /// </summary>
-        public SingletonManager()
-        {
-            this.cssClassKeys = new Dictionary<string, CssClassKey>();
-            this.metadataKeys = new Dictionary<string, MetadataKey>();
-        }
+		#region Public Methods and Operators
 
-        #endregion
+		/// <summary>
+		/// Gets a singleton class identifier.
+		/// </summary>
+		/// <param name="className">
+		/// Name of the class.
+		/// </param>
+		/// <returns>
+		/// A <c>CssClassKey</c> that represents that class.
+		/// </returns>
+		public CssClassKey GetCssClassKey(string className)
+		{
+			// Establish our contracts.
+			Contract.Requires(className != null);
+			Contract.Requires(className.Length > 0);
 
-        #region Public Methods and Operators
+			// All the class names are singletones.
+			className = string.Intern(className);
 
-        /// <summary>
-        /// Gets a singleton class identifier.
-        /// </summary>
-        /// <param name="className">
-        /// Name of the class.
-        /// </param>
-        /// <returns>
-        /// A <c>CssClassKey</c> that represents that class.
-        /// </returns>
-        public CssClassKey GetCssClassKey(string className)
-        {
-            // Establish our contracts.
-            Contract.Requires(className != null);
-            Contract.Requires(className.Length > 0);
+			// Look for the key.
+			CssClassKey results;
 
-            // All the class names are singletones.
-            className = string.Intern(className);
+			if (cssClassKeys.TryGetValue(
+				className,
+				out results))
+			{
+				return results;
+			}
 
-            // Look for the key.
-            CssClassKey results;
+			// We haven't registered this key yet, so register and return it.
+			results = new CssClassKey(className);
 
-            if (this.cssClassKeys.TryGetValue(
-                className, 
-                out results))
-            {
-                return results;
-            }
+			cssClassKeys[className] = results;
 
-            // We haven't registered this key yet, so register and return it.
-            results = new CssClassKey(className);
+			return results;
+		}
 
-            this.cssClassKeys[className] = results;
+		/// <summary>
+		/// Gets a singleton metadata key for a given name.
+		/// </summary>
+		/// <param name="keyName">
+		/// The name of the metadata key to retrieve.
+		/// </param>
+		/// <returns>
+		/// A singleton MetadataKey that represents the given name.
+		/// </returns>
+		public MetadataKey GetMetadataKey(string keyName)
+		{
+			// Establish our contracts.
+			Contract.Requires(keyName != null);
+			Contract.Requires(keyName.Length > 0);
 
-            return results;
-        }
+			// All the class names are singletones.
+			keyName = string.Intern(keyName);
 
-        /// <summary>
-        /// Gets a singleton metadata key for a given name.
-        /// </summary>
-        /// <param name="keyName">
-        /// The name of the metadata key to retrieve.
-        /// </param>
-        /// <returns>
-        /// A singleton MetadataKey that represents the given name.
-        /// </returns>
-        public MetadataKey GetMetadataKey(string keyName)
-        {
-            // Establish our contracts.
-            Contract.Requires(keyName != null);
-            Contract.Requires(keyName.Length > 0);
+			// Look for the key.
+			MetadataKey results;
 
-            // All the class names are singletones.
-            keyName = string.Intern(keyName);
+			if (metadataKeys.TryGetValue(
+				keyName,
+				out results))
+			{
+				return results;
+			}
 
-            // Look for the key.
-            MetadataKey results;
+			// We haven't registered this key yet, so register and return it.
+			results = new MetadataKey(keyName);
 
-            if (this.metadataKeys.TryGetValue(
-                keyName, 
-                out results))
-            {
-                return results;
-            }
+			metadataKeys[keyName] = results;
 
-            // We haven't registered this key yet, so register and return it.
-            results = new MetadataKey(keyName);
+			return results;
+		}
 
-            this.metadataKeys[keyName] = results;
-
-            return results;
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }
