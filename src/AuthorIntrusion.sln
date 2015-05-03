@@ -1,18 +1,13 @@
-﻿
+﻿O
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion", "AuthorIntrusion\AuthorIntrusion.csproj", "{36D7F7CB-F006-464F-9E71-F3D2F84D1CEA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.TextTokens", "MfGames.TextTokens\MfGames.TextTokens.csproj", "{7B578A31-00BB-4B53-BF51-377F261118D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.TextTokens.Tests", "MfGames.TextTokens.Tests\MfGames.TextTokens.Tests.csproj", "{84DD0764-63F8-4ECC-8860-F3F1A779AFDF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{92367AE4-0D34-4615-9151-3414D40E5530}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.Culture", "MfGames.Culture\MfGames.Culture.csproj", "{32FE0279-B198-4462-BC6F-F001F54CE4BC}"
 EndProject
