@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSystemModule.cs" />
-    <Compile Include="FileSystemPersistence.cs" />
+    <Compile Include="FileSystemStorageProviderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

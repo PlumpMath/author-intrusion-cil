@@ -7,6 +7,8 @@
 
 using System;
 
+using AuthorIntrusion.Storage;
+
 using Ninject;
 
 namespace AuthorIntrusion.Cli
@@ -29,10 +31,13 @@ namespace AuthorIntrusion.Cli
 			// Hook up the dependency injection for the entire application.
 			var kernel = new StandardKernel();
 
-			kernel.Load("AuthorIntrusion.Plugin.*.dll");
-			kernel.Load("AuthorIntrusion.Cli.Plugin.*.dll");
+			kernel.Load(
+				typeof(StorageProviderManager).Assembly);
+			kernel.Load(
+				"AuthorIntrusion.Plugin.*.dll",
+				"AuthorIntrusion.Cli.Plugin.*.dll");
 
-			var results = kernel.GetAll<IPersistencePlugin>();
+			var results = kernel.Get<StorageProviderManager>();
 			Console.WriteLine(results);
 		}
 

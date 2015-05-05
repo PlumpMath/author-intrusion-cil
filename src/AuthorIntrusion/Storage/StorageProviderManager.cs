@@ -6,7 +6,9 @@
 // </license>
 
 using System.Collections.Generic;
+using System.Linq;
 
+using AuthorIntrusion.Contracts.Settings;
 using AuthorIntrusion.Contracts.Storage;
 
 namespace AuthorIntrusion.Storage
@@ -15,15 +17,32 @@ namespace AuthorIntrusion.Storage
 	{
 		#region Fields
 
-		private readonly IEnumerable<IStorageProviderFactory> factories;
+		private readonly List<IStorageProviderFactory> factories;
+
+		private readonly ISettings settings;
 
 		#endregion
 
 		#region Constructors and Destructors
 
-		public StorageProviderManager(IEnumerable<IStorageProviderFactory> factories)
+		public StorageProviderManager(
+			ISettings settings,
+			IEnumerable<IStorageProviderFactory> factories)
 		{
-			this.factories = factories;
+			this.settings = settings;
+			this.factories = factories.ToList();
+		}
+
+		#endregion
+
+		#region Public Methods and Operators
+
+		public IStorageProviderFactory GetStorageProviderFactory(
+			string storageProviderFactoryId)
+		{
+			IStorageProviderFactory results = factories
+				.Single(f => f.StorageProviderFactoryId == storageProviderFactoryId);
+			return results;
 		}
 
 		#endregion

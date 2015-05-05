@@ -1,4 +1,4 @@
-﻿// <copyright file="FileSystemModule.cs" company="Moonfire Games">
+﻿// <copyright file="TestsModule.cs" company="Moonfire Games">
 //   Copyright (c) Moonfire Games. Some Rights Reserved.
 // </copyright>
 // <license href="http://mfgames.com/mfgames-cil/license">
@@ -6,19 +6,20 @@
 // </license>
 
 using AuthorIntrusion.Contracts.Storage;
+using AuthorIntrusion.Tests.Storage;
 
 using Ninject.Modules;
 
-namespace AuthorIntrusion.Plugin.IO.FileSystem
+namespace AuthorIntrusion.Tests
 {
-	public class FileSystemModule : NinjectModule
+	public class TestsModule : NinjectModule
 	{
 		#region Public Methods and Operators
 
 		public override void Load()
 		{
 			Bind<IStorageProviderFactory>()
-				.To<FileSystemStorageProviderFactory>()
+				.To<MemoryStorageProviderFactory>()
 				.InSingletonScope();
 		}
 

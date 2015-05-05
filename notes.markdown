@@ -1,6 +1,14 @@
 ---
-Title: To Do Items
+title: Notes
 ---
+
+# JSON
+
+Parsing a JSON.NET string:
+
+	JObject.Parse(jsonString).SelectToken("hashKey").ToObject<TType>();
+
+# Tokens
 
 * Retokenize a line
 * Handle deleting at the end of the buffer
@@ -13,5 +21,3 @@ Title: To Do Items
 * Deferred processing
 * Styling tokens
 	* Deferred styling of tokens
-
-FileSystemPersistenceManager
