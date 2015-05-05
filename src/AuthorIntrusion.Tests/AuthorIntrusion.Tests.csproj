@@ -87,6 +87,7 @@
     <Compile Include="ProjectLayoutTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryPersistence.cs" />
+    <Compile Include="TestsBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

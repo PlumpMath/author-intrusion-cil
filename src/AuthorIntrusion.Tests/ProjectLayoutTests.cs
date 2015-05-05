@@ -12,14 +12,24 @@ using AuthorIntrusion.Buffers;
 using MarkdownLog;
 
 using Xunit;
+using Xunit.Abstractions;
 
 namespace AuthorIntrusion.Tests
 {
 	/// <summary>
 	/// Tests functionality for applying layouts and the resulting regions.
 	/// </summary>
-	public class ProjectLayoutTests
+	public class ProjectLayoutTests : TestsBase
 	{
+		#region Constructors and Destructors
+
+		public ProjectLayoutTests(ITestOutputHelper output)
+			: base(output)
+		{
+		}
+
+		#endregion
+
 		#region Public Methods and Operators
 
 		/// <summary>

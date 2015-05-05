@@ -8,13 +8,24 @@
 using System;
 using System.Collections.Generic;
 
+using Xunit.Abstractions;
+
 namespace AuthorIntrusion.Tests.IO.MarkdownBufferFormatTests
 {
 	/// <summary>
 	/// Contains common functionality for tests based on memory persistence.
 	/// </summary>
-	public class MemoryPersistenceTestsBase
+	public abstract class MemoryPersistenceTestsBase : TestsBase
 	{
+		#region Constructors and Destructors
+
+		protected MemoryPersistenceTestsBase(ITestOutputHelper output)
+			: base(output)
+		{
+		}
+
+		#endregion
+
 		#region Methods
 
 		/// <summary>
