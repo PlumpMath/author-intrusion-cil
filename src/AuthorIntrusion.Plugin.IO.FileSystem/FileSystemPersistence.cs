@@ -5,8 +5,6 @@
 //   MIT License (MIT)
 // </license>
 
-using AuthorIntrusion.Contracts;
-
 namespace AuthorIntrusion.Plugin.IO.FileSystem
 {
 	public class FileSystemPersistence : IPersistencePlugin

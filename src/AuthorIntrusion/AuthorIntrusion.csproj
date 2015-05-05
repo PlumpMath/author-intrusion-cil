@@ -64,9 +64,16 @@
   <ItemGroup>
     <Compile Include="Extensions\System\Collections\Generic\SystemCollectionsGenericDictionaryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\StorageProviderManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AuthorIntrusion.Contracts\AuthorIntrusion.Contracts.csproj">
+      <Project>{68FC829F-1EE0-4454-AABD-177D4D41BE55}</Project>
+      <Name>AuthorIntrusion.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

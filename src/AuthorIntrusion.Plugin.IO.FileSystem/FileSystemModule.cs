@@ -5,8 +5,6 @@
 //   MIT License (MIT)
 // </license>
 
-using AuthorIntrusion.Contracts;
-
 using Ninject.Modules;
 
 namespace AuthorIntrusion.Plugin.IO.FileSystem

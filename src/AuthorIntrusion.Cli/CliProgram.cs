@@ -7,8 +7,6 @@
 
 using System;
 
-using AuthorIntrusion.Contracts;
-
 using Ninject;
 
 namespace AuthorIntrusion.Cli
