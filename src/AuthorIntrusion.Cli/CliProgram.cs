@@ -7,10 +7,9 @@
 
 using System;
 
-using AuthorIntrusion.Cli.Transform;
-using AuthorIntrusion.Plugins;
+using AuthorIntrusion.Contracts;
 
-using CommandLine;
+using Ninject;
 
 namespace AuthorIntrusion.Cli
 {
@@ -29,46 +28,14 @@ namespace AuthorIntrusion.Cli
 		/// </param>
 		private static void Main(string[] args)
 		{
-			// Parse the arguments into an options object.
-			var options = new CliOptions();
-			string invokedVerb = null;
-			object invokedOptions = null;
-			var parser = new Parser(
-				delegate(ParserSettings settings)
-					{
-						settings.CaseSensitive = true;
-						settings.IgnoreUnknownArguments = false;
-					});
-			bool successful = parser.ParseArguments(
-				args,
-				options,
-				(verb,
-					subOptions) =>
-					{
-						// if parsing succeeds the verb name and correct instance
-						// will be passed to onVerbCommand delegate (string,object)
-						invokedVerb = verb;
-						invokedOptions = subOptions;
-					});
+			// Hook up the dependency injection for the entire application.
+			var kernel = new StandardKernel();
 
-			if (!successful)
-			{
-				Console.WriteLine("Cannot parse arguments.");
-				Environment.Exit(1);
-			}
+			kernel.Load("AuthorIntrusion.Plugin.*.dll");
+			kernel.Load("AuthorIntrusion.Cli.Plugin.*.dll");
 
-			// Set up the plugins.
-			var container = new PluginContainer(new CliRegistry());
-			container.AssertConfigurationIsValid();
-
-			// Determine which command to run.
-			if (invokedVerb == TransformOptions.LongName)
-			{
-				var transformOptions = (TransformOptions)invokedOptions;
-				var transformCommand = container.GetInstance<TransformCommand>();
-
-				transformCommand.Run(transformOptions);
-			}
+			var results = kernel.GetAll<IPersistencePlugin>();
+			Console.WriteLine(results);
 		}
 
 		#endregion

@@ -61,32 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IO\DocBookBufferFormatTests\StoreInternalRegionTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadNestedMetadataTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreProjectIndexedSequencedRegionsTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreNestedSequencedRegionsTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadExternalExternalProjectTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadExternalInternalRegionsTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadExternalSequenceRegion2Tests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadInternalExternalProjectTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadInternalRegionWithWrongTitleTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadInternalSequenceRegion2Tests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadInternalSequenceRegionTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadInternalSingleRegionTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadInternalInternalProjectTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadNestedProjectIndexedRegionsTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\LoadNestedSequencedRegionsTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\MarkdownBufferFormatTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\MemoryPersistenceTestsBase.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreExternalRegionTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreExternalRegionWithInternalSequenceRegionsTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreExternalSequenceRegionTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreInternalRegionTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreInternalSequenceRegionTests.cs" />
-    <Compile Include="IO\MarkdownBufferFormatTests\StoreSimpleProjectTests.cs" />
-    <Compile Include="ProjectLayoutTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MemoryPersistence.cs" />
     <Compile Include="TestsBase.cs" />
   </ItemGroup>
   <ItemGroup>
