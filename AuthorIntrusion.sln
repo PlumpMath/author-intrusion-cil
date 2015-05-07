@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.TextTokens.Tests", "tests\MfGames.TextTokens.Tests\MfGames.TextTokens.Tests.csproj", "{84DD0764-63F8-4ECC-8860-F3F1A779AFDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.UI.WpfAwe", "AuthorIntrusion.UI.WpfAwe\AuthorIntrusion.UI.WpfAwe.csproj", "{89EA90ED-141A-4EB2-9F06-68B0308CCF63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.UI.WebWpf", "src\AuthorIntrusion.UI.WebWpf\AuthorIntrusion.UI.WebWpf.csproj", "{89EA90ED-141A-4EB2-9F06-68B0308CCF63}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AuthorIntrusion.Web.Plugin.LocalAuthentication", "src\AuthorIntrusion.Web.Plugin.LocalAuthentication\AuthorIntrusion.Web.Plugin.LocalAuthentication.xproj", "{C2460E65-A08A-4821-9E50-D268CBC2C786}"
 EndProject
