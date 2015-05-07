@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfGames.TextTokens.Tests", "tests\MfGames.TextTokens.Tests\MfGames.TextTokens.Tests.csproj", "{84DD0764-63F8-4ECC-8860-F3F1A779AFDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorIntrusion.UI.WpfAwe", "AuthorIntrusion.UI.WpfAwe\AuthorIntrusion.UI.WpfAwe.csproj", "{89EA90ED-141A-4EB2-9F06-68B0308CCF63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{84DD0764-63F8-4ECC-8860-F3F1A779AFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84DD0764-63F8-4ECC-8860-F3F1A779AFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84DD0764-63F8-4ECC-8860-F3F1A779AFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89EA90ED-141A-4EB2-9F06-68B0308CCF63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89EA90ED-141A-4EB2-9F06-68B0308CCF63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89EA90ED-141A-4EB2-9F06-68B0308CCF63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89EA90ED-141A-4EB2-9F06-68B0308CCF63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,5 +92,6 @@ Global
 		{A45C8A4A-AB51-411B-AF5F-258293D53199} = {43D49082-09DE-43E7-89E5-63C6B94EBFFA}
 		{10004E79-4E53-45F1-9F64-ACA3CAD268C2} = {43D49082-09DE-43E7-89E5-63C6B94EBFFA}
 		{84DD0764-63F8-4ECC-8860-F3F1A779AFDF} = {43D49082-09DE-43E7-89E5-63C6B94EBFFA}
+		{89EA90ED-141A-4EB2-9F06-68B0308CCF63} = {19F68C1E-FFB2-4402-8623-37CE84769772}
 	EndGlobalSection
 EndGlobal
