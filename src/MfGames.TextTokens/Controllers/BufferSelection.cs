@@ -65,7 +65,7 @@ namespace MfGames.TextTokens.Controllers
 		/// <value>
 		/// The buffer.
 		/// </value>
-		public IBuffer Buffer { get; private set; }
+		public IBuffer Buffer { get; }
 
 		/// <summary>
 		/// Gets the cursor location within the buffer.

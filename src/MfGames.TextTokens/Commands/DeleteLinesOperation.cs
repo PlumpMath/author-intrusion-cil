@@ -48,7 +48,7 @@ namespace MfGames.TextTokens.Commands
 		/// <value>
 		/// The count.
 		/// </value>
-		public int Count { get; private set; }
+		public int Count { get; }
 
 		/// <summary>
 		/// Gets the index of the line to insert after.
@@ -56,7 +56,7 @@ namespace MfGames.TextTokens.Commands
 		/// <value>
 		/// The index of the line.
 		/// </value>
-		public LineIndex LineIndex { get; private set; }
+		public LineIndex LineIndex { get; }
 
 		#endregion
 

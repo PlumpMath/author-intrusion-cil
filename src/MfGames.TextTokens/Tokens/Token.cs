@@ -57,7 +57,7 @@ namespace MfGames.TextTokens.Tokens
 		/// <value>
 		/// The text.
 		/// </value>
-		public string Text { get; private set; }
+		public string Text { get; }
 
 		/// <summary>
 		/// Gets the token key for this token.
@@ -65,7 +65,7 @@ namespace MfGames.TextTokens.Tokens
 		/// <value>
 		/// The token key.
 		/// </value>
-		public TokenKey TokenKey { get; private set; }
+		public TokenKey TokenKey { get; }
 
 		#endregion
 	}

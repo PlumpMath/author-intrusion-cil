@@ -135,7 +135,7 @@ namespace MfGames.TextTokens.Buffers
 		/// <value>
 		/// The redo commands.
 		/// </value>
-		private Stack<BufferCommand> RedoCommands { get; set; }
+		private Stack<BufferCommand> RedoCommands { get; }
 
 		/// <summary>
 		/// Gets or sets the undo commands currently on the buffer.
@@ -143,7 +143,7 @@ namespace MfGames.TextTokens.Buffers
 		/// <value>
 		/// The undo commands.
 		/// </value>
-		private Stack<BufferCommand> UndoCommands { get; set; }
+		private Stack<BufferCommand> UndoCommands { get; }
 
 		#endregion
 

@@ -55,7 +55,7 @@ namespace MfGames.TextTokens.Controllers
 		/// <value>
 		/// The buffer.
 		/// </value>
-		public IBuffer Buffer { get; private set; }
+		public IBuffer Buffer { get; }
 
 		/// <summary>
 		/// Gets the anchor position of the selection.
@@ -77,7 +77,7 @@ namespace MfGames.TextTokens.Controllers
 		/// <value>
 		/// The selection.
 		/// </value>
-		protected BufferSelection Selection { get; private set; }
+		protected BufferSelection Selection { get; }
 
 		#endregion
 

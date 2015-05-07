@@ -86,7 +86,7 @@ namespace MfGames.TextTokens.Lines
 		/// <value>
 		/// The line key.
 		/// </value>
-		public LineKey LineKey { get; private set; }
+		public LineKey LineKey { get; }
 
 		/// <summary>
 		/// Gets an ordered list of tokens within the line.

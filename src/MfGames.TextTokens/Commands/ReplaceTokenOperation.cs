@@ -115,7 +115,7 @@ namespace MfGames.TextTokens.Commands
 		/// <value>
 		/// The count.
 		/// </value>
-		public int Count { get; private set; }
+		public int Count { get; }
 
 		/// <summary>
 		/// Gets or sets the index of the line.
@@ -137,7 +137,7 @@ namespace MfGames.TextTokens.Commands
 		/// <value>
 		/// The new tokens.
 		/// </value>
-		public IToken[] ReplacementTokens { get; private set; }
+		public IToken[] ReplacementTokens { get; }
 
 		/// <summary>
 		/// Gets the index of the token.
@@ -145,7 +145,7 @@ namespace MfGames.TextTokens.Commands
 		/// <value>
 		/// The index of the token.
 		/// </value>
-		public TokenIndex TokenIndex { get; private set; }
+		public TokenIndex TokenIndex { get; }
 
 		#endregion
 

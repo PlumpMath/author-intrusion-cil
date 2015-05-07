@@ -70,7 +70,7 @@ namespace MfGames.TextTokens.Commands
 		/// <value>
 		/// The new text range.
 		/// </value>
-		protected TextRange NewTextRange { get; private set; }
+		protected TextRange NewTextRange { get; }
 
 		/// <summary>
 		/// Gets the old text ranges, associated with each buffer.

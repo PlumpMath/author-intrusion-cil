@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="MainWindow.xaml.cs" company="Moonfire Games">
+//   Copyright (c) Moonfire Games. Some Rights Reserved.
+// </copyright>
+// <license href="http://mfgames.com/mfgames-cil/license">
+//   MIT License (MIT)
+// </license>
+
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AuthorIntrusion.UI.WpfAwe
 {
@@ -20,9 +14,13 @@ namespace AuthorIntrusion.UI.WpfAwe
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		#region Constructors and Destructors
+
 		public MainWindow()
 		{
 			InitializeComponent();
 		}
+
+		#endregion
 	}
 }
